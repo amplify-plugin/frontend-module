@@ -2,7 +2,7 @@
 
 namespace Amplify\Frontend\Helpers;
 
-use App\Models\State;
+use Amplify\System\Backend\Models\State;
 use Illuminate\Support\Facades\Route;
 
 class CustomerHelper

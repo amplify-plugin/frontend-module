@@ -7,12 +7,12 @@ use Amplify\ErpApi\Jobs\ContactProfileSyncJob;
 use Amplify\Frontend\Http\Requests\Auth\ContactAccountRequest;
 use Amplify\Frontend\Http\Requests\Auth\RegistrationRequest;
 use Amplify\Frontend\Traits\HasDynamicPage;
+use Amplify\System\Backend\Models\Customer;
+use Amplify\System\Backend\Models\Event;
+use Amplify\System\Backend\Models\IndustryClassification;
 use Amplify\System\Factories\NotificationFactory;
 use Amplify\System\Marketing\Models\Subscriber;
 use App\Http\Controllers\Controller;
-use App\Models\Customer;
-use App\Models\Event;
-use App\Models\IndustryClassification;
 use ErrorException;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\RedirectResponse;
@@ -184,7 +184,7 @@ class RegisteredUserController extends Controller
 
     /**
      * @param  $request
-     * @return [\App\Models\Customer, \App\Models\CustomerAddress]
+     * @return [\Amplify\System\Backend\Models\Customer, \Amplify\System\Backend\Models\CustomerAddress]
      *
      * @throws \Exception
      */

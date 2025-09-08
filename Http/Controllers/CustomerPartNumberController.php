@@ -3,8 +3,8 @@
 namespace Amplify\Frontend\Http\Controllers;
 
 use Amplify\Frontend\Http\Requests\UpdateCustomerPartNumberRequest;
+use Amplify\System\Backend\Models\CustomPartNumber;
 use App\Http\Controllers\Controller;
-use App\Models\CustomPartNumber;
 
 class CustomerPartNumberController extends Controller
 {

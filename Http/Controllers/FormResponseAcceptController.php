@@ -3,11 +3,11 @@
 namespace Amplify\Frontend\Http\Controllers;
 
 use Amplify\Frontend\Http\Requests\FormResponseRequest;
+use Amplify\System\Backend\Models\Event;
 use Amplify\System\Cms\Models\Form;
 use Amplify\System\Cms\Models\FormResponse;
 use Amplify\System\Factories\NotificationFactory;
 use App\Http\Controllers\Controller;
-use App\Models\Event;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 

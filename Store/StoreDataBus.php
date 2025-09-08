@@ -3,21 +3,21 @@
 namespace Amplify\Frontend\Store;
 
 use Amplify\ErpApi\Wrappers\Quotation;
+use Amplify\System\Backend\Models\Contact;
+use Amplify\System\Backend\Models\ContactLogin;
+use Amplify\System\Backend\Models\CustomerAddress;
+use Amplify\System\Backend\Models\CustomerRole;
+use Amplify\System\Backend\Models\FaqCategory;
+use Amplify\System\Backend\Models\Order;
+use Amplify\System\Backend\Models\OrderList;
+use Amplify\System\Backend\Models\Product;
+use Amplify\System\Backend\Models\Webinar;
 use Amplify\System\Cms\Models\Page;
 use Amplify\System\Helpers\UtilityHelper;
 use Amplify\System\Marketing\Models\Campaign;
 use Amplify\System\Sayt\Classes\CategoriesInfo;
 use Amplify\System\Sayt\Classes\RemoteResults;
 use Amplify\System\Sayt\Facade\Sayt;
-use App\Models\Contact;
-use App\Models\ContactLogin;
-use App\Models\CustomerAddress;
-use App\Models\CustomerRole;
-use App\Models\FaqCategory;
-use App\Models\Order;
-use App\Models\OrderList;
-use App\Models\Product;
-use App\Models\Webinar;
 use Exception;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Traits\Macroable;
@@ -28,9 +28,9 @@ use Spatie\Honeypot\Honeypot;
  * @property null|string $pageTitle
  * @property RemoteResults $eaProductsData
  * @property RemoteResults $eaProductDetail
- * @property Contact $contactModel
- * @property CustomerRole $contactRoleModel
- * @property CustomerAddress $addressModel
+ * @property \Amplify\System\Backend\Models\Contact $contactModel
+ * @property \Amplify\System\Backend\Models\CustomerRole $contactRoleModel
+ * @property \Amplify\System\Backend\Models\CustomerAddress $addressModel
  * @property FaqCategory $faqCategoryModel
  * @property OrderList $favouriteModel
  * @property Quotation $quotationWrapper
@@ -39,7 +39,7 @@ use Spatie\Honeypot\Honeypot;
  * @property LengthAwarePaginator $contactLoginPaginate
  * @property LengthAwarePaginator $webinarPaginate
  * @property Honeypot $honeyPot
- * @property Product $productModel
+ * @property \Amplify\System\Backend\Models\Product $productModel
  * @property CategoriesInfo $eaCategory
  */
 class StoreDataBus

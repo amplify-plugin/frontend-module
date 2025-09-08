@@ -3,9 +3,9 @@
 namespace Amplify\Frontend\Http\Controllers;
 
 use Amplify\Frontend\Traits\HasDynamicPage;
+use Amplify\System\Backend\Models\Product;
 use Amplify\System\Sayt\Facade\Sayt;
 use App\Http\Controllers\Controller;
-use App\Models\Product;
 use ErrorException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 

@@ -6,11 +6,11 @@ use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\Frontend\Events\ContactLoggedIn;
 use Amplify\Frontend\Helpers\CustomerHelper;
 use Amplify\Frontend\Traits\HasDynamicPage;
+use Amplify\System\Backend\Models\Contact;
+use Amplify\System\Backend\Models\ContactLogin;
+use Amplify\System\Backend\Models\Customer;
+use Amplify\System\Backend\Models\Role;
 use App\Http\Controllers\Controller;
-use App\Models\Contact;
-use App\Models\ContactLogin;
-use App\Models\Customer;
-use App\Models\Role;
 use Backpack\Pro\Http\Controllers\Operations\FetchOperation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -178,7 +178,7 @@ class ContactLoginController extends Controller
         $customerExcluded = $request->input('cus_exld', []) ?? [];
 
         return $this->fetch([
-            'model' => \App\Models\Customer::class,
+            'model' => \Amplify\System\Backend\Models\Customer::class,
             'searchable_attributes' => ['customer_name', 'customer_code', 'id', 'email', 'phone'],
             'paginate' => 10, // items to show per page
             'searchOperator' => 'LIKE',

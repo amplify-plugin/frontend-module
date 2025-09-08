@@ -4,7 +4,7 @@ namespace Amplify\Frontend\Listeners;
 
 use Amplify\Frontend\Events\ContactLoggedIn;
 use Amplify\Frontend\Events\ContactLoggedOut;
-use App\Models\ContactLogin;
+use Amplify\System\Backend\Models\ContactLogin;
 use Illuminate\Support\Facades\Schema;
 
 class UpdateContactLoginDataListener

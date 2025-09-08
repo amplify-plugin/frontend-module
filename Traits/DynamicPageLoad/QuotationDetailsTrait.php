@@ -2,8 +2,8 @@
 
 namespace Amplify\Frontend\Traits\DynamicPageLoad;
 
-use App\Models\CustomerOrder;
-use App\Models\Product;
+use Amplify\System\Backend\Models\CustomerOrder;
+use Amplify\System\Backend\Models\Product;
 
 trait QuotationDetailsTrait
 {

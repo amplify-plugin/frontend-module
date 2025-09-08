@@ -4,9 +4,9 @@ namespace Amplify\Frontend\Http\Controllers;
 
 use Amplify\Frontend\Http\Requests\RoleStoreUpdateRequest;
 use Amplify\Frontend\Traits\HasDynamicPage;
+use Amplify\System\Backend\Models\CustomerRole;
+use Amplify\System\Backend\Models\Role;
 use App\Http\Controllers\Controller;
-use App\Models\CustomerRole;
-use App\Models\Role;
 
 class RoleController extends Controller
 {

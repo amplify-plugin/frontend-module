@@ -2,7 +2,7 @@
 
 namespace Amplify\Frontend\Traits\DynamicPageLoad;
 
-use App\Models\Webinar;
+use Amplify\System\Backend\Models\Webinar;
 
 trait EventTrait
 {

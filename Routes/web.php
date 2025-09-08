@@ -54,7 +54,7 @@ use Amplify\Frontend\Http\Controllers\QuotationController;
 use Amplify\Frontend\Http\Controllers\RoleController;
 use Amplify\Frontend\Http\Controllers\ShippingController;
 use Amplify\Frontend\Http\Controllers\ShopSearchController;
-use App\Http\Controllers\SwitchAccountController;
+use Amplify\System\Backend\Http\Controllers\SwitchAccountController;
 use App\Http\Middleware\ContactForceShippingAddressSelection;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;

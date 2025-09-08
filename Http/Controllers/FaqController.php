@@ -3,9 +3,9 @@
 namespace Amplify\Frontend\Http\Controllers;
 
 use Amplify\Frontend\Traits\HasDynamicPage;
+use Amplify\System\Backend\Models\Faq;
+use Amplify\System\Backend\Models\FaqCategory;
 use App\Http\Controllers\Controller;
-use App\Models\Faq;
-use App\Models\FaqCategory;
 use Illuminate\Database\Eloquent\Builder;
 
 class FaqController extends Controller

@@ -2,7 +2,7 @@
 
 namespace Amplify\Frontend\Http\Rules;
 
-use App\Models\OrderList;
+use Amplify\System\Backend\Models\OrderList;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 

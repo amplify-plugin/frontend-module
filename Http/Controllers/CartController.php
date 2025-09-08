@@ -5,11 +5,11 @@ namespace Amplify\Frontend\Http\Controllers;
 use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\Frontend\Http\Resources\CartResource;
 use Amplify\Frontend\Traits\HasDynamicPage;
+use Amplify\System\Backend\Http\Requests\Orders\QuickOrderAddToOrderRequest;
+use Amplify\System\Backend\Models\Cart;
+use Amplify\System\Backend\Models\CartItem;
+use Amplify\System\Backend\Models\Product;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Orders\QuickOrderAddToOrderRequest;
-use App\Models\Cart;
-use App\Models\CartItem;
-use App\Models\Product;
 use Illuminate\Http\Request;
 
 class CartController extends Controller

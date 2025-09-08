@@ -3,9 +3,9 @@
 namespace Amplify\Frontend\Http\Controllers\Auth;
 
 use Amplify\ErpApi\Facades\ErpApi;
+use Amplify\System\Backend\Models\Country;
+use Amplify\System\Backend\Models\State;
 use App\Http\Controllers\Controller;
-use App\Models\Country;
-use App\Models\State;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 

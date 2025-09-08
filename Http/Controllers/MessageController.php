@@ -3,12 +3,12 @@
 namespace Amplify\Frontend\Http\Controllers;
 
 use Amplify\Frontend\Traits\HasDynamicPage;
+use Amplify\System\Backend\Models\Contact;
+use Amplify\System\Backend\Models\User;
 use Amplify\System\Message\Facades\Messenger;
 use Amplify\System\Message\Http\Requests\MessageRequest;
 use Amplify\System\Message\Models\Message;
 use Amplify\System\Message\Models\MessageThread;
-use App\Models\Contact;
-use App\Models\User;
 use ErrorException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;

@@ -3,9 +3,9 @@
 namespace Amplify\Frontend\Events;
 
 use Amplify\ErpApi\Facades\ErpApi;
-use App\Http\Controllers\CartController;
-use App\Models\Cart;
-use App\Models\Contact;
+use Amplify\System\Backend\Http\Controllers\CartController;
+use Amplify\System\Backend\Models\Cart;
+use Amplify\System\Backend\Models\Contact;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
