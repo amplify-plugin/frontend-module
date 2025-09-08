@@ -51,7 +51,7 @@ class FrontendServiceProvider extends ServiceProvider
 
         $target_path = public_path('frontend'.DIRECTORY_SEPARATOR.$template->asset_folder);
 
-        $asset_path = base_path('templates'.DIRECTORY_SEPARATOR.$template->component_folder.DIRECTORY_SEPARATOR.'public');
+        $asset_path = base_path('themes'.DIRECTORY_SEPARATOR.$template->component_folder.DIRECTORY_SEPARATOR.'public');
 
         if (! file_exists($asset_path)) {
             mkdir($asset_path, 0666, true);

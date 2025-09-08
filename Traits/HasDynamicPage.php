@@ -2,7 +2,6 @@
 
 namespace Amplify\Frontend\Traits;
 
-use;
 use Amplify\System\Cms\Models\Page;
 use Amplify\System\Facades\AssetsFacade;
 use Amplify\System\Support\AssetsLoader;
@@ -204,7 +203,7 @@ trait HasDynamicPage
 
     private function wrapPageContent(string $content): string
     {
-        $layout = template_view('index');
+        $layout = theme_view('index');
 
         return <<<HTML
 @extends('{$layout}')
