@@ -3,7 +3,6 @@
 namespace Amplify\Frontend;
 
 use Amplify\Frontend\Providers\EventServiceProvider;
-use Amplify\Frontend\Providers\WidgetServiceProvider;
 use Amplify\System\Cms\Models\Form;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
@@ -23,7 +22,6 @@ class FrontendServiceProvider extends ServiceProvider
         );
 
         $this->app->register(EventServiceProvider::class);
-        $this->app->register(WidgetServiceProvider::class);
     }
 
     /**
