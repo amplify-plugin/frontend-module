@@ -63,6 +63,7 @@ use Spatie\Honeypot\ProtectAgainstSpam;
 Route::get('admin', function () {
     return Redirect::to('admin/login');
 });
+
 Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class, ContactForceShippingAddressSelection::class])->group(function () {
     /*
     |--------------------------------------------------------------------------
