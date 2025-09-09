@@ -21,7 +21,7 @@ trait HasDynamicPage
      *
      * @throws \ErrorException
      *
-     * @see modules/Cms/Config/cms.php
+     * @see plugins/Cms/Config/cms.php
      */
     public function loadPageById($id = null): void
     {
@@ -47,7 +47,7 @@ trait HasDynamicPage
      *
      * @throws \ErrorException
      *
-     * @see modules/Cms/Config/cms.php
+     * @see plugins/Cms/Config/cms.php
      */
     public function loadPageByType($type = null): void
     {
@@ -73,8 +73,8 @@ trait HasDynamicPage
      *
      * @throws \ErrorException
      *
-     * @see modules/Cms/Config/cms.php
-     * @see modules/Frontend/Config/frontend.php
+     * @see plugins/Cms/Config/cms.php
+     * @see plugins/Frontend/Config/frontend.php
      */
     public function loadPageBySlug($slug = null): void
     {
@@ -174,12 +174,12 @@ trait HasDynamicPage
         }
 
         push_css([
-            template_asset('css/vendor.min.css'),
-            template_asset('css/styles.min.css'),
+            theme_asset('css/vendor.min.css'),
+            theme_asset('css/styles.min.css'),
         ], 'template-style');
 
         push_css([
-            template_asset('css/custom.css'),
+            theme_asset('css/custom.css'),
         ], 'custom-style');
 
         foreach (config('amplify.frontend.scripts', []) as $group => $scripts) {
@@ -189,15 +189,15 @@ trait HasDynamicPage
         }
 
         push_js([
-            template_asset('js/vendor.min.js'),
+            theme_asset('js/vendor.min.js'),
         ], 'plugin-script');
 
         push_js([
-            template_asset('js/scripts.min.js'),
+            theme_asset('js/scripts.min.js'),
         ], 'template-script');
 
         push_js([
-            template_asset('js/custom.js'),
+            theme_asset('js/custom.js'),
         ], 'custom-script');
     }
 
