@@ -40,28 +40,6 @@ class FrontendServiceProvider extends ServiceProvider
             if (! $request?->is('admin/*')) {
                 Route::bind('form_code', fn (string $value) => Form::whereCode($value)->firstOrFail());
 
-                $this->linkAssetPaths();
-            }
-        }
-    }
-
-    private function linkAssetPaths(): void
-    {
-        $template = template();
-
-        $target_path = public_path('frontend'.DIRECTORY_SEPARATOR.$template->asset_folder);
-
-        $asset_path = base_path('themes'.DIRECTORY_SEPARATOR.$template->component_folder.DIRECTORY_SEPARATOR.'public');
-
-        if (! file_exists($asset_path)) {
-            mkdir($asset_path, 0666, true);
-        }
-
-        if (! is_dir($target_path)) {
-            if (PHP_OS_FAMILY === 'Windows') {
-                exec('mklink /J '.escapeshellarg($target_path).' '.escapeshellarg($asset_path));
-            } else {
-                symlink($asset_path, $target_path);
             }
         }
     }
