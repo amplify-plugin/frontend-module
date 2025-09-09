@@ -3,7 +3,7 @@
 return [
     'excluded_page_types' => ['static_page', 'shop_by_catalog'],
     'shop_page_default_view' => 'list',
-    'fallback_image_path' => 'img/No-Image-Placeholder-min.png',
+    'fallback_image_path' => 'assets/img/No-Image-Placeholder-min.png',
     'easyask_single_product_index' => 'id',
     'mega_menu_max_height' => '310px',
     'enable_language' => false,
