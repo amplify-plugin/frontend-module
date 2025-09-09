@@ -54,8 +54,17 @@ use Amplify\Frontend\Http\Controllers\QuotationController;
 use Amplify\Frontend\Http\Controllers\RoleController;
 use Amplify\Frontend\Http\Controllers\ShippingController;
 use Amplify\Frontend\Http\Controllers\ShopSearchController;
+use Amplify\System\Backend\Http\Controllers\CenPosPaymentController;
+use Amplify\System\Backend\Http\Controllers\CustomerController;
+use Amplify\System\Backend\Http\Controllers\CustomerOrderController;
+use Amplify\System\Backend\Http\Controllers\ECommerceGatewayController;
+use Amplify\System\Backend\Http\Controllers\EnvController;
+use Amplify\System\Backend\Http\Controllers\LocalizationController;
+use Amplify\System\Backend\Http\Controllers\PasswordResetController;
+use Amplify\System\Backend\Http\Controllers\PunchOutController;
 use Amplify\System\Backend\Http\Controllers\SwitchAccountController;
 use Amplify\System\Backend\Http\Middlewares\ContactForceShippingAddressSelection;
+use Amplify\System\OrderRule\Http\Controllers\OrderAwaitingApprovalController;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 use Spatie\Honeypot\ProtectAgainstSpam;
@@ -271,4 +280,115 @@ Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class, ContactF
     });
 
     Route::post('customer-verification', CustomerVerificationController::class)->name('contact-validation');
+
+
 });
+
+Route::get('punchout/login', [PunchOutController::class, 'login'])->name('punchout.login');
+
+Route::get('admin/app/config', [\App\Http\Controllers\Controller::class, 'getAppConfig']);
+
+Route::get('/filemanager', function () {
+    return view('filemanager');
+});
+Route::get('/locale-lang.js', [LocalizationController::class, 'exportLocaleLang']);
+Route::get('/languages/{locale}', [LocalizationController::class, 'switchLanguage']);
+
+// frontend fixed routes
+// Route::get('/', [DynamicPageLoadController::class, 'index'])->name('frontend.index');
+// Route::get('/home', [DynamicPageLoadController::class, 'index'])->name('frontend.home');
+
+// Route::get('/order-list-details/{order_list_id}',
+//     [DynamicPageLoadController::class, 'index'])->name('frontend.order_list.details');
+
+Route::post('/password-reset-otp', [PasswordResetController::class, 'sendOtp'])->name('frontend.password_reset_otp');
+Route::post('/otp-check', [PasswordResetController::class, 'otpCheck'])->name('frontend.otp_check');
+Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->name('frontend.reset_password');
+// Route::get('/forgot-password', [DynamicPageLoadController::class, 'index'])->name('frontend.customer_forgot_password');
+
+Route::get('/faq/faq-viewed/{faq_id}', [FaqController::class, 'faqViewed'])->name('faq.faq-viewed');
+Route::post('/faq/faq-reaction', [FaqController::class, 'faqReaction'])->name('faq.faq-reaction');
+
+// Route::get('/invoice-details/download/{invoiceNumber}', [PdfGeneratorController::class, 'generatePdf'])->name('download.invoice-details');
+
+/*
+ * Customer Routes
+ */
+Route::group(['prefix' => 'customer'], function () {
+    Route::group(['middleware' => 'guest:customer'], function () {
+        Route::post('login', [CustomerController::class, 'customerLogin'])->name('customer.login');
+        Route::post('registration', [CustomerController::class, 'customerRegistration'])->name('customer.registration');
+    });
+    Route::group(['middleware' => ['customers']], function () {
+        Route::get('/dashboard', [CustomerController::class, 'customerDashboard'])->name('customer.dashboard');
+        Route::get('/cenpos-invoices-payment',
+            [CenPosPaymentController::class, 'invoicePay'])->name('customer.cenpos-invoices-payment');
+        Route::post('/cenpos-invoices-pay',
+            [CenPosPaymentController::class, 'invoiceProcessPayment'])->name('customer.cenpos-invoice-pay.submit');
+
+        Route::get('/cenpos-order-credit-card-payment/{customer_order}',
+            [CenPosPaymentController::class, 'orderCreditCardPay'])->name('customer.cenpos-order-credit-card-payment');
+        Route::post('/cenpos-order-credit-card-pay-process/{customer_order}', [
+            CenPosPaymentController::class, 'orderCreditCardProcessPayment',
+        ])->name('customer.cenpos-order-credit-card-pay.submit');
+
+        Route::get('/cenpos-invoices',
+            [CenPosPaymentController::class, 'index'])->name('customer.cenpos-invoices-pay.index');
+    });
+    Route::post('logout', [CustomerController::class, 'customerLogout'])->name('customer.logout');
+});
+/*
+ * Customer Api Routes.
+ */
+Route::group(['prefix' => 'api', 'as' => 'api.'], function () {
+    // Route::resource('/contacts', ContactResourceController::class);
+    Route::get('/product-details/rbs/{p_code}/{w_code?}', [ECommerceGatewayController::class, 'getPriceAvailability']);
+    Route::post('/cenpos-token', [CustomerOrderController::class, 'getCenposToken']);
+});
+
+Route::post('/udpate-order-note', [CustomerOrderController::class, 'updateOrderNote'])->name('update.order-note');
+Route::post('/update-draft-note', [CustomerOrderController::class, 'updateDraftNote'])->name('update.draft-note');
+
+Route::post('/order/quick-order-file-upload',
+    [CustomerOrderController::class, 'quickOrderFileUpload'])->name('frontend.order.quick-order-file-upload');
+
+Route::get('/get/carts', [CartController::class, 'getCarts'])->name('frontend.get-carts');
+Route::post('/cart/summary', [CartController::class, 'getCartSummary'])->name('frontend.cart.summary');
+Route::post('/remove/cart/{cartItem}', [CartController::class, 'removeCart'])->name('frontend.remove-cart');
+Route::post('/update/cart/{cartItem}', [CartController::class, 'updateCart'])->name('frontend.update-cart');
+Route::post('/order/quick-order-add-to-order', [CartController::class, 'addToCart'])->name('frontend.order.quick-order-add-to-order');
+Route::post('/remove/carts', [CartController::class, 'removeCarts'])->name('frontend.remove-carts');
+
+Route::post('/order/save-order-list',
+    [CustomerOrderController::class, 'saveOrderList'])->name('frontend.order.order-list.save');
+Route::post('/order/save-product-to-order-list',
+    [CustomerOrderController::class, 'saveProductToOrderList'])->name('frontend.order-list.add-product');
+Route::post('/order/check-order-list-name',
+    [CustomerOrderController::class, 'checkOrderListName'])->name('frontend.order.order-list.check-name-availability');
+Route::post('/order/submit-quote-as-order',
+    [CustomerOrderController::class, 'submitQuoteAsOrder'])->name('submit.quote-to-order');
+Route::post('/order/submit-list-as-order/{list}',
+    [CustomerOrderController::class, 'submitListAsOrder'])->name('submit.saved-list-to-order');
+Route::post('/order/add-items-to-order/{list}',
+    [CustomerOrderController::class, 'addAllListItemsToLatestOrder'])->name('submit.add-items-to-order');
+Route::post('/order/add-single-item-to-order/{item}',
+    [CustomerOrderController::class, 'addSingleListItemsToLatestOrder'])->name('order-list-item.add-to-order');
+Route::post('/order/draft-to-order/{order}',
+    [CustomerOrderController::class, 'submitDraftAsOrder'])->name('draft.submit-as-order');
+Route::post('/order/get-product-name-by-code',
+    [CustomerOrderController::class, 'getProductNameByCode'])->name('frontend.order.get-product-name-by-code');
+Route::post('/order/submit-order',
+    [CustomerOrderController::class, 'submitOrder'])->name('frontend.order.submit-order');
+Route::post('/order/submit-pending-order/{order_id}',
+    [CustomerOrderController::class, 'submitPendingOrder'])->name('frontend.order.submit-pending-order');
+Route::post('/order/calculate-price',
+    [CustomerOrderController::class, 'getOrderPricing'])->name('frontend.order.calculate-price');
+Route::post('/order/summary', [CustomerOrderController::class, 'getOrderSummary'])->name('frontend.order.summary');
+Route::post('/approve-order/{order}', [CustomerOrderController::class, 'approveOrder'])->name('approve-order');
+// Route::delete('/saved-order-list/delete/{list}', [CustomerOrderController::class, 'deleteSavedOrder'])->name('order-list.delete');
+Route::delete('/quote/delete/{quote}', [CustomerOrderController::class, 'deleteQuote'])->name('order.delete');
+Route::delete('/saved-order-list/delete/{item}/item',
+    [CustomerOrderController::class, 'deleteSavedOrderItem'])->name('order-list-item.delete');
+Route::delete('/customer-profile-quotation-list-item/delete/{item}/item',
+    [CustomerOrderController::class, 'deleteQuotationItem'])->name('customer-profile-quotation-list-item.delete');
+
