@@ -95,7 +95,7 @@ Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class, ContactF
     Route::get("{$shopRoutePrefix}/{query?}", ShopSearchController::class)->where(['query' => '(.*)'])->name('shop.index');
     Route::get('quick-view/{id}/{seo_path?}', [ShopSearchController::class, 'getQuickView'])->name('shop.quickView');
     Route::get('warehouse-selection-view/{code}', [ShopSearchController::class, 'getWarehouseSelectionView'])->name('shop.warehouseSelectionView');
-    Route::apiResource('carts', CartController::class);
+    Route::apiResource('carts', \Amplify\Frontend\Http\Controllers\CartController::class);
     Route::get('checkout', CheckoutController::class)->name('checkout');
     Route::post('subscribe', NewsletterSubscriptionController::class)->name('subscribe');
     Route::get('faq/{faq-category-slug?}', FaqController::class)->name('faqs.show');
