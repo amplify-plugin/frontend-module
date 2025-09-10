@@ -27,7 +27,7 @@ use Amplify\Frontend\Http\Controllers\Auth\RegisteredUserController;
 use Amplify\Frontend\Http\Controllers\Auth\VerifyEmailController;
 use Amplify\Frontend\Http\Controllers\BrandIndexController;
 use Amplify\Frontend\Http\Controllers\CampaignController;
-use Amplify\Frontend\Http\Controllers\CartController;
+use Amplify\System\Backend\Http\Controllers\CartController;
 use Amplify\Frontend\Http\Controllers\CategoryIndexController;
 use Amplify\Frontend\Http\Controllers\CheckoutController;
 use Amplify\Frontend\Http\Controllers\ContactController;
