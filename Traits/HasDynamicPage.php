@@ -175,6 +175,7 @@ trait HasDynamicPage
 
         push_css([
             theme_asset('css/vendor.min.css'),
+            asset('vendor/widget/css/widgets.css'),
             theme_asset('css/styles.min.css'),
         ], 'template-style');
 
