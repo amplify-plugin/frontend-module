@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'shop_page_prefix' => env('AMPLIFY_SHOP_PAGE_PREFIX', 'shop'),
     'excluded_page_types' => ['static_page', 'shop_by_catalog'],
     'shop_page_default_view' => 'list',
     'fallback_image_path' => 'assets/img/No-Image-Placeholder-min.png',
