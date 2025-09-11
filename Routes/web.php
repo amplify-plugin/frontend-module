@@ -109,7 +109,7 @@ Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class, ContactF
     Route::post('validate/shipping-address', [ShippingController::class, 'validateAddress']);
     Route::post('/get/shipping/option', [ShippingController::class, 'options'])->name('shipping-options');
 
-    if (config('amplify.basic.client_code') == 'SPI') {
+    if (config('amplify.client_code') == 'SPI') {
         Route::get('Items/0/{identifier}/{seopath?}', function ($identifier, $seopath) {
             return redirect()->route('frontend.shop.show', ['identifier' => intval($identifier), 'seo_path' => $seopath]);
         })->where(['identifier' => '([0-9]+)', 'seopath' => '(.*)']);
