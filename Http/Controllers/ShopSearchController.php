@@ -5,6 +5,8 @@ namespace Amplify\Frontend\Http\Controllers;
 use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\Widget\Traits\ProductDetailTrait;
+use Amplify\System\Backend\Models\Product;
+use Illuminate\Http\RedirectResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -22,14 +24,30 @@ class ShopSearchController extends Controller
      *
      * @throws \ErrorException
      */
-    public function __invoke(?string $query = null): string
+    public function __invoke(?string $query = null): RedirectResponse|string
     {
         abort_unless(! customer_check() || customer(true)->can('shop.browse'), 403);
-
+ 
+        $eaProductData = store()->eaProductsData;
+ 
+        $products = $eaProductData->getProducts();
+       
+        if (! empty($products) && count($products) === 1 ){
+            $seoPath = $eaProductData->getCurrentSeoPath();
+            $firstProduct = array_shift($products);
+           
+            if (! empty($firstProduct->Sku_Id) && ! empty($skuId = explode('-', $firstProduct->Sku_Id)[1])) {
+                $dbProduct = Product::find($skuId);
+                $firstProduct->Product_Id = $firstProduct->Amplify_Id = $skuId;
+                $firstProduct->Product_Slug = $dbProduct->product_slug;
+            }
+ 
+            return \redirect(frontendSingleProductURL($firstProduct, $seoPath));
+ 
+        }
+ 
         $this->loadPageByType('shop');
-
-        store()->eaProductsData;
-
+ 
         return $this->render();
     }
 
