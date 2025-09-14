@@ -52,7 +52,7 @@ class ShippingController extends Controller
                     'shipping_zip' => $validateAddress->ZipCode,
                 ]);
 
-                if (config('amplify.basic.client_code') != 'ACP' && ! empty($erpAddress->ShipToNumber)) {
+                if (config('amplify.client_code') != 'ACP' && ! empty($erpAddress->ShipToNumber)) {
                     CustomerAddress::create([
                         'customer_id' => customer()->id,
                         'address_code' => $erpAddress->ShipToNumber,

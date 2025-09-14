@@ -90,7 +90,7 @@ Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class, ContactF
     |--------------------------------------------------------------------------
     */
 
-    $shopRoutePrefix = config('amplify.basic.shop_page_prefix');
+    $shopRoutePrefix = config('amplify.frontend.shop_page_prefix');
     Route::get("{$shopRoutePrefix}/product/{identifier}/{seo_path?}", ProductDetailController::class)->where(['identifier' => '([a-zA-Z0-9\-]+)', 'seo_path' => '(.*)'])->name('shop.show');
     Route::get("{$shopRoutePrefix}/{query?}", ShopSearchController::class)->where(['query' => '(.*)'])->name('shop.index');
     Route::get('quick-view/{id}/{seo_path?}', [ShopSearchController::class, 'getQuickView'])->name('shop.quickView');
@@ -109,7 +109,7 @@ Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class, ContactF
     Route::post('validate/shipping-address', [ShippingController::class, 'validateAddress']);
     Route::post('/get/shipping/option', [ShippingController::class, 'options'])->name('shipping-options');
 
-    if (config('amplify.basic.client_code') == 'SPI') {
+    if (config('amplify.client_code') == 'SPI') {
         Route::get('Items/0/{identifier}/{seopath?}', function ($identifier, $seopath) {
             return redirect()->route('frontend.shop.show', ['identifier' => intval($identifier), 'seo_path' => $seopath]);
         })->where(['identifier' => '([0-9]+)', 'seopath' => '(.*)']);
