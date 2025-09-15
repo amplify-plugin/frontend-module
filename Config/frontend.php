@@ -30,7 +30,7 @@ return [
             'vendor/easyask-sayt/css/sayt.css',
         ],
         'custom-style' => [
-            'assets/css/global.css',
+            'vendor/widget/css/widget.css',
         ],
         'internal-style' => [
 
