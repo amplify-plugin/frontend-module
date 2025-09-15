@@ -30,7 +30,7 @@ return [
             'vendor/easyask-sayt/css/sayt.css',
         ],
         'custom-style' => [
-            'vendor/widget/css/widget.css',
+            'vendor/widget/css/widgets.css',
         ],
         'internal-style' => [
 
@@ -38,7 +38,7 @@ return [
     ],
     'scripts' => [
         'head-script' => [
-            'assets/js/modernizr.min.js',
+            'vendor/frontend/js/modernizr.min.js',
         ],
         'plugin-script' => [
 
@@ -47,7 +47,7 @@ return [
 
         ],
         'custom-script' => [
-            'assets/js/frontend-utility.js',
+            'vendor/frontend/js/utility.js',
         ],
         'internal-script' => [
 

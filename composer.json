@@ -20,6 +20,7 @@
             "Amplify\\Frontend\\": "./"
         },
         "files": [
+            "helpers.php"
         ]
     },
     "extra": {

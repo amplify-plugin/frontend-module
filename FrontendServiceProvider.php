@@ -33,6 +33,10 @@ class FrontendServiceProvider extends ServiceProvider
     {
         $this->loadRoutesFrom(__DIR__.'/Routes/web.php');
 
+        $this->publishes([
+            __DIR__.'/resources' => public_path('vendor/frontend')
+        ], 'frontend-asset');
+
         if (! $this->app->runningInConsole()) {
 
             $request = $this->app->make(Request::class);
