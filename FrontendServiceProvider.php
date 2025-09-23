@@ -46,5 +46,10 @@ class FrontendServiceProvider extends ServiceProvider
 
             }
         }
+
+        $this->app->booted(function () {
+            push_js( 'vendor/frontend/js/modernizr.min.js', 'head-script');
+            push_js( 'vendor/frontend/js/utility.js', 'custom-script');
+        });
     }
 }

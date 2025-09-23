@@ -25,34 +25,16 @@ return [
     'product_not_available_text' => 'Available in 3-5 days',
     'right_sidebar' => true,
     'styles' => [
-        'plugin-style' => [
-            // sayt search
-            'vendor/easyask-sayt/css/sayt.css',
-        ],
-        'custom-style' => [
-            'vendor/widget/css/widgets.css',
-        ],
-        'internal-style' => [
-
-        ],
+        'plugin-style' => [],
+        'custom-style' => [],
+        'internal-style' => [],
     ],
     'scripts' => [
-        'head-script' => [
-            'vendor/frontend/js/modernizr.min.js',
-        ],
-        'plugin-script' => [
-
-        ],
-        'template-script' => [
-
-        ],
-        'custom-script' => [
-            'vendor/frontend/js/utility.js',
-        ],
-        'internal-script' => [
-
-        ],
-        'footer-script' => [
-        ],
+        'head-script' => [],
+        'plugin-script' => [],
+        'template-script' => [],
+        'custom-script' => [],
+        'internal-script' => [],
+        'footer-script' => [],
     ],
 ];
