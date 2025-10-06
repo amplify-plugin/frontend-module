@@ -22,6 +22,7 @@ class ProfileUpdateRequest extends FormRequest
             'new_password' => "nullable|min:$minPassLen|required_with:confirm_password|same:confirm_password",
             'confirm_password' => 'required_with:new_password',
             'redirect_route' => 'nullable|string',
+            'account_title_id' => 'nullable|string',
         ];
     }
 }
