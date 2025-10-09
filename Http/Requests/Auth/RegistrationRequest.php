@@ -32,12 +32,12 @@ class RegistrationRequest extends FormRequest
             'company_name' => 'required|string|max:255|ascii',
             'email' => [
                 'required',
-                'email',
+                'email:dns,rfc',
                 'ascii',
                 Rule::unique('customers'),
                 Rule::unique('contacts'),
             ],
-            'phone_number' => 'required|string|max:255|ascii',
+            'phone_number' => 'required|string|max:255|ascii|phone_number',
             'industry_classification_id' => 'nullable|integer|exists:industry_classifications,id',
             'address_name' => 'required|string|max:255|ascii',
             'address_1' => 'required|string|max:255|ascii',
@@ -45,7 +45,7 @@ class RegistrationRequest extends FormRequest
             'address_3' => 'nullable|string|max:255|ascii',
             'city' => 'required|string|max:255|ascii',
             'state' => 'required|string|max:255|ascii',
-            'zip_code' => 'required|string|max:20|ascii',
+            'zip_code' => 'required|string|max:20|ascii|postal_code',
             'password' => "required|min:$minPassLen",
             'contact_account_title' => 'integer|nullable',
         ];

@@ -29,7 +29,7 @@ class ContactAccountRequest extends FormRequest
             'customer_account_number' => ['required', 'string', 'max:255', 'ascii'],
             'contact_name' => 'required|string|max:255|ascii',
             'contact_email' => 'required|email:dns,rfc|unique:contacts,email|ascii',
-            'contact_phone_number' => 'required|string|max:255|ascii',
+            'contact_phone_number' => 'required|string|max:255|ascii|phone_number',
             'contact_password' => 'required|confirmed|min:'.$minPassLen,
             'contact_newsletter' => 'nullable|string|in:yes,no',
             'contact_accept_term' => 'nullable|string|in:yes,no',
