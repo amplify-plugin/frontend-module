@@ -31,8 +31,8 @@ class ContactAccountRequest extends FormRequest
             'contact_email' => 'required|email:dns,rfc|unique:contacts,email|ascii',
             'contact_phone_number' => 'required|string|max:255|ascii|phone_number',
             'contact_password' => 'required|confirmed|min:'.$minPassLen,
-            'contact_newsletter' => 'nullable|string|in:yes,no',
-            'contact_accept_term' => 'nullable|string|in:yes,no',
+            'contact_newsletter' => 'string|in:yes,no',
+            'contact_accept_term' => 'string|in:yes,no',
             'contact_account_title' => 'integer|nullable',
         ];
 
@@ -40,6 +40,10 @@ class ContactAccountRequest extends FormRequest
             if ($this->has('contact_captcha')) {
                 $rules['contact_captcha'] = 'required|captcha';
             }
+        }
+
+        if (in_array('contact_accept_term', $this->input('required', []))) {
+            $rules['contact_accept_term'].= '|required';
         }
 
         return $rules;

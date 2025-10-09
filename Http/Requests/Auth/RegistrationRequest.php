@@ -48,6 +48,8 @@ class RegistrationRequest extends FormRequest
             'zip_code' => 'required|string|max:20|ascii|postal_code',
             'password' => "required|min:$minPassLen",
             'contact_account_title' => 'integer|nullable',
+            'newsletter' => 'string|in:yes,no',
+            'accept_term' => 'string|in:yes,no',
         ];
 
         if (! config('captcha.disable')) {
@@ -58,6 +60,10 @@ class RegistrationRequest extends FormRequest
 
         if ($this->has('password_confirmation')) {
             $rules['password_confirmation'] = 'required|same:password';
+        }
+
+        if (in_array('accept_term', $this->input('required', []))) {
+            $rules['accept_term'].= '|required';
         }
 
         return $rules;
