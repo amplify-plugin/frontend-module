@@ -25,11 +25,11 @@ class ContactAccountRequest extends FormRequest
         $minPassLen = SecurityHelper::passwordLength();
 
         $rules = [
-            'search_account_number' => ['required', 'string', 'max:255'],
-            'customer_account_number' => ['required', 'string', 'max:255'],
-            'contact_name' => 'required|string|max:255',
-            'contact_email' => 'required|email:dns,rfc|unique:contacts,email',
-            'contact_phone_number' => 'required|string|max:255',
+            'search_account_number' => ['required', 'string', 'max:255', 'ascii'],
+            'customer_account_number' => ['required', 'string', 'max:255', 'ascii'],
+            'contact_name' => 'required|string|max:255|ascii',
+            'contact_email' => 'required|email:dns,rfc|unique:contacts,email|ascii',
+            'contact_phone_number' => 'required|string|max:255|ascii',
             'contact_password' => 'required|confirmed|min:'.$minPassLen,
             'contact_newsletter' => 'nullable|string|in:yes,no',
             'contact_accept_term' => 'nullable|string|in:yes,no',
