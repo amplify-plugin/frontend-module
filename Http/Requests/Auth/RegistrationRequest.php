@@ -62,8 +62,12 @@ class RegistrationRequest extends FormRequest
             $rules['password_confirmation'] = 'required|same:password';
         }
 
-        if (in_array('accept_term', $this->input('required', []))) {
-            $rules['accept_term'].= '|required';
+        foreach ($this->input('required', []) as $field) {
+            if (!isset($rules[$field])) {
+                $rules[$field] = 'required';
+            } else {
+                $rules[$field] .= '|required';
+            }
         }
 
         return $rules;

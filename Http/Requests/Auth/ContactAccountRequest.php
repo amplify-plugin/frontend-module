@@ -25,25 +25,29 @@ class ContactAccountRequest extends FormRequest
         $minPassLen = SecurityHelper::passwordLength();
 
         $rules = [
-            'search_account_number' => ['required', 'string', 'max:255', 'ascii'],
-            'customer_account_number' => ['required', 'string', 'max:255', 'ascii'],
+            'search_account_number' => 'required|string|max:255|ascii',
+            'customer_account_number' => 'string|max:255|ascii',
             'contact_name' => 'required|string|max:255|ascii',
             'contact_email' => 'required|email:dns,rfc|unique:contacts,email|ascii',
             'contact_phone_number' => 'required|string|max:255|ascii|phone_number',
-            'contact_password' => 'required|confirmed|min:'.$minPassLen,
+            'contact_password' => 'required|confirmed|min:' . $minPassLen,
             'contact_newsletter' => 'string|in:yes,no',
             'contact_accept_term' => 'string|in:yes,no',
             'contact_account_title' => 'integer|nullable',
         ];
 
-        if (! config('captcha.disable')) {
+        if (!config('captcha.disable')) {
             if ($this->has('contact_captcha')) {
                 $rules['contact_captcha'] = 'required|captcha';
             }
         }
 
-        if (in_array('contact_accept_term', $this->input('required', []))) {
-            $rules['contact_accept_term'].= '|required';
+        foreach ($this->input('required', []) as $field) {
+            if (!isset($rules[$field])) {
+                $rules[$field] = 'required';
+            } else {
+                $rules[$field] .= '|required';
+            }
         }
 
         return $rules;
