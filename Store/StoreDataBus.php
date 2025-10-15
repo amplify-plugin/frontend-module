@@ -115,6 +115,9 @@ class StoreDataBus
         'productModel' => [
             Product::class, 'guessSingleProductDetail',
         ],
+        'contentModel' => [
+            Product::class, 'guessContentModel',
+        ],
         'eaCategory' => [
             Sayt::class, 'getCategory',
         ],
