@@ -14,8 +14,10 @@ use Amplify\System\Factories\NotificationFactory;
 use Amplify\System\Marketing\Models\Subscriber;
 use App\Http\Controllers\Controller;
 use ErrorException;
+use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
@@ -36,30 +38,78 @@ class RegisteredUserController extends Controller
         return $this->render();
     }
 
+    /**
+     * @return mixed
+     *
+     * @throws Exception
+     */
+    private function getCustomer(ContactAccountRequest $request)
+    {
+        $customerCode = trim($request->input('customer_account_number'));
+        $customerName = trim($request->input('contact_company_name'));
+
+        // Must have at least one identifier
+        if ($customerCode === '' && $customerName === '') {
+            throw new Exception(
+                'Please enter Account Number or Company Name',
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        $customer = null;
+
+        // 1️⃣ Lookup by company name if code is not provided
+        if ($customerCode === '') {
+            $customer = Customer::select('id', 'customer_code', 'customer_name')
+                ->where(DB::raw('TRIM(customer_name)'), $customerName)
+                ->first();
+
+            if (! $customer) {
+                throw new Exception(
+                    'We could not find your company name in our system.',
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            $customerCode = trim($customer->customer_code);
+        }
+
+        // 2️⃣ Always verify existence in ERP
+        $customerInERP = ErpApi::getCustomerDetail(['customer_number' => $customerCode]);
+
+        if (empty($customerInERP->CustomerNumber)) {
+            throw new Exception(
+                'Customer with the provided account number does not exist.',
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // 3️⃣ If customer is still not found locally, try finding by code
+        if (! $customer) {
+            $customer = Customer::where(DB::raw('TRIM(customer_code)'), $customerCode)->first();
+        }
+
+        // 4️⃣ Create if missing, otherwise fetch address
+        if (! $customer) {
+            return $this->createCustomerAndAddress($customerInERP->toArray());
+        }
+
+        $address = $customer->addresses->first();
+
+        return [$customer, $address];
+    }
+
+    /**
+     * @param ContactAccountRequest $request
+     * @return RedirectResponse
+     * @throws \Throwable
+     */
     public function requestAccount(ContactAccountRequest $request)
     {
         try {
-
-            $customerCode = trim($request->input('customer_account_number'));
-
-            $customerInERP = ErpApi::getCustomerDetail(['customer_number' => $customerCode]);
-
-            if (empty($customerInERP->CustomerNumber)) {
-                return redirect()->back()
-                    ->withErrors(['contact_account_number' => 'Customer with the provided account number does not exist.'])
-                    ->withInput();
-            }
-
-            $customer = Customer::where(DB::raw('TRIM(customer_code)'), $customerCode)->first();
-
             DB::beginTransaction();
 
-            if (! $customer) {
-                // Create new customer from ERP data
-                [$customer, $address] = $this->createCustomerAndAddress($customerInERP->toArray());
-            } else {
-                $address = $customer->addresses->first();
-            }
+            [$customer, $address] = $this->getCustomer($request);
 
             // Create Contact
             $contact = $customer->contacts()->create([
@@ -97,11 +147,32 @@ class RegisteredUserController extends Controller
 
             return redirect()->to('/');
 
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             DB::rollBack();
+
             Log::error('Customer Registration Exception: '.$exception->getMessage());
 
-            Session::flash('error', 'Request for online account has failed. Please try again later.');
+            $code = (int) $exception->getCode();
+            $message = $exception->getMessage();
+
+            // Handle specific 400 validation-like errors
+            if ($code === 400) {
+                $fields = ['customer_account_number', 'contact_company_name'];
+                Session::flash($message);
+                foreach ($fields as $field) {
+                    if (! empty($request->get($field))) {
+                        return redirect()->back()
+                            ->withErrors([$field => $message])
+                            ->withInput();
+                    }
+                }
+            }
+
+            // Generic error fallback
+            Session::flash('error', $code === 400
+                ? $message
+                : 'Request for online account has failed. Please try again later.'
+            );
 
             return redirect()->back();
         }
@@ -110,7 +181,7 @@ class RegisteredUserController extends Controller
     /**
      * Handle an incoming registration request.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function newRetailCustomer(RegistrationRequest $request): RedirectResponse
     {
@@ -171,7 +242,7 @@ class RegisteredUserController extends Controller
 
             return redirect()->to('/');
 
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             DB::rollBack();
 
             Log::error('Customer Registration  Exception: '.$exception->getMessage());
@@ -186,7 +257,7 @@ class RegisteredUserController extends Controller
      * @param  $request
      * @return [\Amplify\System\Backend\Models\Customer, \Amplify\System\Backend\Models\CustomerAddress]
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private function createCustomerAndAddress(array $attributes): array
     {
@@ -241,7 +312,7 @@ class RegisteredUserController extends Controller
 
             // Handle ERP response
             if ($erpCustomer->CustomerNumber == null) {
-                throw new \Exception('ERP customer creation failed for customer ID: '.$customer->id);
+                throw new Exception('ERP customer creation failed for customer ID: '.$customer->id);
             }
 
             // Update customer code with ERP Customer Number
