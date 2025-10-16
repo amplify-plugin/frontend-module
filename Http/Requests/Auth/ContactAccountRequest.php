@@ -26,7 +26,7 @@ class ContactAccountRequest extends FormRequest
 
         $rules = [
             'search_account_number' => 'string|max:255|ascii',
-            'customer_account_number' => 'string|max:255|ascii',
+            'customer_account_number' => 'nullable|string|max:255|ascii',
             'contact_name' => 'required|string|max:255|ascii',
             'contact_email' => 'required|email:dns,rfc|unique:contacts,email|ascii',
             'contact_phone_number' => 'required|string|max:255|ascii|phone_number',
