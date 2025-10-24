@@ -9,74 +9,93 @@ use Amplify\System\Backend\Models\CustomerAddress;
 use Amplify\System\Backend\Models\Warehouse;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ShippingController extends Controller
 {
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'shipping_number' => 'nullable',
-            'shipping_name' => 'nullable',
-            'shipping_address1' => 'required',
-            'shipping_address2' => 'nullable',
-            'shipping_contact1' => 'nullable',
-            'shipping_contact2' => 'nullable',
-            'shipping_phone1' => 'required',
-            'shipping_phone2' => 'nullable',
-            'shipping_email1' => 'required',
-            'shipping_email2' => 'nullable',
-            'shipping_country' => 'required',
-            'shipping_state' => 'required',
-            'shipping_city' => 'required',
-            'shipping_zip' => 'required',
-        ]);
+        $rules = [
+            'shipping_number' => ['nullable'],
+            'shipping_name' => 'nullable|string|max:255',
+            'shipping_address1' => 'required|string|max:255',
+            'shipping_address2' => 'nullable|string|max:255',
+            'shipping_address3' => 'nullable|string|max:255',
+            'shipping_contact1' => 'nullable|string|max:255',
+            'shipping_contact2' => 'nullable|string|max:255',
+            'shipping_phone1' => 'required|string|min:10|max:255',
+            'shipping_phone2' => 'nullable|string|min:10|max:255',
+            'shipping_email1' => 'required|string|email:dns,rfc|max:255',
+            'shipping_email2' => 'nullable|string|email:dns,rfc|max:255',
+            'shipping_country' => 'required|string|max:255',
+            'shipping_state' => 'required|string|max:255',
+            'shipping_city' => 'required|string|max:255',
+            'shipping_zip' => 'required|string|max:10',
+        ];
+
+        if (config('amplify.client_code') == 'STV') {
+            $rules['shipping_number'][] = Rule::unique('customer_addresses', 'address_code')->where(function ($query) {
+                return $query->where('customer_id', customer()->getKey());
+            });
+        }
+
+        $validatedData = $request->validate($rules);
 
         try {
-            $validateAddress = ErpApi::validateCustomerShippingLocation($validatedData);
 
-            if ($validateAddress->Response === 'Success') {
-                $erpAddress = ErpApi::createCustomerShippingLocation([
-                    'shipping_number' => $validatedData['shipping_number'],
-                    'shipping_name' => $validateAddress->Name,
-                    'shipping_address1' => $validateAddress->Address1,
-                    'shipping_address2' => $validateAddress->Address2,
-                    'shipping_contact1' => $validatedData['shipping_contact1'],
-                    'shipping_contact2' => $validatedData['shipping_contact2'],
-                    'shipping_phone1' => $validatedData['shipping_phone1'],
-                    'shipping_phone2' => $validatedData['shipping_phone2'],
-                    'shipping_email1' => $validatedData['shipping_email1'],
-                    'shipping_email2' => $validatedData['shipping_email2'],
-                    'shipping_country' => $validatedData['shipping_country'],
-                    'shipping_state' => $validateAddress->State,
-                    'shipping_city' => $validateAddress->City,
-                    'shipping_zip' => $validateAddress->ZipCode,
-                ]);
+            $validateAddress = ErpApi::validateCustomerShippingLocation([
+                'ship_to_name' => $request->input('shipping_name'),
+                'ship_to_code' => $request->input('shipping_number'),
+                'ship_to_address1' => $request->input('shipping_address1'),
+                'ship_to_address2' => $request->input('shipping_address2'),
+                'ship_to_address3' => $request->input('shipping_address3'),
+                'ship_to_city' => $request->input('shipping_city'),
+                'ship_to_country_code' => $request->input('shipping_country'),
+                'ship_to_state' => $request->input('shipping_state'),
+                'ship_to_zip_code' => $request->input('shipping_zip'),
+            ]);
 
-                if (config('amplify.client_code') != 'ACP' && ! empty($erpAddress->ShipToNumber)) {
-                    CustomerAddress::create([
-                        'customer_id' => customer()->id,
-                        'address_code' => $erpAddress->ShipToNumber,
-                        'address_name' => $erpAddress->ShipToName,
-                        'address_1' => $erpAddress->ShipToAddress1,
-                        'address_2' => $erpAddress->ShipToAddress2,
-                        'country_code' => $erpAddress->ShipToCountryCode,
-                        'state' => $erpAddress->ShipToState,
-                        'city' => $erpAddress->ShipToCity,
-                        'zip_code' => $erpAddress->ShipToZipCode,
-                    ]);
-                }
-
-                return $erpAddress;
+            if ($validateAddress->Response !== 'Success') {
+                throw new \Exception($addressValidation->Message ?? 'The address value was incomplete.');
             }
 
-            return response()->json([
-                'message' => $validateAddress->Details ?? 'Something went wrong.',
-            ], 500);
+            $erpAddress = ErpApi::createCustomerShippingLocation([
+                'address_code' => $validateAddress->Reference,
+                'address_name' => $validateAddress->Name,
+                'address_1' => $validateAddress->Address1,
+                'address_2' => $validateAddress->Address2,
+                'address_3' => $validateAddress->Address3,
+                'contact' => $validatedData['shipping_contact1'] ?? null,
+                'contact_2' => $validatedData['shipping_contact2'] ?? null,
+                'phone_1' => $validatedData['shipping_phone1'] ?? null,
+                'phone_2' => $validatedData['shipping_phone2'] ?? null,
+                'email_1' => $validatedData['shipping_email1'] ?? null,
+                'email_2' => $validatedData['shipping_email2'] ?? null,
+                'country_code' => $validatedData['shipping_country'] ?? null,
+                'state' => $validateAddress->State,
+                'city' => $validateAddress->City,
+                'zip_code' => $validateAddress->ZipCode,
+            ]);
+
+            if (config('amplify.client_code') != 'ACP' && !empty($erpAddress->ShipToNumber)) {
+                CustomerAddress::create([
+                    'customer_id' => customer()->getKey(),
+                    'address_code' => $erpAddress->ShipToNumber,
+                    'address_name' => $erpAddress->ShipToName,
+                    'address_1' => $erpAddress->ShipToAddress1,
+                    'address_2' => $erpAddress->ShipToAddress2,
+                    'address_3' => $erpAddress->ShipToAddress3,
+                    'country_code' => $erpAddress->ShipToCountryCode,
+                    'state' => $erpAddress->ShipToState,
+                    'city' => $erpAddress->ShipToCity,
+                    'zip_code' => $erpAddress->ShipToZipCode,
+                ]);
+            }
+
+            return $erpAddress;
 
         } catch (\Throwable $th) {
-            return response()->json([
-                'message' => $th->getMessage(),
-            ], 500);
+            return response()->json(['message' => $th->getMessage()], 500);
         }
     }
 
@@ -149,7 +168,7 @@ class ShippingController extends Controller
     private function getWillCallMethods(mixed $carts, mixed $shippingMethods): mixed
     {
         $products = ErpApi::getProductPriceAvailability([
-            'items' => $carts->map(fn ($item): array => [
+            'items' => $carts->map(fn($item): array => [
                 'item' => $item['ItemNumber'],
                 'qty' => $item['OrderQty'],
             ]),
@@ -191,7 +210,7 @@ class ShippingController extends Controller
                 return $quantity < $cart['OrderQty'];
             });
 
-        if (count($warehouses) > 0 && ! $isBackOrder) {
+        if (count($warehouses) > 0 && !$isBackOrder) {
             $shippingMethods['FreightRate']['WILL CALL'][0] = $warehouses;
         } else {
             unset($shippingMethods['FreightRate']['WILL CALL']);
@@ -216,7 +235,7 @@ class ShippingController extends Controller
         // find the matching wrapper by ShipToNumber
         $selected = $all->firstWhere('ShipToNumber', $data['ship_to_number']);
 
-        if (! $selected) {
+        if (!$selected) {
             return back()->withErrors([
                 'ship_to_number' => 'Selected address is invalid.',
             ]);
