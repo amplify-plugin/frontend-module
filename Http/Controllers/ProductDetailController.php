@@ -8,6 +8,12 @@ use Amplify\System\Sayt\Facade\Sayt;
 use App\Http\Controllers\Controller;
 use ErrorException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Amplify\ErpApi\Facades\ErpApi;
+use Amplify\System\Backend\Models\Warehouse;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Amplify\System\Backend\Models\ProductRelation;
+use Amplify\System\Helpers\UtilityHelper;
 
 class ProductDetailController extends Controller
 {
@@ -56,6 +62,101 @@ class ProductDetailController extends Controller
             store()->dynamicPageModel = $page;
         } else {
             $this->loadPageByType('single_product');
+        }
+    }
+
+    public function relatedProducts(Request $request, Product $product): string
+    {
+        // Get related products from the database
+        $dbProduct = $product;
+
+        // Load all related products from the database (no relation_type filtering for now)
+        $related = $dbProduct->relatedProducts()->get();
+
+        if ($related->isEmpty()) {
+            return '';
+        }
+
+        $items = $related->map(function ($p) {
+            return [
+                'item' => $p->product_code,
+                'uom' => $p->uom ?? 'EA',
+            ];
+        })->toArray();
+
+        $erpCustomer = null;
+        $priceAvailability = collect();
+
+        if (customer_check() || config('amplify.basic.enable_guest_pricing')) {
+            $warehouses = ErpApi::getWarehouses([['enabled', '=', true]]);
+            $warehouseString = $warehouses->pluck('WarehouseNumber')->implode(',');
+
+            $erpCustomer = ErpApi::getCustomerDetail();
+            if (! Str::contains($warehouseString, $erpCustomer->DefaultWarehouse)) {
+                $warehouseString = "$warehouseString,{$erpCustomer->DefaultWarehouse}";
+            }
+
+            if (! empty($items)) {
+                $priceAvailability = ErpApi::getProductPriceAvailability([
+                    'items' => $items,
+                    'warehouse' => $warehouseString,
+                ]);
+            }
+        }
+
+        $warehouseNumber = $priceAvailability->pluck('WarehouseID')->all();
+        $warehouseModels = Warehouse::whereIn('code', $warehouseNumber)->get(['code', 'name'])->toArray();
+
+        $warehouse_codes = array_unique([
+            $erpCustomer->DefaultWarehouse ?? null,
+            customer()?->warehouse?->code ?? null,
+            config('amplify.frontend.guest_checkout_warehouse'),
+        ]);
+
+        // Enrich related products with ERP data and DB fields
+        $related->transform(function ($rp) use ($priceAvailability, $warehouse_codes) {
+            $filtered = $priceAvailability->where('ItemNumber', $rp->product_code)->whereIn('WarehouseID', $warehouse_codes);
+            $rp->ERP = $filtered->isNotEmpty() ? $filtered->first() : $priceAvailability->where('ItemNumber', $rp->product_code)->first();
+            $rp->total_quantity_available = $priceAvailability->where('ItemNumber', $rp->product_code)->sum('QuantityAvailable');
+
+            $rp->mpn = $rp->manufacturer ?? 'N/A';
+            $rp->min_order_qty = $rp->min_order_qty ?? 1;
+            $rp->qty_interval = $rp->qty_interval ?? 1;
+            $rp->allow_back_order = $rp->allow_back_order ?? 0;
+            $rp->default_document = $rp->default_document_type ?? null;
+            $rp->assembled = $rp->vendornum == 3160;
+            $rp->in_stock = $rp->vendornum == 3160 ? true : ($rp->in_stock ?? false);
+            $rp->is_ncnr = $rp->is_ncnr ?? false;
+            $rp->ship_restriction = $rp->ship_restriction ?? false;
+            $rp->pricing = true;
+            $rp->specifications = $rp->attributes->map(function ($item) {
+                $value = $item->pivot->attribute_value;
+                $value = UtilityHelper::isJson($value) ? json_decode($value, true)[config('app.locale')] ?? null : $value;
+
+                    return (object) [
+                        'name' => $item->name,
+                        'value' => $value,
+                    ];
+                })->toArray();
+
+            return $rp;
+        });
+       
+        try {
+            // If this is an AJAX request, return only the product list partial
+            if ($request->ajax()) {
+                return view('widget::product.tabs.related-products-list', [
+                    'relatedProducts' => $related,
+                    'product' => $dbProduct,
+                ])->render();
+            }
+
+            return view('widget::product.tabs.related-products', [
+                'relatedProducts' => $related,
+                'product' => $dbProduct,
+            ])->render();
+        } catch (\Exception $e) {
+            abort(500, $e->getMessage());
         }
     }
 }
