@@ -2,7 +2,7 @@
 
 namespace Amplify\Frontend\Http\Controllers;
 
-use Amplify\ErpApi\Jobs\CustomerAddressSyncJob;
+use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\Frontend\Http\Requests\ShipToAddressRequest;
 use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\System\Backend\Models\Contact;
@@ -23,7 +23,7 @@ class AddressController extends Controller
     public function index()
     {
         $this->loadPageByType('address');
-        if (! customer(true)->can('ship-to-addresses.list')) {
+        if (!customer(true)->can('ship-to-addresses.list')) {
             abort(403);
         }
 
@@ -37,7 +37,7 @@ class AddressController extends Controller
     {
         $this->loadPageByType('address_create');
 
-        if (! customer(true)->can('ship-to-addresses.add')) {
+        if (!customer(true)->can('ship-to-addresses.add')) {
             abort(403);
         }
 
@@ -50,11 +50,58 @@ class AddressController extends Controller
      */
     public function store(ShipToAddressRequest $request)
     {
-        try {
-            $address = CustomerAddress::create($request->validated());
+        $validatedAddress = ErpApi::validateCustomerShippingLocation([
+            'ship_to_name' => $request->input('address_name'),
+            'ship_to_code' => $request->input('address_code'),
+            'ship_to_address1' => $request->input('address_1'),
+            'ship_to_address2' => $request->input('address_2'),
+            'ship_to_address3' => $request->input('address_3'),
+            'ship_to_city' => $request->input('city'),
+            'ship_to_country_code' => $request->input('country_code'),
+            'ship_to_state' => $request->input('state'),
+            'ship_to_zip_code' => $request->input('zip_code'),
+        ]);
 
-            if (config('amplify.erp.auto_create_ship_to')) {
-                CustomerAddressSyncJob::dispatch($address->toArray());
+        if ($validatedAddress->Response !== 'Success') {
+            Session::flash('error', $validatedAddress->Message ?? 'The address value was incomplete.');
+            return back();
+        }
+
+        try {
+
+            $erpAddress = ErpApi::createCustomerShippingLocation([
+                'address_code' => $validatedAddress->Reference,
+                'address_name' => $validatedAddress->Name,
+                'address_1' => $validatedAddress->Address1,
+                'address_2' => $validatedAddress->Address2,
+                'address_3' => $validatedAddress->Address3,
+
+                'contact' => $request->input('shipping_contact1'),
+                'contact_2' => $request->input('shipping_contact2'),
+                'phone_1' => $request->input('shipping_phone1'),
+                'phone_2' => $request->input('shipping_phone2'),
+                'email_1' => $request->input('shipping_email1'),
+                'email_2' => $request->input('shipping_email2'),
+
+                'country_code' => $request->input('country_code'),
+                'state' => $validatedAddress->State,
+                'city' => $validatedAddress->City,
+                'zip_code' => $validatedAddress->ZipCode,
+            ]);
+
+            if (config('amplify.client_code') != 'ACP' && !empty($erpAddress->ShipToNumber)) {
+                $address = CustomerAddress::create([
+                    'customer_id' => $request->input('customer_id', customer()->getKey()),
+                    'address_code' => $erpAddress->ShipToNumber,
+                    'address_name' => $erpAddress->ShipToName,
+                    'address_1' => $erpAddress->ShipToAddress1,
+                    'address_2' => $erpAddress->ShipToAddress2,
+                    'address_3' => $erpAddress->ShipToAddress3,
+                    'country_code' => $erpAddress->ShipToCountryCode,
+                    'state' => $erpAddress->ShipToState,
+                    'city' => $erpAddress->ShipToCity,
+                    'zip_code' => $erpAddress->ShipToZipCode,
+                ]);
             }
 
             Session::flash('success', 'Addresses Added Successfully');
@@ -76,7 +123,7 @@ class AddressController extends Controller
         store()->addressModel = $address;
 
         $this->loadPageByType('address_details');
-        if (! customer(true)->can('ship-to-addresses.view')) {
+        if (!customer(true)->can('ship-to-addresses.view')) {
             abort(403);
         }
 
@@ -92,7 +139,7 @@ class AddressController extends Controller
 
         $this->loadPageByType('address_edit');
 
-        if (! customer(true)->can('ship-to-addresses.update')) {
+        if (!customer(true)->can('ship-to-addresses.update')) {
             abort(403);
         }
 
@@ -122,7 +169,7 @@ class AddressController extends Controller
      */
     public function destroy(CustomerAddress $address)
     {
-        if (! customer(true)->can('ship-to-addresses.remove')) {
+        if (!customer(true)->can('ship-to-addresses.remove')) {
             abort(403);
         }
         try {
