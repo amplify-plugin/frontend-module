@@ -13,6 +13,7 @@ use Amplify\System\Backend\Models\Warehouse;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Amplify\System\Backend\Models\ProductRelation;
+use Amplify\System\Backend\Models\ProductRelationshipType;
 use Amplify\System\Helpers\UtilityHelper;
 
 class ProductDetailController extends Controller
@@ -70,8 +71,29 @@ class ProductDetailController extends Controller
         // Get related products from the database
         $dbProduct = $product;
 
-        // Load all related products from the database (no relation_type filtering for now)
-        $related = $dbProduct->relatedProducts()->get();
+        // Determine selected relation type (optional)
+        $relationTypeId = $request->get('relation_type') ?? null;
+
+        // Load relation types that are actually used by this product (avoid showing unrelated types)
+        $typeIds = ProductRelation::where('product_id', $dbProduct->id)->pluck('product_relationship_type_id')->unique()->toArray();
+        $relationTypes = ProductRelationshipType::whereIn('id', $typeIds)->get();
+
+        // If no relation_type was provided, default to the first available type (so the UI shows a filtered set)
+        if (empty($relationTypeId) && $relationTypes->isNotEmpty()) {
+            $relationTypeId = $relationTypes->first()->id;
+        }
+
+        // Load related products from the database, filtered by (now-determined) relation type when available
+        $relatedQuery = $dbProduct->relatedProducts();
+        if (!empty($relationTypeId)) {
+            // filter by pivot product_relationship_type_id (pivot uses this column)
+            try {
+                $relatedQuery = $relatedQuery->wherePivot('product_relationship_type_id', $relationTypeId);
+            } catch (\Throwable $e) {
+                // fallback: ignore filtering if wherePivot not available
+            }
+        }
+        $related = $relatedQuery->get();
 
         if ($related->isEmpty()) {
             return '';
@@ -104,15 +126,13 @@ class ProductDetailController extends Controller
             }
         }
 
-        $warehouseNumber = $priceAvailability->pluck('WarehouseID')->all();
-        $warehouseModels = Warehouse::whereIn('code', $warehouseNumber)->get(['code', 'name'])->toArray();
-
         $warehouse_codes = array_unique([
             $erpCustomer->DefaultWarehouse ?? null,
             customer()?->warehouse?->code ?? null,
             config('amplify.frontend.guest_checkout_warehouse'),
         ]);
 
+        
         // Enrich related products with ERP data and DB fields
         $related->transform(function ($rp) use ($priceAvailability, $warehouse_codes) {
             $filtered = $priceAvailability->where('ItemNumber', $rp->product_code)->whereIn('WarehouseID', $warehouse_codes);
@@ -141,19 +161,15 @@ class ProductDetailController extends Controller
 
             return $rp;
         });
-       
+
         try {
             // If this is an AJAX request, return only the product list partial
-            if ($request->ajax()) {
-                return view('widget::product.tabs.related-products-list', [
-                    'relatedProducts' => $related,
-                    'product' => $dbProduct,
-                ])->render();
-            }
-
+            // Return the same view (partial/full) so the UI can be replaced when switching types via AJAX
             return view('widget::product.tabs.related-products', [
                 'relatedProducts' => $related,
                 'product' => $dbProduct,
+                'relationTypes' => $relationTypes,
+                'selectedRelationType' => $relationTypeId,
             ])->render();
         } catch (\Exception $e) {
             abort(500, $e->getMessage());
