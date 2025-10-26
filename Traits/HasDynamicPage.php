@@ -165,8 +165,15 @@ trait HasDynamicPage
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     private function preloadDefaultAssets(): void
     {
+        $themeFolder = theme()->slug ?? 'demo';
+
+        $themePrefix = "themes/{$themeFolder}/assets";
+
         foreach (config('amplify.frontend.styles', []) as $group => $styles) {
             foreach ($styles ?? [] as $style) {
                 push_css($style, $group);
@@ -174,13 +181,13 @@ trait HasDynamicPage
         }
 
         push_css([
-            theme_asset('css/vendor.min.css'),
-            asset('vendor/widget/css/widgets.css'),
-            theme_asset('css/styles.min.css'),
+            mix('css/vendor.min.css', $themePrefix),
+            mix('css/widgets.css', 'vendor/widget'),
+            mix('css/styles.min.css', $themePrefix),
         ], 'template-style');
 
         push_css([
-            theme_asset('css/custom.css'),
+            mix('css/custom.css', $themePrefix),
         ], 'custom-style');
 
         foreach (config('amplify.frontend.scripts', []) as $group => $scripts) {
@@ -190,15 +197,15 @@ trait HasDynamicPage
         }
 
         push_js([
-            theme_asset('js/vendor.min.js'),
+            mix('js/vendor.min.js', $themePrefix),
         ], 'plugin-script');
 
         push_js([
-            theme_asset('js/scripts.min.js'),
+            mix('js/scripts.min.js', $themePrefix),
         ], 'template-script');
 
         push_js([
-            theme_asset('js/custom.js'),
+            mix('js/custom.js', $themePrefix),
         ], 'custom-script');
     }
 
