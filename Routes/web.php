@@ -115,6 +115,8 @@ Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class, ContactF
         })->where(['identifier' => '([0-9]+)', 'seopath' => '(.*)']);
     }
 
+    Route::get('related-products/{product}', [ProductDetailController::class, 'relatedProducts'])->name('shop.relatedProducts');
+
     /*
     |--------------------------------------------------------------------------
     | Without Authentication
