@@ -85,7 +85,7 @@ class ProductDetailController extends Controller
         $relatedIds = $relations->when($relationTypeId, fn($c) => $c->where('product_relationship_type_id', $relationTypeId))->pluck('related_product_id');
 
         // Load related products with attributes
-        $perPage = $request->get('per_page', 10);
+        $perPage = $request->get('per_page', getPaginationLengths()[0]);
 
         $related = Product::with(['attributes'])
             ->whereIn('id', $relatedIds)
