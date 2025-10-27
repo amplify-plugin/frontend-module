@@ -15,6 +15,7 @@ class CartResource extends JsonResource
         return [
             'products' => CartItemResource::collection($this->whenLoaded('cartItems')),
             'total_price' => $this->total ?? 0,
+            'id' => $this->id
         ];
     }
 }
