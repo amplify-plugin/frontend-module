@@ -44,25 +44,27 @@ class AuthenticatedSessionController extends Controller
     public function attempt(LoginRequest $request): RedirectResponse
     {
         $request->ensureIsNotRateLimited();
+
         $account = Contact::where([
             'email' => $request->input('email'),
             'enabled' => true,
         ])->first();
+
         $guestCart = getCart()?->load('cartItems') ?? null;
 
-        if (! $account) {
+        if (!$account) {
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
             ]);
         }
 
-        if (! $account->isApproved()) {
+        if (!$account->isApproved()) {
             throw ValidationException::withMessages([
                 'email' => 'The account has not been approved yet. Please contact Admin',
             ]);
         }
 
-        if (! Auth::guard(Contact::AUTH_GUARD)->attempt($request->only('email', 'password'), $request->boolean('remember'))) {
+        if (!Auth::guard(Contact::AUTH_GUARD)->attempt($request->only('email', 'password'), $request->boolean('remember'))) {
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
             ]);
@@ -71,6 +73,13 @@ class AuthenticatedSessionController extends Controller
         event(new ContactLoggedIn($account, $guestCart));
 
         $request->clearRateLimiter();
+
+        $session_token = \Illuminate\Support\Facades\Session::token();
+        @Cache::forget("{$session_token}-customer-model");
+        @Cache::forget("{$session_token}-mobile-menu");
+        @Cache::forget("{$session_token}-primary-menu");
+        @Cache::forget("{$session_token}-account-menu");
+
         $request->session()->regenerate();
 
         return redirect()->to(CustomerHelper::afterLoggedRedirectTo($request->all()));
@@ -85,14 +94,13 @@ class AuthenticatedSessionController extends Controller
     {
         try {
             $customer_number = customer()->customer_code;
-
-            if (Cache::has("getCustomerDetails-{$customer_number}")) {
-                Cache::forget("getCustomerDetails-{$customer_number}");
-            }
-
-            if (Cache::has("getCustomerShippingLocationList-{$customer_number}")) {
-                Cache::forget("getCustomerShippingLocationList-{$customer_number}");
-            }
+            $session_token = \Illuminate\Support\Facades\Session::token();
+            @Cache::forget("getCustomerDetails-{$customer_number}");
+            @Cache::forget("getCustomerShippingLocationList-{$customer_number}");
+            @Cache::forget("{$session_token}-customer-model");
+            @Cache::forget("{$session_token}-mobile-menu");
+            @Cache::forget("{$session_token}-primary-menu");
+            @Cache::forget("{$session_token}-account-menu");
 
             $account = Auth::guard(Contact::AUTH_GUARD)->user();
 
