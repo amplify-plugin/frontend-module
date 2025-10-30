@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Blade;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Illuminate\Support\Facades\Cookie;
 
 class ShopSearchController extends Controller
 {
@@ -27,27 +28,29 @@ class ShopSearchController extends Controller
     public function __invoke(?string $query = null): RedirectResponse|string
     {
         abort_unless(! customer_check() || customer(true)->can('shop.browse'), 403);
- 
+
         $eaProductData = store()->eaProductsData;
- 
+
         $products = $eaProductData->getProducts();
-       
+
         if (! empty($products) && count($products) === 1 ){
             $seoPath = $eaProductData->getCurrentSeoPath();
             $firstProduct = array_shift($products);
-           
+
             if (! empty($firstProduct->Sku_Id) && ! empty($skuId = explode('-', $firstProduct->Sku_Id)[1])) {
                 $dbProduct = Product::find($skuId);
                 $firstProduct->Product_Id = $firstProduct->Amplify_Id = $skuId;
                 $firstProduct->Product_Slug = $dbProduct->product_slug;
             }
- 
+
             return \redirect(frontendSingleProductURL($firstProduct, $seoPath));
- 
+
         }
- 
+
         $this->loadPageByType('shop');
- 
+
+        Cookie::queue('showView',  active_shop_view(), MONTH/60, '/'.config('amplify.frontend.shop_page_prefix'));
+
         return $this->render();
     }
 
