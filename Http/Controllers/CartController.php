@@ -18,7 +18,7 @@ class CartController extends Controller
 
     public function __construct()
     {
-        if (! config('amplify.frontend.guest_checkout')) {
+        if (! config('amplify.frontend.guest_add_to_cart')) {
             $this->middleware('customers');
         }
     }
