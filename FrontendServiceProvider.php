@@ -33,10 +33,6 @@ class FrontendServiceProvider extends ServiceProvider
     {
         $this->loadRoutesFrom(__DIR__.'/Routes/web.php');
 
-        $this->publishes([
-            __DIR__.'/resources' => public_path('vendor/frontend')
-        ], 'frontend-asset');
-
         if (! $this->app->runningInConsole()) {
 
             $request = $this->app->make(Request::class);
@@ -46,10 +42,5 @@ class FrontendServiceProvider extends ServiceProvider
 
             }
         }
-
-        $this->app->booted(function () {
-            push_js( 'vendor/frontend/js/modernizr.min.js', 'head-script');
-            push_js( 'vendor/frontend/js/utility.js', 'custom-script');
-        });
     }
 }
