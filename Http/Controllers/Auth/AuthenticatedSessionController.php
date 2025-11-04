@@ -60,7 +60,7 @@ class AuthenticatedSessionController extends Controller
 
         if (!$account->isApproved()) {
             throw ValidationException::withMessages([
-                'email' => 'The account has not been approved yet. Please contact Admin',
+                'email' => __('The account has not been approved yet. Please contact Admin'),
             ]);
         }
 
@@ -82,13 +82,15 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->to(CustomerHelper::afterLoggedRedirectTo($request->all()));
+        return redirect()
+            ->to(CustomerHelper::afterLoggedRedirectTo($request->all()))
+            ->with('success', __("Welcome back! :name", ['name' => $account->name]));
     }
 
     /**
      * Destroy an authenticated session.
      *
-     * @return Application|ResponseFactory|\Illuminate\Foundation\Application|JsonResponse|Response
+     * @return RedirectResponse
      */
     public function logout(Request $request)
     {
@@ -115,14 +117,13 @@ class AuthenticatedSessionController extends Controller
 
             $request->session()->regenerateToken();
 
-            return response([
-                'message' => 'Session Logout successfully',
-            ], 200);
+            return redirect()
+                ->to(route('frontend.index'))
+                ->with('success', __('Session Logout successfully'));
 
         } catch (\Exception $exception) {
-            return response([
-                'message' => $exception->getMessage(),
-            ], 500);
+            return back()
+                ->with('error', $exception->getMessage());
         }
     }
 }
