@@ -10,14 +10,16 @@ use Amplify\System\Backend\Models\Warehouse;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class ShippingController extends Controller
 {
     public function store(Request $request)
     {
+        // Define validation rules first (outside of try)
         $rules = [
             'shipping_number' => ['nullable'],
-            'shipping_name' => 'nullable|string|max:255',
+            'shipping_name' => 'required|string|max:255',
             'shipping_address1' => 'required|string|max:255',
             'shipping_address2' => 'nullable|string|max:255',
             'shipping_address3' => 'nullable|string|max:255',
@@ -25,7 +27,7 @@ class ShippingController extends Controller
             'shipping_contact2' => 'nullable|string|max:255',
             'shipping_phone1' => 'required|string|min:10|max:255',
             'shipping_phone2' => 'nullable|string|min:10|max:255',
-            'shipping_email1' => 'required|string|email:dns,rfc|max:255',
+            'shipping_email1' => 'nullable|string|email:dns,rfc|max:255',
             'shipping_email2' => 'nullable|string|email:dns,rfc|max:255',
             'shipping_country' => 'required|string|max:255',
             'shipping_state' => 'required|string|max:255',
@@ -33,30 +35,29 @@ class ShippingController extends Controller
             'shipping_zip' => 'required|string|max:10',
         ];
 
-        if (config('amplify.client_code') == 'STV') {
-            $rules['shipping_number'][] = Rule::unique('customer_addresses', 'address_code')->where(function ($query) {
-                return $query->where('customer_id', customer()->getKey());
-            });
+        if (config('amplify.client_code') === 'STV') {
+            $rules['shipping_number'][] = Rule::unique('customer_addresses', 'address_code')
+                ->where(fn($query) => $query->where('customer_id', customer()->getKey()));
         }
 
-        $validatedData = $request->validate($rules);
-
         try {
+            // Let Laravel throw ValidationException automatically
+            $validatedData = $request->validate($rules);
 
             $validateAddress = ErpApi::validateCustomerShippingLocation([
-                'ship_to_name' => $request->input('shipping_name'),
-                'ship_to_code' => $request->input('shipping_number'),
-                'ship_to_address1' => $request->input('shipping_address1'),
-                'ship_to_address2' => $request->input('shipping_address2'),
-                'ship_to_address3' => $request->input('shipping_address3'),
-                'ship_to_city' => $request->input('shipping_city'),
-                'ship_to_country_code' => $request->input('shipping_country'),
-                'ship_to_state' => $request->input('shipping_state'),
-                'ship_to_zip_code' => $request->input('shipping_zip'),
+                'ship_to_name' => $validatedData['shipping_name'] ?? null,
+                'ship_to_code' => $validatedData['shipping_number'] ?? null,
+                'ship_to_address1' => $validatedData['shipping_address1'],
+                'ship_to_address2' => $validatedData['shipping_address2'] ?? null,
+                'ship_to_address3' => $validatedData['shipping_address3'] ?? null,
+                'ship_to_city' => $validatedData['shipping_city'],
+                'ship_to_country_code' => $validatedData['shipping_country'],
+                'ship_to_state' => $validatedData['shipping_state'],
+                'ship_to_zip_code' => $validatedData['shipping_zip'],
             ]);
 
             if ($validateAddress->Response !== 'Success') {
-                throw new \Exception($addressValidation->Message ?? 'The address value was incomplete.');
+                throw new \Exception($validateAddress->Message ?? 'The address value was incomplete.');
             }
 
             $erpAddress = ErpApi::createCustomerShippingLocation([
@@ -71,13 +72,13 @@ class ShippingController extends Controller
                 'phone_2' => $validatedData['shipping_phone2'] ?? null,
                 'email_1' => $validatedData['shipping_email1'] ?? null,
                 'email_2' => $validatedData['shipping_email2'] ?? null,
-                'country_code' => $validatedData['shipping_country'] ?? null,
+                'country_code' => $validateAddress->CountryCode,
                 'state' => $validateAddress->State,
                 'city' => $validateAddress->City,
                 'zip_code' => $validateAddress->ZipCode,
             ]);
 
-            if (config('amplify.client_code') != 'ACP' && !empty($erpAddress->ShipToNumber)) {
+            if (config('amplify.client_code') !== 'ACP' && !empty($erpAddress->ShipToNumber)) {
                 CustomerAddress::create([
                     'customer_id' => customer()->getKey(),
                     'address_code' => $erpAddress->ShipToNumber,
@@ -92,9 +93,13 @@ class ShippingController extends Controller
                 ]);
             }
 
-            return $erpAddress;
+            return response()->json(['success' => true, 'address' => $erpAddress]);
 
+        } catch (ValidationException $e) {
+            // Return validation errors in JSON
+            return response()->json(['errors' => $e->errors()], 422);
         } catch (\Throwable $th) {
+            // Return any other errors
             return response()->json(['message' => $th->getMessage()], 500);
         }
     }
@@ -116,7 +121,7 @@ class ShippingController extends Controller
     public function options(ShippingOptionRequest $request)
     {
         $orderInfo = [
-            'customer_number' => customer_check() ? customer()->erp_id : config('amplify.frontend.guest_default'),
+            'customer_number' => customer_check() ? customer()->customer_erp_id : config('amplify.frontend.guest_default'),
             'customer_default_warehouse' => customer_check()
                 ? ($request->input('customer_default_warehouse') ?: customer()->warehouse_seq_code)
                 : config('amplify.frontend.guest_checkout_warehouse'),
