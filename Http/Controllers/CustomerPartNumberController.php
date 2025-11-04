@@ -2,33 +2,49 @@
 
 namespace Amplify\Frontend\Http\Controllers;
 
-use Amplify\Frontend\Http\Requests\UpdateCustomerPartNumberRequest;
+use Amplify\Frontend\Http\Requests\CustomerPartNumberRequest;
 use Amplify\System\Backend\Models\CustomPartNumber;
 use App\Http\Controllers\Controller;
 
 class CustomerPartNumberController extends Controller
 {
-    public function __invoke(UpdateCustomerPartNumberRequest $request)
+    public function store(CustomerPartNumberRequest $request)
     {
-        $inputs = $request->validated();
+        try {
+            $inputs = $request->validated();
 
-        if (empty($inputs['customer_id'])) {
-            $customer = customer();
-            $inputs['customer_id'] = $customer->getKey();
-            $inputs['customer_product_uom'] = 'EA';
+            $customerPartNumber = CustomPartNumber::where('customer_id', $inputs['customer_id'])
+                ->where('product_id', $inputs['product_id'])
+                ->first();
+
+            if ($customerPartNumber) {
+                $customerPartNumber->update($inputs);
+                $customerPartNumber->refresh();
+            } else {
+                $customerPartNumber = CustomPartNumber::create($inputs);
+            }
+
+            return response()->json(['message' => $customerPartNumber->wasRecentlyCreated ? 'New customer part number added successfully.' : 'Customer part number updated successfully.']);
+        } catch (\Exception $exception) {
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
+    }
 
-        $customerPartNumber = CustomPartNumber::where('customer_id', $inputs['customer_id'])
-            ->where('product_id', $inputs['product_id'])
-            ->first();
-        if ($customerPartNumber) {
-            $customerPartNumber->update($inputs);
+    public function destroy(CustomerPartNumberRequest $request)
+    {
+        try {
 
-            $customerPartNumber->refresh();
-        } else {
-            $customerPartNumber = CustomPartNumber::create($inputs);
+            $inputs = $request->validated();
+
+            $customerPartNumber = CustomPartNumber::where('customer_id', $inputs['customer_id'])
+                ->where('product_id', $inputs['product_id'])
+                ->first();
+            if ($customerPartNumber) {
+                $customerPartNumber->delete();
+            }
+            return response()->json(['message' => 'Customer part number removed successfully.']);
+        } catch (\Exception $exception) {
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
-
-        return response()->json(['message' => 'Customer Part Number updated successfully.', 'data' => $customerPartNumber]);
     }
 }
