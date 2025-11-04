@@ -24,7 +24,11 @@ class CustomerPartNumberController extends Controller
                 $customerPartNumber = CustomPartNumber::create($inputs);
             }
 
-            return response()->json(['message' => $customerPartNumber->wasRecentlyCreated ? 'New customer part number added successfully.' : 'Customer part number updated successfully.']);
+            $message = $customerPartNumber->wasRecentlyCreated
+                ? 'New customer part number added successfully.'
+                : 'Customer part number updated successfully.';
+
+            return response()->json(['message' => $message]);
         } catch (\Exception $exception) {
             return response()->json(['message' => $exception->getMessage()], 500);
         }
