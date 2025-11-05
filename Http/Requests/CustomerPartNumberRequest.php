@@ -39,6 +39,7 @@ class CustomerPartNumberRequest extends FormRequest
     protected function prepareForValidation()
     {
         return $this->mergeIfMissing([
+            'company_id' => 1,
             'customer_id' => customer(true)->customer_id,
             'customer_address_id' => customer(true)->customer_address_id,
             'customer_product_uom' => 'EA'

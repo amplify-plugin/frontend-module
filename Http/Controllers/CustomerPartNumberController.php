@@ -4,6 +4,8 @@ namespace Amplify\Frontend\Http\Controllers;
 
 use Amplify\Frontend\Http\Requests\CustomerPartNumberRequest;
 use Amplify\System\Backend\Models\CustomPartNumber;
+use Amplify\System\Backend\Models\Event;
+use Amplify\System\Factories\NotificationFactory;
 use App\Http\Controllers\Controller;
 
 class CustomerPartNumberController extends Controller
@@ -25,8 +27,12 @@ class CustomerPartNumberController extends Controller
             }
 
             $message = $customerPartNumber->wasRecentlyCreated
-                ? 'New customer part number added successfully.'
-                : 'Customer part number updated successfully.';
+                ? __('New customer part number added successfully.')
+                : __('Customer part number updated successfully.');
+
+            if (!$customerPartNumber->wasRecentlyCreated) {
+                NotificationFactory::call(Event::CUSTOMER_PART_NUMBER_DELETED, $customerPartNumber->toArray());
+            }
 
             return response()->json(['message' => $message]);
         } catch (\Exception $exception) {
@@ -44,9 +50,14 @@ class CustomerPartNumberController extends Controller
                 ->where('product_id', $inputs['product_id'])
                 ->first();
             if ($customerPartNumber) {
+
+                $data = $customerPartNumber->toArray();
+
                 $customerPartNumber->delete();
+
+                NotificationFactory::call(Event::CUSTOMER_PART_NUMBER_DELETED, $data);
             }
-            return response()->json(['message' => 'Customer part number removed successfully.']);
+            return response()->json(['message' => __('Customer part number removed successfully.')]);
         } catch (\Exception $exception) {
             return response()->json(['message' => $exception->getMessage()], 500);
         }
