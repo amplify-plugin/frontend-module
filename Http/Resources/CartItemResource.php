@@ -18,7 +18,7 @@ class CartItemResource extends JsonResource
             'id' => $this->id,
             'product_id' => $this->product_id,
             'product_code' => $this->product_code,
-            'product_name' => ucwords(Str::lower($this->product_name)),
+            'product_name' => $this->product_name,
             'short_description' => ! empty($this->product) ?
                                         $this->product->local_short_description : '',
             'manufacturer_name' => ! empty($this->product->manufacturerRelation) ?
