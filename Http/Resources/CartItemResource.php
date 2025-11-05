@@ -35,7 +35,7 @@ class CartItemResource extends JsonResource
             'expiry_date' => $this->expiry_date,
             'additional_info' => $this->additional_info,
             'product_image' => $this->product_image,
-            'uom' => $this->uom ?? 'EA',
+            'uom' => unit_of_measurement($this->uom ?? 'EA', 'Each'),
             'url' => $this->product ? frontendSingleProductURL($this->product) : '#',
             'product_back_order' => $this->product_back_order,
             'note' => $this->getSourceMessage($this->source, $this->source_type, $this->expiry_date, $this->additional_info),
