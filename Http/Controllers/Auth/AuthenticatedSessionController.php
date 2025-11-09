@@ -75,10 +75,10 @@ class AuthenticatedSessionController extends Controller
         $request->clearRateLimiter();
 
         $session_token = \Illuminate\Support\Facades\Session::token();
-        @Cache::forget("{$session_token}-customer-model");
-        @Cache::forget("{$session_token}-mobile-menu");
-        @Cache::forget("{$session_token}-primary-menu");
-        @Cache::forget("{$session_token}-account-menu");
+        @cache()->forget("{$session_token}-customer-model");
+        @cache()->forget("{$session_token}-mobile-menu");
+        @cache()->forget("{$session_token}-primary-menu");
+        @cache()->forget("{$session_token}-account-menu");
 
         $request->session()->regenerate();
 
@@ -97,12 +97,14 @@ class AuthenticatedSessionController extends Controller
         try {
             $customer_number = customer()->customer_code;
             $session_token = \Illuminate\Support\Facades\Session::token();
-            @Cache::forget("getCustomerDetails-{$customer_number}");
-            @Cache::forget("getCustomerShippingLocationList-{$customer_number}");
-            @Cache::forget("{$session_token}-customer-model");
-            @Cache::forget("{$session_token}-mobile-menu");
-            @Cache::forget("{$session_token}-primary-menu");
-            @Cache::forget("{$session_token}-account-menu");
+            @cache()->forget("getCustomerDetails-{$customer_number}");
+            @cache()->forget("getCustomerShippingLocationList-{$customer_number}");
+
+            @cache()->forget("{$session_token}-customer-model");
+            @cache()->forget("{$session_token}-mobile-menu");
+            @cache()->forget("{$session_token}-primary-menu");
+            @cache()->forget("{$session_token}-account-menu");
+            @cache()->forget("{$session_token}-account-sidebar");
 
             $account = Auth::guard(Contact::AUTH_GUARD)->user();
 
