@@ -30,10 +30,10 @@ class ShopSearchController extends Controller
         abort_unless(! customer_check() || customer(true)->can('shop.browse'), 403);
 
         $eaProductData = store()->eaProductsData;
-
         $products = $eaProductData->getProducts();
+        $searchMessage = $eaProductData->getMessage();
 
-        if (! empty($products) && count($products) === 1 ){
+        if (! empty($products) && count($products) === 1 && empty($searchMessage) ){
             $seoPath = $eaProductData->getCurrentSeoPath();
             $firstProduct = array_shift($products);
 
