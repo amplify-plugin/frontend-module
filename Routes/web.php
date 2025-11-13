@@ -307,6 +307,7 @@ Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class, ContactF
     Route::post('/update/cart/{cartItem}', [CartController::class, 'updateCart'])->name('update-cart');
     Route::post('/order/quick-order-add-to-order', [CartController::class, 'addToCart'])->name('order.quick-order-add-to-order');
     Route::post('/remove/carts', [CartController::class, 'removeCarts'])->name('remove-carts');
+    Route::post('/cart/check-shipping', [CartController::class, 'checkShipping'])->name('check-cart-shipping');
 
     Route::post('/order/save-order-list',
         [CustomerOrderController::class, 'saveOrderList'])->name('order.order-list.save');
