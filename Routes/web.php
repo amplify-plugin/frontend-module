@@ -258,7 +258,10 @@ Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class, ContactF
         Route::post('shipping-address/create', [ShippingController::class, 'store']);
         Route::post('/ship-to-address-save', [ShippingController::class, 'saveShipToAddress'])
             ->name('ship-to-address.store');
-
+        Route::get('/session/shipping-address/{code}', [
+            ShippingController::class,
+            'storeSessionAddress'
+            ])->name('session.shipping-address.store');
         Route::resource('messages', MessageController::class)
             ->names('messages')
             ->where(['message' => '[\d]+']);

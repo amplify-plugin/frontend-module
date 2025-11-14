@@ -255,4 +255,25 @@ class ShippingController extends Controller
         // now allow the user through
         return redirect()->intended('/');
     }
+
+    public function storeSessionAddress(Request $request, string $addressCode)
+    {
+        // re-load the full list from the ERP API
+        $all = ErpApi::getCustomerShippingLocationList();
+
+        // find the matching wrapper by ShipToNumber
+        $selected = $all->firstWhere('ShipToNumber', $addressCode);
+
+        if (!$selected) {
+            return back()->withErrors([
+                'ship_to_number' => 'Selected address is invalid.',
+            ]);
+        }
+        
+        // always overwrite previous session value
+        session(['ship_to_address' => $selected->toArray()]);
+
+        // redirct back with flash message
+        return redirect()->back()->with('success', 'Shipping address selected successfully.');
+    }
 }
