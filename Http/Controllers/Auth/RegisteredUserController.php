@@ -197,7 +197,7 @@ class RegisteredUserController extends Controller
             'CustomerAddress2' => $request->input('address_2'),
             'CustomerAddress3' => $request->input('address_3'),
             'CustomerZipCode' => $request->input('zip_code'),
-            'CustomerCity' => $request->input('address_3'),
+            'CustomerCity' => $request->input('city'),
             'CustomerState' => $request->input('state'),
             'CustomerCountry' => $request->input('country_code'),
         ];
@@ -275,6 +275,13 @@ class RegisteredUserController extends Controller
             'approved' => config('amplify.erp.auto_create_cash_customer', false),
             'customer_type' => 'Retail',
             'industry_classification_id' => $industryClassification->id ?? null,
+            'address_1' => $attributes['CustomerAddress1'],
+            'address_2' => $attributes['CustomerAddress2'],
+            'address_3' => $attributes['CustomerAddress3'],
+            'zip_code' => $attributes['CustomerZipCode'],
+            'city' => $attributes['CustomerCity'],
+            'country_code' => $attributes['CustomerCountry'],
+            'state' => $attributes['CustomerState'],
         ]);
 
         // Create Address
@@ -299,13 +306,13 @@ class RegisteredUserController extends Controller
                 'phone_number' => $customer->phone,
                 'customer_name' => $customer->customer_name,
                 'contact' => null,
-                'address_1' => $address->address_1,
-                'address_2' => $address->address_2,
-                'address_3' => $address->address_3,
-                'city' => $address->city,
-                'state' => $address->state,
-                'zip_code' => $address->zip_code,
-                'country_code' => $address->country_code,
+                'address_1' => $customer->address_1,
+                'address_2' => $customer->address_2,
+                'address_3' => $customer->address_3,
+                'city' => $customer->city,
+                'state' => $customer->state,
+                'zip_code' => $customer->zip_code,
+                'country_code' => $customer->country_code,
                 'branch' => null,
                 'customer_industry' => $customer->industryClassification?->name,
             ]);
@@ -336,9 +343,7 @@ class RegisteredUserController extends Controller
         NotificationFactory::call(Event::CONTACT_ACCOUNT_REQUEST_RECEIVED, [
             'contact_id' => $contact->id,
         ]);
-
-        logger()->debug('');
-
+        
         if (config('amplify.erp.auto_create_contact')) {
             ContactProfileSyncJob::dispatch($contact->toArray());
         }
