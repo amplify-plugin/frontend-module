@@ -99,6 +99,7 @@ trait HasDynamicPage
     /**
      * @throws BindingResolutionException
      * @throws \ErrorException
+     * @throws \Exception
      */
     public function render(): string
     {
@@ -188,6 +189,7 @@ trait HasDynamicPage
 
         push_css([
             mix('css/custom.css', $themePrefix),
+            asset('assets/css/custom.css'),
         ], 'custom-style');
 
         foreach (config('amplify.frontend.scripts', []) as $group => $scripts) {
