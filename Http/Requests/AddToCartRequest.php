@@ -1,6 +1,6 @@
 <?php
 
-namespace Amplify\System\Backend\Http\Requests\Orders;
+namespace Amplify\Frontend\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
