@@ -5,12 +5,16 @@ namespace Amplify\Frontend\Http\Controllers;
 use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\Frontend\Http\Resources\CartResource;
 use Amplify\Frontend\Traits\HasDynamicPage;
-use Amplify\System\Backend\Http\Requests\Orders\QuickOrderAddToOrderRequest;
+use Amplify\System\Backend\Http\Requests\Orders\AddToCartRequest;
 use Amplify\System\Backend\Models\Cart;
 use Amplify\System\Backend\Models\CartItem;
 use Amplify\System\Backend\Models\Product;
+use Amplify\System\Jobs\CartPricingSyncJob;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Pipeline\Pipeline;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
 {
@@ -33,7 +37,42 @@ class CartController extends Controller
         return $this->render();
     }
 
-    public function quickOrderAddToOrder(QuickOrderAddToOrderRequest $request)
+    public function store(AddToCartRequest $request)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            $data = app(Pipeline::class)
+                ->send(['meta' => [], 'items' => $request->input('products')])
+                ->through(config('amplify.add_to_cart_pipeline', []))
+                ->thenReturn();
+
+            $cart = getOrCreateCart();
+
+            if (!$cart->wasRecentlyCreated) {
+                $cart->cartItems()->whereIn('product_id', collect($data['items'])->pluck('product_id')->toArray())->delete();
+            }
+
+            $cart->cartItems()->createMany($data['items']);
+
+            DB::commit();
+
+            CartPricingSyncJob::dispatch($cart->getkey());
+
+            return $this->apiResponse(true, __('Product(s) added to cart successfully.'));
+
+        } catch (\Exception $exception) {
+
+            DB::rollBack();
+
+            Log::debug($exception);
+
+            return $this->apiResponse(false, $exception->getMessage(), 500);
+        }
+    }
+
+    public function quickOrderAddToOrder(AddToCartRequest $request)
     {
         try {
             if (! ErpApi::enabled()) {
