@@ -223,4 +223,24 @@ trait HasDynamicPage
 HTML;
 
     }
+
+    /**
+     * Build a standardized API JSON response.
+     *
+     * @param int $status HTTP status code (default: 200)
+     * @param array $extra Additional data to merge into the response
+     */
+    public function apiResponse(bool $success, string $message, int $status = 200, array $extra = []): \Illuminate\Http\JsonResponse
+    {
+        return response()->json(
+            array_merge(
+                [
+                    'success' => $success,
+                    'message' => $message,
+                ],
+                $extra,
+            ),
+            $status,
+        );
+    }
 }
