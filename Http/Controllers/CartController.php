@@ -3,9 +3,9 @@
 namespace Amplify\Frontend\Http\Controllers;
 
 use Amplify\ErpApi\Facades\ErpApi;
+use Amplify\Frontend\Http\Requests\AddToCartRequest;
 use Amplify\Frontend\Http\Resources\CartResource;
 use Amplify\Frontend\Traits\HasDynamicPage;
-use Amplify\System\Backend\Http\Requests\Orders\AddToCartRequest;
 use Amplify\System\Backend\Models\Cart;
 use Amplify\System\Backend\Models\CartItem;
 use Amplify\System\Backend\Models\Product;
