@@ -13,9 +13,13 @@ class CartResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'products' => CartItemResource::collection($this->whenLoaded('cartItems')),
             'total_price' => $this->total ?? 0,
-            'id' => $this->id
+            'products' => empty($this->resource) ? [] : CartItemResource::collection($this->whenLoaded('cartItems')),
+            'status' => boolval($this->status ?? 0),
+            'sub_total' => $this->sub_total ?? 0,
+            'tax_amount' => $this->tax_amount ?? 0,
+            'ship_charge' => $this->ship_charge ?? 0,
+            'total' => $this->total ?? 0,
         ];
     }
 }
