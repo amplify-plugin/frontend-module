@@ -28,8 +28,8 @@ class RegistrationRequest extends FormRequest
         $minPassLen = SecurityHelper::passwordLength();
 
         $rules = [
-            'name' => 'required|string|max:255|ascii',
-            'company_name' => 'required|string|max:255|ascii',
+            'name' => 'required|string|max:255|clean_string',
+            'company_name' => 'required|string|max:255|clean_string',
             'email' => [
                 'required',
                 'email:dns,rfc',
@@ -37,14 +37,14 @@ class RegistrationRequest extends FormRequest
                 Rule::unique('customers'),
                 Rule::unique('contacts'),
             ],
-            'phone_number' => 'required|string|max:255|ascii|phone_number',
+            'phone_number' => 'required|string|max:255|clean_string|phone_number',
             'industry_classification_id' => 'nullable|integer|exists:industry_classifications,id',
-            'address_name' => 'required|string|max:255|ascii',
-            'address_1' => 'required|string|max:255|ascii',
-            'address_2' => 'nullable|string|max:255|ascii',
-            'address_3' => 'nullable|string|max:255|ascii',
-            'city' => 'required|string|max:255|ascii',
-            'state' => 'required|string|max:255|ascii',
+            'address_name' => 'required|string|max:255|clean_string',
+            'address_1' => 'required|string|max:255|clean_string',
+            'address_2' => 'nullable|string|max:255|clean_string',
+            'address_3' => 'nullable|string|max:255|clean_string',
+            'city' => 'required|string|max:255|clean_string',
+            'state' => 'required|string|max:255|clean_string',
             'zip_code' => 'required|string|max:20|ascii|postal_code',
             'password' => "required|min:$minPassLen",
             'contact_account_title' => 'integer|nullable',
@@ -95,13 +95,6 @@ class RegistrationRequest extends FormRequest
             'address.*.address_1.required' => 'Address line 1 is required.',
             'address.*.city.required' => 'City is required.',
             'address.*.state.required' => 'State is required.',
-
-            // Old validation messages
-            //            'customer_name.required' => 'The Company name is required',
-            //            'address.*.address.address_name.required' => 'Address name is required',
-            //            'address.*.address.address_1.required' => 'Address line 1 is required',
-            //            'address.*.address.city.required' => 'City is required',
-            //            'address.*.address.state.required' => 'State is required',
         ];
     }
 }
