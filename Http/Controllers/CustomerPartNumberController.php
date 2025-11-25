@@ -9,6 +9,7 @@ use Amplify\System\Backend\Models\Event;
 use Amplify\System\Backend\Models\Product;
 use Amplify\System\Factories\NotificationFactory;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 
 class CustomerPartNumberController extends Controller
@@ -19,10 +20,6 @@ class CustomerPartNumberController extends Controller
 
         $product = Product::find($inputs['product_id']);
 
-        $customerPartNumber = CustomPartNumber::where('customer_id', $inputs['customer_id'])
-            ->where('product_id', $inputs['product_id'])
-            ->first();
-
         $payloads = [
             'customer_number' => customer()->erp_id,
             'customer_product_code' => $inputs['customer_product_code'],
@@ -32,33 +29,20 @@ class CustomerPartNumberController extends Controller
         ];
 
         DB::beginTransaction();
-
         try {
 
-            if ($customerPartNumber) {
-                $customerPartNumber->update($inputs);
-                $customerPartNumber->refresh();
-            } else {
-                $customerPartNumber = CustomPartNumber::create($inputs);
-            }
-
-            $message = $customerPartNumber->wasRecentlyCreated
-                ? __('New customer part number added successfully.')
-                : __('Customer part number updated successfully.');
+            CustomPartNumber::create($inputs);
 
             $response = ErpApi::createUpdateCustomerPartNumber($payloads);
 
             if ($response['success']) {
                 DB::commit();
-                if (!$customerPartNumber->wasRecentlyCreated) {
-                    NotificationFactory::call(Event::CUSTOMER_PART_NUMBER_DELETED, $customerPartNumber->toArray());
-                }
             } else {
                 DB::rollBack();
                 throw new \Exception($response['error']);
             }
 
-            return response()->json(['message' => $message]);
+            return response()->json(['message' => __('New customer part number added successfully.')]);
 
         } catch (\Exception $exception) {
             return response()->json(['message' => $exception->getMessage()], 500);
@@ -77,7 +61,7 @@ class CustomerPartNumberController extends Controller
 
             if ($customerPartNumber) {
                 $data = $customerPartNumber->toArray();
-                NotificationFactory::call(Event::CUSTOMER_PART_NUMBER_DELETED, $data);
+
 
                 $response = ErpApi::createUpdateCustomerPartNumber([
                     'customer_number' => customer()->erp_id,
@@ -87,7 +71,12 @@ class CustomerPartNumberController extends Controller
                     'action' => 'delete'
                 ]);
 
-                $customerPartNumber->delete();
+                if ($response['success']) {
+                    $customerPartNumber->delete();
+                    NotificationFactory::call(Event::CUSTOMER_PART_NUMBER_DELETED, $data);
+                } else {
+                    throw  new \ErrorException($response['error'] ?? 'Failed to remove the customer part number.');
+                }
             }
 
             return response()->json(['message' => __('Customer part number removed successfully.')]);
