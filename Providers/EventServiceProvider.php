@@ -33,12 +33,6 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Validator::extend('clean_string', function ($attribute, $value, $parameters, $validator) {
-            return preg_match('/^[\pL\pN\s\'\-\+\(\)]+$/u', $value);
-        });
-
-        Validator::replacer('clean_string', function ($message, $attribute, $rule, $parameters) {
-            return "The {$attribute} may only contain letters, numbers and spaces.";
-        });
+        //
     }
 }

@@ -22,6 +22,7 @@ class FrontendServiceProvider extends ServiceProvider
         );
 
         $this->app->register(EventServiceProvider::class);
+        $this->app->register(ValidationServiceProvider::class);
     }
 
     /**
