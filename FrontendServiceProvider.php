@@ -3,6 +3,7 @@
 namespace Amplify\Frontend;
 
 use Amplify\Frontend\Providers\EventServiceProvider;
+use Amplify\Frontend\Providers\ValidationServiceProvider;
 use Amplify\System\Cms\Models\Form;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
