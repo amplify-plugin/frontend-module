@@ -13,6 +13,7 @@ use Amplify\System\Jobs\CartPricingSyncJob;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Pipeline\Pipeline;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -22,16 +23,30 @@ class CartController extends Controller
 
     public function __construct()
     {
-        if (! config('amplify.frontend.guest_add_to_cart')) {
+        if (!config('amplify.frontend.guest_add_to_cart')) {
             $this->middleware('customers');
         }
     }
 
     /**
-     * @throws \ErrorException
+     * @throws \ErrorException|\Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->expectsJson()) {
+
+            $cart = \getCart();
+
+            if ($cart instanceof Cart) {
+
+                $cart->load(['cartItems', 'cartItems.product.manufacturerRelation']);
+
+                return new CartResource($cart);
+            }
+
+            return new CartResource(null);
+        }
+
         $this->loadPageByType('cart');
 
         return $this->render();
@@ -72,131 +87,29 @@ class CartController extends Controller
         }
     }
 
-    public function quickOrderAddToOrder(AddToCartRequest $request)
+    public function remove(string $cartItemId)
     {
         try {
-            if (! ErpApi::enabled()) {
-                return response()->json(['success' => false, 'message' => 'ERP service not enabled.'], 500);
-            }
-
-            $isAddedToCart = false;
-            $cart = Cart::firstOrCreate(
-                ['contact_id' => customer(true)->id, 'status' => 1]
-            );
-
-            foreach ($request->products as $key => $product) {
-                $product_id = $product['product_id'];
-                $product_code = $product['product_code'];
-                $warehouse_code = $product['product_warehouse_code'] ?? ErpApi::getCustomerDetail()->DefaultWarehouse;
-                $product_qty = $product['qty'];
-                $product_back_order = $product['product_back_order'] ?? null;
-                $customer_back_order_code = ErpApi::getCustomerDetail()->BackorderCode ?? 'N';
-                $is_back_order_enabled = $customer_back_order_code == 'Y' && $product_back_order == 'Y';
-                $dbProduct = Product::with('productImage')->where('product_code', $product_code)->first();
-                $ERPInfo = $this->getERPInfo($product_code, $warehouse_code)->first();
-
-                if (
-                    (bool) $ERPInfo &&
-                    (bool) $dbProduct &&
-                    $dbProduct->exists() &&
-                    $product_qty > 0 &&
-                    ($is_back_order_enabled || $ERPInfo->QuantityAvailable >= $product_qty)
-                ) {
-                    if (! $isAddedToCart) {
-                        $isAddedToCart = true;
-                    }
-
-                    $product_price = \ErpApi::enabled() ? $ERPInfo->Price : $dbProduct->selling_price;
-                    $cartItem = $cart->cartItems()->firstWhere([
-                        'product_id' => $product_id,
-                        'product_code' => $product_code,
-                        'product_warehouse_code' => $warehouse_code,
-                    ]);
-
-                    if ((bool) $cartItem) {
-                        if ($is_back_order_enabled || $ERPInfo->QuantityAvailable >= $cartItem->quantity + $product_qty) {
-                            $cartItem->increment('quantity', $product_qty);
-                        }
-                    } else {
-                        $cart->cartItems()->create([
-                            'product_id' => $product_id,
-                            'product_code' => $product_code,
-                            'product_warehouse_code' => $warehouse_code,
-                            'quantity' => $product_qty,
-                            'unitprice' => $product_price,
-                            'address_id' => customer(true)->customer_address_id,
-                            'product_name' => $dbProduct->product_name,
-                            'product_back_order' => $product_back_order,
-                            'product_image' => $dbProduct->productImage->main ?? null,
-                        ]);
-                    }
-                }
-            }
-
-            if ($isAddedToCart) {
-                $isSuccess = true;
-                $message = 'Added to the order successfully';
-                $status = 200;
-            } else {
-                $isSuccess = false;
-                $message = 'Product not available, Try again later.';
-                $status = 500;
-            }
-
-            return response()->json([
-                'success' => $isSuccess,
-                'message' => $message,
-            ], $status);
-        } catch (\Exception $exception) {
-            return response()->json([
-                'success' => false,
-                'message' => $exception->getMessage(),
-            ], 500);
-        }
-    }
-
-    public function getCarts()
-    {
-        if (customer_check()) {
 
             $cart = getCart();
 
-            if ($cart instanceof Cart) {
+            $products = $cartItemId;
 
-                $cart->load('cartItems');
+            if ($cart->cartItems()->whereIn('id', Arr::wrap($products))->delete()) {
 
-                return new CartResource($cart);
+                CartPricingSyncJob::dispatch($cart->getKey());
+
+                return response()->json(['message' => __('Your current cart items are removed'), 'success' => true], 200);
             }
-        }
 
-        return ['data' => ['products' => [], 'total_price' => 0]];
+            return response()->json(['message' => __('Failed to clear the current cart items.'), 'success' => false], 500);
+        } catch (\Exception $exception) {
+            Log::error($exception);
+            return response()->json(['message' => $exception->getMessage(), 'success' => false], 500);
+        }
     }
 
-    public function removeCart(CartItem $cartItem)
-    {
-        if (customer_check()) {
-            $isOwnCart = $cartItem->whereHas('cart', function ($query) {
-                $query->where('contact_id', customer(true)->id);
-            })->exists();
-
-            if ($isOwnCart) {
-                $cartItem->delete();
-
-                return response()->json([
-                    'success' => true,
-                    'total_price' => getCart()->total,
-                    'message' => 'Successfully deleted cart item.',
-                ], 200);
-            }
-        }
-
-        return response()->json([
-            'success' => false,
-            'message' => 'Something went wrong.',
-        ], 200);
-    }
-
-    public function updateCart(CartItem $cartItem, Request $request)
+    public function update(CartItem $cartItem, Request $request)
     {
         $request->validate([
             'quantity' => 'required|numeric|min:1',
@@ -229,32 +142,16 @@ class CartController extends Controller
         ], 200);
     }
 
-    public function removeCarts()
+    public function destroy(Cart $cart, Request $request)
     {
-        if (customer_check()) {
-            $cart = getCart();
-            if ($cart instanceof Cart) {
-                $cart->cartItems()->delete();
-                $cart->delete();
+        if ($cart->cartItems()->delete()) {
 
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Cart removed successfully.',
-                    'redirect' => url('/shop'),
-                ], 200);
-            } else {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Cart is empty.',
-                    'redirect' => url('/shop'),
-                ], 200);
-            }
+            CartPricingSyncJob::dispatch($cart->getKey());
+
+            return response()->json(['message' => __('Your current cart items are removed.'), 'success' => true], 200);
         }
 
-        return response()->json([
-            'success' => false,
-            'message' => 'Couldn\'t removed cart successfully.',
-        ], 200);
+        return response()->json(['message' => __('Failed to clear the current cart items.'), 'success' => false], 500);
     }
 
     private function getERPInfo(string $productCode, string $warehouseString)

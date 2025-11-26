@@ -95,7 +95,13 @@ Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class, ContactF
     Route::get("{$shopRoutePrefix}/{query?}", ShopSearchController::class)->where(['query' => '(.*)'])->name('shop.index');
     Route::get('quick-view/{id}/{seo_path?}', [ShopSearchController::class, 'getQuickView'])->name('shop.quickView');
     Route::get('warehouse-selection-view/{code}', [ShopSearchController::class, 'getWarehouseSelectionView'])->name('shop.warehouseSelectionView');
-    Route::apiResource('carts', \Amplify\Frontend\Http\Controllers\CartController::class);
+    Route::apiResource('carts', \Amplify\Frontend\Http\Controllers\CartController::class)
+        ->where(['cart' => '[0-9]+'])
+        ->except('update');
+    Route::delete('carts/remove/{cartItem}', [\Amplify\Frontend\Http\Controllers\CartController::class, 'remove'])
+        ->name('carts.remove-item');
+    Route::patch('carts/update/{cartItem}', [\Amplify\Frontend\Http\Controllers\CartController::class, 'update'])
+        ->name('carts.update-item');
     Route::get('checkout', CheckoutController::class)->name('checkout');
     Route::post('subscribe', NewsletterSubscriptionController::class)->name('subscribe');
     Route::get('faq/{faq-category-slug?}', FaqController::class)->name('faqs.show');
@@ -304,12 +310,9 @@ Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class, ContactF
     Route::post('/order/quick-order-file-upload',
         [CustomerOrderController::class, 'quickOrderFileUpload'])->name('order.quick-order-file-upload');
 
-    Route::get('/get/carts', [CartController::class, 'getCarts'])->name('get-carts');
     Route::post('/cart/summary', [CartController::class, 'getCartSummary'])->name('cart.summary');
-    Route::post('/remove/cart/{cartItem}', [CartController::class, 'removeCart'])->name('remove-cart');
-    Route::post('/update/cart/{cartItem}', [CartController::class, 'updateCart'])->name('update-cart');
-    Route::post('/order/quick-order-add-to-order', [CartController::class, 'addToCart'])->name('order.quick-order-add-to-order');
-    Route::post('/remove/carts', [CartController::class, 'removeCarts'])->name('remove-carts');
+//    Route::post('/remove/cart/{cartItem}', [CartController::class, 'removeCart'])->name('remove-cart');
+//    Route::post('/update/cart/{cartItem}', [CartController::class, 'updateCart'])->name('update-cart');
     Route::post('/cart/check-shipping', [CartController::class, 'checkShipping'])->name('check-cart-shipping');
 
     Route::post('/order/save-order-list',
