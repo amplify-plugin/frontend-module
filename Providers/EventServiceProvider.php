@@ -7,6 +7,7 @@ use Amplify\Frontend\Events\ContactLoggedOut;
 use Amplify\Frontend\Listeners\UpdateContactLoginDataListener;
 use Amplify\Frontend\Listeners\UpdateCustomerDataListener;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Validator;
 
 class EventServiceProvider extends ServiceProvider
 {
