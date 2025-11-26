@@ -25,7 +25,7 @@ class ShippingController extends Controller
             'shipping_address3' => 'nullable|string|max:255',
             'shipping_contact1' => 'nullable|string|max:255',
             'shipping_contact2' => 'nullable|string|max:255',
-            'shipping_phone1' => 'required|string|min:10|max:255',
+            'shipping_phone1' => 'nullable|string|min:10|max:255',
             'shipping_phone2' => 'nullable|string|min:10|max:255',
             'shipping_email1' => 'nullable|string|email:dns,rfc|max:255',
             'shipping_email2' => 'nullable|string|email:dns,rfc|max:255',
@@ -269,7 +269,7 @@ class ShippingController extends Controller
                 'ship_to_number' => 'Selected address is invalid.',
             ]);
         }
-        
+
         // always overwrite previous session value
         session(['ship_to_address' => $selected->toArray()]);
 
