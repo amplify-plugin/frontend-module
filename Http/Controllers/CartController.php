@@ -2,13 +2,11 @@
 
 namespace Amplify\Frontend\Http\Controllers;
 
-use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\Frontend\Http\Requests\AddToCartRequest;
 use Amplify\Frontend\Http\Resources\CartResource;
 use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\System\Backend\Models\Cart;
 use Amplify\System\Backend\Models\CartItem;
-use Amplify\System\Backend\Models\Product;
 use Amplify\System\Jobs\CartPricingSyncJob;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -23,7 +21,7 @@ class CartController extends Controller
 
     public function __construct()
     {
-        if (!config('amplify.frontend.guest_add_to_cart')) {
+        if (! config('amplify.frontend.guest_add_to_cart')) {
             $this->middleware('customers');
         }
     }
@@ -65,7 +63,7 @@ class CartController extends Controller
 
             $cart = getOrCreateCart();
 
-            if (!$cart->wasRecentlyCreated) {
+            if (! $cart->wasRecentlyCreated) {
                 $cart->cartItems()->whereIn('product_id', collect($data['items'])->pluck('product_id')->toArray())->delete();
             }
 
@@ -105,6 +103,7 @@ class CartController extends Controller
             return response()->json(['message' => __('Failed to clear the current cart items.'), 'success' => false], 500);
         } catch (\Exception $exception) {
             Log::error($exception);
+
             return response()->json(['message' => $exception->getMessage(), 'success' => false], 500);
         }
     }
@@ -113,33 +112,30 @@ class CartController extends Controller
     {
         $request->validate([
             'quantity' => 'required|numeric|min:1',
-            'product_warehouse_code' => 'required',
         ]);
 
-        if (customer_check()) {
-            $ERPInfo = $this->getERPInfo($cartItem->product_code, $request->product_warehouse_code)->first();
-            $isOwnCart = $cartItem->whereHas('cart', function ($query) {
-                $query->where('contact_id', customer(true)->id);
-            })->exists();
+        try {
+            $product = $cartItem->toArray();
+            $product['qty'] = $request->input('quantity');
 
-            if ($isOwnCart && $ERPInfo->QuantityAvailable >= $request->quantity) {
-                $cartItem->update([
-                    'quantity' => $request->quantity,
-                    'product_warehouse_code' => $request->product_warehouse_code,
-                ]);
+            $data = app(Pipeline::class)
+                ->send(['meta' => [], 'items' => [$product]])
+                ->through(config('amplify.add_to_cart_pipeline', []))
+                ->thenReturn();
 
-                return response()->json([
-                    'success' => true,
-                    'total_price' => getCart()->total,
-                    'message' => 'Successfully updated cart item.',
-                ], 200);
-            }
+            $cartItem->update(array_shift($data['items']));
+
+            DB::commit();
+
+            CartPricingSyncJob::dispatch($cartItem->cart_id);
+
+            return $this->apiResponse(true, __('Cart updated successfully.'));
+        } catch (\Exception $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong.',
+            ], 200);
         }
-
-        return response()->json([
-            'success' => false,
-            'message' => 'Something went wrong.',
-        ], 200);
     }
 
     public function destroy(Cart $cart, Request $request)
