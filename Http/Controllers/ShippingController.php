@@ -30,15 +30,56 @@ class ShippingController extends Controller
             'shipping_email1' => 'nullable|string|email:dns,rfc|max:255',
             'shipping_email2' => 'nullable|string|email:dns,rfc|max:255',
             'shipping_country' => 'required|string|max:255',
-            'shipping_state' => 'required|string|max:255',
+            'shipping_state' => 'nullable|string|max:255',
             'shipping_city' => 'required|string|max:255',
             'shipping_zip' => 'required|string|max:10',
         ];
 
         if (config('amplify.client_code') === 'STV') {
-            $rules['shipping_number'][] = Rule::unique('customer_addresses', 'address_code')
-                ->where(fn($query) => $query->where('customer_id', customer()->getKey()));
+
+            $address1 = trim($request->input('shipping_address1', ''));
+
+            if (!empty($address1)) {
+                // Extract first token from address 1
+                $firstToken = preg_split('/\s+/', $address1)[0] ?? $address1;
+
+                // Keep only alphanumeric + hyphens (sanitized token)
+                $baseCode = preg_replace('/[^A-Za-z0-9\-]/', '', $firstToken);
+
+                // If sanitization removed everything, fallback to raw token without spaces
+                if ($baseCode === '') {
+                    $baseCode = preg_replace('/\s+/', '', $firstToken);
+                }
+
+                // Guarantee a usable baseCode
+                if ($baseCode === '') {
+                    $baseCode = 'ADDR'; // fallback safety
+                }
+
+                $candidate = $baseCode;
+                $counter = 0;
+
+                // Check duplicates for this customer
+                while (
+                    CustomerAddress::where('customer_id', customer()->getKey())
+                        ->where('address_code', $candidate)
+                        ->exists()
+                ) {
+                    $counter++;
+                    $candidate = $baseCode . '-' . $counter;
+                }
+
+                // Auto-apply generated unique code into the request
+                $request->merge(['shipping_number' => $candidate]);
+            }
+
+            // Conditionally require state for countries that need it (US, CA, MX)
+            $country = strtoupper((string) $request->input('shipping_country', ''));
+            if (in_array($country, ['US', 'CA', 'MX'], true)) {
+                $rules['shipping_state'] = 'required|string|max:255';
+            }
         }
+
 
         try {
             // Let Laravel throw ValidationException automatically
