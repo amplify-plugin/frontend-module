@@ -28,7 +28,7 @@ class ContactAccountRequest extends FormRequest
             'search_account_number' => 'string|max:255|clean_string',
             'customer_account_number' => 'nullable|string|max:255|clean_string',
             'contact_name' => 'required|string|max:255|clean_string',
-            'contact_email' => 'required|email:dns,rfc|unique:contacts,email|clean_string',
+            'contact_email' => 'required|email:dns,rfc|unique:contacts,email',
             'contact_phone_number' => 'required|string|max:255|clean_string|phone_number',
             'contact_password' => 'required|confirmed|min:'.$minPassLen,
             'contact_newsletter' => 'string|in:yes,no',
