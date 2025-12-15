@@ -5,7 +5,7 @@ namespace Amplify\Frontend\Listeners;
 use Amplify\ErpApi\Jobs\CustomerProfileSyncJob;
 use Amplify\Frontend\Events\ContactLoggedIn;
 
-class UpdateCustomerDataListener
+class UpdateCustomerListener
 {
     /**
      * Handle the event.

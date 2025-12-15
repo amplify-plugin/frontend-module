@@ -2,6 +2,7 @@
 
 namespace Amplify\Frontend\Http\Controllers;
 
+use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\Frontend\Http\Requests\AddToCartRequest;
 use Amplify\Frontend\Http\Resources\CartResource;
 use Amplify\Frontend\Traits\HasDynamicPage;
@@ -31,7 +32,7 @@ class CartController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->expectsJson()) {
+        if ($request->wantsJson()) {
 
             $cart = \getCart();
 
@@ -71,7 +72,7 @@ class CartController extends Controller
 
             DB::commit();
 
-            CartPricingSyncJob::dispatch($cart->getkey());
+            CartPricingSyncJob::dispatch($cart->getkey(), session('ship_to_address.ShipToNumber', session('ship_to_address.address_code', ErpApi::getCustomerDetail()->DefaultShipTo)));
 
             return $this->apiResponse(true, __('Product(s) added to cart successfully.'));
 
@@ -95,7 +96,7 @@ class CartController extends Controller
 
             if ($cart->cartItems()->whereIn('id', Arr::wrap($products))->delete()) {
 
-                CartPricingSyncJob::dispatch($cart->getKey());
+                CartPricingSyncJob::dispatch($cart->getKey(),session('ship_to_address.ShipToNumber', session('ship_to_address.address_code', ErpApi::getCustomerDetail()->DefaultShipTo)));
 
                 return response()->json(['message' => __('Your current cart items are removed'), 'success' => true], 200);
             }
@@ -127,7 +128,7 @@ class CartController extends Controller
 
             DB::commit();
 
-            CartPricingSyncJob::dispatch($cartItem->cart_id);
+            CartPricingSyncJob::dispatch($cartItem->cart_id,session('ship_to_address.ShipToNumber', session('ship_to_address.address_code', ErpApi::getCustomerDetail()->DefaultShipTo)));
 
             return $this->apiResponse(true, __('Cart updated successfully.'));
         } catch (\Exception $exception) {
@@ -142,21 +143,11 @@ class CartController extends Controller
     {
         if ($cart->cartItems()->delete()) {
 
-            CartPricingSyncJob::dispatch($cart->getKey());
+            CartPricingSyncJob::dispatch($cart->getKey(),session('ship_to_address.ShipToNumber', session('ship_to_address.address_code', ErpApi::getCustomerDetail()->DefaultShipTo)));
 
             return response()->json(['message' => __('Your current cart items are removed.'), 'success' => true], 200);
         }
 
         return response()->json(['message' => __('Failed to clear the current cart items.'), 'success' => false], 500);
-    }
-
-    private function getERPInfo(string $productCode, string $warehouseString)
-    {
-        return \ErpApi::getProductPriceAvailability([
-            'items' => [
-                ['item' => $productCode],
-            ],
-            'warehouse' => $warehouseString,
-        ]);
     }
 }

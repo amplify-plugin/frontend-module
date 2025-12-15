@@ -4,8 +4,9 @@ namespace Amplify\Frontend\Providers;
 
 use Amplify\Frontend\Events\ContactLoggedIn;
 use Amplify\Frontend\Events\ContactLoggedOut;
-use Amplify\Frontend\Listeners\UpdateContactLoginDataListener;
-use Amplify\Frontend\Listeners\UpdateCustomerDataListener;
+use Amplify\Frontend\Listeners\MergeContactCartListener;
+use Amplify\Frontend\Listeners\UpdateContactLoginListener;
+use Amplify\Frontend\Listeners\UpdateCustomerListener;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Validator;
 
@@ -18,11 +19,12 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         ContactLoggedIn::class => [
-            UpdateCustomerDataListener::class,
-            UpdateContactLoginDataListener::class,
+            UpdateCustomerListener::class,
+            UpdateContactLoginListener::class,
+            MergeContactCartListener::class
         ],
         ContactLoggedOut::class => [
-            UpdateContactLoginDataListener::class,
+            UpdateContactLoginListener::class,
         ],
     ];
 
