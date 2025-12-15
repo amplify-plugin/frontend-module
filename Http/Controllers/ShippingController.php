@@ -162,7 +162,7 @@ class ShippingController extends Controller
     public function options(ShippingOptionRequest $request)
     {
         $orderInfo = [
-            'customer_number' => customer_check() ? customer()->customer_erp_id : config('amplify.frontend.guest_default'),
+            'customer_number' => customer_check() ? customer()->erp_id : config('amplify.frontend.guest_default'),
             'customer_default_warehouse' => customer_check()
                 ? ($request->input('customer_default_warehouse') ?: customer()->warehouse_seq_code)
                 : config('amplify.frontend.guest_checkout_warehouse'),
