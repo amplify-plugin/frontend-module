@@ -46,7 +46,7 @@ class MergeContactCartListener
         foreach ($contactCartItems as $cartItem) {
             foreach ($guestCartItems as $guestIndex => $guestCartItem) {
                 if ($guestCartItem['product_id'] == $cartItem->product_id) {
-                    $cartItem->quantity = $cartItem->quantity + $guestCartItem->quantity;
+                    $cartItem->quantity = $cartItem->quantity + ($guestCartItem['quantity'] ?? 0);
                     $cartItem->save();
                     unset($guestCartItems[$guestIndex]);
                     break;
