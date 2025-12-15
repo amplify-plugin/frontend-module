@@ -5,6 +5,8 @@ namespace Amplify\Frontend\Http\Controllers;
 use Amplify\Frontend\Http\Requests\FavoriteListRequest;
 use Amplify\Frontend\Http\Requests\UpdateOrderListRequest;
 use Amplify\Frontend\Traits\HasDynamicPage;
+use Amplify\System\Backend\Models\Cart;
+use Amplify\System\Backend\Models\CartItem;
 use Amplify\System\Backend\Models\OrderList;
 use Amplify\System\Backend\Models\OrderListItem;
 use App\Http\Controllers\Controller;
@@ -23,7 +25,7 @@ class FavouriteController extends Controller
      */
     public function index(Request $request)
     {
-        if (! in_array(true, [customer(true)->can('favorites.use-global-list'), customer(true)->can('favorites.manage-personal-list')])) {
+        if (!in_array(true, [customer(true)->can('favorites.use-global-list'), customer(true)->can('favorites.manage-personal-list')])) {
             abort(403);
         }
         if ($request->wantsJson()) {
@@ -33,7 +35,7 @@ class FavouriteController extends Controller
                 config('amplify.constant.favorite_list_type.quick-list') => OrderList::select('id', 'name')->whereCustomerId(customer()->getKey())->whereContactId(customer(true)->getKey())->whereListType('quick-list')->get(),
             ];
 
-            if (! config('amplify.basic.enable_quick_list', true)) {
+            if (!config('amplify.basic.enable_quick_list', true)) {
                 unset($lists[config('amplify.constant.favorite_list_type.quick-list')]);
             }
 
@@ -59,35 +61,33 @@ class FavouriteController extends Controller
     public function store(FavoriteListRequest $request): JsonResponse
     {
         try {
-            $inputs = $request->all();
 
-            $orderListItem = new OrderListItem([
-                'product_id' => $inputs['product_id'],
-                'qty' => $inputs['product_qty'],
-                'list_id' => $inputs['list_id'],
-            ]);
+            $inputs = $request->validated();
 
-            if ($inputs['list_id'] == null) {
-                $orderList = OrderList::create([
+            $orderList = OrderList::firstOrCreate(
+                [
+                    'id' => $inputs['list_id']
+                ],
+                [
                     'name' => $inputs['list_name'],
-                    'list_type' => $inputs['list_type'],
-                    'description' => $inputs['list_desc'],
+                    'list_type' => $inputs['list_type'] ?? 'personal',
+                    'description' => $inputs['list_desc'] ?? '',
                     'contact_id' => customer(true)->getKey(),
                     'customer_id' => customer()->getKey(),
-                ]);
-            } else {
-                $orderList = OrderList::find($inputs['list_id']);
-            }
+                ]
+            );
 
             if ($orderList instanceof OrderList) {
-                $orderList->orderListItems()->save($orderListItem);
+                $orderList->orderListItems()->createMany($this->processOrderListItems($request));
                 $orderList->touch();
             }
+
+            $header = $request->input('is_shopping_list', 0) ? 'Shopping List' : 'Favourites List';
 
             return response()->json([
                 'type' => 'success',
                 'status' => true,
-                'message' => ($inputs['list_id'] != null) ? 'New Item added to Favorite list' : 'Favorite List created and Added this item.',
+                'message' => ($inputs['list_id'] != null) ? "New item added to {$header}" : "{$header} created and Added this item(s).",
             ]);
 
         } catch (\Exception $exception) {
@@ -95,7 +95,28 @@ class FavouriteController extends Controller
                 'type' => 'error',
                 'status' => false,
                 'message' => $exception->getMessage(),
-            ]);
+            ], 500);
+        }
+    }
+
+    private function processOrderListItems(FavoriteListRequest $request): array
+    {
+        switch ($request->input('type')) {
+            case 'cart' :
+            {
+                return CartItem::select('product_id', 'quantity as qty')
+                    ->where('cart_id', '=', $request->input('cart_id'))->get()
+                    ->map(fn($cartItem) => $cartItem->toArray())
+                    ->toArray();
+            }
+            //waiting for new features
+            default :
+            {
+                return [[
+                        'product_id' => $request->input('product_id'),
+                        'qty' => $request->input('product_qty', 1),
+                    ]];
+            }
         }
     }
 
@@ -104,7 +125,7 @@ class FavouriteController extends Controller
      */
     public function show(string $id)
     {
-        if (! in_array(true, [customer(true)->can('favorites.manage-global-list'), customer(true)->can('favorites.manage-personal-list')])) {
+        if (!in_array(true, [customer(true)->can('favorites.manage-global-list'), customer(true)->can('favorites.manage-personal-list')])) {
             abort(403);
         }
         $this->loadPageByType('favourite_detail');
@@ -119,7 +140,7 @@ class FavouriteController extends Controller
      */
     public function edit(string $id): string
     {
-        if (! in_array(true, [customer(true)->can('favorites.manage-personal-list'), customer(true)->can('favorites.manage-personal-list')])) {
+        if (!in_array(true, [customer(true)->can('favorites.manage-personal-list'), customer(true)->can('favorites.manage-personal-list')])) {
             abort(403);
         }
         $this->loadPageByType('favourite_edit');
@@ -132,14 +153,14 @@ class FavouriteController extends Controller
      */
     public function update(UpdateOrderListRequest $request, string $id): RedirectResponse
     {
-        if (! in_array(true, [customer(true)->can('favorites.manage-personal-list'), customer(true)->can('favorites.manage-personal-list')])) {
+        if (!in_array(true, [customer(true)->can('favorites.manage-personal-list'), customer(true)->can('favorites.manage-personal-list')])) {
             abort(403);
         }
         $orderList = OrderList::findOrFail($id);
 
         $orderList->fill($request->validated());
 
-        if (! $orderList->save()) {
+        if (!$orderList->save()) {
             session()->flash('error', 'Favorite List updated field.');
 
             return redirect()->back();
@@ -161,7 +182,7 @@ class FavouriteController extends Controller
 
             if ($action == 'remove') {
                 OrderListItem::whereIn('product_id', $products)->get()->each(function ($item) {
-                    if (! $item->delete()) {
+                    if (!$item->delete()) {
                         throw new \Exception('Failed to remove item favorite list');
                     }
                 });
@@ -201,11 +222,11 @@ class FavouriteController extends Controller
     /**
      * This will delete the saved order list item
      *
-     * @param  OrderList  $favourite
+     * @param OrderList $favourite
      */
     public function destroy(Request $request, $favouriteItem): RedirectResponse
     {
-        if (! in_array(true, [customer(true)->can('favorites.manage-global-list'), customer(true)->can('favorites.manage-personal-list')])) {
+        if (!in_array(true, [customer(true)->can('favorites.manage-global-list'), customer(true)->can('favorites.manage-personal-list')])) {
             abort(403);
         }
         try {
@@ -222,11 +243,11 @@ class FavouriteController extends Controller
     /**
      * This will delete the saved order list item
      *
-     * @param  OrderListItem  $favourite
+     * @param OrderListItem $favourite
      */
     public function destroyOrderListItem(Request $request, $favouriteItem): RedirectResponse
     {
-        if (! in_array(true, [customer(true)->can('favorites.manage-global-list'), customer(true)->can('favorites.manage-personal-list')])) {
+        if (!in_array(true, [customer(true)->can('favorites.manage-global-list'), customer(true)->can('favorites.manage-personal-list')])) {
             abort(403);
         }
 

@@ -22,7 +22,7 @@ class FavoriteListRule implements ValidationRule
             ->where('order_list_items.list_id', request()->list_id)
             ->exists();
         if ($hasItems) {
-            $list_name = request()->is_shopping_list ? 'Shopping' : 'Favorite';
+            $list_name = request('is_shopping_list') ? 'Shopping' : 'Favorite';
             $fail("This product is already in the {$list_name} list. Please choose a different one.");
         }
     }

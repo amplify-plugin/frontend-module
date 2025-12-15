@@ -24,9 +24,23 @@ class FavoriteListRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'type' => ['string', 'in:cart,order,product,invoice'],
             'list_id' => 'nullable',
-            'product_id' => ['required', new FavoriteListRule],
+            'cart_id' => ['integer', 'required_if:type,cart'],
+            'product_id' => ['integer', 'required_if:type,product', new FavoriteListRule],
+            'product_qty' => ['integer'],
             'list_type' => ['required', new FavoriteListUniqueRule],
+            'is_shopping_list'=> ['nullable', 'boolean'],
+            'list_name' => ['required_if:list_id,null', 'string', 'max:255'],
+            'list_desc' => ['required_if:list_id,null', 'string', 'max:255'],
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->mergeIfMissing([
+            'type' => 'product',
+            'is_shopping_list' => false
+        ]);
     }
 }
