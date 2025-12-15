@@ -64,6 +64,20 @@ class AuthenticatedSessionController extends Controller
             ]);
         }
 
+        $guestCustomerNumber = config('amplify.frontend.guest_default');
+
+        if ($guestCustomerNumber) {
+            @cache()->forget("getCustomerDetails-{$guestCustomerNumber}");
+            @cache()->forget("getCustomerShippingLocationList-{$guestCustomerNumber}");
+        }
+
+        $guestSessionToken = \Illuminate\Support\Facades\Session::token();
+        @cache()->forget("{$guestSessionToken}-customer-model");
+        @cache()->forget("{$guestSessionToken}-mobile-menu");
+        @cache()->forget("{$guestSessionToken}-primary-menu");
+        @cache()->forget("{$guestSessionToken}-account-menu");
+        @cache()->forget("{$guestSessionToken}-account-sidebar");
+
         if (!Auth::guard(Contact::AUTH_GUARD)->attempt($request->only('email', 'password'), $request->boolean('remember'))) {
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
@@ -73,12 +87,6 @@ class AuthenticatedSessionController extends Controller
         event(new ContactLoggedIn($account, $guestCart));
 
         $request->clearRateLimiter();
-
-        $session_token = \Illuminate\Support\Facades\Session::token();
-        @cache()->forget("{$session_token}-customer-model");
-        @cache()->forget("{$session_token}-mobile-menu");
-        @cache()->forget("{$session_token}-primary-menu");
-        @cache()->forget("{$session_token}-account-menu");
 
         $request->session()->regenerate();
 
@@ -95,25 +103,12 @@ class AuthenticatedSessionController extends Controller
     public function logout(Request $request)
     {
         try {
-            $customer_number = customer()->customer_code;
-            $session_token = \Illuminate\Support\Facades\Session::token();
-            @cache()->forget("getCustomerDetails-{$customer_number}");
-            @cache()->forget("getCustomerShippingLocationList-{$customer_number}");
-
-            @cache()->forget("{$session_token}-customer-model");
-            @cache()->forget("{$session_token}-mobile-menu");
-            @cache()->forget("{$session_token}-primary-menu");
-            @cache()->forget("{$session_token}-account-menu");
-            @cache()->forget("{$session_token}-account-sidebar");
 
             $account = Auth::guard(Contact::AUTH_GUARD)->user();
 
-            event(new ContactLoggedOut($account));
+            $token = \Illuminate\Support\Facades\Session::token();
 
-            // Clear the ship-to address from session if it exists
-            if (session()->has('ship_to_address')) {
-                session()->forget('ship_to_address');
-            }
+            event(new ContactLoggedOut($account, $token));
 
             Auth::guard(Contact::AUTH_GUARD)->logout();
 
@@ -124,6 +119,7 @@ class AuthenticatedSessionController extends Controller
                 ->with('success', __('Session Logout successfully'));
 
         } catch (\Exception $exception) {
+            logger()->debug($exception);
             return back()
                 ->with('error', $exception->getMessage());
         }
