@@ -21,13 +21,15 @@ class CartResource extends JsonResource
         }
 
         return [
+            'id' => $this->id,
             'item_count' => $itemCount,
             'products' => empty($this->resource) ? [] : CartItemResource::collection($this->whenLoaded('cartItems')),
             'status' => boolval($this->status ?? 0),
-            'sub_total' => \currency_format($this->sub_total ?? 0, $this->currency, true),
-            'tax_amount' => \currency_format($this->tax_amount ?? 0, $this->currency, true),
-            'ship_charge' => \currency_format($this->ship_charge ?? 0, $this->currency, true),
-            'total' => \currency_format($this->total ?? 0, $this->currency, true),
+            'sub_total' => \currency_format($this->sub_total, $this->currency, true),
+            'tax_amount' => \currency_format($this->tax_amount, $this->currency, true),
+            'ship_charge' => \currency_format($this->ship_charge, $this->currency, true),
+            'total' => \currency_format($this->total, $this->currency, true),
+            'total_amount' => $this->total,
         ];
     }
 }
