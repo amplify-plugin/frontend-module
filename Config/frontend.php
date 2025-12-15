@@ -37,4 +37,5 @@ return [
         'internal-script' => [],
         'footer-script' => [],
     ],
+    'cart_item_badge_style' => 'items',
 ];

@@ -6,6 +6,7 @@ use Carbon\CarbonImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Str;
+use function Adminer\confirm;
 
 class CartItemResource extends JsonResource
 {
@@ -24,8 +25,8 @@ class CartItemResource extends JsonResource
             'manufacturer_name' => ! empty($this->product->manufacturerRelation) ?
                                         $this->product->manufacturerRelation->name : '',
             'qty' => (float) $this->quantity,
-            'price' => (float) $this->unitprice,
-            'subtotal' => ($this->subtotal != null) ? $this->subtotal : ($this->quantity * $this->unitprice),
+            'price' => \currency_format($this->unitprice, $this->cart->currency, true),
+            'subtotal' => \currency_format($this->subtotal, $this->cart->currency, true),
             'product_warehouse_code' => $this->product_warehouse_code,
             'warehouse_id' => $this->warehouse_id ?? null,
             'warehouse_name' => $this->warehouse->name ?? null,
