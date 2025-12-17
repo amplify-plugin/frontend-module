@@ -15,6 +15,8 @@ class MergeContactCartListener
      */
     public function handle(ContactLoggedIn $event): void
     {
+
+        return;
         /**
          * @var  Cart $cart
          */
