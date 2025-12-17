@@ -28,7 +28,7 @@ class ShippingOptionRequest extends FormRequest
             'customer_address_two' => 'nullable|string|max:255',
             'customer_address_three' => 'nullable|string|max:255',
             'customer_city' => 'required|string|max:255',
-            'customer_state' => 'required|string|max:255',
+            'customer_state' => 'nullable|string|max:255',
             'customer_zipcode' => 'required',
         ];
     }
