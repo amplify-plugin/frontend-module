@@ -102,21 +102,21 @@ class ShippingController extends Controller
             }
 
             $erpAddress = ErpApi::createCustomerShippingLocation([
-                'address_code' => $validateAddress->Reference,
-                'address_name' => $validateAddress->Name,
-                'address_1' => $validateAddress->Address1,
-                'address_2' => $validateAddress->Address2,
-                'address_3' => $validateAddress->Address3,
+                'address_code' => $validatedData['shipping_number'],
+                'address_name' => $validatedData['shipping_name'],
+                'address_1' => $validatedData['shipping_address1'],
+                'address_2' => $validatedData['shipping_address2'] ?? null,
+                'address_3' => $validatedData['shipping_address3'] ?? null,
                 'contact' => $validatedData['shipping_contact1'] ?? null,
                 'contact_2' => $validatedData['shipping_contact2'] ?? null,
                 'phone_1' => $validatedData['shipping_phone1'] ?? null,
                 'phone_2' => $validatedData['shipping_phone2'] ?? null,
                 'email_1' => $validatedData['shipping_email1'] ?? null,
                 'email_2' => $validatedData['shipping_email2'] ?? null,
-                'country_code' => $validateAddress->CountryCode,
-                'state' => $validateAddress->State,
-                'city' => $validateAddress->City,
-                'zip_code' => $validateAddress->ZipCode,
+                'country_code' => $validatedData['shipping_country'],
+                'state' => $validatedData['shipping_state'] ?? null,
+                'city' => $validatedData['shipping_city'],
+                'zip_code' => $validatedData['shipping_zip'],
             ]);
 
             if (config('amplify.client_code') !== 'ACP' && !empty($erpAddress->ShipToNumber)) {
