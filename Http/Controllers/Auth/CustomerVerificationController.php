@@ -50,8 +50,8 @@ class CustomerVerificationController extends Controller
         $response['status'] = $validation->ValidCombination == 'Y';
         $response['data'] = $validation->toArray();
         $response['message'] = ($response['status'])
-            ? 'Customer Profile Found with given information.'
-            : 'No Customer Profile Not Found.';
+            ? 'Customer profile found with given information.'
+            : 'No customer profile found with given information.';
 
         return response()->json($response);
     }
