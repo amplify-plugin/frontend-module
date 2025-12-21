@@ -286,6 +286,7 @@ Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class, ContactF
             });
 
         Route::get('past-items', [PastItemsController::class, 'index'])->name('past.items');
+        Route::get('past-items-history', [PastItemsController::class, 'history'])->name('past.items.history');
         Route::post('customer-part-numbers', [CustomerPartNumberController::class, 'store'])->name('customer-part-numbers');
         Route::delete('customer-part-numbers', [CustomerPartNumberController::class, 'destroy']);
     });

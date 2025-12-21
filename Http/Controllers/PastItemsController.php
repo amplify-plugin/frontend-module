@@ -70,4 +70,13 @@ class PastItemsController extends Controller
     {
         //
     }
+    public function history()
+    {
+        if (! customer(true)->can('past-items.past-items-history')) {
+            abort(403);
+        }
+        $this->loadPageByType('past_items_history');
+
+        return $this->render();
+    }
 }
