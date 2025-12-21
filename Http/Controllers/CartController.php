@@ -2,11 +2,9 @@
 
 namespace Amplify\Frontend\Http\Controllers;
 
-use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\Frontend\Events\CartUpdated;
 use Amplify\Frontend\Http\Requests\AddToCartRequest;
 use Amplify\Frontend\Http\Resources\CartResource;
-use Amplify\Frontend\Jobs\CartPricingSyncJob;
 use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\System\Backend\Models\Cart;
 use Amplify\System\Backend\Models\CartItem;
@@ -75,8 +73,6 @@ class CartController extends Controller
 
             \event(new CartUpdated($cart));
 
-            CartPricingSyncJob::dispatch($cart->getkey(), session('ship_to_address.ShipToNumber', session('ship_to_address.address_code', ErpApi::getCustomerDetail()->DefaultShipTo)));
-
             return $this->apiResponse(true, __('Product(s) added to cart successfully.'));
 
         } catch (\Exception $exception) {
@@ -100,8 +96,6 @@ class CartController extends Controller
             if ($cart->cartItems()->whereIn('id', Arr::wrap($products))->delete()) {
 
                 \event(new CartUpdated($cart));
-
-                CartPricingSyncJob::dispatch($cart->getKey(), session('ship_to_address.ShipToNumber', session('ship_to_address.address_code', ErpApi::getCustomerDetail()->DefaultShipTo)));
 
                 return response()->json(['message' => __('Your current cart items are removed'), 'success' => true], 200);
             }
@@ -138,7 +132,7 @@ class CartController extends Controller
 
             DB::commit();
 
-            CartPricingSyncJob::dispatch($cartItem->cart_id, session('ship_to_address.ShipToNumber', session('ship_to_address.address_code', ErpApi::getCustomerDetail()->DefaultShipTo)));
+            \event(new CartUpdated($cartItem->cart));
 
             return $this->apiResponse(true, __('Cart updated successfully.'));
 
