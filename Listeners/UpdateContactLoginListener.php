@@ -5,8 +5,6 @@ namespace Amplify\Frontend\Listeners;
 use Amplify\Frontend\Events\ContactLoggedIn;
 use Amplify\Frontend\Events\ContactLoggedOut;
 use Amplify\System\Backend\Models\ContactLogin;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class UpdateContactLoginListener
 {

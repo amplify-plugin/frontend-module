@@ -9,7 +9,6 @@ use Amplify\System\Backend\Models\Event;
 use Amplify\System\Backend\Models\Product;
 use Amplify\System\Factories\NotificationFactory;
 use App\Http\Controllers\Controller;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 
 class CustomerPartNumberController extends Controller

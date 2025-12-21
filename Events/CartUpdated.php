@@ -3,26 +3,27 @@
 namespace Amplify\Frontend\Events;
 
 use Amplify\System\Backend\Models\Cart;
-use Amplify\System\Backend\Models\Contact;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ContactLoggedIn
+class CartUpdated
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public Contact $contact;
-
-    public ?Cart $guestCart;
+    public Cart $cart;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(Contact $contact, ?Cart $guestCart = null)
+    public function __construct(Cart $cart)
     {
-        $this->contact = $contact;
-        $this->guestCart = $guestCart;
-        customer_permissions();
+
+        $cart->sub_total = $cart->cartItems->sum('subtotal');
+        $cart->tax_amount = null;
+        $cart->ship_charge = null;
+        $cart->total = $cart->sub_total;
+        $cart->save();
+        $this->cart = $cart;
     }
 }

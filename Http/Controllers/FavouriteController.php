@@ -5,7 +5,6 @@ namespace Amplify\Frontend\Http\Controllers;
 use Amplify\Frontend\Http\Requests\FavoriteListRequest;
 use Amplify\Frontend\Http\Requests\UpdateOrderListRequest;
 use Amplify\Frontend\Traits\HasDynamicPage;
-use Amplify\System\Backend\Models\Cart;
 use Amplify\System\Backend\Models\CartItem;
 use Amplify\System\Backend\Models\OrderList;
 use Amplify\System\Backend\Models\OrderListItem;

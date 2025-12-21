@@ -2,19 +2,18 @@
 
 namespace Amplify\Frontend\Http\Controllers;
 
+use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\System\Backend\Models\Product;
-use Amplify\System\Sayt\Facade\Sayt;
-use App\Http\Controllers\Controller;
-use ErrorException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Amplify\ErpApi\Facades\ErpApi;
-use Amplify\System\Backend\Models\Warehouse;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use Amplify\System\Backend\Models\ProductRelation;
 use Amplify\System\Backend\Models\ProductRelationshipType;
 use Amplify\System\Helpers\UtilityHelper;
+use Amplify\System\Sayt\Facade\Sayt;
+use App\Http\Controllers\Controller;
+use ErrorException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ProductDetailController extends Controller
 {

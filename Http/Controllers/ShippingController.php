@@ -9,7 +9,6 @@ use Amplify\System\Backend\Models\CustomerAddress;
 use Amplify\System\Backend\Models\Warehouse;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class ShippingController extends Controller

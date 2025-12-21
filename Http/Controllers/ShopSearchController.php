@@ -4,16 +4,16 @@ namespace Amplify\Frontend\Http\Controllers;
 
 use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\Frontend\Traits\HasDynamicPage;
-use Amplify\Widget\Traits\ProductDetailTrait;
 use Amplify\System\Backend\Models\Product;
-use Illuminate\Http\RedirectResponse;
+use Amplify\Widget\Traits\ProductDetailTrait;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Cookie;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Illuminate\Support\Facades\Cookie;
 
 class ShopSearchController extends Controller
 {

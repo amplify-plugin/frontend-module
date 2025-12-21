@@ -5,8 +5,6 @@ namespace Amplify\Frontend\Http\Resources;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Str;
-use function Adminer\confirm;
 
 class CartItemResource extends JsonResource
 {

@@ -2,11 +2,9 @@
 
 namespace Amplify\Frontend\Listeners;
 
-use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\Frontend\Events\ContactLoggedIn;
-use Amplify\System\Backend\Http\Controllers\CartController;
+use Amplify\Frontend\Jobs\CartPricingSyncJob;
 use Amplify\System\Backend\Models\Cart;
-use Amplify\System\Jobs\CartPricingSyncJob;
 
 class MergeContactCartListener
 {
