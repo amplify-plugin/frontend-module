@@ -160,6 +160,9 @@ class ShippingController extends Controller
 
     public function options(ShippingOptionRequest $request)
     {
+        $cart = getCart();
+        $cartItems = $cart?->cartItems?->toArray() ?? [];
+
         $orderInfo = [
             'customer_number' => customer_check() ? customer()->erp_id : config('amplify.frontend.guest_default'),
             'customer_default_warehouse' => customer_check()
@@ -177,7 +180,12 @@ class ShippingController extends Controller
             'ship_to_zip_code' => $request->input('customer_zipcode', ''),
             'phone_number' => $request->input('customer_phone', ''),
             'shipping_name' => $request->input('shipping_name', ''),
-            'items' => $this->getCartItemsForFactsErp(),
+            'items' => $cartItems,
+            'sub_total' => $cart->sub_total ?? 0,
+            'tax_amount' => $cart->tax_amount ?? 0,
+            'total' => $cart->total ?? 0,
+            'ship_charge' => $cart->ship_charge ?? 0,
+            'currency' => $cart->currency ?? config('amplify.basic.global_currency'),
         ];
 
         $orderTotal = ErpApi::getOrderTotal($orderInfo);
