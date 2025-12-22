@@ -161,6 +161,7 @@ class ShippingController extends Controller
     public function options(ShippingOptionRequest $request)
     {
         $cart = getCart();
+
         $cartItems = $cart?->cartItems?->toArray() ?? [];
 
         $orderInfo = [
@@ -191,28 +192,6 @@ class ShippingController extends Controller
         $orderTotal = ErpApi::getOrderTotal($orderInfo);
 
         return response()->json($orderTotal);
-    }
-
-    /**
-     * @return array|mixed [type]
-     */
-    private function getCartItemsForFactsErp(): mixed
-    {
-        $cart = getCart();
-
-        if ($cart instanceof Cart) {
-
-            return $cart->cartItems->map(function ($item) {
-                return [
-                    'ItemNumber' => $item->product_code,
-                    'WarehouseID' => $item->product_warehouse_code,
-                    'OrderQty' => $item->quantity,
-                    'UnitOfMeasure' => $item->uom,
-                ];
-            })->toArray();
-        } else {
-            return [];
-        }
     }
 
     /**
