@@ -5,7 +5,6 @@ namespace Amplify\Frontend\Jobs;
 use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\ErpApi\Wrappers\ShippingLocation;
 use Amplify\System\Backend\Models\Cart;
-use AWS\CRT\Log;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -104,7 +103,9 @@ class CartPricingSyncJob implements ShouldQueue
                     }
                 }
 
-            } else {
+            }
+
+            else {
                 $this->cart->sub_total = $this->cart->cartItems->sum('subtotal');
                 $this->cart->total = $this->cart->subtotal;
                 $this->cart->tax_amount = null;
