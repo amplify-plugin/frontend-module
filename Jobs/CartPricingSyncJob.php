@@ -46,14 +46,12 @@ class CartPricingSyncJob implements ShouldQueue
 
                 $shippingList = ErpApi::getCustomerShippingLocationList(['customer_number' => $erpCustomer->CustomerNumber]);
 
+                $shipToNumber = !empty($this->shipToCode) ? $this->shipToCode : $erpCustomer->DefaultShipTo;
+
                 /**
                  * @var ShippingLocation $shipTo
                  */
-                $shipTo = $shippingList->firstWhere('ShipToNumber', $erpCustomer->DefaultShipTo);
-
-                if (empty($shipTo)) {
-                    $shipTo = $shippingList->first();
-                }
+                $shipTo = $shippingList->firstWhere('ShipToNumber', '=', $shipToNumber);
 
                 $orderInfo = [
                     'customer_number' => $erpCustomer->CustomerNumber,
@@ -63,19 +61,20 @@ class CartPricingSyncJob implements ShouldQueue
                     'shipping_method' => $erpCustomer->CarrierCode,
                     'customer_order_ref' => null,
                     'ship_to_number' => $shipTo?->ShipToNumber ?? '',
-                    'ship_to_address1' => $shipTo?->ShipToAddress1 ?? '',
-                    'ship_to_address2' => $shipTo?->ShipToAddress2 ?? '',
-                    'ship_to_address3' => $shipTo?->ShipToAddress3 ?? '',
-                    'ship_to_city' => $shipTo?->ShipToCity ?? '',
-                    'ship_to_country_code' => $shipTo?->ShipToCountryCode ?? '',
-                    'ship_to_state' => $shipTo?->ShipToState ?? '',
-                    'ship_to_zip_code' => $shipTo?->ShipToZipCode ?? '',
+                    'ship_to_address1' => $shipTo?->ShipToAddress1 ?? $erpCustomer->CustomerAddress1 ?? '',
+                    'ship_to_address2' => $shipTo?->ShipToAddress2 ?? $erpCustomer->CustomerAddress2 ?? '',
+                    'ship_to_address3' => $shipTo?->ShipToAddress3 ?? $erpCustomer->CustomerAddress3 ?? '',
+                    'ship_to_city' => $shipTo?->ShipToCity ?? $erpCustomer->CustomerCity ?? '',
+                    'ship_to_country_code' => $shipTo?->ShipToCountryCode ?? $erpCustomer->CustomerCountry ?? '',
+                    'ship_to_state' => $shipTo?->ShipToState ?? $erpCustomer->CustomerState ?? '',
+                    'ship_to_zip_code' => $shipTo?->ShipToZipCode ?? $erpCustomer->CustomerZipCode ?? '',
                     'phone_number' => '',
                     'shipping_name' => $shipTo?->ShipToName ?? '',
                     'items' => $cartItems->toArray(),
                 ];
 
                 $orderTotal = ErpApi::getOrderTotal($orderInfo);
+
                 $this->cart->sub_total = $orderTotal->TotalLineAmount;
                 $this->cart->total = $orderTotal->TotalOrderValue;
                 $this->cart->tax_amount = $orderTotal->SalesTaxAmount;
