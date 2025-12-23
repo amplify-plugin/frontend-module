@@ -5,6 +5,7 @@ namespace Amplify\Frontend\Jobs;
 use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\ErpApi\Wrappers\ShippingLocation;
 use Amplify\System\Backend\Models\Cart;
+use AWS\CRT\Log;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -35,7 +36,7 @@ class CartPricingSyncJob implements ShouldQueue
 
             $this->cart = $this->cart->load('cartItems');
 
-            $cartItems = $this->cart->cartItems()->exists() ? $this->cart->cartItems : new Collection();
+            $cartItems = $this->cart->cartItems()->exists() ? $this->cart->cartItems : new Collection;
 
             // Reset Cart if no item exists
             if ($cartItems->isEmpty()) {
@@ -44,6 +45,7 @@ class CartPricingSyncJob implements ShouldQueue
                 $this->cart->tax_amount = null;
                 $this->cart->ship_charge = null;
                 $this->cart->currency = config('amplify.basic.global_currency', 'USD');
+
                 return;
             }
 
@@ -51,7 +53,7 @@ class CartPricingSyncJob implements ShouldQueue
                 $erpCustomer = ErpApi::getCustomerDetail([
                     'customer_number' => empty($this->cart->contact_id)
                         ? config('amplify.frontend.guest_default')
-                        : $this->cart->contact->customer->erp_id
+                        : $this->cart->contact->customer->erp_id,
                 ]);
 
                 $shippingList = ErpApi::getCustomerShippingLocationList(['customer_number' => $erpCustomer->CustomerNumber]);
@@ -82,14 +84,7 @@ class CartPricingSyncJob implements ShouldQueue
                     'ship_to_zip_code' => $shipTo?->ShipToZipCode ?? '',
                     'phone_number' => '',
                     'shipping_name' => $shipTo?->ShipToName ?? '',
-                    'items' => $cartItems->map(function ($item) {
-                        return [
-                            'ItemNumber' => $item->product_code,
-                            'WarehouseID' => $item->product_warehouse_code,
-                            'OrderQty' => $item->quantity,
-                            'UnitOfMeasure' => $item->uom,
-                        ];
-                    })->toArray()
+                    'items' => $cartItems->toArray(),
                 ];
 
                 $orderTotal = ErpApi::getOrderTotal($orderInfo);
