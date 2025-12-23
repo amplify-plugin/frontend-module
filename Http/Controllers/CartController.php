@@ -61,7 +61,7 @@ class CartController extends Controller
                 ->through(config('amplify.add_to_cart_pipeline', []))
                 ->thenReturn();
 
-            $cart = getOrCreateCart();
+            $cart = getCart();
 
             if (!$cart->wasRecentlyCreated) {
                 $cart->cartItems()->whereIn('product_id', collect($data['items'])->pluck('product_id')->toArray())->delete();

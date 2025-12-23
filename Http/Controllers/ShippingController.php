@@ -3,8 +3,8 @@
 namespace Amplify\Frontend\Http\Controllers;
 
 use Amplify\ErpApi\Facades\ErpApi;
+use Amplify\Frontend\Events\CartUpdated;
 use Amplify\Frontend\Http\Requests\ShippingOptionRequest;
-use Amplify\System\Backend\Models\Cart;
 use Amplify\System\Backend\Models\CustomerAddress;
 use Amplify\System\Backend\Models\Warehouse;
 use App\Http\Controllers\Controller;
@@ -190,6 +190,8 @@ class ShippingController extends Controller
         ];
 
         $orderTotal = ErpApi::getOrderTotal($orderInfo);
+
+        event(new CartUpdated($cart, $orderTotal));
 
         return response()->json($orderTotal);
     }
