@@ -43,6 +43,7 @@ use Amplify\Frontend\Http\Controllers\InvoiceController;
 use Amplify\Frontend\Http\Controllers\MessageController;
 use Amplify\Frontend\Http\Controllers\MyProfileController;
 use Amplify\Frontend\Http\Controllers\NewsletterSubscriptionController;
+use Amplify\Frontend\Http\Controllers\NoticeIndexController;
 use Amplify\Frontend\Http\Controllers\OrderController;
 use Amplify\Frontend\Http\Controllers\OrderStatusController;
 use Amplify\Frontend\Http\Controllers\PastItemsController;
@@ -330,6 +331,7 @@ Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class, ContactF
     Route::post('/order/calculate-price',
         [CustomerOrderController::class, 'getOrderPricing'])->name('order.calculate-price');
     Route::post('/order/summary', [CustomerOrderController::class, 'getOrderSummary'])->name('order.summary');
+    Route::post('/notices', NoticeIndexController::class)->name('notices.index');
 });
 
 Route::get('punchout/login', [PunchOutController::class, 'login'])->name('punchout.login');
