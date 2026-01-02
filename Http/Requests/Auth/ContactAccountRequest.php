@@ -36,7 +36,7 @@ class ContactAccountRequest extends FormRequest
             'contact_account_title' => 'integer|nullable',
         ];
 
-        if (!config('captcha.disable')) {
+        if (config('amplify.basic.captcha_status')) {
             if ($this->has('contact_captcha')) {
                 $rules['contact_captcha'] = 'required|captcha';
             }

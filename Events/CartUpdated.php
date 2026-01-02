@@ -32,8 +32,8 @@ class CartUpdated
 
         $this->cart = $cart;
 
-        if ($orderTotal == null & $this->cart->total > 0) {
-            CartPricingSyncJob::dispatch($cart->getKey(), session('ship_to_address.ShipToNumber', session('ship_to_address.address_code', ErpApi::getCustomerDetail()->DefaultShipTo)));
-        }
+//        if ($orderTotal == null & $this->cart->total > 0) {
+//            CartPricingSyncJob::dispatch($cart->getKey(), session('ship_to_address.ShipToNumber', session('ship_to_address.address_code', ErpApi::getCustomerDetail()->DefaultShipTo)));
+//        }
     }
 }

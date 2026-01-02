@@ -35,7 +35,7 @@ class FormResponseRequest extends FormRequest
     {
         $rules = [];
 
-        if ($this->form->allow_captcha && ! config('captcha.disable') && $this->filled('captcha_name')) {
+        if ($this->form->allow_captcha && config('amplify.basic.captcha_status') && $this->filled('captcha_name')) {
             $rules[$this->input('captcha_name', 'captcha')] = 'required|captcha';
         }
 

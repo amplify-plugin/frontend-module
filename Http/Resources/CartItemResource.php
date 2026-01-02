@@ -43,6 +43,7 @@ class CartItemResource extends JsonResource
                 ? $this->additional_info['is_ncnr'] ? '<span class="text-warning">It is a <b>Non-Cancelable, Non-Returnable</b> item</span>' : ''
                 : '',
             'ship_restriction' => $this->additional_info['ship_restriction'] ?? '',
+            'error' => $this->additional_info['error'] ?? '',
         ];
     }
 

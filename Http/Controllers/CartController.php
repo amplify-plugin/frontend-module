@@ -31,7 +31,7 @@ class CartController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->wantsJson()) {
+        if ($request->ajax()) {
 
             $cart = \getCart();
 
@@ -52,19 +52,51 @@ class CartController extends Controller
 
     public function store(AddToCartRequest $request)
     {
+        $cart = getCart();
+
+        $payload = [
+            'meta' => [],
+            'errors' => [],
+            'items' => [],
+        ];
+
+        $requestItems = $request->input('products');
+
+        $productCodes = [];
+
+        foreach ($requestItems as $i) {
+            $productCodes[] = $i['product_code'];
+        }
+
+        $cartItems = $cart->cartItems->toArray();
+
+        foreach ($cartItems as $index => $cartItem) {
+            if (in_array($cartItem['product_code'], $productCodes)) {
+                unset($cartItems[$index]);
+                continue;
+            }
+            $cartItems[$index]['qty'] = $cartItem['quantity'];
+        }
+
+        $payload['items'] = array_merge($cartItems, $requestItems);
+
+        $data = app(Pipeline::class)
+            ->send($payload)
+            ->through(config('amplify.add_to_cart_pipeline', []))
+            ->thenReturn();
+
+        if (!empty($data['errors'])) {
+            $this->apiResponse(false, $data['errors'][0], 500, ['errors' => $data['errors']]);
+        }
+
         DB::beginTransaction();
 
         try {
 
-            $data = app(Pipeline::class)
-                ->send(['meta' => [], 'items' => $request->input('products')])
-                ->through(config('amplify.add_to_cart_pipeline', []))
-                ->thenReturn();
-
-            $cart = getCart();
-
             if (!$cart->wasRecentlyCreated) {
-                $cart->cartItems()->whereIn('product_id', collect($data['items'])->pluck('product_id')->toArray())->delete();
+                $cart->cartItems()
+                    ->whereIn('product_id', collect($data['items'])->pluck('product_id')->toArray())
+                    ->delete();
             }
 
             $cart->cartItems()->createMany($data['items']);
@@ -115,24 +147,48 @@ class CartController extends Controller
             'quantity' => 'required|numeric|min:1',
         ]);
 
-        DB::beginTransaction();
+        $payload = [
+            'meta' => [],
+            'errors' => [],
+            'items' => [],
+        ];
 
-        try {
+            $quantity = $request->input('quantity');
 
-            $product = $cartItem->toArray();
+            $payload['items'] = CartItem::where('cart_id', '=', $cartItem->cart_id)
+                ->get()
+                ->map(function ($entry) use ($cartItem, $quantity) {
+                    $entry->qty = $entry->getKey() == $cartItem->getKey()
+                        ? $quantity
+                        : $entry->quantity;
 
-            $product['qty'] = $request->input('quantity');
+                    return $entry;
+                })
+                ->toArray();
 
             $data = app(Pipeline::class)
-                ->send(['meta' => [], 'items' => [$product]])
+                ->send($payload)
                 ->through(config('amplify.add_to_cart_pipeline', []))
                 ->thenReturn();
 
-            $cartItem->update(array_shift($data['items']));
+
+            if (!empty($data['errors'])) {
+                $this->apiResponse(false, $data['errors'][0], 500, ['errors' => $data['errors']]);
+            }
+
+            DB::beginTransaction();
+
+            try {
+
+                $cart = $cartItem->cart;
+
+                $cart->cartItems()->delete();
+
+                $cart->cartItems()->createMany($data['items']);
 
             DB::commit();
 
-            \event(new CartUpdated($cartItem->cart));
+            \event(new CartUpdated($cart));
 
             return $this->apiResponse(true, __('Cart updated successfully.'));
 

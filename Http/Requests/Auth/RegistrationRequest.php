@@ -52,7 +52,7 @@ class RegistrationRequest extends FormRequest
             'accept_term' => 'string|in:yes,no',
         ];
 
-        if (! config('captcha.disable')) {
+        if (config('amplify.basic.captcha_status')) {
             if ($this->has('captcha')) {
                 $rules['captcha'] = 'required|captcha';
             }
