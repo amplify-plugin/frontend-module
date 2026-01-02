@@ -18,19 +18,21 @@ class CartUpdated
 
     /**
      * Create a new event instance.
-     * @param Cart $cart
+     * @param Cart $cartModel
      * @param OrderTotal|null $orderTotal
      */
     public function __construct(Cart $cart, ?OrderTotal $orderTotal = null)
     {
-        $cart->sub_total = $orderTotal?->TotalLineAmount ?? $cart->cartItems->sum('subtotal');
-        $cart->tax_amount = $orderTotal?->SalesTaxAmount ?? null;
-        $cart->ship_charge = $orderTotal?->FreightAmount ?? null;
-        $cart->total = $orderTotal?->TotalOrderValue ?? $cart->sub_total;
+        $cartModel = Cart::find($cart->getKey());
 
-        $cart->save();
+        $cartModel->sub_total = $orderTotal?->TotalLineAmount ?? $cartModel->cartItems->sum('subtotal');
+        $cartModel->tax_amount = $orderTotal?->SalesTaxAmount ?? null;
+        $cartModel->ship_charge = $orderTotal?->FreightAmount ?? null;
+        $cartModel->total = $orderTotal?->TotalOrderValue ?? $cartModel->sub_total;
 
-        $this->cart = $cart;
+        $cartModel->save();
+
+        $this->cart = $cartModel;
 
 //        if ($orderTotal == null & $this->cart->total > 0) {
 //            CartPricingSyncJob::dispatch($cart->getKey(), session('ship_to_address.ShipToNumber', session('ship_to_address.address_code', ErpApi::getCustomerDetail()->DefaultShipTo)));

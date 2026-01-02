@@ -12,7 +12,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
@@ -57,7 +56,6 @@ class CartController extends Controller
         $payload = [
             'meta' => [],
             'errors' => [],
-            'items' => [],
         ];
 
         $requestItems = $request->input('products');
@@ -70,15 +68,9 @@ class CartController extends Controller
 
         $cartItems = $cart->cartItems->toArray();
 
-        foreach ($cartItems as $index => $cartItem) {
-            if (in_array($cartItem['product_code'], $productCodes)) {
-                unset($cartItems[$index]);
-                continue;
-            }
-            $cartItems[$index]['qty'] = $cartItem['quantity'];
-        }
+        $cartItems = array_filter($cartItems, fn($item) => in_array($item['product_code'], $productCodes));
 
-        $payload['items'] = array_merge($cartItems, $requestItems);
+        $payload['items'] = $cartItems + $requestItems;
 
         $data = app(Pipeline::class)
             ->send($payload)
@@ -89,7 +81,7 @@ class CartController extends Controller
             $this->apiResponse(false, $data['errors'][0], 500, ['errors' => $data['errors']]);
         }
 
-        DB::beginTransaction();
+//        DB::beginTransaction();
 
         try {
 
@@ -101,7 +93,7 @@ class CartController extends Controller
 
             $cart->cartItems()->createMany($data['items']);
 
-            DB::commit();
+//            DB::commit();
 
             \event(new CartUpdated($cart));
 
@@ -109,7 +101,7 @@ class CartController extends Controller
 
         } catch (\Exception $exception) {
 
-            DB::rollBack();
+//            DB::rollBack();
 
             Log::debug($exception);
 
@@ -150,43 +142,42 @@ class CartController extends Controller
         $payload = [
             'meta' => [],
             'errors' => [],
-            'items' => [],
         ];
 
-            $quantity = $request->input('quantity');
+        $quantity = $request->input('quantity');
 
-            $payload['items'] = CartItem::where('cart_id', '=', $cartItem->cart_id)
-                ->get()
-                ->map(function ($entry) use ($cartItem, $quantity) {
-                    $entry->qty = $entry->getKey() == $cartItem->getKey()
-                        ? $quantity
-                        : $entry->quantity;
+        $payload['items'] = CartItem::where('cart_id', '=', $cartItem->cart_id)
+            ->get()
+            ->map(function ($entry) use ($cartItem, $quantity) {
+                $entry->quantity = $entry->getKey() == $cartItem->getKey()
+                    ? $quantity
+                    : $entry->quantity;
 
-                    return $entry;
-                })
-                ->toArray();
+                return $entry;
+            })
+            ->toArray();
 
-            $data = app(Pipeline::class)
-                ->send($payload)
-                ->through(config('amplify.add_to_cart_pipeline', []))
-                ->thenReturn();
+        $data = app(Pipeline::class)
+            ->send($payload)
+            ->through(config('amplify.add_to_cart_pipeline', []))
+            ->thenReturn();
 
 
-            if (!empty($data['errors'])) {
-                $this->apiResponse(false, $data['errors'][0], 500, ['errors' => $data['errors']]);
-            }
+        if (!empty($data['errors'])) {
+            $this->apiResponse(false, $data['errors'][0], 500, ['errors' => $data['errors']]);
+        }
 
-            DB::beginTransaction();
+//        DB::beginTransaction();
 
-            try {
+        try {
 
-                $cart = $cartItem->cart;
+            $cart = $cartItem->cart;
 
-                $cart->cartItems()->delete();
+            $cart->cartItems()->delete();
 
-                $cart->cartItems()->createMany($data['items']);
+            $cart->cartItems()->createMany($data['items']);
 
-            DB::commit();
+//            DB::commit();
 
             \event(new CartUpdated($cart));
 
@@ -194,7 +185,7 @@ class CartController extends Controller
 
         } catch (\Exception $exception) {
 
-            DB::rollBack();
+//            DB::rollBack();
 
             Log::error($exception);
 
