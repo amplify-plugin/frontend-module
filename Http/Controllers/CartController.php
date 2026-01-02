@@ -164,7 +164,7 @@ class CartController extends Controller
 
 
         if (!empty($data['errors'])) {
-            $this->apiResponse(false, $data['errors'][0], 500, ['errors' => $data['errors']]);
+            $this->apiResponse(false, $data['errors'][0][0] ?? 'Something went wrong.', 500, ['errors' => $data['errors']]);
         }
 
 //        DB::beginTransaction();
