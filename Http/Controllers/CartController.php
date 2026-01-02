@@ -75,13 +75,16 @@ class CartController extends Controller
         $data = app(Pipeline::class)
             ->send($payload)
             ->through(config('amplify.add_to_cart_pipeline', []))
-            ->thenReturn();
+            ->then(function ($data) {
+                foreach ($data['items'] as $index => $item) {
+                    $data['items'][$index]['error'] = isset($data['errors'][$index]) ? implode("\n", $data['errors'][$index]) : null;
+                }
+                return $data;
+            });
 
         if (!empty($data['errors'])) {
-            $this->apiResponse(false, $data['errors'][0], 500, ['errors' => $data['errors']]);
+            $this->apiResponse(false, Arr::first(Arr::flatten($data['errors'])), 500, ['errors' => $data['errors']]);
         }
-
-//        DB::beginTransaction();
 
         try {
 
@@ -93,15 +96,11 @@ class CartController extends Controller
 
             $cart->cartItems()->createMany($data['items']);
 
-//            DB::commit();
-
             \event(new CartUpdated($cart));
 
             return $this->apiResponse(true, __('Product(s) added to cart successfully.'));
 
         } catch (\Exception $exception) {
-
-//            DB::rollBack();
 
             Log::debug($exception);
 
@@ -160,14 +159,17 @@ class CartController extends Controller
         $data = app(Pipeline::class)
             ->send($payload)
             ->through(config('amplify.add_to_cart_pipeline', []))
-            ->thenReturn();
+            ->then(function ($data) {
+                foreach ($data['items'] as $index => $item) {
+                    $data['items'][$index]['error'] = isset($data['errors'][$index]) ? implode("\n", $data['errors'][$index]) : null;
+                }
+                return $data;
+            });
 
 
         if (!empty($data['errors'])) {
-            $this->apiResponse(false, $data['errors'][0][0] ?? 'Something went wrong.', 500, ['errors' => $data['errors']]);
+            $this->apiResponse(false, Arr::first(Arr::flatten($data['errors'])), 500, ['errors' => $data['errors']]);
         }
-
-//        DB::beginTransaction();
 
         try {
 
@@ -177,15 +179,11 @@ class CartController extends Controller
 
             $cart->cartItems()->createMany($data['items']);
 
-//            DB::commit();
-
             \event(new CartUpdated($cart));
 
             return $this->apiResponse(true, __('Cart updated successfully.'));
 
         } catch (\Exception $exception) {
-
-//            DB::rollBack();
 
             Log::error($exception);
 
