@@ -30,7 +30,7 @@ class CartController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
+        if ($request->expectsJson()) {
 
             $cart = \getCart();
 
