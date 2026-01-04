@@ -5,9 +5,9 @@ namespace Amplify\Frontend\Providers;
 use Amplify\Frontend\Events\CartUpdated;
 use Amplify\Frontend\Events\ContactLoggedIn;
 use Amplify\Frontend\Events\ContactLoggedOut;
+use Amplify\Frontend\Listeners\MergeCartListener;
 use Amplify\Frontend\Listeners\UpdateContactLoginListener;
 use Amplify\Frontend\Listeners\UpdateCustomerListener;
-use App\Listeners\MergeCartListener;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -21,6 +21,7 @@ class EventServiceProvider extends ServiceProvider
         ContactLoggedIn::class => [
             UpdateCustomerListener::class,
             UpdateContactLoginListener::class,
+            MergeCartListener::class,
         ],
         ContactLoggedOut::class => [
             UpdateContactLoginListener::class,
