@@ -83,7 +83,7 @@ class CartController extends Controller
             });
 
         if (!empty($data['errors'])) {
-            $this->apiResponse(false, Arr::first(Arr::flatten($data['errors'])), 500, ['errors' => $data['errors']]);
+            return $this->apiResponse(false, count($data['errors']) == 1 ? Arr::first(Arr::flatten($data['errors'])) : 'The given data was invalid.', 400, ['errors' => $data['errors']]);
         }
 
         try {
