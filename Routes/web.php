@@ -101,6 +101,7 @@ Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class, ContactF
         ->name('carts.remove-item');
     Route::patch('carts/update/{cartItem}', [\Amplify\Frontend\Http\Controllers\CartController::class, 'update'])
         ->name('carts.update-item');
+    Route::post('/remove/carts', [\Amplify\Frontend\Http\Controllers\CartController::class, 'removeCarts'])->name('frontend.remove-carts');
     Route::get('checkout', CheckoutController::class)->name('checkout');
     Route::post('subscribe', NewsletterSubscriptionController::class)->name('subscribe');
     Route::get('faq/{faq-category-slug?}', FaqController::class)->name('faqs.show');
