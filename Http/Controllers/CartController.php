@@ -2,17 +2,29 @@
 
 namespace Amplify\Frontend\Http\Controllers;
 
+use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\Frontend\Events\CartUpdated;
 use Amplify\Frontend\Http\Requests\AddToCartRequest;
 use Amplify\Frontend\Http\Resources\CartResource;
 use Amplify\Frontend\Traits\HasDynamicPage;
+use Amplify\System\Backend\Enums\ProductAvailabilityEnum;
+use Amplify\System\Backend\Http\Requests\OrderFileRequest;
 use Amplify\System\Backend\Models\Cart;
 use Amplify\System\Backend\Models\CartItem;
+use Amplify\System\Backend\Models\DocumentType;
+use Amplify\System\Backend\Models\Product;
+use Amplify\System\Sayt\Classes\ItemRow;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Query\JoinClause;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CartController extends Controller
 {
@@ -210,5 +222,133 @@ class CartController extends Controller
 
             return $this->apiResponse(false, $exception->getMessage(), 500);
         }
+    }
+
+    public function orderFile(OrderFileRequest $request): JsonResponse
+    {
+        $file = request()->file('file');
+        $fileName = time() . '_' . $file->getClientOriginalName();
+        $filePath = $file->storeAs('public/quick_order/', $fileName);
+
+        $fileExtension = strtoupper($file->getClientOriginalExtension());
+
+        $readerType = match ($fileExtension) {
+            'CSV' => \Maatwebsite\Excel\Excel::CSV,
+            'XLS' => \Maatwebsite\Excel\Excel::XLS,
+            'XLSX' => \Maatwebsite\Excel\Excel::XLSX,
+            default => null
+        };
+
+        $fileData = Excel::toArray((object)[], $filePath, 'local', $readerType);
+
+        $firstSheet = array_shift($fileData);
+
+        if (empty($firstSheet) || count($firstSheet) == 1) {
+            throw ValidationException::withMessages(['file' => 'The file is empty or only have headers.']);
+        }
+
+        // Remove Header
+        if (isset($firstSheet[0][0])) {
+            unset($firstSheet[0]);
+        }
+
+        if (count($firstSheet) > 100) {
+            return $this->apiResponse(false, __('The file has more than 100 items.'), 500);
+        }
+
+        // Merge Quantity for Duplicate Product
+        $items = [];
+        $codes = [];
+
+        foreach ($firstSheet as $row) {
+            $code = strval($row[0]);
+            if (empty($code)) {
+                continue;
+            }
+            $codes[$code] = true;
+            $items[] = ['code' => $code, 'quantity' => empty($row[1]) ? null : floatval($row[1])];
+        }
+
+        if (empty($items)) {
+            return $this->apiResponse(false, __('There are no products in the file.'), 500);
+        }
+
+        $products = Product::whereIn('product_code', array_keys($codes))->get();
+
+        array_walk($items, function (&$item) use (&$products) {
+            $item['product'] = $products->where('product_code', $item['code'])->first();
+        });
+
+
+        if (customer_check() || config('amplify.basic.enable_guest_pricing')) {
+
+            $warehouses = ErpApi::getWarehouses([['enabled', '=', true]]);
+
+            $warehouseString = $warehouses->pluck('WarehouseNumber')->implode(',');
+
+            $erpCustomer = ErpApi::getCustomerDetail();
+
+            if (!Str::contains($warehouseString, $erpCustomer->DefaultWarehouse)) {
+                $warehouseString = "$warehouseString,{$erpCustomer->DefaultWarehouse}";
+            }
+
+            $erpProductCodes = [];
+
+            foreach ($products as $product) {
+                $erpProductCodes[] = [
+                    'item' => $product->product_code,
+                    'uom' => $product->uom,
+                    'qty' => !empty($items[$product->product_code]['quantity']) ? $items[$product->product_code]['quantity'] : $product->min_order_qty,
+                ];
+            }
+
+            $erpProductDetails = ErpApi::getProductPriceAvailability([
+                'items' => $erpProductCodes,
+                'warehouse' => $warehouseString,
+            ]);
+
+            unset($erpProductCodes);
+
+            if ($erpProductDetails->isEmpty()) {
+                return $this->apiResponse(false, __(product_not_avail_message() . ' for all products'), 500);
+            }
+
+            $warehouse_codes = array_unique([$erpCustomer->DefaultWarehouse, customer()?->warehouse?->code, config('amplify.frontend.guest_checkout_warehouse')]);
+
+            array_walk($items, function (&$item) use ($erpProductDetails, $warehouse_codes, $products) {
+
+                $product = $item['product'];
+
+                $filteredPriceAvailability = $erpProductDetails
+                    ->where('ItemNumber', $product->product_code)
+                    ->whereIn('WarehouseID', $warehouse_codes);
+
+                $product->ERP = $filteredPriceAvailability->isNotEmpty()
+                    ? $filteredPriceAvailability->first()
+                    : $erpProductDetails->where('ItemNumber', $product->Product_Code)
+                        ->first();
+
+                $product->avaliable = $erpProductDetails
+                    ->where('ItemNumber', $product->Product_Code)
+                    ->where('QuantityAvailable', '>=', 1)
+                    ->count();
+
+                $product->total_quantity_available = $erpProductDetails->where('ItemNumber', $product->product_code)->sum('QuantityAvailable');
+                $product->min_order_qty = $product->ERP?->MinOrderQuantity ?? $ownProduct?->min_order_qty ?? 1;
+                $product->qty_interval = $product->ERP?->QuantityInterval ?? $ownProduct?->qty_interval ?? 1;
+                $product->allow_back_order = $product->ERP?->AllowBackOrder ?? $ownProduct?->allow_back_order ?? false;
+                $product->availability = $ownProduct?->availability ?? ProductAvailabilityEnum::Actual;
+                $product->pricing = true;
+                $product->quantity = $item['quantity'] ?? $product->min_order_qty;
+
+                $item['product'] = $product;
+            });
+        }
+
+        Storage::delete($filePath);
+
+        return $this->apiResponse(true, 'Total ' . count($products) .' items added', 200, [
+            'html' => view('widget::quick-order.items', compact('items'))->render()
+        ]);
     }
 }
