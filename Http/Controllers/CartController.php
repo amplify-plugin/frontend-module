@@ -3,6 +3,7 @@
 namespace Amplify\Frontend\Http\Controllers;
 
 use Amplify\ErpApi\Facades\ErpApi;
+use Amplify\ErpApi\Wrappers\ProductPriceAvailability;
 use Amplify\Frontend\Events\CartUpdated;
 use Amplify\Frontend\Http\Requests\AddToCartRequest;
 use Amplify\Frontend\Http\Resources\CartResource;
@@ -276,7 +277,7 @@ class CartController extends Controller
         $products = Product::whereIn('product_code', array_keys($codes))->get();
 
         array_walk($items, function (&$item) use (&$products) {
-            $item['product'] = $products->where('product_code', $item['code'])->first();
+            $item['product'] = $products->where('product_code', $item['code'])->first() ?? new \stdClass();
         });
 
 
@@ -319,27 +320,36 @@ class CartController extends Controller
 
                 $product = $item['product'];
 
-                $filteredPriceAvailability = $erpProductDetails
-                    ->where('ItemNumber', $product->product_code)
-                    ->whereIn('WarehouseID', $warehouse_codes);
+                if ($product instanceof Product) {
+                    $filteredPriceAvailability = $erpProductDetails
+                        ->where('ItemNumber', $product->product_code)
+                        ->whereIn('WarehouseID', $warehouse_codes);
 
-                $product->ERP = $filteredPriceAvailability->isNotEmpty()
-                    ? $filteredPriceAvailability->first()
-                    : $erpProductDetails->where('ItemNumber', $product->Product_Code)
-                        ->first();
+                    $product->ERP = $filteredPriceAvailability->isNotEmpty()
+                        ? $filteredPriceAvailability->first()
+                        : $erpProductDetails->where('ItemNumber', $product->product_code)
+                            ->first();
 
-                $product->avaliable = $erpProductDetails
-                    ->where('ItemNumber', $product->Product_Code)
-                    ->where('QuantityAvailable', '>=', 1)
-                    ->count();
+                    $product->avaliable = $erpProductDetails
+                        ->where('ItemNumber', $product->product_code)
+                        ->where('QuantityAvailable', '>=', 1)
+                        ->count();
 
                 $product->total_quantity_available = $erpProductDetails->where('ItemNumber', $product->product_code)->sum('QuantityAvailable');
-                $product->min_order_qty = $product->ERP?->MinOrderQuantity ?? $ownProduct?->min_order_qty ?? 1;
-                $product->qty_interval = $product->ERP?->QuantityInterval ?? $ownProduct?->qty_interval ?? 1;
-                $product->allow_back_order = $product->ERP?->AllowBackOrder ?? $ownProduct?->allow_back_order ?? false;
-                $product->availability = $ownProduct?->availability ?? ProductAvailabilityEnum::Actual;
+
+                } else {
+                    $product->ERP = new ProductPriceAvailability([]);
+                    $product->avaliable = 0;
+                    $product->total_quantity_available = 0;
+                }
+
+                $product->min_order_qty = $product?->ERP?->MinOrderQuantity ?? $product?->min_order_qty ?? 1;
+                $product->qty_interval = $product?->ERP?->QuantityInterval ?? $product?->qty_interval ?? 1;
+                $product->allow_back_order = $product?->ERP?->AllowBackOrder ?? $product?->allow_back_order ?? false;
+                $product->availability = $product?->availability ?? ProductAvailabilityEnum::Actual;
                 $product->pricing = true;
                 $product->quantity = $item['quantity'] ?? $product->min_order_qty;
+                $product->assembled = ($product?->vendornum ?? '' == 3160);
 
                 $item['product'] = $product;
             });
@@ -347,7 +357,7 @@ class CartController extends Controller
 
         Storage::delete($filePath);
 
-        return $this->apiResponse(true, 'Total ' . count($products) .' items added', 200, [
+        return $this->apiResponse(true, 'Total ' . count($products) . ' items added', 200, [
             'html' => view('widget::quick-order.items', compact('items'))->render()
         ]);
     }
