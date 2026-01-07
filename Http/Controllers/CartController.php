@@ -351,4 +351,23 @@ class CartController extends Controller
             'html' => view('widget::quick-order.items', compact('items'))->render()
         ]);
     }
+
+    public function removeCarts()
+    {
+        $cart = getCart();
+        if ($cart instanceof Cart) {
+            $cart->cartItems()->delete();
+            $cart->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Cart removed successfully.'
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Cart is empty.',
+        ], 200);
+    }
 }
