@@ -81,9 +81,9 @@ class CartController extends Controller
 
         $cartItems = $cart->cartItems->toArray();
 
-        $cartItems = array_filter($cartItems, fn($item) => in_array($item['product_code'], $productCodes));
+        $cartItems = array_filter($cartItems, fn($item) => !in_array($item['product_code'], $productCodes));
 
-        $payload['items'] = $cartItems + $requestItems;
+        $payload['items'] = array_merge($cartItems, $requestItems);
 
         $data = app(Pipeline::class)
             ->send($payload)
@@ -101,11 +101,9 @@ class CartController extends Controller
 
         try {
 
-            if (!$cart->wasRecentlyCreated) {
-                $cart->cartItems()
-                    ->whereIn('product_id', collect($data['items'])->pluck('product_id')->toArray())
-                    ->delete();
-            }
+            $cart->cartItems()
+                ->whereIn('product_id', collect($data['items'])->pluck('product_id')->toArray())
+                ->delete();
 
             $cart->cartItems()->createMany($data['items']);
 
@@ -335,7 +333,7 @@ class CartController extends Controller
                         ->where('QuantityAvailable', '>=', 1)
                         ->count();
 
-                $product->total_quantity_available = $erpProductDetails->where('ItemNumber', $product->product_code)->sum('QuantityAvailable');
+                    $product->total_quantity_available = $erpProductDetails->where('ItemNumber', $product->product_code)->sum('QuantityAvailable');
 
                 } else {
                     $product->ERP = new ProductPriceAvailability([]);
@@ -367,17 +365,10 @@ class CartController extends Controller
         $cart = getCart();
         if ($cart instanceof Cart) {
             $cart->cartItems()->delete();
-            $cart->delete();
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Cart removed successfully.'
-            ], 200);
+            return $this->apiResponse(true, __('Cart removed successfully.'));
         }
 
-        return response()->json([
-            'success' => false,
-            'message' => 'Cart is empty.',
-        ], 200);
+        return $this->apiResponse(false, __('Your current cart is empty.'));
     }
 }
