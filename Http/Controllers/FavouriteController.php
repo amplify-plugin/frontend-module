@@ -108,13 +108,20 @@ class FavouriteController extends Controller
                     ->map(fn($cartItem) => $cartItem->toArray())
                     ->toArray();
             }
+            case 'products':
+            {
+                return array_map(
+                    fn($i) => ['product_id' => $i['product_id'], 'qty' => $i['qty']],
+                    $request->input('products', [])
+                );
+            }
             //waiting for new features
             default :
             {
                 return [[
-                        'product_id' => $request->input('product_id'),
-                        'qty' => $request->input('product_qty', 1),
-                    ]];
+                    'product_id' => $request->input('product_id'),
+                    'qty' => $request->input('product_qty', 1),
+                ]];
             }
         }
     }
