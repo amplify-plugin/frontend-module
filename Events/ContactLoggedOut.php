@@ -16,7 +16,7 @@ class ContactLoggedOut
     /**
      * Create a new event instance.
      */
-    public function __construct(Contact $contact, string $token = null)
+    public function __construct(Contact $contact, ?string $token = null)
     {
         $this->contact = $contact;
 

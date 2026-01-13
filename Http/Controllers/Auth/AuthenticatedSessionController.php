@@ -103,7 +103,9 @@ class AuthenticatedSessionController extends Controller
 
             $token = \Illuminate\Support\Facades\Session::token();
 
-            event(new ContactLoggedOut($account, $token));
+            if (! empty($account)) {
+                event(new ContactLoggedOut($account, $token));
+            }
 
             Auth::guard(Contact::AUTH_GUARD)->logout();
 
