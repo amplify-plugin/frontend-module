@@ -56,6 +56,7 @@ class MergeCartListener
                     foreach ($data['items'] as $index => $item) {
                         $data['items'][$index]['error'] = isset($data['errors'][$index]) ? implode("\n", $data['errors'][$index]) : null;
                     }
+                    return $data;
                 });
 
             $loggedCart->cartItems()->delete();
