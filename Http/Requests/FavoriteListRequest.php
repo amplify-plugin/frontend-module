@@ -25,14 +25,14 @@ class FavoriteListRequest extends FormRequest
     {
         return [
             'type' => ['string', 'in:cart,order,product,invoice'],
-            'list_id' => 'nullable',
+            'list_id' => ['nullable','integer'],
             'cart_id' => ['integer', 'required_if:type,cart'],
             'product_id' => ['integer', 'required_if:type,product', new FavoriteListRule],
             'product_qty' => ['integer'],
             'list_type' => ['required', new FavoriteListUniqueRule],
             'is_shopping_list'=> ['nullable', 'boolean'],
-            'list_name' => ['required_if:list_id,null', 'string', 'max:255'],
-            'list_desc' => ['required_if:list_id,null', 'string', 'max:255'],
+            'list_name' => ['required_if:list_id,null', 'nullable', 'string', 'max:255'],
+            'list_desc' => ['nullable', 'string', 'max:255'],
         ];
     }
 
