@@ -12,6 +12,7 @@ use Amplify\System\Backend\Models\Order;
 use Amplify\System\Backend\Models\OrderList;
 use Amplify\System\Backend\Models\Product;
 use Amplify\System\Backend\Models\Webinar;
+use Amplify\System\Cms\Models\Content;
 use Amplify\System\Cms\Models\Page;
 use Amplify\System\Helpers\UtilityHelper;
 use Amplify\System\Marketing\Models\Campaign;
@@ -116,7 +117,7 @@ class StoreDataBus
             Product::class, 'guessSingleProductDetail',
         ],
         'contentModel' => [
-            Product::class, 'guessContentModel',
+            Content::class, 'guessContentModel',
         ],
         'eaCategory' => [
             Sayt::class, 'getCategory',
