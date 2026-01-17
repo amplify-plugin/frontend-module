@@ -83,7 +83,7 @@ class CartController extends Controller
 
         $cartItems = array_filter($cartItems, fn($item) => !in_array($item['product_code'], $productCodes));
 
-        $payload['items'] = array_merge($cartItems, $requestItems);
+        $payload['items'] = array_merge($requestItems, $cartItems);
 
         $data = app(Pipeline::class)
             ->send($payload)
