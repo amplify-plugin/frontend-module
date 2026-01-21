@@ -96,7 +96,12 @@ class CartController extends Controller
             });
 
         if (!empty($data['errors'])) {
-            return $this->apiResponse(false, count($data['errors']) == 1 ? Arr::first(Arr::flatten($data['errors'])) : 'The given data was invalid.', 400, ['errors' => $data['errors']]);
+            return $this->apiResponse(false, count($data['errors']) == 1
+                ? Arr::first(Arr::flatten($data['errors']))
+                : __('There are issue(s) appeared on your order (marked in red). Please correct before adding to the Cart.')
+                , 400,
+                ['errors' => $data['errors']]
+            );
         }
 
         try {
