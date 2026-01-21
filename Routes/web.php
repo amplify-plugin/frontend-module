@@ -252,7 +252,7 @@ Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class, ContactF
             ->only('index', 'show');
 
         Route::resource('favourites', FavouriteController::class)->where(['favourite' => '[\d]+']);
-        Route::delete('favourites/{favourite}/item', [FavouriteController::class, 'destroyOrderListItem'])->name('favourites.destroy-item');
+        Route::delete('favourites/{product}/item', [FavouriteController::class, 'destroyOrderListItem'])->name('favourites.destroy-item');
         Route::post('favourites/{favourite}/sync-product', [FavouriteController::class, 'syncProduct']);
 
         Route::get('fetch-products', ProductSearchController::class);

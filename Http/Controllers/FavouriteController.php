@@ -228,15 +228,16 @@ class FavouriteController extends Controller
     /**
      * This will delete the saved order list item
      *
-     * @param OrderList $favourite
+     * @param $favourite
+     * @return RedirectResponse
      */
-    public function destroy(Request $request, $favouriteItem): RedirectResponse
+    public function destroy($favourite): RedirectResponse
     {
         if (!in_array(true, [customer(true)->can('favorites.manage-global-list'), customer(true)->can('favorites.manage-personal-list')])) {
             abort(403);
         }
         try {
-            $item = OrderList::find($favouriteItem);
+            $item = OrderList::find($favourite);
             $item->delete();
             Session::flash('success', 'You have successfully deleted the Favorite List!');
         } catch (\Exception $e) {
@@ -249,9 +250,10 @@ class FavouriteController extends Controller
     /**
      * This will delete the saved order list item
      *
-     * @param OrderListItem $favourite
+     * @param $favouriteItem
+     * @return JsonResponse
      */
-    public function destroyOrderListItem(Request $request, $favouriteItem): RedirectResponse
+    public function destroyOrderListItem($favouriteItem): JsonResponse
     {
         if (!in_array(true, [customer(true)->can('favorites.manage-global-list'), customer(true)->can('favorites.manage-personal-list')])) {
             abort(403);
@@ -259,12 +261,12 @@ class FavouriteController extends Controller
 
         try {
             $item = OrderListItem::find($favouriteItem);
-            $item->delete();
-            Session::flash('success', 'You have successfully deleted the Favorite List Item!');
+            if ($item->delete()) {
+                return $this->apiResponse(true, 'Item removed from favorite list.');
+            }
+            return $this->apiResponse(false, 'Failed to remove item from favorite list.');
         } catch (\Exception $e) {
-            Session::flash('error', 'Sorry! Something went wrong...');
+            return $this->apiResponse(false, 'Sorry! Something went wrong...', 500);
         }
-
-        return back();
     }
 }
