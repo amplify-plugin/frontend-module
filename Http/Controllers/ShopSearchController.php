@@ -33,7 +33,7 @@ class ShopSearchController extends Controller
         $products = $eaProductData->getProducts();
         $searchMessage = $eaProductData->getMessage();
 
-        if (! empty($products) && count($products) === 1 && empty($searchMessage) ){
+        if (! empty($products) && count($products) === 1 && empty($searchMessage) && !request()->filled('page')){
             $seoPath = $eaProductData->getCurrentSeoPath();
             $firstProduct = array_shift($products);
 
