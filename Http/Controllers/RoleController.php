@@ -7,6 +7,7 @@ use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\System\Backend\Models\CustomerRole;
 use Amplify\System\Backend\Models\Role;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 
 class RoleController extends Controller
 {
@@ -114,10 +115,12 @@ class RoleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CustomerRole $role)
+    public function destroy(CustomerRole $role): JsonResponse
     {
-        $role->delete();
+        if ($role->delete()) {
+            return $this->apiResponse(true, 'Role deleted successfully.');
+        }
 
-        return back();
+        return $this->apiResponse(false, 'Role could not be deleted.');
     }
 }
