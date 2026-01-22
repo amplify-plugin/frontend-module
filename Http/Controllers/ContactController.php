@@ -8,6 +8,7 @@ use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\System\Backend\Http\Requests\FrontendContactRequest;
 use Amplify\System\Backend\Models\Contact;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +25,7 @@ class ContactController extends Controller
     public function index(): string
     {
         $this->loadPageByType('contact');
-        if (! customer(true)->can('contact-management.list')) {
+        if (!customer(true)->can('contact-management.list')) {
             abort(403);
         }
 
@@ -39,7 +40,7 @@ class ContactController extends Controller
     public function create(): string
     {
         $this->loadPageByType('contact_create');
-        if (! customer(true)->can('contact-management.add')) {
+        if (!customer(true)->can('contact-management.add')) {
             abort(403);
         }
 
@@ -51,7 +52,7 @@ class ContactController extends Controller
      */
     public function store(FrontendContactRequest $request)
     {
-        if (! customer(true)->can('contact-management.add')) {
+        if (!customer(true)->can('contact-management.add')) {
             abort(403);
         }
         $data = $request->all();
@@ -73,7 +74,7 @@ class ContactController extends Controller
         store()->contactModel = $contact;
 
         $this->loadPageByType('contact_detail');
-        if (! customer(true)->can('contact-management.view')) {
+        if (!customer(true)->can('contact-management.view')) {
             abort(403);
         }
 
@@ -87,7 +88,7 @@ class ContactController extends Controller
      */
     public function edit(Contact $contact): string
     {
-        if (! customer(true)->can('contact-management.update')) {
+        if (!customer(true)->can('contact-management.update')) {
             abort(403);
         }
         store()->contactModel = $contact;
@@ -102,7 +103,7 @@ class ContactController extends Controller
      */
     public function update(FrontendContactRequest $request, Contact $contact)
     {
-        if (! customer(true)->can('contact-management.update')) {
+        if (!customer(true)->can('contact-management.update')) {
             abort(403);
         }
 
@@ -118,14 +119,17 @@ class ContactController extends Controller
     /**
      * Remove the specified contact from storage.
      */
-    public function destroy(Contact $contact)
+    public function destroy(Contact $contact): JsonResponse
     {
-        if (! customer(true)->can('contact-management.remove')) {
-            abort(403);
+        if (!customer(true)->can('contact-management.remove')) {
+            abort(403, 'You are not allowed to delete this contact');
         }
-        $contact->delete();
 
-        return back()->with('success', 'Contact deleted successfully');
+        if ($contact->delete()) {
+            return $this->apiResponse(true, __('Contact deleted successfully.'));
+        }
+
+        return $this->apiResponse(false, __('Failed to delete contact.'));
     }
 
     public function impersonate(Contact $contact, Request $request): RedirectResponse
