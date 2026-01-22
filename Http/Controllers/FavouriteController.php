@@ -229,22 +229,27 @@ class FavouriteController extends Controller
      * This will delete the saved order list item
      *
      * @param $favourite
-     * @return RedirectResponse
+     * @return JsonResponse
      */
-    public function destroy($favourite): RedirectResponse
+    public function destroy($favourite): JsonResponse
     {
         if (!in_array(true, [customer(true)->can('favorites.manage-global-list'), customer(true)->can('favorites.manage-personal-list')])) {
-            abort(403);
-        }
-        try {
-            $item = OrderList::find($favourite);
-            $item->delete();
-            Session::flash('success', 'You have successfully deleted the Favorite List!');
-        } catch (\Exception $e) {
-            Session::flash('error', 'Sorry! Something went wrong...');
+            abort(403, 'Your are not allowed to delete favorite list.');
         }
 
-        return back();
+        try {
+
+            $item = OrderList::find($favourite);
+
+            if ($item->delete()) {
+                return $this->apiResponse(true, __('You have successfully deleted the Favorite List.'));
+            }
+
+            return $this->apiResponse(false, __('Failed to delete the Favorite List.'), 500);
+
+        } catch (\Exception $e) {
+            return $this->apiResponse(false, $e->getMessage(), 500);
+        }
     }
 
     /**
