@@ -29,10 +29,11 @@ class FavoriteListRequest extends FormRequest
             'cart_id' => ['integer', 'required_if:type,cart'],
             'product_id' => ['integer', 'required_if:type,product', new FavoriteListRule],
             'product_qty' => ['integer'],
-            'list_type' => ['required', new FavoriteListUniqueRule],
+            'list_type' => ['required_if:list_id,null', new FavoriteListUniqueRule],
             'is_shopping_list'=> ['nullable', 'boolean'],
             'list_name' => ['required_if:list_id,null', 'nullable', 'string', 'max:255'],
             'list_desc' => ['nullable', 'string', 'max:255'],
+            'title' => ['nullable', 'string', 'max:255'],
         ];
     }
 
@@ -40,7 +41,8 @@ class FavoriteListRequest extends FormRequest
     {
         $this->mergeIfMissing([
             'type' => 'product',
-            'is_shopping_list' => false
+            'is_shopping_list' => false,
+            'title' => 'Order List'
         ]);
     }
 }

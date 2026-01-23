@@ -24,20 +24,33 @@ class FavouriteController extends Controller
     public function index(Request $request)
     {
         if (!in_array(true, [customer(true)->can('favorites.use-global-list'), customer(true)->can('favorites.manage-personal-list')])) {
-            abort(403);
+            abort(403, 'You don\'t have permission to use this feature');
         }
+
         if ($request->wantsJson()) {
-            $lists = [
-                config('amplify.constant.favorite_list_type.global') => OrderList::select('id', 'name')->whereCustomerId(customer()->getKey())->whereListType('global')->get(),
-                config('amplify.constant.favorite_list_type.personal') => OrderList::select('id', 'name')->whereCustomerId(customer()->getKey())->whereContactId(customer(true)->getKey())->whereListType('personal')->get(),
-                config('amplify.constant.favorite_list_type.quick-list') => OrderList::select('id', 'name')->whereCustomerId(customer()->getKey())->whereContactId(customer(true)->getKey())->whereListType('quick-list')->get(),
-            ];
+            try {
+                $lists = OrderList::select('id', 'name', 'list_type', 'contact_id', 'customer_id')
+                    ->whereCustomerId(customer()->getKey())
+                    ->where(function ($query) {
+                        $query->whereNull('contact_id')
+                            ->orWhere('contact_id', customer(true)->getKey());
+                    })
+                    ->when(!config('amplify.basic.enable_quick_list', true), function ($query) {
+                        $query->where('list_type', '!=', 'quick-list');
+                    })
+                    ->get()
+                    ->map(function ($item) {
+                        $item->product_ids = $item->orderListItems?->pluck('product_id')->toArray() ?? [];
+                        $item->list_type = $item->list_type_label;
+                        unset($item->orderListItems);
+                        return $item;
+                    })
+                    ->toArray();
 
-            if (!config('amplify.basic.enable_quick_list', true)) {
-                unset($lists[config('amplify.constant.favorite_list_type.quick-list')]);
+                return $this->apiResponse(true, '', 200, ['data' => $lists]);
+            } catch (\Exception $e) {
+                return $this->apiResponse(false, $e->getMessage(), 500);
             }
-
-            return response()->json(['data' => $lists, 'create_new_list' => customer(true)->can('favorites.manage-personal-list')]);
         } else {
             $this->loadPageByType('favourite');
 
@@ -62,15 +75,17 @@ class FavouriteController extends Controller
 
             $inputs = $request->validated();
 
+            $listType = $inputs['list_type'] ?? 'personal';
+
             $orderList = OrderList::firstOrCreate(
                 [
                     'id' => $inputs['list_id']
                 ],
                 [
-                    'name' => $inputs['list_name'],
-                    'list_type' => $inputs['list_type'] ?? 'personal',
+                    'name' => $inputs['list_name'] ?? '',
+                    'list_type' => $listType,
                     'description' => $inputs['list_desc'] ?? '',
-                    'contact_id' => customer(true)->getKey(),
+                    'contact_id' => $listType == 'personal' ? customer(true)->getKey() : null,
                     'customer_id' => customer()->getKey(),
                 ]
             );
@@ -80,7 +95,7 @@ class FavouriteController extends Controller
                 $orderList->touch();
             }
 
-            $header = $request->input('is_shopping_list', 0) ? 'Shopping List' : 'Favourites List';
+            $header = $request->input('title', 'Order List');
 
             return response()->json([
                 'type' => 'success',
@@ -133,6 +148,7 @@ class FavouriteController extends Controller
         if (!in_array(true, [customer(true)->can('favorites.manage-global-list'), customer(true)->can('favorites.manage-personal-list')])) {
             abort(403);
         }
+
         $this->loadPageByType('favourite_detail');
 
         return $this->render();
@@ -146,8 +162,9 @@ class FavouriteController extends Controller
     public function edit(string $id): string
     {
         if (!in_array(true, [customer(true)->can('favorites.manage-personal-list'), customer(true)->can('favorites.manage-personal-list')])) {
-            abort(403);
+            abort(403, 'You don\'t have permission to use this feature');
         }
+
         $this->loadPageByType('favourite_edit');
 
         return $this->render();
@@ -159,8 +176,9 @@ class FavouriteController extends Controller
     public function update(UpdateOrderListRequest $request, string $id): RedirectResponse
     {
         if (!in_array(true, [customer(true)->can('favorites.manage-personal-list'), customer(true)->can('favorites.manage-personal-list')])) {
-            abort(403);
+            abort(403, 'You don\'t have permission to use this feature');
         }
+
         $orderList = OrderList::findOrFail($id);
 
         $orderList->fill($request->validated());
@@ -260,7 +278,7 @@ class FavouriteController extends Controller
     public function destroyOrderListItem($favouriteItem): JsonResponse
     {
         if (!in_array(true, [customer(true)->can('favorites.manage-global-list'), customer(true)->can('favorites.manage-personal-list')])) {
-            abort(403);
+            abort(403, 'Your are not allowed to delete favorite list item.');
         }
 
         try {

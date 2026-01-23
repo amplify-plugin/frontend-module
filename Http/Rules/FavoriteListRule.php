@@ -5,6 +5,7 @@ namespace Amplify\Frontend\Http\Rules;
 use Amplify\System\Backend\Models\OrderList;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Support\Str;
 
 class FavoriteListRule implements ValidationRule
 {
@@ -22,8 +23,8 @@ class FavoriteListRule implements ValidationRule
             ->where('order_list_items.list_id', request()->list_id)
             ->exists();
         if ($hasItems) {
-            $list_name = request('is_shopping_list') ? 'Shopping' : 'Favorite';
-            $fail("This product is already in the {$list_name} list. Please choose a different one.");
+            $list_name = Str::lower(request('title', 'Order List'));
+            $fail("This product is already in the {$list_name}. Please choose a different one.");
         }
     }
 }
