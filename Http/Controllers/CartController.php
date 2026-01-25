@@ -73,17 +73,8 @@ class CartController extends Controller
 
         $requestItems = $request->input('products');
 
-        $productCodes = [];
 
-        foreach ($requestItems as $i) {
-            $productCodes[] = $i['product_code'];
-        }
-
-        $cartItems = $cart->cartItems->toArray();
-
-        $cartItems = array_filter($cartItems, fn($item) => !in_array($item['product_code'], $productCodes));
-
-        $payload['items'] = array_merge($requestItems, $cartItems);
+        $payload['items'] = $requestItems;
 
         $data = app(Pipeline::class)
             ->send($payload)
@@ -107,7 +98,7 @@ class CartController extends Controller
         try {
 
             $cart->cartItems()
-                ->whereIn('product_id', collect($data['items'])->pluck('product_id')->toArray())
+                ->whereIn('product_code', collect($data['items'])->pluck('product_code')->toArray())
                 ->delete();
 
             $cart->cartItems()->createMany($data['items']);
