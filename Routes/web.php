@@ -44,6 +44,7 @@ use Amplify\Frontend\Http\Controllers\MyProfileController;
 use Amplify\Frontend\Http\Controllers\NewsletterSubscriptionController;
 use Amplify\Frontend\Http\Controllers\NoticeIndexController;
 use Amplify\Frontend\Http\Controllers\OrderController;
+use Amplify\Frontend\Http\Controllers\OrderListController;
 use Amplify\Frontend\Http\Controllers\OrderStatusController;
 use Amplify\Frontend\Http\Controllers\PastItemsController;
 use Amplify\Frontend\Http\Controllers\ProductDetailController;
@@ -236,6 +237,10 @@ Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class])->group(
             Route::resource('favourites', FavouriteController::class)->where(['favourite' => '[\d]+']);
             Route::delete('favourites/{product}/item', [FavouriteController::class, 'destroyOrderListItem'])->name('favourites.destroy-item');
             Route::post('favourites/{favourite}/sync-product', [FavouriteController::class, 'syncProduct']);
+
+            Route::resource('order-lists', OrderListController::class)->where(['order_list' => '[\d]+']);
+            Route::delete('order-lists/{product}/item', [OrderListController::class, 'destroyOrderListItem'])->name('order-lists.destroy-item');
+            Route::post('order-lists/{order_list}/sync-product', [OrderListController::class, 'syncProduct']);
 
             Route::get('fetch-products', ProductSearchController::class);
 
