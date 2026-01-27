@@ -22,9 +22,9 @@ class UpdateOrderListRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'customer_id' => ['integer', 'required'],
-            'name' => ['string', 'required', 'min:3'],
-            'list_type' => ['string', 'required', 'in:personal,global'],
+            'customer_id' => ['integer', 'nullable'],
+            'name' => ['string', 'required', 'min:2'],
+            'list_type' => ['string', 'required', 'in:personal,global,quick-list'],
             'description' => ['string', 'nullable'],
         ];
     }

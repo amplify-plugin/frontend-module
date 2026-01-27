@@ -238,7 +238,7 @@ Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class])->group(
             Route::delete('favourites/{product}/item', [FavouriteController::class, 'destroyOrderListItem'])->name('favourites.destroy-item');
             Route::post('favourites/{favourite}/sync-product', [FavouriteController::class, 'syncProduct']);
 
-            Route::resource('order-lists', OrderListController::class)->where(['order_list' => '[\d]+']);
+            Route::apiResource('order-lists', OrderListController::class)->where(['order_list' => '[\d]+']);
             Route::delete('order-lists/{product}/item', [OrderListController::class, 'destroyOrderListItem'])->name('order-lists.destroy-item');
             Route::post('order-lists/{order_list}/sync-product', [OrderListController::class, 'syncProduct']);
 

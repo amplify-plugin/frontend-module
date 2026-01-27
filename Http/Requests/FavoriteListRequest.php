@@ -31,7 +31,7 @@ class FavoriteListRequest extends FormRequest
             'product_qty' => ['integer'],
             'list_type' => ['required_if:list_id,null', new FavoriteListUniqueRule],
             'is_shopping_list'=> ['nullable', 'boolean'],
-            'list_name' => ['required_if:list_id,null', 'nullable', 'string', 'max:255'],
+            'list_name' => ['required_if:list_id,null', 'nullable', 'string', 'min:2', 'max:255'],
             'list_desc' => ['nullable', 'string', 'max:255'],
             'title' => ['nullable', 'string', 'max:255'],
         ];

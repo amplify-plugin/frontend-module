@@ -51,7 +51,7 @@ class QuickListController extends Controller
             abort(403);
         }
 
-        store()->favouriteModel = new OrderList;
+        store()->orderListModel = new OrderList;
 
         $this->loadPageByType('quicklist_create');
 
@@ -111,7 +111,7 @@ class QuickListController extends Controller
 
         $quick_list->load('orderListItems');
 
-        store()->favouriteModel = $quick_list;
+        store()->orderListModel = $quick_list;
 
         return $this->render();
     }
@@ -129,7 +129,7 @@ class QuickListController extends Controller
 
         $quick_list->load('orderListItems');
 
-        store()->favouriteModel = $quick_list;
+        store()->orderListModel = $quick_list;
 
         $this->loadPageByType('quicklist_edit');
 

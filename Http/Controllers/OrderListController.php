@@ -13,6 +13,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class OrderListController extends Controller
 {
@@ -59,14 +60,6 @@ class OrderListController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(FavoriteListRequest $request): JsonResponse
@@ -100,7 +93,7 @@ class OrderListController extends Controller
             return response()->json([
                 'type' => 'success',
                 'status' => true,
-                'message' => ($inputs['list_id'] != null) ? "New item added to {$header}" : "{$header} created and Added this item(s).",
+                'message' => ($inputs['list_id'] != null) ? "New item added to " . Str::lower($header) : "{$header} created and Added current item(s).",
             ]);
 
         } catch (\Exception $exception) {
@@ -143,10 +136,22 @@ class OrderListController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id, Request $request)
     {
         if (!in_array(true, [customer(true)->can('favorites.manage-global-list'), customer(true)->can('favorites.manage-personal-list')])) {
             abort(403);
+        }
+
+        $orderList = OrderList::find($id);
+
+        if (!$orderList) {
+            abort(404, 'Not Found');
+        }
+
+        \store()->orderListModel = $orderList;
+
+        if ($request->wantsJson()) {
+            return $this->apiResponse(true, '', 200, ['data' => store('orderListModel', [])->makeHidden(['contact_id', 'customer_id', 'created_at', 'updated_at'])]);
         }
 
         $this->loadPageByType('order_list_detail');
@@ -155,25 +160,9 @@ class OrderListController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @throws \ErrorException
-     */
-    public function edit(string $id): string
-    {
-        if (!in_array(true, [customer(true)->can('favorites.manage-personal-list'), customer(true)->can('favorites.manage-personal-list')])) {
-            abort(403, 'You don\'t have permission to use this feature');
-        }
-
-        $this->loadPageByType('order_list_edit');
-
-        return $this->render();
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateOrderListRequest $request, string $id): RedirectResponse
+    public function update(UpdateOrderListRequest $request, string $id): JsonResponse
     {
         if (!in_array(true, [customer(true)->can('favorites.manage-personal-list'), customer(true)->can('favorites.manage-personal-list')])) {
             abort(403, 'You don\'t have permission to use this feature');
@@ -181,16 +170,15 @@ class OrderListController extends Controller
 
         $orderList = OrderList::findOrFail($id);
 
+        $title = $request->input('title', 'Order List');
+
         $orderList->fill($request->validated());
 
         if (!$orderList->save()) {
-            session()->flash('error', 'Favorite List updated field.');
-
-            return redirect()->back();
+            return $this->apiResponse(false, 'Unable to update ' . \Str::lower($title), 500);
         }
-        session()->flash('success', 'Favorite List updated successfully.');
 
-        return redirect()->route('frontend.order-lists.index');
+        return $this->apiResponse(true, "{$title} updated successfully.");
     }
 
     /**

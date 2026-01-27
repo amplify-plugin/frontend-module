@@ -33,7 +33,8 @@ use Spatie\Honeypot\Honeypot;
  * @property \Amplify\System\Backend\Models\CustomerRole $contactRoleModel
  * @property \Amplify\System\Backend\Models\CustomerAddress $addressModel
  * @property FaqCategory $faqCategoryModel
- * @property OrderList $favouriteModel
+ * @property OrderList $orderListModel
+ * @property OrderList $favoriteModel
  * @property Quotation $quotationWrapper
  * @property Webinar $webinar
  * @property Campaign $campaign
@@ -89,8 +90,11 @@ class StoreDataBus
         'faqCategoryModel' => [
             FaqCategory::class, 'guessCurrentModel',
         ],
-        'favouriteModel' => [
-            OrderList::class, 'guessFavouriteModel',
+        'orderListModel' => [
+            OrderList::class, 'guessOrderListModel',
+        ],
+        'favoriteModel' => [
+            OrderList::class, 'guessFavoriteModel',
         ],
         'quotationWrapper' => [
             Order::class, 'guessQuotationWrapper',
