@@ -63,7 +63,7 @@ class ProductDetailController extends Controller
         }
     }
 
-    public function relatedProducts(Request $request, Product $product): string
+    public function relatedProducts(Request $request, Product $product)
     {
         $dbProduct = $product;
         $relationTypeId = $request->get('relation_type') ?? null;
@@ -146,7 +146,7 @@ class ProductDetailController extends Controller
                     $value = $item->pivot->attribute_value;
                     $value = UtilityHelper::isJson($value) ? json_decode($value, true)[config('app.locale')] ?? null : $value;
 
-                    return (object) [
+                    return (object)[
                         'name' => $item->name,
                         'value' => $value,
                     ];
@@ -159,14 +159,16 @@ class ProductDetailController extends Controller
         try {
             // If this is an AJAX request, return only the product list partial
             // Return the same view (partial/full) so the UI can be replaced when switching types via AJAX
-            return view('widget::product.tabs.related-products', [
+            return $this->apiResponse(true, '', 200, [
+                'html' => view('widget::product.tabs.related-products', [
                 'relatedProducts' => $related,
                 'product' => $dbProduct,
                 'relationTypes' => $relationTypes,
                 'selectedRelationType' => $relationTypeId,
-            ])->render();
+            ])->render()
+            ]);
         } catch (\Exception $e) {
-            abort(500, $e->getMessage());
+            return $this->apiResponse(false, $e->getMessage(), 500);
         }
     }
 }
