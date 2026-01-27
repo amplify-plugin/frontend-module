@@ -52,7 +52,7 @@ class OrderListController extends Controller
                 return $this->apiResponse(false, $e->getMessage(), 500);
             }
         } else {
-            $this->loadPageByType('favourite');
+            $this->loadPageByType('order_list');
 
             return $this->render();
         }
@@ -190,7 +190,7 @@ class OrderListController extends Controller
         }
         session()->flash('success', 'Favorite List updated successfully.');
 
-        return redirect()->route('frontend.favourites.index');
+        return redirect()->route('frontend.order-lists.index');
     }
 
     /**

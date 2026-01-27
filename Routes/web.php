@@ -23,6 +23,7 @@ use Amplify\Frontend\Http\Controllers\Auth\ForceResetPasswordController;
 use Amplify\Frontend\Http\Controllers\Auth\ForgotPasswordController;
 use Amplify\Frontend\Http\Controllers\Auth\NewPasswordController;
 use Amplify\Frontend\Http\Controllers\Auth\PasswordController;
+use Amplify\Frontend\Http\Controllers\Auth\RegisteredUserController;
 use Amplify\Frontend\Http\Controllers\Auth\VerifyEmailController;
 use Amplify\Frontend\Http\Controllers\BrandIndexController;
 use Amplify\Frontend\Http\Controllers\CampaignController;
@@ -62,7 +63,6 @@ use Amplify\System\Backend\Http\Controllers\LocalizationController;
 use Amplify\System\Backend\Http\Controllers\PasswordResetController;
 use Amplify\System\Backend\Http\Controllers\SwitchAccountController;
 use Amplify\System\Backend\Http\Middlewares\ContactForceShippingAddressSelection;
-use Backpack\CRUD\app\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 use Spatie\Honeypot\ProtectAgainstSpam;
@@ -132,7 +132,7 @@ Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class])->group(
                     ->withoutMiddleware('guest:customer');
             });
 
-            Route::controller(RegisterController::class)->prefix('registration')->group(function () {
+            Route::controller(RegisteredUserController::class)->prefix('registration')->group(function () {
                 Route::get('/', '__invoke')->name('registration');
                 Route::post('request-account', 'requestAccount')
                     ->name('registration.request-account');
