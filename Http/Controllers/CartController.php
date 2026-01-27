@@ -247,6 +247,8 @@ class CartController extends Controller
             unset($firstSheet[0]);
         }
 
+        $firstSheetCount = count($firstSheet);
+
         if (count($firstSheet) > 100) {
             return $this->apiResponse(false, __('The file has more than 100 items.'), 500);
         }
@@ -351,7 +353,7 @@ class CartController extends Controller
 
         Storage::delete($filePath);
 
-        return $this->apiResponse(true, 'Total ' . count($products) . ' items added', 200, [
+        return $this->apiResponse(true, "Total {$firstSheetCount} entries found.", 200, [
             'html' => view('widget::quick-order.items', compact('items'))->render()
         ]);
     }
