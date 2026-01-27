@@ -242,6 +242,8 @@ class CartController extends Controller
             throw ValidationException::withMessages(['file' => 'The file is empty or only have headers.']);
         }
 
+        $firstSheet = array_filter($firstSheet, fn ($value) => !empty($value[0]));
+
         // Remove Header
         if (isset($firstSheet[0][0])) {
             unset($firstSheet[0]);
