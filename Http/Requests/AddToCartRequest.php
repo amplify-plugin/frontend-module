@@ -34,4 +34,13 @@ class AddToCartRequest extends FormRequest
             'products.*.additional_info' => 'required_if:source_type,Quote,Promo|array',
         ];
     }
+
+    public function attributes()
+    {
+        return [
+            'products.*.product_code' => 'product code',
+            'products.*.qty' => 'quantity',
+            'products.*.source_type' => 'source',
+        ];
+    }
 }
