@@ -10,7 +10,10 @@ class CaptureIntendedUrl
 {
     protected $except = [
         'admin/*',
-        'force-reset-password'
+        'force-reset-password',
+        'forgot-password',
+        'reset-password',
+        'register',
     ];
     /**
      * Handle an incoming request.
