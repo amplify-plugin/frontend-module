@@ -67,6 +67,7 @@ class AuthenticatedSessionController extends Controller
         }
 
         $guestSessionToken = \Illuminate\Support\Facades\Session::token();
+        session()->flush();
         @cache()->forget("{$guestSessionToken}-customer-model");
         @cache()->forget("{$guestSessionToken}-mobile-menu");
         @cache()->forget("{$guestSessionToken}-primary-menu");

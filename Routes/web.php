@@ -56,6 +56,7 @@ use Amplify\Frontend\Http\Controllers\RoleController;
 use Amplify\Frontend\Http\Controllers\ShippingController;
 use Amplify\Frontend\Http\Controllers\ShopSearchController;
 use Amplify\Frontend\Http\Middlewares\CaptureIntendedUrl;
+use Amplify\Frontend\Http\Middlewares\CustomerDefaultValues;
 use Amplify\System\Backend\Http\Controllers\CartController;
 use Amplify\System\Backend\Http\Controllers\CenPosPaymentController;
 use Amplify\System\Backend\Http\Controllers\CustomerOrderController;
@@ -96,8 +97,7 @@ Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class])->group(
         Route::get('quick-view/{id}/{seo_path?}', [ShopSearchController::class, 'getQuickView'])->name('shop.quickView');
         Route::get('warehouse-selection-view/{code}', [ShopSearchController::class, 'getWarehouseSelectionView'])->name('shop.warehouseSelectionView');
         Route::apiResource('carts', \Amplify\Frontend\Http\Controllers\CartController::class)
-            ->where(['cart' => '[0-9]+'])
-            ->except('update');
+            ->where(['cart' => '[0-9]+'])->except('update');
         Route::delete('carts/remove/{cartItem}', [\Amplify\Frontend\Http\Controllers\CartController::class, 'remove'])
             ->name('carts.remove-item');
         Route::patch('carts/update/{cartItem}', [\Amplify\Frontend\Http\Controllers\CartController::class, 'update'])
@@ -162,7 +162,7 @@ Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class])->group(
         | Only Authenticated
         |--------------------------------------------------------------------------
         */
-        Route::group(['middleware' => 'customers'], function () {
+        Route::group(['middleware' => ['customers', CustomerDefaultValues::class]], function () {
 
             /*
             |--------------------------------------------------------------------------
@@ -275,16 +275,25 @@ Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class])->group(
             Route::get('past-items-history', [PastItemsController::class, 'history'])->name('past.items.history');
             Route::post('customer-part-numbers', [CustomerPartNumberController::class, 'store'])->name('customer-part-numbers');
             Route::delete('customer-part-numbers', [CustomerPartNumberController::class, 'destroy']);
+
+            Route::prefix('customer')->group(function () {
+                Route::get('/cenpos-invoices-payment',
+                    [CenPosPaymentController::class, 'invoicePay'])->name('customer.cenpos-invoices-payment');
+                Route::post('/cenpos-invoices-pay',
+                    [CenPosPaymentController::class, 'invoiceProcessPayment'])->name('customer.cenpos-invoice-pay.submit');
+
+                Route::get('/cenpos-order-credit-card-payment/{customer_order}',
+                    [CenPosPaymentController::class, 'orderCreditCardPay'])->name('customer.cenpos-order-credit-card-payment');
+                Route::post('/cenpos-order-credit-card-pay-process/{customer_order}', [
+                    CenPosPaymentController::class, 'orderCreditCardProcessPayment',
+                ])->name('customer.cenpos-order-credit-card-pay.submit');
+
+                Route::get('/cenpos-invoices',
+                    [CenPosPaymentController::class, 'index'])->name('customer.cenpos-invoices-pay.index');
+            });
         });
 
         Route::post('customer-verification', CustomerVerificationController::class)->name('contact-validation');
-
-        // frontend fixed routes
-// Route::get('/', [DynamicPageLoadController::class, 'index'])->name('index');
-// Route::get('/home', [DynamicPageLoadController::class, 'index'])->name('home');
-
-// Route::get('/order-list-details/{order_list_id}',
-//     [DynamicPageLoadController::class, 'index'])->name('order_list.details');
 
         Route::post('/password-reset-otp', [PasswordResetController::class, 'sendOtp'])->name('password_reset_otp');
         Route::post('/otp-check', [PasswordResetController::class, 'otpCheck'])->name('otp_check');
@@ -294,7 +303,6 @@ Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class])->group(
             [CustomerOrderController::class, 'quickOrderFileUpload'])->name('order.quick-order-file-upload');
 
         Route::post('/cart/summary', [CartController::class, 'getCartSummary'])->name('cart.summary');
-        Route::post('/cart/check-shipping', [CartController::class, 'checkShipping'])->name('check-cart-shipping');
 
         Route::post('/order/check-order-list-name',
             [CustomerOrderController::class, 'checkOrderListName'])->name('order.order-list.check-name-availability');
@@ -311,29 +319,12 @@ Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class])->group(
         Route::post('/notices', NoticeIndexController::class)->name('notices.index');
     });
 
-    Route::get('admin/app/config', [\App\Http\Controllers\Controller::class, 'getAppConfig']);
-
     Route::get('/locale-lang.js', [LocalizationController::class, 'exportLocaleLang']);
     Route::get('/languages/{locale}', [LocalizationController::class, 'switchLanguage']);
 
     /*
      * Customer Routes
      */
-    Route::prefix('customer')->middleware(['customers'])->group(function () {
-        Route::get('/cenpos-invoices-payment',
-            [CenPosPaymentController::class, 'invoicePay'])->name('customer.cenpos-invoices-payment');
-        Route::post('/cenpos-invoices-pay',
-            [CenPosPaymentController::class, 'invoiceProcessPayment'])->name('customer.cenpos-invoice-pay.submit');
-
-        Route::get('/cenpos-order-credit-card-payment/{customer_order}',
-            [CenPosPaymentController::class, 'orderCreditCardPay'])->name('customer.cenpos-order-credit-card-payment');
-        Route::post('/cenpos-order-credit-card-pay-process/{customer_order}', [
-            CenPosPaymentController::class, 'orderCreditCardProcessPayment',
-        ])->name('customer.cenpos-order-credit-card-pay.submit');
-
-        Route::get('/cenpos-invoices',
-            [CenPosPaymentController::class, 'index'])->name('customer.cenpos-invoices-pay.index');
-    });
 
     Route::post('/udpate-order-note', [CustomerOrderController::class, 'updateOrderNote'])->name('update.order-note');
     Route::post('/update-draft-note', [CustomerOrderController::class, 'updateDraftNote'])->name('update.draft-note');

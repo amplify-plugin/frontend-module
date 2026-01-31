@@ -20,25 +20,25 @@ class UpdateContactLoginListener
             $customer_id = $event->contact->active_customer_id;
         }
 
-        $login = ContactLogin::where([
+        $login = ContactLogin::firstOrCreate([
             'contact_id' => $contact_id,
             'customer_id' => $customer_id,
-        ])->first();
+            'active' => true,
+        ]);
 
-        if ($login) {
-            if (empty($login->warehouse_id)) {
-                $login->warehouse_id = $event->contact->customer->warehouse_id;
-            }
+        if (empty($login->warehouse_id)) {
+            $login->warehouse_id = $event->contact->customer->warehouse_id;
+        }
 
-            if ($event instanceof ContactLoggedIn) {
-                $login->last_logged_in = now();
-                $login->save();
-            }
+        if ($event instanceof ContactLoggedIn) {
+            $login->last_logged_in = now();
+            $login->save();
+        }
 
-            if ($event instanceof ContactLoggedOut) {
-                $login->last_logged_out = now();
-                $login->save();
-            }
+        if ($event instanceof ContactLoggedOut) {
+            $login->last_logged_out = now();
+            $login->active = false;
+            $login->save();
         }
     }
 }
