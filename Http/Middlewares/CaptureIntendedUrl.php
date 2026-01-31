@@ -8,6 +8,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CaptureIntendedUrl
 {
+    protected $except = [
+        'admin/*',
+        'force-reset-password'
+    ];
     /**
      * Handle an incoming request.
      *
@@ -16,7 +20,7 @@ class CaptureIntendedUrl
     public function handle(Request $request, Closure $next): Response
     {
         if (
-            !$request->is('/admin/*') &&
+            !$request->is($this->except) &&
             $request->isMethod('GET') &&
             $request->route() &&
             !$request->routeIs('frontend.login*') &&
