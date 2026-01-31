@@ -72,9 +72,9 @@ class AddressController extends Controller
             $erpAddress = ErpApi::createCustomerShippingLocation([
                 'address_code' => $validatedAddress->Reference,
                 'address_name' => $validatedAddress->Name,
-                'address_1' => $validatedAddress->Address1,
-                'address_2' => $validatedAddress->Address2,
-                'address_3' => $validatedAddress->Address3,
+                'address_1' => $validatedAddress->Address1 ?? $request->input('address_1'),
+                'address_2' => $validatedAddress->Address2 ?? $request->input('address_2'),
+                'address_3' => $validatedAddress->Address3 ?? $request->input('address_3'),
 
                 'contact' => $request->input('shipping_contact1'),
                 'contact_2' => $request->input('shipping_contact2'),
@@ -84,13 +84,13 @@ class AddressController extends Controller
                 'email_2' => $request->input('shipping_email2'),
 
                 'country_code' => $request->input('country_code'),
-                'state' => $validatedAddress->State,
-                'city' => $validatedAddress->City,
-                'zip_code' => $validatedAddress->ZipCode,
+                'state' => $validatedAddress->State ?? $request->input('state'),
+                'city' => $validatedAddress->City ?? $request->input('city'),
+                'zip_code' => $validatedAddress->ZipCode ?? $request->input('zip_code'),
             ]);
 
             if (config('amplify.client_code') != 'ACP' && !empty($erpAddress->ShipToNumber)) {
-                $address = CustomerAddress::create([
+                CustomerAddress::create([
                     'customer_id' => $request->input('customer_id', customer()->getKey()),
                     'address_code' => $erpAddress->ShipToNumber,
                     'address_name' => $erpAddress->ShipToName,
@@ -104,7 +104,7 @@ class AddressController extends Controller
                 ]);
             }
 
-            Session::flash('success', 'Addresses Added Successfully');
+            Session::flash('success', 'Address Added Successfully');
 
             return redirect()->route('frontend.addresses.index');
         } catch (\Throwable $th) {

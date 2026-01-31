@@ -4,6 +4,7 @@ namespace Amplify\Frontend\Http\Middlewares;
 
 use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\System\Backend\Models\ContactLogin;
+use Amplify\System\Backend\Models\CustomerAddress;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,17 +18,21 @@ class CustomerDefaultValues
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!session()->has('ship_to_address')) {
 
+        if (!$request->session()->has('ship_to_address')) {
             $contact = $request->user('customer');
-
             $customer = $contact->customer;
 
-            $addresses = $customer->addresses;
 
-            $defaultAddress = $addresses->firstWhere('address_code', '=', $customer->shipto_address_code);
+            $defaultAddress = CustomerAddress::where('customer_id', $customer->getKey())->orWhere(function ($query) use ($contact, $customer) {
+                $query->where('id', is_numeric($contact->customer_address_id) ? $contact->customer_address_id : $customer->default_address_id)
+                    ->orWhere('address_code', $customer->shipto_address_code);
+            })->first();
+
+
+            $contactLogin = ContactLogin::firstOrCreate(['customer_id' => $customer->getkey(), 'contact_id' => $contact->getKey(), 'active' => true]);
+
             if ($defaultAddress) {
-                $contactLogin = ContactLogin::where(['customer_id' => $customer->getkey(), 'contact_id' => $contact->getKey(), 'active' => true])->first();
                 $contactLogin->customer_address_id = $defaultAddress->getKey();
                 $contactLogin->ship_to_name = $defaultAddress->address_code;
                 $contactLogin->save();
