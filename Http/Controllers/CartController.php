@@ -115,13 +115,22 @@ class CartController extends Controller
         }
     }
 
+    /**
+     * can accept id as comma seperated values
+     *
+     * @param string $cartItemId
+     * @return JsonResponse
+     */
     public function remove(string $cartItemId)
     {
         try {
 
             $cart = getCart();
 
-            $products = $cartItemId;
+            $products = (Str::contains($cartItemId, ',', true))
+                ? explode(',', $cartItemId)
+                : $cartItemId;
+
 
             if ($cart->cartItems()->whereIn('id', Arr::wrap($products))->delete()) {
 
@@ -242,7 +251,7 @@ class CartController extends Controller
             throw ValidationException::withMessages(['file' => 'The file is empty or only have headers.']);
         }
 
-        $firstSheet = array_filter($firstSheet, fn ($value) => !empty($value[0]));
+        $firstSheet = array_filter($firstSheet, fn($value) => !empty($value[0]));
 
         // Remove Header
         if (isset($firstSheet[0][0])) {
