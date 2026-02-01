@@ -24,7 +24,7 @@ class CustomerDefaultValues
             $customer = $contact->customer;
 
 
-            $defaultAddress = CustomerAddress::where('customer_id', $customer->getKey())->orWhere(function ($query) use ($contact, $customer) {
+            $defaultAddress = CustomerAddress::where('customer_id', $customer->getKey())->where(function ($query) use ($contact, $customer) {
                 $query->where('id', is_numeric($contact->customer_address_id) ? $contact->customer_address_id : $customer->default_address_id)
                     ->orWhere('address_code', $customer->shipto_address_code);
             })->first();
