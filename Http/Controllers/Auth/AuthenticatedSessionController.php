@@ -80,6 +80,8 @@ class AuthenticatedSessionController extends Controller
             ]);
         }
 
+        session('impersonate', false);
+
         event(new ContactLoggedIn($account, $guestCart));
 
         $request->clearRateLimiter();
