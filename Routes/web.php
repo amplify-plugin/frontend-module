@@ -293,8 +293,6 @@ Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class])->group(
             });
         });
 
-        Route::post('customer-verification', CustomerVerificationController::class)->name('contact-validation');
-
         Route::post('/password-reset-otp', [PasswordResetController::class, 'sendOtp'])->name('password_reset_otp');
         Route::post('/otp-check', [PasswordResetController::class, 'otpCheck'])->name('otp_check');
         Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->name('reset_password');
