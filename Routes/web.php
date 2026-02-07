@@ -13,7 +13,6 @@
 
 use Amplify\Frontend\Helpers\CustomerHelper;
 use Amplify\Frontend\Http\Controllers\AddressController;
-use Amplify\Frontend\Http\Controllers\ARSummaryController;
 use Amplify\Frontend\Http\Controllers\Auth\AuthenticatedSessionController;
 use Amplify\Frontend\Http\Controllers\Auth\ConfirmablePasswordController;
 use Amplify\Frontend\Http\Controllers\Auth\CustomerVerificationController;
@@ -27,9 +26,7 @@ use Amplify\Frontend\Http\Controllers\Auth\RegisteredUserController;
 use Amplify\Frontend\Http\Controllers\Auth\VerifyEmailController;
 use Amplify\Frontend\Http\Controllers\BrandIndexController;
 use Amplify\Frontend\Http\Controllers\CampaignController;
-use Amplify\Frontend\Http\Controllers\CategoryIndexController;
 use Amplify\Frontend\Http\Controllers\CheckoutController;
-use Amplify\Frontend\Http\Controllers\ContactController;
 use Amplify\Frontend\Http\Controllers\ContactLoginController;
 use Amplify\Frontend\Http\Controllers\CustomerPartNumberController;
 use Amplify\Frontend\Http\Controllers\DashboardController;
@@ -40,41 +37,37 @@ use Amplify\Frontend\Http\Controllers\FavouriteController;
 use Amplify\Frontend\Http\Controllers\FormResponseAcceptController;
 use Amplify\Frontend\Http\Controllers\HomeController;
 use Amplify\Frontend\Http\Controllers\InvoiceController;
+use Amplify\Frontend\Http\Controllers\LocalizationController;
 use Amplify\Frontend\Http\Controllers\MessageController;
 use Amplify\Frontend\Http\Controllers\MyProfileController;
 use Amplify\Frontend\Http\Controllers\NewsletterSubscriptionController;
-use Amplify\Frontend\Http\Controllers\NoticeIndexController;
 use Amplify\Frontend\Http\Controllers\OrderController;
 use Amplify\Frontend\Http\Controllers\OrderListController;
 use Amplify\Frontend\Http\Controllers\OrderStatusController;
+use Amplify\Frontend\Http\Controllers\PasswordResetController;
 use Amplify\Frontend\Http\Controllers\PastItemsController;
 use Amplify\Frontend\Http\Controllers\ProductDetailController;
 use Amplify\Frontend\Http\Controllers\ProductSearchController;
 use Amplify\Frontend\Http\Controllers\QuickListController;
 use Amplify\Frontend\Http\Controllers\QuotationController;
-use Amplify\Frontend\Http\Controllers\RoleController;
 use Amplify\Frontend\Http\Controllers\ShippingController;
-use Amplify\Frontend\Http\Controllers\ShopSearchController;
-use Amplify\Frontend\Http\Middlewares\CaptureIntendedUrl;
 use Amplify\Frontend\Http\Middlewares\CustomerDefaultValues;
 use Amplify\System\Backend\Http\Controllers\CartController;
 use Amplify\System\Backend\Http\Controllers\CenPosPaymentController;
 use Amplify\System\Backend\Http\Controllers\CustomerOrderController;
-use Amplify\System\Backend\Http\Controllers\LocalizationController;
-use Amplify\System\Backend\Http\Controllers\PasswordResetController;
-use Amplify\System\Backend\Http\Controllers\SwitchAccountController;
-use Amplify\System\Backend\Http\Middlewares\ContactForceShippingAddressSelection;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
-use Spatie\Honeypot\ProtectAgainstSpam;
 
 Route::get('admin', function () {
     return Redirect::to('admin/login');
 });
 
-Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class])->group(function () {
+Route::name('frontend.')->middleware(['web', \Spatie\Honeypot\ProtectAgainstSpam::class])->group(function () {
 
-    Route::middleware([ContactForceShippingAddressSelection::class, CaptureIntendedUrl::class])->group(function () {
+    Route::middleware([
+        \Amplify\Frontend\Http\Middlewares\ContactForceShippingAddressSelection::class,
+        \Amplify\Frontend\Http\Middlewares\CaptureIntendedUrl::class
+    ])->group(function () {
         /*
         |--------------------------------------------------------------------------
         | Public Routes
@@ -91,11 +84,17 @@ Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class])->group(
         |--------------------------------------------------------------------------
         */
 
-        $shopRoutePrefix = config('amplify.frontend.shop_page_prefix');
-        Route::get("product/{identifier}", ProductDetailController::class)->where(['identifier' => '([a-zA-Z0-9\-]+)'])->name('shop.show');
-        Route::get("{$shopRoutePrefix}/{query?}", ShopSearchController::class)->where(['query' => '(.*)'])->name('shop.index');
-        Route::get('quick-view/{id}/{seo_path?}', [ShopSearchController::class, 'getQuickView'])->name('shop.quickView');
-        Route::get('warehouse-selection-view/{code}', [ShopSearchController::class, 'getWarehouseSelectionView'])->name('shop.warehouseSelectionView');
+        $productRoutePrefix = config('amplify.frontend.product_page_prefix');
+
+        Route::get("{$productRoutePrefix}/{identifier}/{slug}/{query?}", ProductDetailController::class)->where(['identifier' => '([a-zA-Z0-9\-]+)', 'query' => '(.*)'])->name('shop.show');
+
+        Route::controller(\Amplify\Frontend\Http\Controllers\ShopSearchController::class)->group(function () {
+            $shopRoutePrefix = config('amplify.frontend.shop_page_prefix');
+            Route::get("{$shopRoutePrefix}/{query?}", '__invoke')->where(['query' => '(.*)'])->name('index');
+            Route::get('quick-view/{id}/{seo_path?}', 'getQuickView')->name('quickView');
+            Route::get('warehouse-selection-view/{code}', 'getWarehouseSelectionView')->name('warehouseSelectionView');
+        })->name('shop.');
+
         Route::apiResource('carts', \Amplify\Frontend\Http\Controllers\CartController::class)
             ->where(['cart' => '[0-9]+'])->except('update');
         Route::delete('carts/remove/{cartItem}', [\Amplify\Frontend\Http\Controllers\CartController::class, 'remove'])
@@ -106,23 +105,51 @@ Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class])->group(
         Route::post('/remove/carts', [\Amplify\Frontend\Http\Controllers\CartController::class, 'removeCarts'])->name('frontend.remove-carts');
         Route::get('checkout', CheckoutController::class)->name('checkout');
         Route::post('subscribe', NewsletterSubscriptionController::class)->name('subscribe');
-        Route::get('faq/{faq-category-slug?}', FaqController::class)->name('faqs.show');
-        Route::get('faq/{faq}/stats-count/{value}', [FaqController::class, 'statsCount'])->name('faqs.stats-count');
+
+        Route::prefix('faq')->controller(FaqController::class)->group(function () {
+            Route::get('faq/{faq-category-slug?}', '__invoke')->name('faqs.show');
+            Route::get('faq/{faq}/stats-count/{value}', 'statsCount')->name('faqs.stats-count');
+        });
+
         Route::post('form-response/{form_code}', FormResponseAcceptController::class)->name('form-submit');
         Route::resource('campaigns', CampaignController::class)->only('index', 'show');
         Route::resource('events', EventController::class)->only('index', 'show');
         Route::get('brands/{query?}', BrandIndexController::class)->where(['query' => '(.*)'])->name('brands');
-        Route::get('categories/{query?}', CategoryIndexController::class)->where(['query' => '(.*)'])->name('categories');
+        Route::get('categories/{query?}', \Amplify\Frontend\Http\Controllers\CategoryIndexController::class)->where(['query' => '(.*)'])->name('categories');
         Route::get('order-completed/{order}', [OrderController::class, 'completed'])->name('orders.completed');
         Route::post('validate/shipping-address', [ShippingController::class, 'validateAddress']);
         Route::post('/get/shipping/option', [ShippingController::class, 'options'])->name('shipping-options');
         Route::get('related-products/{product}', [ProductDetailController::class, 'relatedProducts'])->name('shop.relatedProducts');
+        Route::post('/order/quick-order-file-upload',
+            [CustomerOrderController::class, 'quickOrderFileUpload'])->name('order.quick-order-file-upload');
+
+        Route::post('/cart/summary', [CartController::class, 'getCartSummary'])->name('cart.summary');
+
+        Route::post('/order/check-order-list-name',
+            [CustomerOrderController::class, 'checkOrderListName'])->name('order.order-list.check-name-availability');
+
+        Route::post('/order/get-product-name-by-code',
+            [CustomerOrderController::class, 'getProductNameByCode'])->name('order.get-product-name-by-code');
+        Route::post('/order/submit-order',
+            [CustomerOrderController::class, 'submitOrder'])->name('order.submit-order');
+        Route::post('/order/submit-pending-order/{order_id}',
+            [CustomerOrderController::class, 'submitPendingOrder'])->name('order.submit-pending-order');
+        Route::post('/order/calculate-price',
+            [CustomerOrderController::class, 'getOrderPricing'])->name('order.calculate-price');
+        Route::post('/order/summary', [CustomerOrderController::class, 'getOrderSummary'])->name('order.summary');
+        Route::post('/notices', \Amplify\Frontend\Http\Controllers\NoticeIndexController::class)->name('notices.index');
+
+        Route::controller(LocalizationController::class)->group(function () {
+            Route::get('/locale-lang.js', 'exportLocaleLang');
+            Route::get('/languages/{locale}', 'switchLanguage');
+        });
 
         /*
         |--------------------------------------------------------------------------
         | Without Authentication
         |--------------------------------------------------------------------------
         */
+
         Route::middleware('guest:customer')->group(function () {
 
             Route::controller(AuthenticatedSessionController::class)->group(function () {
@@ -138,6 +165,12 @@ Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class])->group(
                     ->name('registration.request-account');
                 Route::post('create-cash-customer', 'newRetailCustomer')
                     ->name('registration.create-cash-customer');
+            });
+
+            Route::controller(PasswordResetController::class)->group(function () {
+                Route::post('/password-reset-otp', 'sendOtp')->name('password_reset_otp');
+                Route::post('/otp-check', 'otpCheck')->name('otp_check');
+                Route::post('/reset-password', 'resetPassword')->name('reset_password');
             });
 
             /*
@@ -203,18 +236,20 @@ Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class])->group(
             Route::get('dashboard', DashboardController::class)
                 ->name('dashboard');
 
-            Route::get('account-summary', ARSummaryController::class)->name('account-summary');
+            Route::get('account-summary', \Amplify\Frontend\Http\Controllers\ARSummaryController::class)->name('account-summary');
 
             Route::post('my-profile/photo-update', [MyProfileController::class, 'photoUpdate'])->name('profile.photo-update');
 
             Route::resource('my-profile', MyProfileController::class)->only(['show', 'update'])->names('profile');
 
-            Route::get('switch-account', [SwitchAccountController::class, 'index'])->name('switch-account.index');
-            Route::put('switch-account', [SwitchAccountController::class, 'update'])->name('switch-account.update');
+            Route::prefix('switch-account')->controller(\Amplify\Frontend\Http\Controllers\SwitchAccountController::class)->group(function () {
+                Route::get('/', 'index')->name('switch-account.index');
+                Route::put('/', 'update')->name('switch-account.update');
+            });
 
-            Route::resource('contacts', ContactController::class);
+            Route::resource('contacts', \Amplify\Frontend\Http\Controllers\ContactController::class);
 
-            Route::resource('roles', RoleController::class);
+            Route::resource('roles', \Amplify\Frontend\Http\Controllers\RoleController::class);
 
             Route::resource('addresses', AddressController::class);
             Route::get('/addresses/default-address/{address}', [AddressController::class, 'setDefault'])
@@ -292,38 +327,13 @@ Route::name('frontend.')->middleware(['web', ProtectAgainstSpam::class])->group(
                     [CenPosPaymentController::class, 'index'])->name('customer.cenpos-invoices-pay.index');
             });
         });
-
-        Route::post('/password-reset-otp', [PasswordResetController::class, 'sendOtp'])->name('password_reset_otp');
-        Route::post('/otp-check', [PasswordResetController::class, 'otpCheck'])->name('otp_check');
-        Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->name('reset_password');
-
-        Route::post('/order/quick-order-file-upload',
-            [CustomerOrderController::class, 'quickOrderFileUpload'])->name('order.quick-order-file-upload');
-
-        Route::post('/cart/summary', [CartController::class, 'getCartSummary'])->name('cart.summary');
-
-        Route::post('/order/check-order-list-name',
-            [CustomerOrderController::class, 'checkOrderListName'])->name('order.order-list.check-name-availability');
-
-        Route::post('/order/get-product-name-by-code',
-            [CustomerOrderController::class, 'getProductNameByCode'])->name('order.get-product-name-by-code');
-        Route::post('/order/submit-order',
-            [CustomerOrderController::class, 'submitOrder'])->name('order.submit-order');
-        Route::post('/order/submit-pending-order/{order_id}',
-            [CustomerOrderController::class, 'submitPendingOrder'])->name('order.submit-pending-order');
-        Route::post('/order/calculate-price',
-            [CustomerOrderController::class, 'getOrderPricing'])->name('order.calculate-price');
-        Route::post('/order/summary', [CustomerOrderController::class, 'getOrderSummary'])->name('order.summary');
-        Route::post('/notices', NoticeIndexController::class)->name('notices.index');
     });
 
-    Route::get('/locale-lang.js', [LocalizationController::class, 'exportLocaleLang']);
-    Route::get('/languages/{locale}', [LocalizationController::class, 'switchLanguage']);
-
     /*
-     * Customer Routes
-     */
-
+    |--------------------------------------------------------------------------
+    | Public System Routes
+    |--------------------------------------------------------------------------
+    */
     Route::post('/udpate-order-note', [CustomerOrderController::class, 'updateOrderNote'])->name('update.order-note');
     Route::post('/update-draft-note', [CustomerOrderController::class, 'updateDraftNote'])->name('update.draft-note');
 
