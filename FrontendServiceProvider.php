@@ -2,6 +2,8 @@
 
 namespace Amplify\Frontend;
 
+use Amplify\Frontend\Http\Middlewares\CaptureIntendedUrl;
+use Amplify\Frontend\Http\Middlewares\ContactForceShippingAddressSelection;
 use Amplify\Frontend\Providers\EventServiceProvider;
 use Amplify\Frontend\Providers\ValidationServiceProvider;
 use Amplify\System\Cms\Models\Form;
@@ -9,6 +11,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Spatie\Honeypot\ProtectAgainstSpam;
 
 class FrontendServiceProvider extends ServiceProvider
 {
@@ -44,6 +47,14 @@ class FrontendServiceProvider extends ServiceProvider
                 Route::bind('form_code', fn (string $value) => Form::whereCode($value)->firstOrFail());
 
             }
+
+            $router = $this->app->make(\Illuminate\Routing\Router::class);
+
+            $router->middlewareGroup('frontend', [
+                ProtectAgainstSpam::class,
+                ContactForceShippingAddressSelection::class,
+                CaptureIntendedUrl::class,
+            ]);
         }
     }
 }
