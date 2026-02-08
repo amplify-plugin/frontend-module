@@ -50,43 +50,98 @@ class AddressController extends Controller
      */
     public function store(ShipToAddressRequest $request)
     {
-        $validatedAddress = ErpApi::validateCustomerShippingLocation([
-            'ship_to_name' => $request->input('address_name'),
-            'ship_to_code' => $request->input('address_code'),
-            'ship_to_address1' => $request->input('address_1'),
-            'ship_to_address2' => $request->input('address_2'),
-            'ship_to_address3' => $request->input('address_3'),
-            'ship_to_city' => $request->input('city'),
-            'ship_to_country_code' => $request->input('country_code'),
-            'ship_to_state' => $request->input('state'),
-            'ship_to_zip_code' => $request->input('zip_code'),
-        ]);
+        $validated = $request->validated();
 
-        if ($validatedAddress->Response !== 'Success') {
-            Session::flash('error', $validatedAddress->Message ?? 'The address value was incomplete.');
-            return back();
+        // STV Client: Auto-generate unique address code from first address line
+        // Example: "123 Main Street" → "123", check duplicates → "123-1", "123-2", etc.
+        if (config('amplify.client_code') === 'STV') {
+            // Step 1: Extract the first address line and trim whitespace
+            // Input: "  123 Main Street  " → Output: "123 Main Street"
+            $address1 = trim($validated['address_1'] ?? '');
+
+            if (!empty($address1)) {
+                // Step 2: Extract the first word/token from the address
+                // Input: "123 Main Street" → Output: "123"
+                // Input: "BuildingA Suite 200" → Output: "BuildingA"
+                $firstToken = preg_split('/\s+/', $address1)[0] ?? $address1;
+
+                // Step 3: Sanitize the token - keep only alphanumeric and hyphens
+                // Removes special characters: periods, slashes, commas, @ symbols, etc.
+                // Input: "#Suite-201" → Output: "Suite-201"
+                // Input: "Apt.#5B" → Output: "Apt5B"
+                $baseCode = preg_replace('/[^A-Za-z0-9\-]/', '', $firstToken);
+
+                // Step 4: Fallback - if sanitization removed everything, try removing spaces instead
+                // Input: "!@#$%" → After sanitize: "" → Try space removal: "" → Move to next step
+                if ($baseCode === '') {
+                    $baseCode = preg_replace('/\s+/', '', $firstToken);
+                }
+
+                // Step 5: Final fallback - if still empty, use default 'ADDR'
+                // This ensures we always have a valid base code
+                if ($baseCode === '') {
+                    $baseCode = 'ADDR';
+                }
+
+                // Step 6: Check for duplicates and generate unique code
+                // Query database for existing codes for this customer
+                // If "123" exists, try "123-1", "123-2", etc. until unique
+                // Example flow:
+                //   - Customer has addresses with codes: "123", "123-1"
+                //   - New code "123" → exists
+                //   - New code "123-1" → exists
+                //   - New code "123-2" → doesn't exist ✓
+                $candidate = $baseCode;
+                $counter = 0;
+
+                while (
+                    CustomerAddress::where('customer_id', customer()->getKey())
+                        ->where('address_code', $candidate)
+                        ->exists()
+                ) {
+                    $counter++;
+                    $candidate = $baseCode . '-' . $counter;
+                }
+
+                // Store the generated unique address code in validated data
+                $validated['address_code'] = $candidate;
+            }
         }
 
         try {
+            $validateAddress = ErpApi::validateCustomerShippingLocation([
+                'ship_to_name' => $validated['address_name'] ?? null,
+                'ship_to_code' => $validated['address_code'] ?? null,
+                'ship_to_address1' => $validated['address_1'],
+                'ship_to_address2' => $validated['address_2'] ?? null,
+                'ship_to_address3' => $validated['address_3'] ?? null,
+                'ship_to_city' => $validated['city'],
+                'ship_to_country_code' => $validated['country_code'],
+                'ship_to_state' => $validated['state'] ?? null,
+                'ship_to_zip_code' => $validated['zip_code'],
+            ]);
+
+            if ($validateAddress->Response !== 'Success') {
+                Session::flash('error', $validateAddress->Message ?? 'The address value was incomplete.');
+                return back();
+            }
 
             $erpAddress = ErpApi::createCustomerShippingLocation([
-                'address_code' => $validatedAddress->Reference,
-                'address_name' => $validatedAddress->Name,
-                'address_1' => $validatedAddress->Address1 ?? $request->input('address_1'),
-                'address_2' => $validatedAddress->Address2 ?? $request->input('address_2'),
-                'address_3' => $validatedAddress->Address3 ?? $request->input('address_3'),
-
-                'contact' => $request->input('shipping_contact1'),
-                'contact_2' => $request->input('shipping_contact2'),
-                'phone_1' => $request->input('shipping_phone1'),
-                'phone_2' => $request->input('shipping_phone2'),
-                'email_1' => $request->input('shipping_email1'),
-                'email_2' => $request->input('shipping_email2'),
-
-                'country_code' => $request->input('country_code'),
-                'state' => $validatedAddress->State ?? $request->input('state'),
-                'city' => $validatedAddress->City ?? $request->input('city'),
-                'zip_code' => $validatedAddress->ZipCode ?? $request->input('zip_code'),
+                'address_code' => $validated['address_code'] ?? null,
+                'address_name' => $validated['address_name'] ?? null,
+                'address_1' => $validated['address_1'],
+                'address_2' => $validated['address_2'] ?? null,
+                'address_3' => $validated['address_3'] ?? null,
+                'contact' => $validated['shipping_contact1'] ?? null,
+                'contact_2' => $validated['shipping_contact2'] ?? null,
+                'phone_1' => $validated['shipping_phone1'] ?? null,
+                'phone_2' => $validated['shipping_phone2'] ?? null,
+                'email_1' => $validated['shipping_email1'] ?? null,
+                'email_2' => $validated['shipping_email2'] ?? null,
+                'country_code' => $validated['country_code'],
+                'state' => $validated['state'] ?? null,
+                'city' => $validated['city'],
+                'zip_code' => $validated['zip_code'],
             ]);
 
             if (config('amplify.client_code') != 'ACP' && !empty($erpAddress->ShipToNumber)) {
