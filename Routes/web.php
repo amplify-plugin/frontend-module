@@ -86,7 +86,9 @@ Route::name('frontend.')->middleware(['web', \Spatie\Honeypot\ProtectAgainstSpam
 
         $productRoutePrefix = config('amplify.frontend.product_page_prefix');
 
-        Route::get("{$productRoutePrefix}/{identifier}/{slug}/{query?}", ProductDetailController::class)->where(['identifier' => '([a-zA-Z0-9\-]+)', 'query' => '(.*)'])->name('shop.show');
+        Route::get("{$productRoutePrefix}/{identifier}/{query?}", ProductDetailController::class)
+            ->where(['identifier' => '([a-zA-Z0-9\-]+)', 'query' => '(.*)'])
+            ->name('shop.show');
 
         Route::name('shop.')->controller(\Amplify\Frontend\Http\Controllers\ShopSearchController::class)->group(function () {
             $shopRoutePrefix = config('amplify.frontend.shop_page_prefix');
