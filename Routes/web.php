@@ -88,12 +88,12 @@ Route::name('frontend.')->middleware(['web', \Spatie\Honeypot\ProtectAgainstSpam
 
         Route::get("{$productRoutePrefix}/{identifier}/{slug}/{query?}", ProductDetailController::class)->where(['identifier' => '([a-zA-Z0-9\-]+)', 'query' => '(.*)'])->name('shop.show');
 
-        Route::controller(\Amplify\Frontend\Http\Controllers\ShopSearchController::class)->group(function () {
+        Route::name('shop.')->controller(\Amplify\Frontend\Http\Controllers\ShopSearchController::class)->group(function () {
             $shopRoutePrefix = config('amplify.frontend.shop_page_prefix');
             Route::get("{$shopRoutePrefix}/{query?}", '__invoke')->where(['query' => '(.*)'])->name('index');
             Route::get('quick-view/{id}/{seo_path?}', 'getQuickView')->name('quickView');
             Route::get('warehouse-selection-view/{code}', 'getWarehouseSelectionView')->name('warehouseSelectionView');
-        })->name('shop.');
+        });
 
         Route::apiResource('carts', \Amplify\Frontend\Http\Controllers\CartController::class)
             ->where(['cart' => '[0-9]+'])->except('update');
