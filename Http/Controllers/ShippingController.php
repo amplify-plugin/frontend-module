@@ -10,6 +10,7 @@ use Amplify\System\Backend\Models\Warehouse;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\Rule;
 
 class ShippingController extends Controller
 {
@@ -18,7 +19,14 @@ class ShippingController extends Controller
         // Define validation rules first (outside of try)
         $rules = [
             'shipping_number' => ['nullable'],
-            'shipping_name' => 'required|string|max:255',
+            'shipping_name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('customer_addresses', 'address_name')->where(function ($query) {
+                    return $query->where('customer_id', customer()->getKey());
+                })
+            ],
             'shipping_address1' => 'required|string|max:255',
             'shipping_address2' => 'nullable|string|max:255',
             'shipping_address3' => 'nullable|string|max:255',
