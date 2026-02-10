@@ -8,6 +8,7 @@ use Amplify\System\Backend\Models\Product;
 use Amplify\System\Backend\Models\ProductRelation;
 use Amplify\System\Backend\Models\ProductRelationshipType;
 use Amplify\System\Helpers\UtilityHelper;
+use Amplify\System\Sayt\Classes\ItemRow;
 use Amplify\System\Sayt\Facade\Sayt;
 use App\Http\Controllers\Controller;
 use ErrorException;
@@ -24,7 +25,7 @@ class ProductDetailController extends Controller
      *
      * @throws ErrorException
      */
-    public function __invoke(string $identifier, ?string $seo_path = null): string
+    public function __invoke(string $identifier, ?string $slug = null): string
     {
         abort_unless(!customer_check() || customer(true)->can('shop.browse'), 403);
 
@@ -35,9 +36,10 @@ class ProductDetailController extends Controller
         }
 
         try {
-            $seo_path = trim(trim($seo_path), '/');
 
-            store()->eaProductDetail = Sayt::storeProductDetail($identifier, $seo_path, ['return_skus' => request('return_skus', false)]);
+            $eaKey = $product instanceof ItemRow ? $product->Product_Id : $product->id;
+
+            store()->eaProductDetail = Sayt::storeProductDetail($eaKey, \request('ref'), ['return_skus' => request('return_skus', false)]);
 
             $this->setProductPreviewPage($product);
 

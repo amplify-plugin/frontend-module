@@ -81,15 +81,14 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
 
     $productRoutePrefix = config('amplify.frontend.product_page_prefix');
 
-    Route::get("{$productRoutePrefix}/{identifier}/{query?}", ProductDetailController::class)
-        ->where(['identifier' => '([a-zA-Z0-9\-]+)', 'query' => '(.*)'])
+    Route::get("{$productRoutePrefix}/{identifier}/{slug?}", ProductDetailController::class)
+        ->where(['identifier' => '([a-zA-Z0-9\-\_\[\]\(\)\+ ]+)'])
         ->name('shop.show');
 
-    Route::name('shop.')->controller(\Amplify\Frontend\Http\Controllers\ShopSearchController::class)->group(function () {
-        $shopRoutePrefix = config('amplify.frontend.shop_page_prefix');
-        Route::get("{$shopRoutePrefix}/{query?}", '__invoke')->where(['query' => '(.*)'])->name('index');
-        Route::get('quick-view/{id}/{seo_path?}', 'getQuickView')->name('quickView');
-        Route::get('warehouse-selection-view/{code}', 'getWarehouseSelectionView')->name('warehouseSelectionView');
+    Route::name('shop.')->prefix(config('amplify.frontend.shop_page_prefix'))->controller(\Amplify\Frontend\Http\Controllers\ShopSearchController::class)->group(function () {
+        Route::get("/{query?}", '__invoke')->where(['query' => '(.*)'])->name('index');
+        Route::get('/quick-view/{id}/{seo_path?}', 'getQuickView')->name('quickView');
+        Route::get('/warehouse-selection-view/{code}', 'getWarehouseSelectionView')->name('warehouseSelectionView');
     });
 
     Route::apiResource('carts', \Amplify\Frontend\Http\Controllers\CartController::class)
