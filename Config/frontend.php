@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'shop_page_prefix' => env('AMPLIFY_SHOP_PAGE_PREFIX', 'shop'),
+    'shop_page_prefix' => env('AMPLIFY_SHOP_PAGE_PREFIX', 'store'),
     'product_page_prefix' => env('AMPLIFY_PRODUCT_PAGE_PREFIX', 'product'),
     'excluded_page_types' => ['static_page', 'shop_by_catalog'],
     'shop_page_default_view' => 'list',
