@@ -187,10 +187,15 @@ trait HasDynamicPage
             mix('css/styles.min.css', $themePrefix),
         ], 'template-style');
 
-        push_css([
+        $customStyles = [
             mix('css/custom.css', $themePrefix),
-            asset('assets/css/custom.css'),
-        ], 'custom-style');
+        ];
+
+        if (file_exists(public_path('assets/css/custom.css'))) {
+            $customStyles[] = asset('assets/css/custom.css');
+        }
+
+        push_css($customStyles, 'custom-style');
 
         foreach (config('amplify.frontend.scripts', []) as $group => $scripts) {
             foreach ($scripts ?? [] as $script) {
