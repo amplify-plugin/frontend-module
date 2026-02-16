@@ -32,16 +32,7 @@ class ShipToAddressRequest extends FormRequest
     {
         $rules = [
             'customer_id' => 'integer|exists:customers,id',
-            'address_name' => [
-                'required',
-                'string',
-                'max:255',
-                Rule::unique('customer_addresses', 'address_name')->where(function ($query) {
-                    return $query->where('customer_id', customer()->getKey());
-                })->when($this->method() === 'PUT', function ($rule) {
-                    return $rule->ignore($this->route('address'));
-                })
-            ],
+            'address_name' => 'required|string|max:255',
             //'address_code' => ['required', 'string', 'max:255'],
             'address_1' => 'required|string|max:255',
             'address_2' => 'nullable|string|max:255',

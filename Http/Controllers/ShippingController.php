@@ -19,14 +19,7 @@ class ShippingController extends Controller
         // Define validation rules first (outside of try)
         $rules = [
             'shipping_number' => ['nullable'],
-            'shipping_name' => [
-                'required',
-                'string',
-                'max:255',
-                Rule::unique('customer_addresses', 'address_name')->where(function ($query) {
-                    return $query->where('customer_id', customer()->getKey());
-                })
-            ],
+            'shipping_name' => 'required|string|max:255',
             'shipping_address1' => 'required|string|max:255',
             'shipping_address2' => 'nullable|string|max:255',
             'shipping_address3' => 'nullable|string|max:255',
