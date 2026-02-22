@@ -33,7 +33,7 @@ class ShopSearchController extends Controller
         $products = $eaProductData->getProducts();
         $searchMessage = $eaProductData->getMessage();
 
-        if (! empty($products) && count($products) === 1 && empty($searchMessage) && !request()->filled('page')){
+        if (! empty($products) && count($products) === 1 && empty($searchMessage) && ! request()->filled('page')) {
             $seoPath = $eaProductData->getCurrentSeoPath();
             $firstProduct = array_shift($products);
 
@@ -49,7 +49,9 @@ class ShopSearchController extends Controller
 
         $this->loadPageByType('shop');
 
-        Cookie::queue('showView',  active_shop_view(), MONTH/60, '/'.config('amplify.frontend.shop_page_prefix'));
+        Cookie::queue('showView', active_shop_view(), MONTH / 60, '/'.config('amplify.frontend.shop_page_prefix'));
+
+        Cookie::queue('resultsPerPage', results_per_page(), MONTH / 60, '/'.config('amplify.frontend.shop_page_prefix'));
 
         return $this->render();
     }
