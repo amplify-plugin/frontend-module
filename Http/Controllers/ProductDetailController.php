@@ -162,7 +162,7 @@ class ProductDetailController extends Controller
             // If this is an AJAX request, return only the product list partial
             // Return the same view (partial/full) so the UI can be replaced when switching types via AJAX
             return $this->apiResponse(true, '', 200, [
-                'html' => view('widget::product.tabs.related-products', [
+                'html' => view('widget::product.tabs.related-product-view', [
                 'relatedProducts' => $related,
                 'product' => $dbProduct,
                 'relationTypes' => $relationTypes,
