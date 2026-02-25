@@ -41,7 +41,7 @@ class RegistrationRequest extends FormRequest
             ],
             'phone_number' => 'required|string|max:255|clean_string|phone_number',
             'industry_classification_id' => 'nullable|integer|exists:industry_classifications,id',
-            'address_name' => 'required|string|max:255|clean_string',
+            'address_name' => 'nullable|string|max:255|clean_string',
             'address_1' => 'required|string|max:255|clean_string',
             'address_2' => 'nullable|string|max:255|clean_string',
             'address_3' => 'nullable|string|max:255|clean_string',
