@@ -22,6 +22,8 @@ class ContactAccountRequest extends FormRequest
      */
     public function rules(): array
     {
+        \session()->flash('tab', $this->input('tab'));
+
         $minPassLen = SecurityHelper::passwordLength();
 
         $rules = [

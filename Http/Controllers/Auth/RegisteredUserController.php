@@ -39,77 +39,17 @@ class RegisteredUserController extends Controller
     }
 
     /**
-     * @return mixed
-     *
-     * @throws Exception
-     */
-    private function getCustomer(ContactAccountRequest $request)
-    {
-        $customerCode = trim($request->input('customer_account_number'));
-        $customerName = trim($request->input('contact_company_name'));
-
-        // Must have at least one identifier
-        if ($customerCode === '' && $customerName === '') {
-            throw new Exception(
-                'Please enter Account Number or Company Name',
-                Response::HTTP_BAD_REQUEST
-            );
-        }
-
-        $customer = null;
-
-        // 1️⃣ Lookup by company name if code is not provided
-        if ($customerCode === '') {
-            $customer = Customer::select('id', 'customer_code', 'customer_name')
-                ->where(DB::raw('TRIM(customer_name)'), $customerName)
-                ->first();
-
-            if (! $customer) {
-                throw new Exception(
-                    'We could not find your company name in our system.',
-                    Response::HTTP_BAD_REQUEST
-                );
-            }
-
-            $customerCode = trim($customer->customer_code);
-        }
-
-        // 2️⃣ Always verify existence in ERP
-        $customerInERP = ErpApi::getCustomerDetail(['customer_number' => $customerCode]);
-
-        if (empty($customerInERP->CustomerNumber)) {
-            throw new Exception(
-                'Customer with the provided account number does not exist.',
-                Response::HTTP_BAD_REQUEST
-            );
-        }
-
-        // 3️⃣ If customer is still not found locally, try finding by code
-        if (! $customer) {
-            $customer = Customer::where(DB::raw('TRIM(customer_code)'), $customerCode)->first();
-        }
-
-        // 4️⃣ Create if missing, otherwise fetch address
-        if (! $customer) {
-            return $this->createCustomerAndAddress($customerInERP->toArray());
-        }
-
-        $address = $customer->addresses->first();
-
-        return [$customer, $address];
-    }
-
-    /**
      * @param ContactAccountRequest $request
      * @return RedirectResponse
      * @throws \Throwable
      */
     public function requestAccount(ContactAccountRequest $request)
     {
-        try {
-            DB::beginTransaction();
+        DB::beginTransaction();
 
-            [$customer, $address] = $this->getCustomer($request);
+        try {
+
+            [$customer, $address] = $this->getExistingCustomer($request);
 
             // Create Contact
             $contact = $customer->contacts()->create([
@@ -141,18 +81,16 @@ class RegisteredUserController extends Controller
             DB::commit();
 
             // Newsletter + Notification
-            $this->handlePostRegistrationTasks($request, $contact);
+            $this->handlePostRegistrationForRequestAccount($request, $contact);
 
-            Session::flash('success', __(config('amplify.messages.registration_success')));
-
-            return redirect()->to('/');
+            return redirect()->to('/')->with('success', __(config('amplify.messages.registration_success')));
 
         } catch (Exception $exception) {
             DB::rollBack();
 
-            Log::error('Customer Registration Exception: '.$exception->getMessage());
+            Log::error($exception);
 
-            $code = (int) $exception->getCode();
+            $code = (int)$exception->getCode();
             $message = $exception->getMessage();
 
             // Handle specific 400 validation-like errors
@@ -160,7 +98,7 @@ class RegisteredUserController extends Controller
                 $fields = ['customer_account_number', 'contact_company_name'];
                 Session::flash($message);
                 foreach ($fields as $field) {
-                    if (! empty($request->get($field))) {
+                    if (!empty($request->get($field))) {
                         return redirect()->back()
                             ->withErrors([$field => $message])
                             ->withInput();
@@ -181,7 +119,7 @@ class RegisteredUserController extends Controller
     /**
      * Handle an incoming registration request.
      *
-     * @throws Exception
+     * @throws Exception|\Throwable
      */
     public function newRetailCustomer(RegistrationRequest $request): RedirectResponse
     {
@@ -206,7 +144,7 @@ class RegisteredUserController extends Controller
         try {
 
             // Create Customer & Address
-            [$customer, $address] = $this->createCustomerAndAddress($customerAddressPayload);
+            $customer = $this->createCustomer($customerAddressPayload);
 
             // Create Contact
             $contact = $customer->contacts()->create([
@@ -218,7 +156,7 @@ class RegisteredUserController extends Controller
                 'login_id' => $request->input('email'),
                 'is_admin' => $customer->wasRecentlyCreated,
                 'enabled' => config('amplify.security.skip_contact_approval', false),
-                'customer_address_id' => $address->id ?? null,
+                'customer_address_id' => null,
                 'warehouse_id' => $customer->warehouse_id ?? null,
                 'active_customer_id' => $customer->getKey(),
                 'order_limit' => 0,
@@ -228,38 +166,91 @@ class RegisteredUserController extends Controller
 
             DB::commit();
 
-            // Create Contact Login
-            $contact->contactLogins()->create([
-                'customer_id' => $customer->id,
-                'warehouse_id' => $customer->warehouse_id ?? null,
-                'customer_address_id' => $address->id ?? null,
-                'ship_to_name' => $address->address_name ?? null,
-            ]);
+            $this->handlePostRegistrationForNewRetailCustomer($request, $customer, $contact);
 
-            $this->handlePostRegistrationTasks($request, $contact);
-
-            Session::flash('success', __(config('amplify.messages.registration_success')));
-
-            return redirect()->to('/');
+            return redirect()->to('/')->with('success', __(config('amplify.messages.registration_success')));
 
         } catch (Exception $exception) {
+
+            Log::error($exception);
+
             DB::rollBack();
 
-            Log::error('Customer Registration  Exception: '.$exception->getMessage());
+            $request->session()->flash('error', 'Registration request failed. Please try again later.');
 
-            Session::flash('error', 'Registration request failed. Please try again later. ');
+            $request->session()->flash('message', $exception->getMessage());
 
-            return redirect()->back();
+            return redirect()->back()->withInput();
         }
     }
 
     /**
-     * @param  $request
-     * @return [\Amplify\System\Backend\Models\Customer, \Amplify\System\Backend\Models\CustomerAddress]
+     * @return mixed
      *
      * @throws Exception
      */
-    private function createCustomerAndAddress(array $attributes): array
+    private function getExistingCustomer(ContactAccountRequest $request)
+    {
+        $customerCode = trim($request->input('customer_account_number'));
+        $customerName = trim($request->input('contact_company_name'));
+
+        // Must have at least one identifier
+        if ($customerCode === '' && $customerName === '') {
+            throw new Exception(
+                'Please enter Account Number or Company Name',
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        $customer = null;
+
+        // 1️⃣ Lookup by company name if code is not provided
+        if ($customerCode === '') {
+            $customer = Customer::select('id', 'customer_code', 'customer_name')
+                ->where(DB::raw('TRIM(customer_name)'), $customerName)
+                ->first();
+
+            if (!$customer) {
+                throw new Exception(
+                    'We could not find your company name in our system.',
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            $customerCode = trim($customer->customer_code);
+        }
+
+        // 2️⃣ Always verify existence in ERP
+        $customerInERP = ErpApi::getCustomerDetail(['customer_number' => $customerCode]);
+
+        if (empty($customerInERP->CustomerNumber)) {
+            throw new Exception(
+                'Customer with the provided account number does not exist.',
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // 3️⃣ If customer is still not found locally, try finding by code
+        if (!$customer) {
+            $customer = Customer::where(DB::raw('TRIM(customer_code)'), $customerCode)->first();
+        }
+
+        // 4️⃣ Create if missing, otherwise fetch address
+        if (!$customer) {
+            return $this->createCustomer($customerInERP->toArray());
+        }
+
+        $address = $customer->addresses->first();
+
+        return [$customer, $address];
+    }
+
+    /**
+     * @param array $attributes
+     * @return Customer
+     * @throws Exception
+     */
+    private function createCustomer(array $attributes): Customer
     {
         $industryName = $attributes['WrittenIndustry'] ?? null;
         $industryClassification = $industryName
@@ -275,25 +266,13 @@ class RegisteredUserController extends Controller
             'approved' => config('amplify.erp.auto_create_cash_customer', false),
             'customer_type' => 'Retail',
             'industry_classification_id' => $industryClassification->id ?? null,
-            'address_1' => $attributes['CustomerAddress1'],
-            'address_2' => $attributes['CustomerAddress2'],
-            'address_3' => $attributes['CustomerAddress3'],
-            'zip_code' => $attributes['CustomerZipCode'],
-            'city' => $attributes['CustomerCity'],
-            'country_code' => $attributes['CustomerCountry'],
-            'state' => $attributes['CustomerState'],
-        ]);
-
-        // Create Address
-        $address = $customer->addresses()->create([
-            'address_name' => $attributes['DefaultShipTo'],
-            'address_1' => $attributes['CustomerAddress1'],
-            'address_2' => $attributes['CustomerAddress2'],
-            'address_3' => $attributes['CustomerAddress3'],
-            'zip_code' => $attributes['CustomerZipCode'],
-            'city' => $attributes['CustomerCity'],
-            'country_code' => $attributes['CustomerCountry'],
-            'state' => $attributes['CustomerState'],
+            'address_1' => $attributes['CustomerAddress1'] ?? null,
+            'address_2' => $attributes['CustomerAddress2'] ?? null,
+            'address_3' => $attributes['CustomerAddress3'] ?? null,
+            'zip_code' => $attributes['CustomerZipCode'] ?? null,
+            'city' => $attributes['CustomerCity'] ?? null,
+            'country_code' => $attributes['CustomerCountry'] ?? null,
+            'state' => $attributes['CustomerState'] ?? null,
         ]);
 
         if (empty($attributes['CustomerNumber'])
@@ -318,8 +297,12 @@ class RegisteredUserController extends Controller
             ]);
 
             // Handle ERP response
+            if (!empty($erpCustomer->Message)) {
+                throw new Exception($erpCustomer->Message);
+            }
+
             if ($erpCustomer->CustomerNumber == null) {
-                throw new Exception('ERP customer creation failed for customer ID: '.$customer->id);
+                throw new Exception('ERP customer creation failed for customer ID: ' . $customer->id);
             }
 
             // Update customer code with ERP Customer Number
@@ -327,10 +310,15 @@ class RegisteredUserController extends Controller
             $customer->save();
         }
 
-        return [$customer, $address];
+        return $customer;
     }
 
-    private function handlePostRegistrationTasks($request, $contact): void
+    /**
+     * @param $request
+     * @param $contact
+     * @return void
+     */
+    private function handlePostRegistrationForRequestAccount($request, $contact): void
     {
         if ($request->filled('contact_newsletter') && $request->input('contact_newsletter') == 'yes') {
             if ($alreadySubscriber = Subscriber::whereEmail($request->input('contact_email'))->first()) {
@@ -343,7 +331,38 @@ class RegisteredUserController extends Controller
         NotificationFactory::call(Event::CONTACT_ACCOUNT_REQUEST_RECEIVED, [
             'contact_id' => $contact->id,
         ]);
-        
+
+        if (config('amplify.erp.auto_create_contact')) {
+            ContactProfileSyncJob::dispatch($contact->toArray());
+        }
+    }
+
+    /**
+     * @param $request
+     * @param $customer
+     * @param $contact
+     * @return void
+     */
+    private function handlePostRegistrationForNewRetailCustomer($request, $customer, $contact): void
+    {
+        if ($request->filled('newsletter') && $request->input('newsletter') == 'yes') {
+            if ($alreadySubscriber = Subscriber::whereEmail($request->input('email'))->first()) {
+                $alreadySubscriber->increment('attempts');
+            } else {
+                Subscriber::create(['email' => $request->input('email')]);
+            }
+        }
+
+        NotificationFactory::call(Event::REGISTRATION_REQUEST_RECEIVED, [
+            'customer_id' => $customer->id,
+            'contact_id' => $contact->id,
+        ]);
+
+        if (config('amplify.erp.auto_create_cash_customer', false)) {
+            NotificationFactory::call(Event::REGISTRATION_REQUEST_ACCEPTED,
+                ['customer_id' => $customer->id]);
+        }
+
         if (config('amplify.erp.auto_create_contact')) {
             ContactProfileSyncJob::dispatch($contact->toArray());
         }

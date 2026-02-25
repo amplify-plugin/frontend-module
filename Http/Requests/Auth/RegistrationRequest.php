@@ -25,6 +25,8 @@ class RegistrationRequest extends FormRequest
      */
     public function rules()
     {
+        \session()->flash('tab', $this->input('tab'));
+
         $minPassLen = SecurityHelper::passwordLength();
 
         $rules = [
@@ -85,8 +87,8 @@ class RegistrationRequest extends FormRequest
             'email.email' => 'Please provide a valid email address.',
             'email.unique' => 'This email address is already registered.',
             'password.required' => 'The password is required.',
-            'password.confirmed' => 'The password confirmation does not match.',
-            'password.min' => 'The password must be at least 6 characters.',
+            'password_confirmation.same' => 'The password & retype password does not match.',
+            'password.min' => "The password must be at least ". SecurityHelper::passwordLength(). " characters.",
             'industry_classification_id.required' => 'The industry classification is required.',
             'industry_classification_id.exists' => 'The selected industry classification is invalid.',
 
