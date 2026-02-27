@@ -332,6 +332,16 @@ class RegisteredUserController extends Controller
             'contact_id' => $contact->id,
         ]);
 
+        if (config('amplify.security.skip_contact_approval', false)) {
+            NotificationFactory::call(Event::CONTACT_ACCOUNT_REQUEST_ACCEPTED, [
+                'contact_id' => $contact->id,
+            ]);
+        } else {
+            NotificationFactory::call(Event::CONTACT_ACCOUNT_REQUEST_VERIFICATION, [
+                'contact_id' => $contact->id,
+            ]);
+        }
+
         if (config('amplify.erp.auto_create_contact')) {
             ContactProfileSyncJob::dispatch($contact->toArray());
         }
@@ -357,6 +367,16 @@ class RegisteredUserController extends Controller
             'customer_id' => $customer->id,
             'contact_id' => $contact->id,
         ]);
+
+        if (config('amplify.security.skip_contact_approval', false)) {
+            NotificationFactory::call(Event::CONTACT_ACCOUNT_REQUEST_ACCEPTED, [
+                'contact_id' => $contact->id,
+            ]);
+        } else {
+            NotificationFactory::call(Event::CONTACT_ACCOUNT_REQUEST_VERIFICATION, [
+                'contact_id' => $contact->id,
+            ]);
+        }
 
         if (config('amplify.erp.auto_create_cash_customer', false)) {
             NotificationFactory::call(Event::REGISTRATION_REQUEST_ACCEPTED,
