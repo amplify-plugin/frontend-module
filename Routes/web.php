@@ -146,6 +146,14 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
+    Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
+        ->middleware(['throttle:6,1'])
+        ->name('verification.verify');
+
+    Route::get('verify-email', EmailVerificationPromptController::class)
+        ->name('verification.notice');
+
+
     Route::middleware('guest:customer')->group(function () {
 
         Route::controller(AuthenticatedSessionController::class)->group(function () {
@@ -204,12 +212,6 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
         Route::post('force-reset-password', [ForceResetPasswordController::class, 'attempt'])
             ->name('force-reset-password-attempt');
 
-        Route::get('verify-email', EmailVerificationPromptController::class)
-            ->name('verification.notice');
-
-        Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
-            ->middleware(['signed', 'throttle:6,1'])
-            ->name('verification.verify');
 
         Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
             ->middleware('throttle:6,1')
