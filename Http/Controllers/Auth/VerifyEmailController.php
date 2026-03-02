@@ -23,9 +23,8 @@ class VerifyEmailController extends Controller
 
         abort_if(!$contact->update(['enabled' => true, 'enabled_at' => now(), 'otp' => null]), 500, 'Email verification failed. Please try again later or contact System Administrator.');
 
-        NotificationFactory::call(Event::CONTACT_ACCOUNT_REQUEST_ACCEPTED, [
-            'contact_id' => $contact->id,
-        ]);
+        NotificationFactory::call(Event::REGISTRATION_REQUEST_ACCEPTED,
+            ['customer_id' => $contact->customer_id, 'contact_id' => $contact->id]);
 
         return redirect()->to(frontendHomeURL() . '?verified=1')
             ->with('success', __('Email verification successful. Please try sign in with your credentials.'));

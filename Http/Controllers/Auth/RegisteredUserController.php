@@ -61,7 +61,7 @@ class RegisteredUserController extends Controller
                 'login_id' => $request->input('contact_email'),
                 'is_admin' => $customer->wasRecentlyCreated,
                 'enabled' => config('amplify.security.skip_contact_approval', false),
-                'customer_address_id' => $address->id ?? null,
+                'customer_address_id' => $address?->id ?? null,
                 'warehouse_id' => $customer->warehouse_id ?? null,
                 'active_customer_id' => $customer->getKey(),
                 'order_limit' => 0,
@@ -74,8 +74,8 @@ class RegisteredUserController extends Controller
                 'contact_id' => $contact->id,
                 'customer_id' => $customer->id,
                 'warehouse_id' => $customer->warehouse_id ?? null,
-                'customer_address_id' => $address->id ?? null,
-                'ship_to_name' => $address->address_name ?? null,
+                'customer_address_id' => $address?->id ?? null,
+                'ship_to_name' => $address?->address_name ?? null,
             ]);
 
             DB::commit();
@@ -237,7 +237,7 @@ class RegisteredUserController extends Controller
 
         // 4️⃣ Create if missing, otherwise fetch address
         if (!$customer) {
-            return $this->createCustomer($customerInERP->toArray());
+            return [$this->createCustomer($customerInERP->toArray()), null];
         }
 
         $address = $customer->addresses->first();
@@ -263,7 +263,7 @@ class RegisteredUserController extends Controller
             'customer_name' => $attributes['CustomerName'] ?? null,
             'email' => $attributes['CustomerEmail'] ?? null,
             'phone' => $attributes['CustomerPhone'] ?? null,
-            'approved' => config('amplify.erp.auto_create_cash_customer', false),
+            'approved' => config('amplify.security.skip_contact_approval', false),
             'customer_type' => 'Retail',
             'industry_classification_id' => $industryClassification->id ?? null,
             'address_1' => $attributes['CustomerAddress1'] ?? null,
@@ -333,7 +333,7 @@ class RegisteredUserController extends Controller
         ]);
 
         if (config('amplify.security.skip_contact_approval', false)) {
-            NotificationFactory::call(Event::CONTACT_ACCOUNT_REQUEST_ACCEPTED, [
+            NotificationFactory::call(Event::REGISTRATION_REQUEST_ACCEPTED, [
                 'contact_id' => $contact->id,
             ]);
         } else {
@@ -369,19 +369,15 @@ class RegisteredUserController extends Controller
         ]);
 
         if (config('amplify.security.skip_contact_approval', false)) {
-            NotificationFactory::call(Event::CONTACT_ACCOUNT_REQUEST_ACCEPTED, [
-                'contact_id' => $contact->id,
-            ]);
+            NotificationFactory::call(Event::REGISTRATION_REQUEST_ACCEPTED,
+                ['contact_id' => $contact->id]);
+
         } else {
             NotificationFactory::call(Event::CONTACT_ACCOUNT_REQUEST_VERIFICATION, [
                 'contact_id' => $contact->id,
             ]);
         }
 
-        if (config('amplify.erp.auto_create_cash_customer', false)) {
-            NotificationFactory::call(Event::REGISTRATION_REQUEST_ACCEPTED,
-                ['customer_id' => $customer->id]);
-        }
 
         if (config('amplify.erp.auto_create_contact')) {
             ContactProfileSyncJob::dispatch($contact->toArray());
