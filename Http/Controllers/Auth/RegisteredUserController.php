@@ -335,6 +335,7 @@ class RegisteredUserController extends Controller
         if (config('amplify.security.skip_contact_approval', false)) {
             NotificationFactory::call(Event::REGISTRATION_REQUEST_ACCEPTED, [
                 'contact_id' => $contact->id,
+                'customer_id' => $contact->customer_id,
             ]);
         } else {
             NotificationFactory::call(Event::CONTACT_ACCOUNT_REQUEST_VERIFICATION, [
@@ -370,7 +371,7 @@ class RegisteredUserController extends Controller
 
         if (config('amplify.security.skip_contact_approval', false)) {
             NotificationFactory::call(Event::REGISTRATION_REQUEST_ACCEPTED,
-                ['contact_id' => $contact->id]);
+                ['contact_id' => $contact->id, 'customer_id' => $customer->id]);
 
         } else {
             NotificationFactory::call(Event::CONTACT_ACCOUNT_REQUEST_VERIFICATION, [
