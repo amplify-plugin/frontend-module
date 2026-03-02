@@ -14,14 +14,8 @@
 use Amplify\Frontend\Helpers\CustomerHelper;
 use Amplify\Frontend\Http\Controllers\AddressController;
 use Amplify\Frontend\Http\Controllers\Auth\AuthenticatedSessionController;
-use Amplify\Frontend\Http\Controllers\Auth\ConfirmablePasswordController;
 use Amplify\Frontend\Http\Controllers\Auth\CustomerVerificationController;
-use Amplify\Frontend\Http\Controllers\Auth\EmailVerificationNotificationController;
-use Amplify\Frontend\Http\Controllers\Auth\EmailVerificationPromptController;
 use Amplify\Frontend\Http\Controllers\Auth\ForceResetPasswordController;
-use Amplify\Frontend\Http\Controllers\Auth\ForgotPasswordController;
-use Amplify\Frontend\Http\Controllers\Auth\NewPasswordController;
-use Amplify\Frontend\Http\Controllers\Auth\PasswordController;
 use Amplify\Frontend\Http\Controllers\Auth\RegisteredUserController;
 use Amplify\Frontend\Http\Controllers\Auth\VerifyEmailController;
 use Amplify\Frontend\Http\Controllers\BrandIndexController;
@@ -44,7 +38,6 @@ use Amplify\Frontend\Http\Controllers\NewsletterSubscriptionController;
 use Amplify\Frontend\Http\Controllers\OrderController;
 use Amplify\Frontend\Http\Controllers\OrderListController;
 use Amplify\Frontend\Http\Controllers\OrderStatusController;
-use Amplify\Frontend\Http\Controllers\PasswordResetController;
 use Amplify\Frontend\Http\Controllers\PastItemsController;
 use Amplify\Frontend\Http\Controllers\ProductDetailController;
 use Amplify\Frontend\Http\Controllers\ProductSearchController;
@@ -92,7 +85,8 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
     });
 
     Route::apiResource('carts', \Amplify\Frontend\Http\Controllers\CartController::class)
-        ->where(['cart' => '[0-9]+'])->except('update');
+        ->where(['cart' => '[0-9]+'])
+        ->except('update');
     Route::delete('carts/remove/{cartItem}', [\Amplify\Frontend\Http\Controllers\CartController::class, 'remove'])
         ->name('carts.remove-item');
     Route::patch('carts/update/{cartItem}', [\Amplify\Frontend\Http\Controllers\CartController::class, 'update'])
@@ -150,10 +144,6 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
         ->middleware(['throttle:6,1'])
         ->name('verification.verify');
 
-    Route::get('verify-email', EmailVerificationPromptController::class)
-        ->name('verification.notice');
-
-
     Route::middleware('guest:customer')->group(function () {
 
         Route::controller(AuthenticatedSessionController::class)->group(function () {
@@ -163,6 +153,9 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
                 ->withoutMiddleware('guest:customer');
         });
 
+        Route::post('customer-verification', CustomerVerificationController::class)
+            ->name('contact-validation');
+
         Route::controller(RegisteredUserController::class)->prefix('registration')->group(function () {
             Route::get('/', '__invoke')->name('registration');
             Route::post('request-account', 'requestAccount')
@@ -171,27 +164,17 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
                 ->name('registration.create-cash-customer');
         });
 
-        Route::controller(PasswordResetController::class)->group(function () {
+        /*
+        |--------------------------------------------------------------------------
+        | Forgot Password & Reset Password
+        |--------------------------------------------------------------------------
+        */
+        Route::controller(\Amplify\Frontend\Http\Controllers\Auth\ForgotPasswordController::class)->group(function () {
+            Route::get('forgot-password', '__invoke')->name('password.request');
             Route::post('/password-reset-otp', 'sendOtp')->name('password_reset_otp');
             Route::post('/otp-check', 'otpCheck')->name('otp_check');
             Route::post('/reset-password', 'resetPassword')->name('reset_password');
         });
-
-        /*
-        |--------------------------------------------------------------------------
-        | Forgot Password& Reset Password
-        |--------------------------------------------------------------------------
-        */
-        Route::get('forgot-password', ForgotPasswordController::class)
-            ->name('password.request');
-        Route::post('forgot-password', [ForgotPasswordController::class, 'store'])
-            ->name('password.email');
-        Route::get('reset-password/{token}', NewPasswordController::class)
-            ->name('password.reset');
-        Route::post('reset-password', [NewPasswordController::class, 'attempt'])
-            ->name('password.store');
-        Route::post('customer-verification', CustomerVerificationController::class)
-            ->name('contact-validation');
     });
 
     /*
@@ -209,20 +192,7 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
         Route::get('force-reset-password', ForceResetPasswordController::class)
             ->name('force-reset-password');
 
-        Route::post('force-reset-password', [ForceResetPasswordController::class, 'attempt'])
-            ->name('force-reset-password-attempt');
-
-
-        Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
-            ->middleware('throttle:6,1')
-            ->name('verification.send');
-
-        Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])
-            ->name('password.confirm');
-
-        Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
-
-        Route::put('password', [PasswordController::class, 'update'])->name('password.update');
+        Route::post('force-reset-password', [ForceResetPasswordController::class, 'attempt']);
 
         /*
         |--------------------------------------------------------------------------

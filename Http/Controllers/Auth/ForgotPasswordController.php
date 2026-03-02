@@ -3,10 +3,14 @@
 namespace Amplify\Frontend\Http\Controllers\Auth;
 
 use Amplify\Frontend\Traits\HasDynamicPage;
+use Amplify\System\Backend\Models\Contact;
+use Amplify\System\Backend\Models\Event;
+use Amplify\System\Factories\NotificationFactory;
+use Amplify\System\Helpers\SecurityHelper;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Session;
 
 class ForgotPasswordController extends Controller
 {
@@ -16,6 +20,7 @@ class ForgotPasswordController extends Controller
      * Display the password reset link request view.
      *
      * @throws \ErrorException
+     * @throws BindingResolutionException
      */
     public function __invoke()
     {
@@ -24,27 +29,76 @@ class ForgotPasswordController extends Controller
         return $this->render();
     }
 
-    /**
-     * Handle an incoming password reset link request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    public function store(Request $request): RedirectResponse
+    public function sendOtp(Request $request)
     {
+        try {
+
+            $contact = Contact::where('email', $request->email)->first();
+            if ($contact) {
+                $otp = mt_rand(100000, 999999);
+                NotificationFactory::call(Event::RESET_PASSWORD, [
+                    'otp' => $otp,
+                    'contact_id' => $contact->id,
+                ]);
+                $contact->otp = $otp;
+                $contact->save();
+
+                return response([
+                    'message' => 'We have emailed you OTP.',
+                ]);
+            } else {
+                return response([
+                    'message' => 'These credential do not match our records.',
+                ], 210);
+            }
+
+        } catch (Exception $ex) {
+            return response()->json(['exception' => $ex->errorInfo ?? $ex->getMessage()], 422);
+        }
+
+    }
+
+    public function otpCheck(Request $request)
+    {
+
+        $contact = Contact::where([['email', $request->email], ['otp', $request->otp]])->first();
+        if ($contact) {
+            return response([
+                'message' => 'OTP verification successful.',
+            ]);
+        } else {
+            return response([
+                'message' => 'The provided otp is incorrect.',
+            ], 210);
+        }
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $passLength = SecurityHelper::passwordLength();
         $request->validate([
-            'email' => ['required', 'email'],
+            'password' => "required|min:$passLength",
         ]);
 
-        // We will send the password reset link to this user. Once we have attempted
-        // to send the link, we will examine the response then see the message we
-        // need to show to the user. Finally, we'll send out a proper response.
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
+        $contact = Contact::where([['email', $request->email], ['otp', $request->otp]])->first();
 
-        return $status == Password::RESET_LINK_SENT
-                    ? back()->with('status', __($status))
-                    : back()->withInput($request->only('email'))
-                        ->withErrors(['email' => __($status)]);
+        if ($contact) {
+            $contact->password = $request->password;
+            $contact->otp = null;
+            $contact->save();
+
+            return response([
+                'success' => true,
+                'message' => 'Your Password Reset is successful.',
+            ]);
+        } else {
+            Session::flash('error', 'Your Password Reset is failed.');
+
+            return response([
+                'success' => false,
+                'message' => 'These credential do not match our records.',
+            ], 210);
+
+        }
     }
 }
