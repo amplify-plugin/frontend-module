@@ -211,9 +211,12 @@ trait HasDynamicPage
             mix('js/scripts.min.js', $themePrefix),
         ], 'template-script');
 
-        push_js([
-            mix('js/custom.js', $themePrefix),
-        ], 'custom-script');
+
+        if (file_exists(public_path("{$themePrefix}/js/custom.js"))) {
+            push_js([
+                mix('js/custom.js', $themePrefix),
+            ], 'custom-script');
+        }
     }
 
     private function wrapPageContent(string $content): string
