@@ -366,6 +366,110 @@ class CartController extends Controller
         ]);
     }
 
+    /**
+     * lookup a single product code and return a table row html
+     */
+    public function codeLookup(Request $request): JsonResponse
+    {
+        $request->validate([
+            'product_code' => 'required|string',
+            'index' => 'nullable|numeric',
+        ]);
+
+        $code  = $request->input('product_code');
+        $index = $request->input('index', 0);
+        $qty   = $request->input('qty', 1);
+
+        $product = Product::where('product_code', $code)->first();
+
+        $message = __(
+            'Part number :code is not available on our website. Please contact your representative, email us at <a href="mailto::email">:email</a> , or call us at <a href="tel::phone">:phone.',
+            [
+                'code'  => $code,
+                'email' => config('amplify.cms.email'),
+                'phone' => config('amplify.cms.phone'),
+            ]
+        );
+
+        if (!$product) {
+            return $this->apiResponse(false, $message, 404);
+        }
+
+        if (customer_check() || config('amplify.basic.enable_guest_pricing')) {
+
+            $warehouses = ErpApi::getWarehouses([['enabled', '=', true]]);
+            $warehouseString = $warehouses->pluck('WarehouseNumber')->implode(',');
+
+            $erpCustomer = ErpApi::getCustomerDetail();
+
+            if (!Str::contains($warehouseString, $erpCustomer->DefaultWarehouse)) {
+                $warehouseString .= ',' . $erpCustomer->DefaultWarehouse;
+            }
+
+            $erpProductCodes = [];
+
+            if ($product instanceof Product) {
+                $erpProductCodes[] = [ 'item' => $product->product_code,
+                                        'uom' => $product->uom,
+                                        'qty' => $qty ?? $product->min_order_qty,
+                                    ];
+            }
+
+            $erpProductDetails = ErpApi::getProductPriceAvailability([
+                'items' => $erpProductCodes,
+                'warehouse' => $warehouseString,
+            ]);
+
+            if ($erpProductDetails->isEmpty()) {
+                return $this->apiResponse(false, $message, 404);
+            }
+
+            $warehouse_codes = array_unique([
+                $erpCustomer->DefaultWarehouse,
+                customer()?->warehouse?->code,
+                config('amplify.frontend.guest_checkout_warehouse'),
+            ]);
+
+            $filteredPriceAvailability = $erpProductDetails
+                ->where('ItemNumber', $product->product_code)
+                ->whereIn('WarehouseID', $warehouse_codes);
+
+            $product->ERP = $filteredPriceAvailability->isNotEmpty()
+                ? $filteredPriceAvailability->first()
+                : $erpProductDetails->where('ItemNumber', $product->product_code)->first();
+
+            $product->avaliable = $erpProductDetails
+                ->where('ItemNumber', $product->product_code)
+                ->where('QuantityAvailable', '>=', 1)
+                ->count();
+
+            $product->total_quantity_available = $erpProductDetails
+                ->where('ItemNumber', $product->product_code)
+                ->sum('QuantityAvailable');
+
+            $product->min_order_qty    = $product?->ERP?->MinOrderQuantity ?? $product?->min_order_qty ?? 1;
+            $product->qty_interval     = $product?->ERP?->QuantityInterval ?? $product?->qty_interval ?? 1;
+            $product->allow_back_order = $product?->ERP?->AllowBackOrder ?? $product?->allow_back_order ?? false;
+            $product->availability     = $product?->availability ?? ProductAvailabilityEnum::Actual;
+            $product->pricing          = true;
+            $product->quantity         = $qty ?? $product->min_order_qty;
+            $product->assembled        = ($product?->vendornum ?? '' == 3160);
+        }
+
+        $item = [
+            'code'     => $code,
+            'quantity' => $qty,
+            'product'  => $product,
+        ];
+
+        $html = view('widget::quick-order.code-item', [
+            'item'  => $item,
+            'index' => $index
+        ])->render();
+
+        return $this->apiResponse(true, '', 200, ['html' => $html]);
+    }
+
     public function removeCarts()
     {
         $cart = getCart();

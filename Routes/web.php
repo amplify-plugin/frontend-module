@@ -92,6 +92,8 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
     Route::patch('carts/update/{cartItem}', [\Amplify\Frontend\Http\Controllers\CartController::class, 'update'])
         ->name('carts.update-item');
     Route::post('carts/order-file', [\Amplify\Frontend\Http\Controllers\CartController::class, 'orderFile'])->name('carts.order-file');
+    // lookup a single product code (used by quick-order widget)
+    Route::post('carts/code-lookup', [\Amplify\Frontend\Http\Controllers\CartController::class, 'codeLookup'])->name('carts.code-lookup');
     Route::post('/remove/carts', [\Amplify\Frontend\Http\Controllers\CartController::class, 'removeCarts'])->name('frontend.remove-carts');
     Route::get('checkout', CheckoutController::class)->name('checkout');
     Route::post('subscribe', NewsletterSubscriptionController::class)->name('subscribe');
