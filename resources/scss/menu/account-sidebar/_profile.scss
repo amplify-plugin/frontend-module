@@ -1,0 +1,15 @@
+/**
+ * @class Amplify\Frontend\Components\Menu\AccountSidebar\Profile
+ * @name Menu Account Sidebar Profile
+ * @code menu.account-sidebar.profile
+ * @description Login widget
+ * @author Hafijul Islam <hafijul.islam@easyask.com>
+ *
+ */
+
+.x-menu-account-sidebar-profile {
+    // Write your widget custom style here.
+    .user-cover {
+        background-image: url('/vendor/widget/img/user-cover-img.jpg');
+    }
+}

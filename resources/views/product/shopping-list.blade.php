@@ -1,0 +1,80 @@
+<div {!! $htmlAttributes !!}>
+    @php
+        $formRoute = route('frontend.favourites.store');
+        $types = config('amplify.constant.favorite_list_type', []);
+        if (! config('amplify.basic.enable_quick_list', true)) {
+            unset($types['quick-list']);
+        }
+    @endphp
+    <button
+            class="btn btn-outline-warning btn-sm dropdown-toggle btn-block"
+            id="shoppingListDropdown{{ $index }}"
+            type="button" data-toggle="dropdown" aria-expanded="false"
+            onclick="loadOrderListDropdown({{ $productId }}, '{{ $widgetTitle }}', '#shopping-list-items-container-{{ $index }}');">
+        {!! $addLabel !!}
+    </button>
+    <div class="dropdown-menu"
+         style="width: 100%; min-width: 200px !important;"
+         aria-labelledby="shoppingListDropdown{{ $index }}">
+        @if(customer_check() && customer(true)->can('favorites.manage-personal-list'))
+            <a href="javascript:void(0);"
+               class="dropdown-item align-center"
+               onclick="Amplify.addToNewOrderList({{ $productId }}, 'product','{{ $widgetTitle }}')">
+                <i class="icon-plus mr-1"></i> {{ __(ucfirst(strtolower("Add to new {$widgetTitle}"))) }}
+            </a>
+            <div class="dropdown-divider"></div>
+        @endif
+        <div class="dropdown-item" id="shopping-list-items-container-{{ $index }}">
+        </div>
+    </div>
+</div>
+
+@pushonce('footer-script')
+    <script>
+        if (typeof loadOrderListDropdown == 'undefined') {
+            function loadOrderListDropdown(productId, title, container) {
+
+                productId = productId.toString();
+
+                if (!Amplify.authenticated()) {
+                    Amplify.alert('You need to be logged in to access this feature.', title);
+                    return;
+                }
+
+                $.ajax('{{ route('frontend.favourites.index') }}', {
+                    beforeSend: () => {
+                        $(container).empty();
+
+                        $(container).append(`<p class="dropdown-item-text text-primary text-center mb-2">
+                <i class="icon-loader spinner mr-1"></i> Loading...
+            </p>`);
+                    },
+                    method: 'GET',
+                    dataType: 'json',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    success: function (response) {
+                        $(container).empty();
+                        let html = '';
+
+                        $.each(response.data, function (key, value) {
+                            html += `<li class="text-primary text-truncate">
+                                    <a href="javascript:void(0);" class="text-decoration-none" title="${value.name}"
+                                    onclick="Amplify.addToExistingOrderList(${value.id}, ${productId}, 'product', '${title}')">
+                                    ${value.name} (${value.list_type})
+                                    </a>
+                                </li>`;
+                        });
+
+                        $(container).append(`<ul class="mb-0">${html}</ul>`);
+                    },
+                    error: function (xhr) {
+                        Amplify.alert(xhr.responseJSON?.message || xhr.statusText, title);
+                    }
+                });
+            }
+        }
+    </script>
+@endpushonce

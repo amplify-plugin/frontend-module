@@ -17,10 +17,10 @@
     },
     "autoload": {
         "psr-4": {
-            "Amplify\\Frontend\\": "./"
+            "Amplify\\Frontend\\": "./src/"
         },
         "files": [
-            "helpers.php"
+            "./src/helpers.php"
         ]
     },
     "extra": {

@@ -1,0 +1,51 @@
+<?php
+
+namespace Amplify\Frontend\Components\Shop\Product;
+
+use Amplify\Frontend\Abstracts\BaseComponent;
+use Closure;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Request;
+
+/**
+ * @class SocialMediaLink
+ */
+class SocialMediaLink extends BaseComponent
+{
+    public array $links = [];
+
+    /**
+     * Create a new component instance.
+     */
+    public function __construct(public mixed $product)
+    {
+        parent::__construct();
+    }
+
+    /**
+     * Whether the component should be rendered
+     */
+    public function shouldRender(): bool
+    {
+        return config('amplify.marketing.social_media_share', true);
+    }
+
+    /**
+     * Get the view / contents that represent the component.
+     */
+    public function render(): View|Closure|string
+    {
+        foreach (config('amplify.marketing.social_media_links', []) as $item => $value) {
+            $this->links[$item] = str_replace('__webpage_url__', Request::url(), $value);
+        }
+
+        return view('widget::product.social-media-link');
+    }
+
+    public function htmlAttributes(): string
+    {
+        $this->attributes = $this->attributes->class(['d-flex flex-wrap justify-content-between']);
+
+        return parent::htmlAttributes();
+    }
+}
