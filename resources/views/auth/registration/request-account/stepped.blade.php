@@ -240,7 +240,7 @@
             }
 
             if (payload.street_address === '' && payload.zip_code === '' && payload.customer_number === '') {
-                Amplify.alert('Customer Number, Street address, Postal code any of them is must', 'Registration');
+                Amplify.alert('{{ __('Customer Number, Street Address, Postal Code are blank') }}', 'Registration');
                 return false;
             }
 
@@ -261,7 +261,7 @@
                 icon: 'info',
                 backdrop: true,
                 showCancelButton: false,
-                text: `Searching for valid customer information...`,
+                text: `{{ __('Searching for valid customer information...') }}`,
                 confirmButtonText: 'Okay',
                 customClass: {
                     confirmButton: 'btn btn-outline-secondary'

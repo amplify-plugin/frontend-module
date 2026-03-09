@@ -83,7 +83,11 @@ class RegisteredUserController extends Controller
             // Newsletter + Notification
             $this->handlePostRegistrationForRequestAccount($request, $contact);
 
-            return redirect()->to('/')->with('success', __(config('amplify.messages.registration_success')));
+            return redirect()->to('/')
+                ->with([
+                    'alert' => true,
+                    'success' => __(config('amplify.messages.registration_success'))
+                ]);
 
         } catch (Exception $exception) {
             DB::rollBack();
@@ -96,7 +100,6 @@ class RegisteredUserController extends Controller
             // Handle specific 400 validation-like errors
             if ($code === 400) {
                 $fields = ['customer_account_number', 'contact_company_name'];
-                Session::flash($message);
                 foreach ($fields as $field) {
                     if (!empty($request->get($field))) {
                         return redirect()->back()
@@ -106,13 +109,11 @@ class RegisteredUserController extends Controller
                 }
             }
 
-            // Generic error fallback
-            Session::flash('error', $code === 400
-                ? $message
-                : 'Request for online account has failed. Please try again later.'
-            );
-
-            return redirect()->back();
+            return redirect()->back()
+                ->with([
+                    'alert' => true,
+                    'error' => $code === 400 ? $message : 'Request for online account has failed. Please try again later.'
+                ]);
         }
     }
 
@@ -168,7 +169,11 @@ class RegisteredUserController extends Controller
 
             $this->handlePostRegistrationForNewRetailCustomer($request, $customer, $contact);
 
-            return redirect()->to('/')->with('success', __(config('amplify.messages.registration_success')));
+            return redirect()->to('/')
+                ->with([
+                    'alert' => true,
+                    'success' => __(config('amplify.messages.registration_success'))
+                ]);
 
         } catch (Exception $exception) {
 
@@ -176,11 +181,14 @@ class RegisteredUserController extends Controller
 
             DB::rollBack();
 
-            $request->session()->flash('error', 'Registration request failed. Please try again later.');
-
-            $request->session()->flash('message', $exception->getMessage());
-
-            return redirect()->back()->withInput();
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with([
+                    'alert' => true,
+                    'message' => $exception->getMessage(),
+                    'error' => __('Registration request failed. Please try again later.')
+                ]);
         }
     }
 

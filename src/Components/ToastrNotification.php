@@ -27,6 +27,7 @@ class ToastrNotification extends BaseComponent
         $level = null;
         $title = ' ';
         $message = null;
+        $alert = session('alert', false);
 
         if (session()->has('success')) {
             $level = 'success';
@@ -42,6 +43,6 @@ class ToastrNotification extends BaseComponent
             $message = session('error');
         }
 
-        return view('widget::toastr-notification', compact('title', 'level', 'message'));
+        return view('widget::toastr-notification', compact('title', 'level', 'message', 'alert'));
     }
 }

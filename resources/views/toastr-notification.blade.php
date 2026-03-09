@@ -1,9 +1,11 @@
 <script>
     @if(!empty($level))
     document.addEventListener('DOMContentLoaded', function () {
-        if (typeof ShowNotification == 'function') {
-            ShowNotification('{{$level}}', '{{$title}}', '{{$message}}');
-        }
+        @if($alert)
+        window.Amplify.alert('{{$message}}', '{{$title}}', {icon: '{{$level}}'});
+        @else
+        window.Amplify.notify('{{$level}}', '{{$message}}', '{{$title}}');
+        @endif
     });
     @endif
 </script>
