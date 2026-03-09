@@ -1536,6 +1536,12 @@ return [
                 'type' => 'text',
                 'value' => 'Quick Order',
             ],
+            [
+                'name' => ':default-product-rows',
+                'type' => 'number',
+                'value' => 1,
+                'hint' => 'Default number of product rows shown when Quick Order loads',
+            ]
         ],
         '@nestedItems' => [],
         'description' => '',
