@@ -11,7 +11,9 @@ use Illuminate\Contracts\View\View;
  */
 class QuickOrder extends BaseComponent
 {
-    public function __construct(public bool $checkWarehouseQtyAvailability = true, public string $widgetTitle = 'Quick Order')
+    public function __construct(public bool   $checkWarehouseQtyAvailability = true,
+                                public string $widgetTitle = 'Quick Order',
+                                public int    $defaultProductRows = 1)
     {
         parent::__construct();
     }
@@ -21,7 +23,15 @@ class QuickOrder extends BaseComponent
      */
     public function shouldRender(): bool
     {
-        return customer_check();
+        if (customer_check()) {
+            return true;
+        }
+
+        if (config('amplify.frontend.guest_add_to_cart')) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
