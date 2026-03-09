@@ -13,33 +13,48 @@
             {{--            </button>--}}
         </div>
     @else
-        <div @class(['gap-2', 'd-flex' => $productView == 'list', 'd-grid' => $productView == 'grid'])class="gap-2">
-            <x-cart.quantity-update :product="$product" :index="$index"/>
-            <button
-                    data-warehouse="{{ $defaultWarehouse }}"
-                    onclick="Amplify.addSingleItemToCart(this, '#cart-item-{{$index}}', {{ json_encode($extras) }})"
-                    data-options="{{ json_encode($cartData) }}"
-                    class="btn btn-block btn-sm btn-primary m-0">
-                {{ __($cartLabel) }}
-            </button>
-        </div>
-        <div class="d-flex gap-2">
-            @if(class_exists(\Amplify\Wishlist\Widgets\WishlistButton::class))
-                <x-wishlist-button :product="$product" class="btn-wishlist">
-                    <x-slot:add-label>
-                        <i class="icon-heart"></i>
-                    </x-slot>
-                    <x-slot:remove-label>
-                        <i class="icon-heart"></i>
-                    </x-slot>
-                </x-wishlist-button>
-            @endif
-            <x-product-shopping-list
-                    :product-id="$product->Amplify_Id"
-                    class="w-100 m-0"
-                    :index="$product->Amplify_Id"
-                    :add-label="'Add to ' . $orderListLabel"
-                    :widget-title="$orderListLabel"/>
-        </div>
+        @if($addToCart)
+            <div @class(['gap-2', 'd-flex' => $productView == 'list', 'd-grid' => $productView == 'grid'])>
+                <x-cart.quantity-update :product="$product" :index="$index"/>
+                <button
+                        data-warehouse="{{ $defaultWarehouse }}"
+                        onclick="Amplify.addSingleItemToCart(this, '#cart-item-{{$index}}', {{ json_encode($extras) }})"
+                        data-options="{{ json_encode($cartData) }}"
+                        class="btn btn-block btn-sm btn-primary m-0">
+                    {{ __($cartLabel) }}
+                </button>
+            </div>
+        @else
+            <a href="{{ frontendSingleProductURL($product, $seoPath) }}"
+               class="btn m-0 btn-primary btn-sm btn-block">
+                {{ __($detailLabel) }}
+            </a>
+        @endif
+
+        @if($wishList || $orderList)
+
+            <div class="d-flex gap-2">
+
+                @if(class_exists(\Amplify\Wishlist\Widgets\WishlistButton::class) && $wishList)
+                    <x-wishlist-button :product="$product" class="btn-wishlist">
+                        <x-slot:add-label>
+                            <i class="icon-heart"></i>
+                        </x-slot>
+                        <x-slot:remove-label>
+                            <i class="icon-heart"></i>
+                        </x-slot>
+                    </x-wishlist-button>
+                @endif
+
+                @if($orderList)
+                    <x-product-shopping-list
+                            :product-id="$product->Amplify_Id"
+                            class="w-100 m-0"
+                            :index="$product->Amplify_Id"
+                            :add-label="'Add to ' . $orderListLabel"
+                            :widget-title="$orderListLabel"/>
+                @endif
+            </div>
+        @endif
     @endif
 </div>

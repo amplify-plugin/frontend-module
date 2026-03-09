@@ -15,12 +15,15 @@ use Illuminate\Contracts\View\View;
 class QuickAction extends BaseComponent
 {
     public function __construct(public Product|ItemRow $product,
-        public ?string $seoPath = '',
-        public mixed $index = 1,
-        public string $detailLabel = 'View Details',
-        public string $cartLabel = 'Add To Cart',
-        public string $orderListLabel = 'Order List',
-        public array $extras = [])
+                                public ?string         $seoPath = '',
+                                public mixed           $index = 1,
+                                public string          $detailLabel = 'View Details',
+                                public string          $cartLabel = 'Add To Cart',
+                                public string          $orderListLabel = 'Order List',
+                                public array           $extras = [],
+                                public bool            $wishList = false,
+                                public bool            $orderList = true,
+                                public bool            $addToCart = true)
     {
         parent::__construct();
     }
@@ -75,7 +78,7 @@ class QuickAction extends BaseComponent
         }
 
         if ($product instanceof Product) {
-            return ! empty($product->has_sku) && empty($product->parent_id);
+            return !empty($product->has_sku) && empty($product->parent_id);
         }
 
         return false;
