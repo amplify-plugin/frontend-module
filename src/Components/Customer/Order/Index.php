@@ -2,6 +2,7 @@
 
 namespace Amplify\Frontend\Components\Customer\Order;
 
+use Amplify\ErpApi\ErpApiService;
 use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\Frontend\Abstracts\BaseComponent;
 use Closure;
@@ -12,22 +13,6 @@ use Illuminate\Contracts\View\View;
  */
 class Index extends BaseComponent
 {
-    /**
-     * @var array
-     */
-    public $options;
-
-    private $component;
-
-    /**
-     * Create a new component instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-    }
-
     /**
      * Whether the component should be rendered
      */
@@ -41,14 +26,23 @@ class Index extends BaseComponent
      */
     public function render(): View|Closure|string
     {
-        $class = match (config('amplify.client_code')) {
-            default => \Amplify\Frontend\Components\Client\Demo\Order\Index::class,
-        };
-        $this->component = new $class;
+        $data = [
+            'lookup_type' => ErpApiService::LOOKUP_OPEN_ORDER,
+            'start_date' => request()->has('created_start_date') ? request('created_start_date') : now(config('app.timezone'))->subDays(7)->format('Y-m-d'),
+            'end_date' => request()->has('created_end_date') ? request('created_end_date') : now(config('app.timezone'))->format('Y-m-d'),
+            'contact_id' => request()->has('type') && request('type') == 'all_order' ? null : (customer(true)->contact_code ?: null),
+            'transaction_types' => ErpApiService::TRANSACTION_TYPES_ORDER,
+        ];
 
-        $this->component->attributes = $this->attributes;
+        if (request()->has('created_start_date') && request()->has('created_end_date')) {
+            $data['lookup_type'] = ErpApiService::LOOKUP_DATE_RANGE;
+        }
 
-        return $this->component->render();
+        $orders = ErpApi::getOrderList($data);
+
+        return view('widget::customer.order.index', [
+            'orders' => $orders,
+        ]);
     }
 
     public function orderStatusOptions(): array
