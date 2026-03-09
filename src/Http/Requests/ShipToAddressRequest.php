@@ -32,15 +32,15 @@ class ShipToAddressRequest extends FormRequest
     {
         $rules = [
             'customer_id' => 'integer|exists:customers,id',
-            'address_name' => 'required|string|max:255',
-            'address_code' => ['nullable', 'string', 'max:255'],
-            'address_1' => 'required|string|max:255',
-            'address_2' => 'nullable|string|max:255',
-            'address_3' => 'nullable|string|max:255',
-            'city' => 'required|string|max:255',
-            'zip_code' => 'nullable|string|max:255',
-            'state' => 'nullable|string|size:2',
-            'country_code' => 'nullable|string|size:2',
+            'address_name' => 'required|string|max:255|ascii',
+            'address_code' => ['nullable', 'string', 'max:255', 'ascii'],
+            'address_1' => 'required|string|max:255|ascii',
+            'address_2' => 'nullable|string|max:255|ascii',
+            'address_3' => 'nullable|string|max:255|ascii',
+            'city' => 'required|string|max:255|ascii',
+            'zip_code' => 'nullable|string|max:255|ascii',
+            'state' => 'nullable|string|size:2|ascii',
+            'country_code' => 'nullable|string|size:2|ascii',
         ];
 
          if ($this->method() == 'PUT') {
