@@ -11,9 +11,9 @@ use Illuminate\Contracts\View\View;
  */
 class QuickOrder extends BaseComponent
 {
-    public function __construct(public bool   $checkWarehouseQtyAvailability = true,
-                                public string $widgetTitle = 'Quick Order',
-                                public int    $defaultProductRows = 1)
+    public function __construct(public bool $checkWarehouseQtyAvailability = true,
+        public string $widgetTitle = 'Quick Order',
+        public int $defaultProductRows = 1)
     {
         parent::__construct();
     }

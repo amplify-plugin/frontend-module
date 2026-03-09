@@ -2,10 +2,10 @@
 
 namespace Amplify\Frontend\Components\Auth\Registration;
 
+use Amplify\Frontend\Abstracts\BaseComponent;
 use Amplify\System\Backend\Models\AccountTitle;
 use Amplify\System\Backend\Models\Country;
 use Amplify\System\Backend\Models\IndustryClassification;
-use Amplify\Frontend\Abstracts\BaseComponent;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Str;

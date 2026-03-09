@@ -2,8 +2,8 @@
 
 namespace Amplify\Frontend\Components\Customer;
 
-use Amplify\System\Backend\Models\ContactLogin;
 use Amplify\Frontend\Abstracts\BaseComponent;
+use Amplify\System\Backend\Models\ContactLogin;
 use Closure;
 use Illuminate\Contracts\View\View;
 

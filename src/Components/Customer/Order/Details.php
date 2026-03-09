@@ -5,10 +5,10 @@ namespace Amplify\Frontend\Components\Customer\Order;
 use Amplify\ErpApi\Collections\OrderNoteCollection;
 use Amplify\ErpApi\Collections\TrackShipmentCollection;
 use Amplify\ErpApi\Facades\ErpApi;
+use Amplify\Frontend\Abstracts\BaseComponent;
 use Amplify\System\Backend\Models\CustomerOrder;
 use Amplify\System\Backend\Models\CustomPartNumber;
 use Amplify\System\Backend\Models\Product;
-use Amplify\Frontend\Abstracts\BaseComponent;
 use Closure;
 use Illuminate\Contracts\View\View;
 

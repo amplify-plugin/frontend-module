@@ -65,7 +65,7 @@ class RegistrationRequest extends FormRequest
         }
 
         foreach ($this->input('required', []) as $field) {
-            if (!isset($rules[$field])) {
+            if (! isset($rules[$field])) {
                 $rules[$field] = 'required';
             } else {
                 $rules[$field] .= '|required';
@@ -88,7 +88,7 @@ class RegistrationRequest extends FormRequest
             'email.unique' => 'This email address is already registered.',
             'password.required' => 'The password is required.',
             'password_confirmation.same' => 'The password & retype password does not match.',
-            'password.min' => "The password must be at least ". SecurityHelper::passwordLength(). " characters.",
+            'password.min' => 'The password must be at least '.SecurityHelper::passwordLength().' characters.',
             'industry_classification_id.required' => 'The industry classification is required.',
             'industry_classification_id.exists' => 'The selected industry classification is invalid.',
 

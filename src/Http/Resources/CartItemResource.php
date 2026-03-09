@@ -25,11 +25,11 @@ class CartItemResource extends JsonResource
             'product_id' => $this->product_id,
             'product_code' => $this->product_code,
             'product_name' => $this->product_name,
-            'short_description' => !empty($this->product) ?
+            'short_description' => ! empty($this->product) ?
                 $this->product->local_short_description : '',
-            'manufacturer_name' => !empty($this->product->manufacturerRelation) ?
+            'manufacturer_name' => ! empty($this->product->manufacturerRelation) ?
                 $this->product->manufacturerRelation->name : '',
-            'qty' => (float)$this->quantity,
+            'qty' => (float) $this->quantity,
             'price' => \currency_format($this->unitprice, $this->cart->currency, true),
             'subtotal' => \currency_format($this->subtotal, $this->cart->currency, true),
             'product_warehouse_code' => $this->product_warehouse_code,
@@ -58,22 +58,22 @@ class CartItemResource extends JsonResource
     {
         switch ($source_type) {
             case 'CUSTOM_ITEM' :
-                return '<span class="text-success font-italic"><i class="icon-file-subtract mr-1"></i>Specification: #' . ($additional_info['OrderSpec'] ?? '') . '</span>';
+                return '<span class="text-success font-italic"><i class="icon-file-subtract mr-1"></i>Specification: #'.($additional_info['OrderSpec'] ?? '').'</span>';
             case 'PROMO':
                 $now = CarbonImmutable::now();
                 $expiry_date = CarbonImmutable::now();
                 if ($expiry_date < $now) {
-                    return '<span class="text-danger font-italic"><i class="icon-bell mr-1"></i>Campaign <code class="font-weight-bold">' . $source . '</code> is expired.';
+                    return '<span class="text-danger font-italic"><i class="icon-bell mr-1"></i>Campaign <code class="font-weight-bold">'.$source.'</code> is expired.';
                 } else {
-                    return '<span class="text-warning font-italic"><i class="icon-bell mr-1"></i>Source: Campaign <code class="font-weight-bold">' . $source . '</code>, Expires: ' . carbon_date($expiry_date);
+                    return '<span class="text-warning font-italic"><i class="icon-bell mr-1"></i>Source: Campaign <code class="font-weight-bold">'.$source.'</code>, Expires: '.carbon_date($expiry_date);
                 }
             case 'QUOTE':
                 $now = CarbonImmutable::now();
                 $expiry_date = CarbonImmutable::now();
                 if ($expiry_date < $now) {
-                    return '<span class="text-danger font-italic"><i class="icon-clock mr-1"></i>Quotation <code class="font-weight-bold">' . $source . '</code> is expired.';
+                    return '<span class="text-danger font-italic"><i class="icon-clock mr-1"></i>Quotation <code class="font-weight-bold">'.$source.'</code> is expired.';
                 } else {
-                    return '<span class="text-warning font-italic"><i class="icon-clock mr-1"></i>Source: Quotation <code class="font-weight-bold">' . $source . '</code>, Expires: ' . carbon_date($expiry_date);
+                    return '<span class="text-warning font-italic"><i class="icon-clock mr-1"></i>Source: Quotation <code class="font-weight-bold">'.$source.'</code>, Expires: '.carbon_date($expiry_date);
                 }
             default:
                 return '';

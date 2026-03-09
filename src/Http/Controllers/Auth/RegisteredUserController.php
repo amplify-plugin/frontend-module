@@ -20,7 +20,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Session;
 
 class RegisteredUserController extends Controller
 {
@@ -39,8 +38,8 @@ class RegisteredUserController extends Controller
     }
 
     /**
-     * @param ContactAccountRequest $request
      * @return RedirectResponse
+     *
      * @throws \Throwable
      */
     public function requestAccount(ContactAccountRequest $request)
@@ -86,7 +85,7 @@ class RegisteredUserController extends Controller
             return redirect()->to('/')
                 ->with([
                     'alert' => true,
-                    'success' => __(config('amplify.messages.registration_success'))
+                    'success' => __(config('amplify.messages.registration_success')),
                 ]);
 
         } catch (Exception $exception) {
@@ -94,14 +93,14 @@ class RegisteredUserController extends Controller
 
             Log::error($exception);
 
-            $code = (int)$exception->getCode();
+            $code = (int) $exception->getCode();
             $message = $exception->getMessage();
 
             // Handle specific 400 validation-like errors
             if ($code === 400) {
                 $fields = ['customer_account_number', 'contact_company_name'];
                 foreach ($fields as $field) {
-                    if (!empty($request->get($field))) {
+                    if (! empty($request->get($field))) {
                         return redirect()->back()
                             ->withErrors([$field => $message])
                             ->withInput();
@@ -112,7 +111,7 @@ class RegisteredUserController extends Controller
             return redirect()->back()
                 ->with([
                     'alert' => true,
-                    'error' => $code === 400 ? $message : 'Request for online account has failed. Please try again later.'
+                    'error' => $code === 400 ? $message : 'Request for online account has failed. Please try again later.',
                 ]);
         }
     }
@@ -172,7 +171,7 @@ class RegisteredUserController extends Controller
             return redirect()->to('/')
                 ->with([
                     'alert' => true,
-                    'success' => __(config('amplify.messages.registration_success'))
+                    'success' => __(config('amplify.messages.registration_success')),
                 ]);
 
         } catch (Exception $exception) {
@@ -187,7 +186,7 @@ class RegisteredUserController extends Controller
                 ->with([
                     'alert' => true,
                     'message' => $exception->getMessage(),
-                    'error' => __('Registration request failed. Please try again later.')
+                    'error' => __('Registration request failed. Please try again later.'),
                 ]);
         }
     }
@@ -218,7 +217,7 @@ class RegisteredUserController extends Controller
                 ->where(DB::raw('TRIM(customer_name)'), $customerName)
                 ->first();
 
-            if (!$customer) {
+            if (! $customer) {
                 throw new Exception(
                     'We could not find your company name in our system.',
                     Response::HTTP_BAD_REQUEST
@@ -239,12 +238,12 @@ class RegisteredUserController extends Controller
         }
 
         // 3️⃣ If customer is still not found locally, try finding by code
-        if (!$customer) {
+        if (! $customer) {
             $customer = Customer::where(DB::raw('TRIM(customer_code)'), $customerCode)->first();
         }
 
         // 4️⃣ Create if missing, otherwise fetch address
-        if (!$customer) {
+        if (! $customer) {
             return [$this->createCustomer($customerInERP->toArray()), null];
         }
 
@@ -254,8 +253,6 @@ class RegisteredUserController extends Controller
     }
 
     /**
-     * @param array $attributes
-     * @return Customer
      * @throws Exception
      */
     private function createCustomer(array $attributes): Customer
@@ -305,12 +302,12 @@ class RegisteredUserController extends Controller
             ]);
 
             // Handle ERP response
-            if (!empty($erpCustomer->Message)) {
+            if (! empty($erpCustomer->Message)) {
                 throw new Exception($erpCustomer->Message);
             }
 
             if ($erpCustomer->CustomerNumber == null) {
-                throw new Exception('ERP customer creation failed for customer ID: ' . $customer->id);
+                throw new Exception('ERP customer creation failed for customer ID: '.$customer->id);
             }
 
             // Update customer code with ERP Customer Number
@@ -321,11 +318,6 @@ class RegisteredUserController extends Controller
         return $customer;
     }
 
-    /**
-     * @param $request
-     * @param $contact
-     * @return void
-     */
     private function handlePostRegistrationForRequestAccount($request, $contact): void
     {
         if ($request->filled('contact_newsletter') && $request->input('contact_newsletter') == 'yes') {
@@ -356,12 +348,6 @@ class RegisteredUserController extends Controller
         }
     }
 
-    /**
-     * @param $request
-     * @param $customer
-     * @param $contact
-     * @return void
-     */
     private function handlePostRegistrationForNewRetailCustomer($request, $customer, $contact): void
     {
         if ($request->filled('newsletter') && $request->input('newsletter') == 'yes') {
@@ -386,7 +372,6 @@ class RegisteredUserController extends Controller
                 'contact_id' => $contact->id,
             ]);
         }
-
 
         if (config('amplify.erp.auto_create_contact')) {
             ContactProfileSyncJob::dispatch($contact->toArray());

@@ -24,7 +24,7 @@ class CustomerPartNumberController extends Controller
             'customer_product_code' => $inputs['customer_product_code'],
             'item_number' => $product->product_code,
             'item_uom' => $inputs['customer_product_uom'],
-            'action' => 'change'
+            'action' => 'change',
         ];
 
         DB::beginTransaction();
@@ -61,20 +61,19 @@ class CustomerPartNumberController extends Controller
             if ($customerPartNumber) {
                 $data = $customerPartNumber->toArray();
 
-
                 $response = ErpApi::createUpdateCustomerPartNumber([
                     'customer_number' => customer()->erp_id,
                     'customer_product_code' => $inputs['customer_product_code'],
                     'item_number' => $customerPartNumber->product->product_code,
                     'item_uom' => $customerPartNumber->customer_product_uom,
-                    'action' => 'delete'
+                    'action' => 'delete',
                 ]);
 
                 if ($response['success']) {
                     $customerPartNumber->delete();
                     NotificationFactory::call(Event::CUSTOMER_PART_NUMBER_DELETED, $data);
                 } else {
-                    throw  new \ErrorException($response['error'] ?? 'Failed to remove the customer part number.');
+                    throw new \ErrorException($response['error'] ?? 'Failed to remove the customer part number.');
                 }
             }
 

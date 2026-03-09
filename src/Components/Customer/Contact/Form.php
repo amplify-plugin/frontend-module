@@ -2,10 +2,10 @@
 
 namespace Amplify\Frontend\Components\Customer\Contact;
 
+use Amplify\Frontend\Abstracts\BaseComponent;
 use Amplify\Frontend\Helpers\CustomerHelper;
 use Amplify\System\Backend\Models\Contact;
 use Amplify\System\Helpers\UtilityHelper;
-use Amplify\Frontend\Abstracts\BaseComponent;
 use Closure;
 use Illuminate\Contracts\View\View;
 

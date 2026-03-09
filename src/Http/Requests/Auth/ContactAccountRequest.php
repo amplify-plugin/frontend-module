@@ -45,7 +45,7 @@ class ContactAccountRequest extends FormRequest
         }
 
         foreach ($this->input('required', []) as $field) {
-            if (!isset($rules[$field])) {
+            if (! isset($rules[$field])) {
                 $rules[$field] = 'required';
             } else {
                 $rules[$field] .= '|required';

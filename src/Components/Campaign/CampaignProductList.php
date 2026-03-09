@@ -2,9 +2,9 @@
 
 namespace Amplify\Frontend\Components\Campaign;
 
+use Amplify\Frontend\Abstracts\BaseComponent;
 use Amplify\System\Backend\Models\OrderList;
 use Amplify\System\Helpers\UtilityHelper;
-use Amplify\Frontend\Abstracts\BaseComponent;
 use Closure;
 use Illuminate\Contracts\View\View;
 

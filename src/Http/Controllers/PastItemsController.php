@@ -70,6 +70,7 @@ class PastItemsController extends Controller
     {
         //
     }
+
     public function history()
     {
         if (! customer(true)->can('past-items.past-items-history')) {

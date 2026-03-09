@@ -2,8 +2,8 @@
 
 namespace Amplify\Frontend\Components\Customer\QuickList;
 
-use Amplify\System\Backend\Models\OrderList;
 use Amplify\Frontend\Abstracts\BaseComponent;
+use Amplify\System\Backend\Models\OrderList;
 use Carbon\Carbon;
 use Closure;
 use Illuminate\Contracts\View\View;

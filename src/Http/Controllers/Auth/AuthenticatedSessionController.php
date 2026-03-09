@@ -47,13 +47,13 @@ class AuthenticatedSessionController extends Controller
 
         $guestCart = getCart()?->load('cartItems') ?? null;
 
-        if (!$account) {
+        if (! $account) {
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
             ]);
         }
 
-        if (!$account->isApproved()) {
+        if (! $account->isApproved()) {
             throw ValidationException::withMessages([
                 'email' => __('The account has not been approved yet. Please contact Admin'),
             ]);
@@ -74,7 +74,7 @@ class AuthenticatedSessionController extends Controller
         @cache()->forget("{$guestSessionToken}-account-menu");
         @cache()->forget("{$guestSessionToken}-account-sidebar");
 
-        if (!Auth::guard(Contact::AUTH_GUARD)->attempt($request->only('email', 'password'), $request->boolean('remember'))) {
+        if (! Auth::guard(Contact::AUTH_GUARD)->attempt($request->only('email', 'password'), $request->boolean('remember'))) {
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
             ]);
@@ -90,7 +90,7 @@ class AuthenticatedSessionController extends Controller
 
         return redirect()
             ->to(CustomerHelper::afterLoggedRedirectTo($request->all()))
-            ->with('success', __("Welcome back! :name", ['name' => $account->name]));
+            ->with('success', __('Welcome back! :name', ['name' => $account->name]));
     }
 
     /**
@@ -122,6 +122,7 @@ class AuthenticatedSessionController extends Controller
 
         } catch (\Exception $exception) {
             logger()->debug($exception);
+
             return back()
                 ->with('error', $exception->getMessage());
         }

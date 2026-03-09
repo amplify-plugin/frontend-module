@@ -2,9 +2,9 @@
 
 namespace Amplify\Frontend\Components\Product;
 
+use Amplify\Frontend\Abstracts\BaseComponent;
 use Amplify\System\Backend\Models\Product;
 use Amplify\System\Sayt\Classes\ItemRow;
-use Amplify\Frontend\Abstracts\BaseComponent;
 use Closure;
 use Illuminate\Contracts\View\View;
 

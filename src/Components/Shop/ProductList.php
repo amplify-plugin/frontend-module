@@ -4,12 +4,12 @@ namespace Amplify\Frontend\Components\Shop;
 
 use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\ErpApi\Wrappers\ProductPriceAvailability;
+use Amplify\Frontend\Abstracts\BaseComponent;
 use Amplify\System\Backend\Enums\ProductAvailabilityEnum;
 use Amplify\System\Backend\Models\OrderList;
 use Amplify\System\Backend\Models\OrderListItem;
 use Amplify\System\Backend\Models\Product;
 use Amplify\System\Sayt\Classes\ItemRow;
-use Amplify\Frontend\Abstracts\BaseComponent;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Collection;

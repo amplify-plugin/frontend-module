@@ -3,7 +3,6 @@
 namespace Amplify\Frontend\Http\Controllers\Auth;
 
 use Amplify\System\Backend\Models\Contact;
-use Amplify\System\Backend\Models\Customer;
 use Amplify\System\Backend\Models\Event;
 use Amplify\System\Factories\NotificationFactory;
 use App\Http\Controllers\Controller;
@@ -20,16 +19,16 @@ class VerifyEmailController extends Controller
     {
         $contact = Contact::findOrFail($id);
 
-        abort_if(!Hash::check($contact->otp, base64_decode($hash)), 404, 'The verification link is invalid or expired. Please contact system administrator.');
+        abort_if(! Hash::check($contact->otp, base64_decode($hash)), 404, 'The verification link is invalid or expired. Please contact system administrator.');
 
-        abort_if(!$contact->update(['enabled' => true, 'enabled_at' => now(), 'otp' => null]), 500, 'Email verification failed. Please try again later or contact System Administrator.');
+        abort_if(! $contact->update(['enabled' => true, 'enabled_at' => now(), 'otp' => null]), 500, 'Email verification failed. Please try again later or contact System Administrator.');
 
         $contact->customer->update(['approved' => true]);
 
         NotificationFactory::call(Event::REGISTRATION_REQUEST_ACCEPTED,
             ['customer_id' => $contact->customer_id, 'contact_id' => $contact->id]);
 
-        return redirect()->to(frontendHomeURL() . '?verified=1')
+        return redirect()->to(frontendHomeURL().'?verified=1')
             ->with('success', __('Email verification successful. Please sign in with your credentials.'));
     }
 }

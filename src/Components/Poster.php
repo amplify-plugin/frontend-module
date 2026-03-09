@@ -2,8 +2,8 @@
 
 namespace Amplify\Frontend\Components;
 
-use Amplify\Frontend\Store\StoreDataBus;
 use Amplify\Frontend\Abstracts\BaseComponent;
+use Amplify\Frontend\Store\StoreDataBus;
 use Closure;
 use Illuminate\Contracts\View\View;
 

@@ -2,9 +2,9 @@
 
 namespace Amplify\Frontend\Components\Event;
 
+use Amplify\Frontend\Abstracts\BaseComponent;
 use Amplify\System\Backend\Models\Webinar;
 use Amplify\System\Helpers\UtilityHelper;
-use Amplify\Frontend\Abstracts\BaseComponent;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Config;

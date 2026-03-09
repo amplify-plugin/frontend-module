@@ -18,8 +18,8 @@ class CartUpdated
 
     /**
      * Create a new event instance.
-     * @param Cart $cartModel
-     * @param OrderTotal|null $orderTotal
+     *
+     * @param  Cart  $cartModel
      */
     public function __construct(Cart $cart, ?OrderTotal $orderTotal = null)
     {
@@ -34,8 +34,8 @@ class CartUpdated
 
         $this->cart = $cartModel;
 
-//        if ($orderTotal == null & $this->cart->total > 0) {
-//            CartPricingSyncJob::dispatch($cart->getKey(), session('ship_to_address.ShipToNumber', session('ship_to_address.address_code', ErpApi::getCustomerDetail()->DefaultShipTo)));
-//        }
+        //        if ($orderTotal == null & $this->cart->total > 0) {
+        //            CartPricingSyncJob::dispatch($cart->getKey(), session('ship_to_address.ShipToNumber', session('ship_to_address.address_code', ErpApi::getCustomerDetail()->DefaultShipTo)));
+        //        }
     }
 }

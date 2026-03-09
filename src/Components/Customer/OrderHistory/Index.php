@@ -5,8 +5,8 @@ namespace Amplify\Frontend\Components\Customer\OrderHistory;
 use Amplify\ErpApi\ErpApiService;
 use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\ErpApi\Wrappers\ProductPriceAvailability;
-use Amplify\System\Backend\Models\Product;
 use Amplify\Frontend\Abstracts\BaseComponent;
+use Amplify\System\Backend\Models\Product;
 use Closure;
 use Illuminate\Contracts\View\View;
 

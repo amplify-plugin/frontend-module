@@ -30,7 +30,7 @@ class CartController extends Controller
 
     public function __construct()
     {
-        if (!config('amplify.frontend.guest_add_to_cart')) {
+        if (! config('amplify.frontend.guest_add_to_cart')) {
             $this->middleware('customers');
         }
     }
@@ -70,7 +70,6 @@ class CartController extends Controller
 
         $requestItems = $request->input('products');
 
-
         $payload['items'] = $requestItems;
 
         $data = app(Pipeline::class)
@@ -80,14 +79,14 @@ class CartController extends Controller
                 foreach ($data['items'] as $index => $item) {
                     $data['items'][$index]['error'] = isset($data['errors'][$index]) ? implode("\n", $data['errors'][$index]) : null;
                 }
+
                 return $data;
             });
 
-        if (!empty($data['errors'])) {
+        if (! empty($data['errors'])) {
             return $this->apiResponse(false, count($data['errors']) == 1
                 ? Arr::first(Arr::flatten($data['errors']))
-                : __('There are issue(s) appeared on your order (marked in red). Please correct before adding to the Cart.')
-                , 400,
+                : __('There are issue(s) appeared on your order (marked in red). Please correct before adding to the Cart.'), 400,
                 ['errors' => $data['errors']]
             );
         }
@@ -115,7 +114,6 @@ class CartController extends Controller
     /**
      * can accept id as comma seperated values
      *
-     * @param string $cartItemId
      * @return JsonResponse
      */
     public function remove(string $cartItemId)
@@ -127,7 +125,6 @@ class CartController extends Controller
             $products = (Str::contains($cartItemId, ',', true))
                 ? explode(',', $cartItemId)
                 : $cartItemId;
-
 
             if ($cart->cartItems()->whereIn('id', Arr::wrap($products))->delete()) {
 
@@ -176,11 +173,11 @@ class CartController extends Controller
                 foreach ($data['items'] as $index => $item) {
                     $data['items'][$index]['error'] = isset($data['errors'][$index]) ? implode("\n", $data['errors'][$index]) : null;
                 }
+
                 return $data;
             });
 
-
-        if (!empty($data['errors'])) {
+        if (! empty($data['errors'])) {
             $this->apiResponse(false, Arr::first(Arr::flatten($data['errors'])), 500, ['errors' => $data['errors']]);
         }
 
@@ -228,7 +225,7 @@ class CartController extends Controller
     public function orderFile(OrderFileRequest $request): JsonResponse
     {
         $file = request()->file('file');
-        $fileName = time() . '_' . $file->getClientOriginalName();
+        $fileName = time().'_'.$file->getClientOriginalName();
         $filePath = $file->storeAs('public/quick_order/', $fileName);
 
         $fileExtension = strtoupper($file->getClientOriginalExtension());
@@ -240,7 +237,7 @@ class CartController extends Controller
             default => null
         };
 
-        $fileData = Excel::toArray((object)[], $filePath, 'local', $readerType);
+        $fileData = Excel::toArray((object) [], $filePath, 'local', $readerType);
 
         $firstSheet = array_shift($fileData);
 
@@ -248,7 +245,7 @@ class CartController extends Controller
             throw ValidationException::withMessages(['file' => 'The file is empty or only have headers.']);
         }
 
-        $firstSheet = array_filter($firstSheet, fn($value) => !empty($value[0]));
+        $firstSheet = array_filter($firstSheet, fn ($value) => ! empty($value[0]));
 
         // Remove Header
         if (isset($firstSheet[0][0])) {
@@ -281,9 +278,8 @@ class CartController extends Controller
         $products = Product::whereIn('product_code', array_keys($codes))->get();
 
         array_walk($items, function (&$item) use (&$products) {
-            $item['product'] = $products->where('product_code', $item['code'])->first() ?? new \stdClass();
+            $item['product'] = $products->where('product_code', $item['code'])->first() ?? new \stdClass;
         });
-
 
         if (customer_check() || config('amplify.basic.enable_guest_pricing')) {
 
@@ -293,7 +289,7 @@ class CartController extends Controller
 
             $erpCustomer = ErpApi::getCustomerDetail();
 
-            if (!Str::contains($warehouseString, $erpCustomer->DefaultWarehouse)) {
+            if (! Str::contains($warehouseString, $erpCustomer->DefaultWarehouse)) {
                 $warehouseString = "$warehouseString,{$erpCustomer->DefaultWarehouse}";
             }
 
@@ -303,7 +299,7 @@ class CartController extends Controller
                 $erpProductCodes[] = [
                     'item' => $product->product_code,
                     'uom' => $product->uom,
-                    'qty' => !empty($items[$product->product_code]['quantity']) ? $items[$product->product_code]['quantity'] : $product->min_order_qty,
+                    'qty' => ! empty($items[$product->product_code]['quantity']) ? $items[$product->product_code]['quantity'] : $product->min_order_qty,
                 ];
             }
 
@@ -315,12 +311,12 @@ class CartController extends Controller
             unset($erpProductCodes);
 
             if ($erpProductDetails->isEmpty()) {
-                return $this->apiResponse(false, __(product_not_avail_message() . ' for all products'), 500);
+                return $this->apiResponse(false, __(product_not_avail_message().' for all products'), 500);
             }
 
             $warehouse_codes = array_unique([$erpCustomer->DefaultWarehouse, customer()?->warehouse?->code, config('amplify.frontend.guest_checkout_warehouse')]);
 
-            array_walk($items, function (&$item) use ($erpProductDetails, $warehouse_codes, $products) {
+            array_walk($items, function (&$item) use ($erpProductDetails, $warehouse_codes) {
 
                 $product = $item['product'];
 
@@ -362,7 +358,7 @@ class CartController extends Controller
         Storage::delete($filePath);
 
         return $this->apiResponse(true, "Total {$firstSheetCount} entries found.", 200, [
-            'html' => view('widget::quick-order.items', compact('items'))->render()
+            'html' => view('widget::quick-order.items', compact('items'))->render(),
         ]);
     }
 
@@ -376,22 +372,22 @@ class CartController extends Controller
             'index' => 'nullable|numeric',
         ]);
 
-        $code  = $request->input('product_code');
+        $code = $request->input('product_code');
         $index = $request->input('index', 0);
-        $qty   = $request->input('qty', 1);
+        $qty = $request->input('qty', 1);
 
         $product = Product::where('product_code', $code)->first();
 
         $message = __(
             'Part number :code is not available on our website. Please contact your representative, email us at <a href="mailto::email">:email</a> , or call us at <a href="tel::phone">:phone.',
             [
-                'code'  => $code,
+                'code' => $code,
                 'email' => config('amplify.cms.email'),
                 'phone' => config('amplify.cms.phone'),
             ]
         );
 
-        if (!$product) {
+        if (! $product) {
             return $this->apiResponse(false, $message, 404);
         }
 
@@ -402,17 +398,17 @@ class CartController extends Controller
 
             $erpCustomer = ErpApi::getCustomerDetail();
 
-            if (!Str::contains($warehouseString, $erpCustomer->DefaultWarehouse)) {
-                $warehouseString .= ',' . $erpCustomer->DefaultWarehouse;
+            if (! Str::contains($warehouseString, $erpCustomer->DefaultWarehouse)) {
+                $warehouseString .= ','.$erpCustomer->DefaultWarehouse;
             }
 
             $erpProductCodes = [];
 
             if ($product instanceof Product) {
-                $erpProductCodes[] = [ 'item' => $product->product_code,
-                                        'uom' => $product->uom,
-                                        'qty' => $qty ?? $product->min_order_qty,
-                                    ];
+                $erpProductCodes[] = ['item' => $product->product_code,
+                    'uom' => $product->uom,
+                    'qty' => $qty ?? $product->min_order_qty,
+                ];
             }
 
             $erpProductDetails = ErpApi::getProductPriceAvailability([
@@ -447,24 +443,24 @@ class CartController extends Controller
                 ->where('ItemNumber', $product->product_code)
                 ->sum('QuantityAvailable');
 
-            $product->min_order_qty    = $product?->ERP?->MinOrderQuantity ?? $product?->min_order_qty ?? 1;
-            $product->qty_interval     = $product?->ERP?->QuantityInterval ?? $product?->qty_interval ?? 1;
+            $product->min_order_qty = $product?->ERP?->MinOrderQuantity ?? $product?->min_order_qty ?? 1;
+            $product->qty_interval = $product?->ERP?->QuantityInterval ?? $product?->qty_interval ?? 1;
             $product->allow_back_order = $product?->ERP?->AllowBackOrder ?? $product?->allow_back_order ?? false;
-            $product->availability     = $product?->availability ?? ProductAvailabilityEnum::Actual;
-            $product->pricing          = true;
-            $product->quantity         = $qty ?? $product->min_order_qty;
-            $product->assembled        = ($product?->vendornum ?? '' == 3160);
+            $product->availability = $product?->availability ?? ProductAvailabilityEnum::Actual;
+            $product->pricing = true;
+            $product->quantity = $qty ?? $product->min_order_qty;
+            $product->assembled = ($product?->vendornum ?? '' == 3160);
         }
 
         $item = [
-            'code'     => $code,
+            'code' => $code,
             'quantity' => $qty,
-            'product'  => $product,
+            'product' => $product,
         ];
 
         $html = view('widget::quick-order.code-item', [
-            'item'  => $item,
-            'index' => $index
+            'item' => $item,
+            'index' => $index,
         ])->render();
 
         return $this->apiResponse(true, '', 200, ['html' => $html]);

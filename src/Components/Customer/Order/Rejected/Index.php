@@ -2,8 +2,8 @@
 
 namespace Amplify\Frontend\Components\Customer\Order\Rejected;
 
-use Amplify\System\OrderRule\Models\CustomerOrderRuleTrack;
 use Amplify\Frontend\Abstracts\BaseComponent;
+use Amplify\System\OrderRule\Models\CustomerOrderRuleTrack;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Config;

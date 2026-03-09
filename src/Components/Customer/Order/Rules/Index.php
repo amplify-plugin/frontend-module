@@ -2,8 +2,8 @@
 
 namespace Amplify\Frontend\Components\Customer\Order\Rules;
 
-use Amplify\System\OrderRule\Models\CustomerOrderRule;
 use Amplify\Frontend\Abstracts\BaseComponent;
+use Amplify\System\OrderRule\Models\CustomerOrderRule;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Config;

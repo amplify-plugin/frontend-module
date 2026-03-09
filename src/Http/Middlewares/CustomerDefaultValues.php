@@ -14,12 +14,12 @@ class CustomerDefaultValues
     /**
      * Handle an incoming request.
      *
-     * @param \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response) $next
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
 
-        if (!$request->session()->has('ship_to_address')) {
+        if (! $request->session()->has('ship_to_address')) {
 
             $contact = $request->user('customer');
 
@@ -27,12 +27,11 @@ class CustomerDefaultValues
 
             $contactLogin = ContactLogin::firstOrCreate(['customer_id' => $customer->getkey(), 'contact_id' => $contact->getKey(), 'active' => true]);
 
-            if (!empty($customer->shipto_address_code)) {
-                $defaultAddress = CustomerAddress::where('customer_id', $customer->getKey())->where(function ($query) use ($contact, $customer) {
-//                $query->where('id', is_numeric($contact->customer_address_id) ? $contact->customer_address_id : $customer->default_address_id)
+            if (! empty($customer->shipto_address_code)) {
+                $defaultAddress = CustomerAddress::where('customer_id', $customer->getKey())->where(function ($query) use ($customer) {
+                    //                $query->where('id', is_numeric($contact->customer_address_id) ? $contact->customer_address_id : $customer->default_address_id)
                     $query->where('address_code', $customer->shipto_address_code);
                 })->first();
-
 
                 if ($defaultAddress) {
                     $contactLogin->customer_address_id = $defaultAddress->getKey();

@@ -23,7 +23,7 @@ class AddressController extends Controller
     public function index()
     {
         $this->loadPageByType('address');
-        if (!customer(true)->can('ship-to-addresses.list')) {
+        if (! customer(true)->can('ship-to-addresses.list')) {
             abort(403);
         }
 
@@ -37,7 +37,7 @@ class AddressController extends Controller
     {
         $this->loadPageByType('address_create');
 
-        if (!customer(true)->can('ship-to-addresses.add')) {
+        if (! customer(true)->can('ship-to-addresses.add')) {
             abort(403);
         }
 
@@ -59,7 +59,7 @@ class AddressController extends Controller
             // Input: "  123 Main Street  " → Output: "123 Main Street"
             $address1 = trim($validated['address_1'] ?? '');
 
-            if (!empty($address1)) {
+            if (! empty($address1)) {
                 // Step 2: Extract the first word/token from the address
                 // Input: "123 Main Street" → Output: "123"
                 // Input: "BuildingA Suite 200" → Output: "BuildingA"
@@ -100,7 +100,7 @@ class AddressController extends Controller
                         ->exists()
                 ) {
                     $counter++;
-                    $candidate = $baseCode . '-' . $counter;
+                    $candidate = $baseCode.'-'.$counter;
                 }
 
                 // Store the generated unique address code in validated data
@@ -123,6 +123,7 @@ class AddressController extends Controller
 
             if ($validateAddress->Response !== 'Success') {
                 Session::flash('error', $validateAddress->Message ?? 'The address value was incomplete.');
+
                 return back();
             }
 
@@ -144,7 +145,7 @@ class AddressController extends Controller
                 'zip_code' => $validated['zip_code'],
             ]);
 
-            if (config('amplify.client_code') != 'ACP' && !empty($erpAddress->ShipToNumber)) {
+            if (config('amplify.client_code') != 'ACP' && ! empty($erpAddress->ShipToNumber)) {
                 CustomerAddress::create([
                     'customer_id' => $request->input('customer_id', customer()->getKey()),
                     'address_code' => $erpAddress->ShipToNumber,
@@ -178,7 +179,7 @@ class AddressController extends Controller
         store()->addressModel = $address;
 
         $this->loadPageByType('address_details');
-        if (!customer(true)->can('ship-to-addresses.view')) {
+        if (! customer(true)->can('ship-to-addresses.view')) {
             abort(403);
         }
 
@@ -194,7 +195,7 @@ class AddressController extends Controller
 
         $this->loadPageByType('address_edit');
 
-        if (!customer(true)->can('ship-to-addresses.update')) {
+        if (! customer(true)->can('ship-to-addresses.update')) {
             abort(403);
         }
 
@@ -224,7 +225,7 @@ class AddressController extends Controller
      */
     public function destroy(CustomerAddress $address)
     {
-        if (!customer(true)->can('ship-to-addresses.remove')) {
+        if (! customer(true)->can('ship-to-addresses.remove')) {
             abort(403);
         }
         try {

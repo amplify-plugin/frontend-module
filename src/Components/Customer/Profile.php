@@ -2,12 +2,12 @@
 
 namespace Amplify\Frontend\Components\Customer;
 
+use Amplify\Frontend\Abstracts\BaseComponent;
 use Amplify\Frontend\Helpers\CustomerHelper;
 use Amplify\System\Backend\Models\AccountTitle;
 use Amplify\System\Backend\Models\Contact;
 use Amplify\System\Backend\Models\Customer;
 use Amplify\System\Helpers\SecurityHelper;
-use Amplify\Frontend\Abstracts\BaseComponent;
 use Closure;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\View\View;

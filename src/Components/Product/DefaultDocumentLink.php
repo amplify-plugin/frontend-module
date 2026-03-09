@@ -2,8 +2,8 @@
 
 namespace Amplify\Frontend\Components\Product;
 
-use Amplify\System\Backend\Models\DocumentType;
 use Amplify\Frontend\Abstracts\BaseComponent;
+use Amplify\System\Backend\Models\DocumentType;
 use Closure;
 use Illuminate\Contracts\View\View;
 

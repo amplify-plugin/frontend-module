@@ -12,9 +12,10 @@ Route::group(['prefix' => 'api', 'as' => 'api.'], function () {
     Route::get('/list-types', function (Request $request) {
         try {
             $listTypes = config('amplify.constant.favorite_list_type');
-            if (!config('amplify.basic.enable_quick_list', true)) {
+            if (! config('amplify.basic.enable_quick_list', true)) {
                 unset($listTypes['quick-list']);
             }
+
             return response()->json(['data' => $listTypes, 'message' => '']);
         } catch (Exception $e) {
             return response()->json(['data' => [], 'message' => $e->getMessage()]);

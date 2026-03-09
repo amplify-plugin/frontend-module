@@ -2,8 +2,8 @@
 
 namespace Amplify\Frontend\Components\Product;
 
-use Amplify\System\Backend\Models\CustomPartNumber;
 use Amplify\Frontend\Abstracts\BaseComponent;
+use Amplify\System\Backend\Models\CustomPartNumber;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Str;

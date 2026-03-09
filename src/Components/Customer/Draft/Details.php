@@ -2,8 +2,8 @@
 
 namespace Amplify\Frontend\Components\Customer\Draft;
 
-use Amplify\System\Backend\Models\CustomerOrder;
 use Amplify\Frontend\Abstracts\BaseComponent;
+use Amplify\System\Backend\Models\CustomerOrder;
 use Closure;
 use Illuminate\Contracts\View\View;
 

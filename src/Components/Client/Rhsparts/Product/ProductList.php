@@ -3,9 +3,9 @@
 namespace Amplify\Frontend\Components\Client\Rhsparts\Product;
 
 use Amplify\ErpApi\Facades\ErpApi;
+use Amplify\Frontend\Abstracts\BaseComponent;
 use Amplify\System\Backend\Models\OrderList;
 use Amplify\System\Backend\Models\Product;
-use Amplify\Frontend\Abstracts\BaseComponent;
 use Closure;
 use Illuminate\Contracts\View\View;
 

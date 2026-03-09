@@ -38,7 +38,7 @@ class ShippingController extends Controller
 
             $address1 = trim($request->input('shipping_address1', ''));
 
-            if (!empty($address1)) {
+            if (! empty($address1)) {
                 // Extract first token from address 1
                 $firstToken = preg_split('/\s+/', $address1)[0] ?? $address1;
 
@@ -65,7 +65,7 @@ class ShippingController extends Controller
                         ->exists()
                 ) {
                     $counter++;
-                    $candidate = $baseCode . '-' . $counter;
+                    $candidate = $baseCode.'-'.$counter;
                 }
 
                 // Auto-apply generated unique code into the request
@@ -78,7 +78,6 @@ class ShippingController extends Controller
                 $rules['shipping_state'] = 'required|string|max:255';
             }
         }
-
 
         try {
             // Let Laravel throw ValidationException automatically
@@ -118,7 +117,7 @@ class ShippingController extends Controller
                 'zip_code' => $validatedData['shipping_zip'],
             ]);
 
-            if (config('amplify.client_code') !== 'ACP' && !empty($erpAddress->ShipToNumber)) {
+            if (config('amplify.client_code') !== 'ACP' && ! empty($erpAddress->ShipToNumber)) {
                 CustomerAddress::create([
                     'customer_id' => customer()->getKey(),
                     'address_code' => $erpAddress->ShipToNumber,
@@ -202,7 +201,7 @@ class ShippingController extends Controller
     private function getWillCallMethods(mixed $carts, mixed $shippingMethods): mixed
     {
         $products = ErpApi::getProductPriceAvailability([
-            'items' => $carts->map(fn($item): array => [
+            'items' => $carts->map(fn ($item): array => [
                 'item' => $item['ItemNumber'],
                 'qty' => $item['OrderQty'],
             ]),
@@ -244,7 +243,7 @@ class ShippingController extends Controller
                 return $quantity < $cart['OrderQty'];
             });
 
-        if (count($warehouses) > 0 && !$isBackOrder) {
+        if (count($warehouses) > 0 && ! $isBackOrder) {
             $shippingMethods['FreightRate']['WILL CALL'][0] = $warehouses;
         } else {
             unset($shippingMethods['FreightRate']['WILL CALL']);
@@ -269,7 +268,7 @@ class ShippingController extends Controller
         // find the matching wrapper by ShipToNumber
         $selected = $all->firstWhere('ShipToNumber', $data['ship_to_number']);
 
-        if (!$selected) {
+        if (! $selected) {
             return back()->withErrors([
                 'ship_to_number' => 'Selected address is invalid.',
             ]);
@@ -293,7 +292,7 @@ class ShippingController extends Controller
         // find the matching wrapper by ShipToNumber
         $selected = $all->firstWhere('ShipToNumber', $addressCode);
 
-        if (!$selected) {
+        if (! $selected) {
             return back()->withErrors([
                 'ship_to_number' => 'Selected address is invalid.',
             ]);

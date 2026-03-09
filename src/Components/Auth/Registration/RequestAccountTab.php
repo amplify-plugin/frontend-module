@@ -2,8 +2,8 @@
 
 namespace Amplify\Frontend\Components\Auth\Registration;
 
-use Amplify\System\Backend\Models\AccountTitle;
 use Amplify\Frontend\Abstracts\BaseComponent;
+use Amplify\System\Backend\Models\AccountTitle;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Str;

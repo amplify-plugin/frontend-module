@@ -2,8 +2,8 @@
 
 namespace Amplify\Frontend\Components\Campaign;
 
-use Amplify\System\Marketing\Models\Campaign;
 use Amplify\Frontend\Abstracts\BaseComponent;
+use Amplify\System\Marketing\Models\Campaign;
 use Closure;
 use Illuminate\Contracts\View\View;
 

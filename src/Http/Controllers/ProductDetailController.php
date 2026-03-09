@@ -27,11 +27,11 @@ class ProductDetailController extends Controller
      */
     public function __invoke(string $identifier, ?string $slug = null): string
     {
-        abort_unless(!customer_check() || customer(true)->can('shop.browse'), 403);
+        abort_unless(! customer_check() || customer(true)->can('shop.browse'), 403);
 
         $product = store()->productModel;
 
-        if (!$product) {
+        if (! $product) {
             abort(404, 'Product Unavailable');
         }
 
@@ -82,8 +82,8 @@ class ProductDetailController extends Controller
             $relationTypeId = $relationTypes->first()->id;
         }
 
-        //Filter related product IDs from the already fetched relations
-        $relatedIds = $relations->when($relationTypeId, fn($c) => $c->where('product_relationship_type_id', $relationTypeId))->pluck('related_product_id');
+        // Filter related product IDs from the already fetched relations
+        $relatedIds = $relations->when($relationTypeId, fn ($c) => $c->where('product_relationship_type_id', $relationTypeId))->pluck('related_product_id');
 
         // Load related products with attributes
         $perPage = $request->get('per_page', getPaginationLengths()[0]);
@@ -113,11 +113,11 @@ class ProductDetailController extends Controller
             $warehouseString = $warehouses->pluck('WarehouseNumber')->implode(',');
 
             $erpCustomer = ErpApi::getCustomerDetail();
-            if (!Str::contains($warehouseString, $erpCustomer->DefaultWarehouse)) {
+            if (! Str::contains($warehouseString, $erpCustomer->DefaultWarehouse)) {
                 $warehouseString = "$warehouseString,{$erpCustomer->DefaultWarehouse}";
             }
 
-            if (!empty($items)) {
+            if (! empty($items)) {
                 $priceAvailability = ErpApi::getProductPriceAvailability([
                     'items' => $items,
                     'warehouse' => $warehouseString,
@@ -148,7 +148,7 @@ class ProductDetailController extends Controller
                     $value = $item->pivot->attribute_value;
                     $value = UtilityHelper::isJson($value) ? json_decode($value, true)[config('app.locale')] ?? null : $value;
 
-                    return (object)[
+                    return (object) [
                         'name' => $item->name,
                         'value' => $value,
                     ];
@@ -163,11 +163,11 @@ class ProductDetailController extends Controller
             // Return the same view (partial/full) so the UI can be replaced when switching types via AJAX
             return $this->apiResponse(true, '', 200, [
                 'html' => view('widget::product.tabs.related-product-view', [
-                'relatedProducts' => $related,
-                'product' => $dbProduct,
-                'relationTypes' => $relationTypes,
-                'selectedRelationType' => $relationTypeId,
-            ])->render()
+                    'relatedProducts' => $related,
+                    'product' => $dbProduct,
+                    'relationTypes' => $relationTypes,
+                    'selectedRelationType' => $relationTypeId,
+                ])->render(),
             ]);
         } catch (\Exception $e) {
             return $this->apiResponse(false, $e->getMessage(), 500);

@@ -2,8 +2,8 @@
 
 namespace Amplify\Frontend\Components;
 
-use Amplify\System\Support\Language;
 use Amplify\Frontend\Abstracts\BaseComponent;
+use Amplify\System\Support\Language;
 use Closure;
 use Illuminate\Contracts\View\View;
 

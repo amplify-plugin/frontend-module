@@ -26,7 +26,7 @@ class EventServiceProvider extends ServiceProvider
         ContactLoggedOut::class => [
             UpdateContactLoginListener::class,
         ],
-        CartUpdated::class => []
+        CartUpdated::class => [],
     ];
 
     /**

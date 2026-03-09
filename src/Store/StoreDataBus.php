@@ -148,6 +148,7 @@ class StoreDataBus
         if (array_key_exists($offset, static::$macros)) {
             $response = call_user_func(static::$macros[$offset]);
             $this->attributes[$offset] = $response;
+
             return $response;
         }
 

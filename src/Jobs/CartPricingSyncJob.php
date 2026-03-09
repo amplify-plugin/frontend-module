@@ -46,7 +46,7 @@ class CartPricingSyncJob implements ShouldQueue
 
                 $shippingList = ErpApi::getCustomerShippingLocationList(['customer_number' => $erpCustomer->CustomerNumber]);
 
-                $shipToNumber = !empty($this->shipToCode) ? $this->shipToCode : $erpCustomer->DefaultShipTo;
+                $shipToNumber = ! empty($this->shipToCode) ? $this->shipToCode : $erpCustomer->DefaultShipTo;
 
                 /**
                  * @var ShippingLocation $shipTo
@@ -91,9 +91,7 @@ class CartPricingSyncJob implements ShouldQueue
                     }
                 }
 
-            }
-
-            else {
+            } else {
                 $this->cart->sub_total = $this->cart->cartItems->sum('subtotal');
                 $this->cart->total = $this->cart->subtotal;
                 $this->cart->tax_amount = null;

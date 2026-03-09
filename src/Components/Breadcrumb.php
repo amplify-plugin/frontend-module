@@ -2,9 +2,9 @@
 
 namespace Amplify\Frontend\Components;
 
+use Amplify\Frontend\Abstracts\BaseComponent;
 use Amplify\System\Cms\Models\Page;
 use Amplify\System\Sayt\Classes\BreadCrumbTrail;
-use Amplify\Frontend\Abstracts\BaseComponent;
 use Closure;
 use ErrorException;
 use Illuminate\Contracts\View\View;

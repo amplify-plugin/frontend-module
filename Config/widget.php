@@ -2205,7 +2205,7 @@ return [
                     'home' => 'Home',
                     'shop' => 'Shop (All Products)',
                 ],
-            ]
+            ],
         ],
         '@nestedItems' => [],
         'description' => 'Checkout widget',

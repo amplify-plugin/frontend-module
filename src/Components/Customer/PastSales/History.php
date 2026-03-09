@@ -3,8 +3,8 @@
 namespace Amplify\Frontend\Components\Customer\PastSales;
 
 use Amplify\ErpApi\Facades\ErpApi;
-use Amplify\System\Backend\Models\Product;
 use Amplify\Frontend\Abstracts\BaseComponent;
+use Amplify\System\Backend\Models\Product;
 use Closure;
 use Illuminate\Contracts\View\View;
 

@@ -2,8 +2,8 @@
 
 namespace Amplify\Frontend\Components;
 
-use Amplify\System\Backend\Models\FaqCategory;
 use Amplify\Frontend\Abstracts\BaseComponent;
+use Amplify\System\Backend\Models\FaqCategory;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;

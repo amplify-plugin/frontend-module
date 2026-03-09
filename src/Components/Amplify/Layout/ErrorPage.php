@@ -2,9 +2,9 @@
 
 namespace Amplify\Frontend\Components\Amplify\Layout;
 
+use Amplify\Frontend\Abstracts\BaseComponent;
 use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\System\Cms\Models\Page;
-use Amplify\Frontend\Abstracts\BaseComponent;
 use Closure;
 use Illuminate\Contracts\View\View;
 

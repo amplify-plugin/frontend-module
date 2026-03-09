@@ -79,7 +79,7 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
         ->name('shop.show');
 
     Route::name('shop.')->prefix(config('amplify.frontend.shop_page_prefix'))->controller(\Amplify\Frontend\Http\Controllers\ShopSearchController::class)->group(function () {
-        Route::get("/{query?}", '__invoke')->where(['query' => '(.*)'])->name('index');
+        Route::get('/{query?}', '__invoke')->where(['query' => '(.*)'])->name('index');
         Route::get('/quick-view/{id}/{seo_path?}', 'getQuickView')->name('quickView');
         Route::get('/warehouse-selection-view/{code}', 'getWarehouseSelectionView')->name('warehouseSelectionView');
     });
@@ -257,7 +257,7 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
             ->name('ship-to-address.store');
         Route::get('/session/shipping-address/{code}', [
             ShippingController::class,
-            'storeSessionAddress'
+            'storeSessionAddress',
         ])->name('session.shipping-address.store');
         Route::resource('messages', MessageController::class)
             ->names('messages')
@@ -317,7 +317,7 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
     Route::post('/order/draft-to-order/{order}',
         [CustomerOrderController::class, 'submitDraftAsOrder'])->name('draft.submit-as-order');
     Route::post('/approve-order/{order}', [CustomerOrderController::class, 'approveOrder'])->name('approve-order');
-// Route::delete('/saved-order-list/delete/{list}', [CustomerOrderController::class, 'deleteSavedOrder'])->name('order-list.delete');
+    // Route::delete('/saved-order-list/delete/{list}', [CustomerOrderController::class, 'deleteSavedOrder'])->name('order-list.delete');
     Route::delete('/quote/delete/{quote}', [CustomerOrderController::class, 'deleteQuote'])->name('order.delete');
     Route::delete('/saved-order-list/delete/{item}/item',
         [CustomerOrderController::class, 'deleteSavedOrderItem'])->name('order-list-item.delete');

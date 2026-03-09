@@ -15,19 +15,20 @@ class CaptureIntendedUrl
         'reset-password',
         'register',
     ];
+
     /**
      * Handle an incoming request.
      *
-     * @param \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response) $next
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
         if (
-            !$request->is($this->except) &&
+            ! $request->is($this->except) &&
             $request->isMethod('GET') &&
             $request->route() &&
-            !$request->routeIs('frontend.login*') &&
-            !$request->expectsJson()
+            ! $request->routeIs('frontend.login*') &&
+            ! $request->expectsJson()
         ) {
             session(['url.intended' => $request->fullUrl()]);
         }

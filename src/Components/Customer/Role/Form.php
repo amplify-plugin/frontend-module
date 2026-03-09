@@ -2,9 +2,9 @@
 
 namespace Amplify\Frontend\Components\Customer\Role;
 
+use Amplify\Frontend\Abstracts\BaseComponent;
 use Amplify\System\Backend\Models\CustomerRole;
 use Amplify\System\Helpers\UtilityHelper;
-use Amplify\Frontend\Abstracts\BaseComponent;
 use Closure;
 use Illuminate\Contracts\View\View;
 

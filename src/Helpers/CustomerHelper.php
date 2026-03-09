@@ -19,7 +19,6 @@ class CustomerHelper
             return url($contact->redirect_route);
         }
 
-
         return route('frontend.dashboard');
     }
 

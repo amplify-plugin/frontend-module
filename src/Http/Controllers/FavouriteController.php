@@ -23,7 +23,7 @@ class FavouriteController extends Controller
      */
     public function index(Request $request)
     {
-        if (!in_array(true, [customer(true)->can('favorites.use-global-list'), customer(true)->can('favorites.manage-personal-list')])) {
+        if (! in_array(true, [customer(true)->can('favorites.use-global-list'), customer(true)->can('favorites.manage-personal-list')])) {
             abort(403, 'You don\'t have permission to use this feature');
         }
 
@@ -35,7 +35,7 @@ class FavouriteController extends Controller
                         $query->whereNull('contact_id')
                             ->orWhere('contact_id', customer(true)->getKey());
                     })
-                    ->when(!config('amplify.basic.enable_quick_list', true), function ($query) {
+                    ->when(! config('amplify.basic.enable_quick_list', true), function ($query) {
                         $query->where('list_type', '!=', 'quick-list');
                     })
                     ->get()
@@ -43,6 +43,7 @@ class FavouriteController extends Controller
                         $item->product_ids = $item->orderListItems?->pluck('product_id')->toArray() ?? [];
                         $item->list_type = $item->list_type_label;
                         unset($item->orderListItems);
+
                         return $item;
                     })
                     ->toArray();
@@ -79,7 +80,7 @@ class FavouriteController extends Controller
 
             $orderList = OrderList::firstOrCreate(
                 [
-                    'id' => $inputs['list_id']
+                    'id' => $inputs['list_id'],
                 ],
                 [
                     'name' => $inputs['list_name'] ?? '',
@@ -115,28 +116,28 @@ class FavouriteController extends Controller
     private function processOrderListItems(FavoriteListRequest $request): array
     {
         switch ($request->input('type')) {
-            case 'cart' :
-            {
+            case 'cart':
+
                 return CartItem::select('product_id', 'quantity as qty')
                     ->where('cart_id', '=', $request->input('cart_id'))->get()
-                    ->map(fn($cartItem) => $cartItem->toArray())
+                    ->map(fn ($cartItem) => $cartItem->toArray())
                     ->toArray();
-            }
+
             case 'products':
-            {
+
                 return array_map(
-                    fn($i) => ['product_id' => $i['product_id'], 'qty' => $i['qty']],
+                    fn ($i) => ['product_id' => $i['product_id'], 'qty' => $i['qty']],
                     $request->input('products', [])
                 );
-            }
-            //waiting for new features
-            default :
-            {
+
+                // waiting for new features
+            default:
+
                 return [[
                     'product_id' => $request->input('product_id'),
                     'qty' => $request->input('product_qty', 1),
                 ]];
-            }
+
         }
     }
 
@@ -145,7 +146,7 @@ class FavouriteController extends Controller
      */
     public function show(string $id)
     {
-        if (!in_array(true, [customer(true)->can('favorites.manage-global-list'), customer(true)->can('favorites.manage-personal-list')])) {
+        if (! in_array(true, [customer(true)->can('favorites.manage-global-list'), customer(true)->can('favorites.manage-personal-list')])) {
             abort(403);
         }
 
@@ -161,7 +162,7 @@ class FavouriteController extends Controller
      */
     public function edit(string $id): string
     {
-        if (!in_array(true, [customer(true)->can('favorites.manage-personal-list'), customer(true)->can('favorites.manage-personal-list')])) {
+        if (! in_array(true, [customer(true)->can('favorites.manage-personal-list'), customer(true)->can('favorites.manage-personal-list')])) {
             abort(403, 'You don\'t have permission to use this feature');
         }
 
@@ -175,7 +176,7 @@ class FavouriteController extends Controller
      */
     public function update(UpdateOrderListRequest $request, string $id): RedirectResponse
     {
-        if (!in_array(true, [customer(true)->can('favorites.manage-personal-list'), customer(true)->can('favorites.manage-personal-list')])) {
+        if (! in_array(true, [customer(true)->can('favorites.manage-personal-list'), customer(true)->can('favorites.manage-personal-list')])) {
             abort(403, 'You don\'t have permission to use this feature');
         }
 
@@ -183,7 +184,7 @@ class FavouriteController extends Controller
 
         $orderList->fill($request->validated());
 
-        if (!$orderList->save()) {
+        if (! $orderList->save()) {
             session()->flash('error', 'Favorite List updated field.');
 
             return redirect()->back();
@@ -205,7 +206,7 @@ class FavouriteController extends Controller
 
             if ($action == 'remove') {
                 OrderListItem::whereIn('product_id', $products)->get()->each(function ($item) {
-                    if (!$item->delete()) {
+                    if (! $item->delete()) {
                         throw new \Exception('Failed to remove item favorite list');
                     }
                 });
@@ -244,13 +245,10 @@ class FavouriteController extends Controller
 
     /**
      * This will delete the saved order list item
-     *
-     * @param $favourite
-     * @return JsonResponse
      */
     public function destroy($favourite): JsonResponse
     {
-        if (!in_array(true, [customer(true)->can('favorites.manage-global-list'), customer(true)->can('favorites.manage-personal-list')])) {
+        if (! in_array(true, [customer(true)->can('favorites.manage-global-list'), customer(true)->can('favorites.manage-personal-list')])) {
             abort(403, 'Your are not allowed to delete favorite list.');
         }
 
@@ -271,13 +269,10 @@ class FavouriteController extends Controller
 
     /**
      * This will delete the saved order list item
-     *
-     * @param $favouriteItem
-     * @return JsonResponse
      */
     public function destroyOrderListItem($favouriteItem): JsonResponse
     {
-        if (!in_array(true, [customer(true)->can('favorites.manage-global-list'), customer(true)->can('favorites.manage-personal-list')])) {
+        if (! in_array(true, [customer(true)->can('favorites.manage-global-list'), customer(true)->can('favorites.manage-personal-list')])) {
             abort(403, 'Your are not allowed to delete favorite list item.');
         }
 
@@ -286,6 +281,7 @@ class FavouriteController extends Controller
             if ($item->delete()) {
                 return $this->apiResponse(true, 'Item removed from favorite list.');
             }
+
             return $this->apiResponse(false, 'Failed to remove item from favorite list.');
         } catch (\Exception $e) {
             return $this->apiResponse(false, 'Sorry! Something went wrong...', 500);

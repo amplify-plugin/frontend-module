@@ -2,9 +2,9 @@
 
 namespace Amplify\Frontend\Components\Auth;
 
+use Amplify\Frontend\Abstracts\BaseComponent;
 use Amplify\System\Helpers\SecurityHelper;
 use Amplify\System\Helpers\UtilityHelper;
-use Amplify\Frontend\Abstracts\BaseComponent;
 use Closure;
 use Illuminate\Contracts\View\View;
 

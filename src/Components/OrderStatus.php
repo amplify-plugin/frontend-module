@@ -2,9 +2,9 @@
 
 namespace Amplify\Frontend\Components;
 
+use Amplify\Frontend\Abstracts\BaseComponent;
 use Amplify\System\Backend\Models\CustomerOrder;
 use Amplify\System\OrderRule\Models\CustomerOrderRuleTrack;
-use Amplify\Frontend\Abstracts\BaseComponent;
 use Closure;
 use Illuminate\Contracts\View\View;
 

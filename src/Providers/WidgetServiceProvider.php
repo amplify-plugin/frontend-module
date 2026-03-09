@@ -36,9 +36,9 @@ class WidgetServiceProvider extends ServiceProvider
                 }
             });
         } else {
-                $this->commands([
-                    \Amplify\Frontend\Commands\WidgetMakeCommand::class,
-                ]);
+            $this->commands([
+                \Amplify\Frontend\Commands\WidgetMakeCommand::class,
+            ]);
         }
     }
 }

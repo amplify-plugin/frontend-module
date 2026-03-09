@@ -3,9 +3,9 @@
 namespace Amplify\Frontend\Components\Customer\Contact\Login;
 
 use Amplify\ErpApi\Facades\ErpApi;
+use Amplify\Frontend\Abstracts\BaseComponent;
 use Amplify\System\Backend\Models\Contact;
 use Amplify\System\Backend\Models\CustomerPermission;
-use Amplify\Frontend\Abstracts\BaseComponent;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Config;

@@ -2,8 +2,8 @@
 
 namespace Amplify\Frontend\Components\Checkout;
 
-use Amplify\System\Backend\Models\CustomerOrder;
 use Amplify\Frontend\Abstracts\BaseComponent;
+use Amplify\System\Backend\Models\CustomerOrder;
 use Closure;
 use Illuminate\Contracts\View\View;
 

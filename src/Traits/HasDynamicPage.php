@@ -211,7 +211,6 @@ trait HasDynamicPage
             mix('js/scripts.min.js', $themePrefix),
         ], 'template-script');
 
-
         if (file_exists(public_path("{$themePrefix}/js/custom.js"))) {
             push_js([
                 mix('js/custom.js', $themePrefix),
@@ -235,8 +234,8 @@ HTML;
     /**
      * Build a standardized API JSON response.
      *
-     * @param int $status HTTP status code (default: 200)
-     * @param array $extra Additional data to merge into the response
+     * @param  int  $status  HTTP status code (default: 200)
+     * @param  array  $extra  Additional data to merge into the response
      */
     public function apiResponse(bool $success, string $message, int $status = 200, array $extra = []): \Illuminate\Http\JsonResponse
     {

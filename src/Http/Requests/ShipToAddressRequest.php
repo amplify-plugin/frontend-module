@@ -43,15 +43,15 @@ class ShipToAddressRequest extends FormRequest
             'country_code' => 'nullable|string|size:2|ascii',
         ];
 
-         if ($this->method() == 'PUT') {
-             $rules['address_code'][] = Rule::unique('customer_addresses', 'address_code')->where(function ($query) {
-                 return $query->where('customer_id', customer()->getKey());
-             })->ignore($this->route('address'));
-         } else {
-             $rules['address_code'][] = Rule::unique('customer_addresses', 'address_code')->where(function ($query) {
-                 return $query->where('customer_id', customer()->getKey());
-             });
-         }
+        if ($this->method() == 'PUT') {
+            $rules['address_code'][] = Rule::unique('customer_addresses', 'address_code')->where(function ($query) {
+                return $query->where('customer_id', customer()->getKey());
+            })->ignore($this->route('address'));
+        } else {
+            $rules['address_code'][] = Rule::unique('customer_addresses', 'address_code')->where(function ($query) {
+                return $query->where('customer_id', customer()->getKey());
+            });
+        }
 
         return $rules;
     }

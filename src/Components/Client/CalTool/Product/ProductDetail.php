@@ -3,12 +3,12 @@
 namespace Amplify\Frontend\Components\Client\CalTool\Product;
 
 use Amplify\ErpApi\Facades\ErpApi;
+use Amplify\Frontend\Abstracts\BaseComponent;
 use Amplify\System\Backend\Models\OrderList;
 use Amplify\System\Backend\Models\OrderListItem;
 use Amplify\System\Backend\Models\Product;
 use Amplify\System\Backend\Models\Warehouse;
 use Amplify\System\Traits\ProductDetailTrait;
-use Amplify\Frontend\Abstracts\BaseComponent;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;

@@ -2,8 +2,8 @@
 
 namespace Amplify\Frontend\Components\Customer\Role\Partials;
 
-use Amplify\System\Backend\Models\Permission;
 use Amplify\Frontend\Abstracts\BaseComponent;
+use Amplify\System\Backend\Models\Permission;
 use Closure;
 use Illuminate\Contracts\View\View;
 

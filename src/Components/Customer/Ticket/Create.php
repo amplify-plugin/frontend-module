@@ -2,9 +2,9 @@
 
 namespace Amplify\Frontend\Components\Customer\Ticket;
 
+use Amplify\Frontend\Abstracts\BaseComponent;
 use Amplify\System\Ticket\Models\Ticket;
 use Amplify\System\Ticket\Models\TicketDepartment;
-use Amplify\Frontend\Abstracts\BaseComponent;
 use Closure;
 use Illuminate\Contracts\View\View;
 

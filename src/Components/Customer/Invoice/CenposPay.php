@@ -2,8 +2,8 @@
 
 namespace Amplify\Frontend\Components\Customer\Invoice;
 
-use Amplify\System\Backend\Facades\CenPos;
 use Amplify\Frontend\Abstracts\BaseComponent;
+use Amplify\System\Backend\Facades\CenPos;
 use Illuminate\Support\Facades\Validator;
 
 class CenposPay extends BaseComponent

@@ -3,6 +3,7 @@
 namespace Amplify\Frontend\Components\Shop;
 
 use Amplify\ErpApi\Facades\ErpApi;
+use Amplify\Frontend\Abstracts\BaseComponent;
 use Amplify\Frontend\Http\Controllers\DynamicPageLoadController;
 use Amplify\System\Backend\Enums\ProductAvailabilityEnum;
 use Amplify\System\Backend\Models\CategoryProduct;
@@ -12,7 +13,6 @@ use Amplify\System\Backend\Models\Warehouse;
 use Amplify\System\Helpers\UtilityHelper;
 use Amplify\System\Sayt\Classes\ItemRow;
 use Amplify\System\Traits\ProductDetailTrait;
-use Amplify\Frontend\Abstracts\BaseComponent;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;

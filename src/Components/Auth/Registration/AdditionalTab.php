@@ -2,8 +2,8 @@
 
 namespace Amplify\Frontend\Components\Auth\Registration;
 
-use Amplify\System\Helpers\UtilityHelper;
 use Amplify\Frontend\Abstracts\BaseComponent;
+use Amplify\System\Helpers\UtilityHelper;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Str;
