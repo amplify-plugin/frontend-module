@@ -6,6 +6,7 @@
  */
 
 return [
+
     Amplify\Frontend\Components\Auth\Login::class => [
         'name' => 'login',
         'reserved' => true,

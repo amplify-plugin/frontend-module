@@ -39,5 +39,6 @@ return [
         'footer-script' => [],
     ],
     'cart_item_badge_style' => 'items',
+
     'show_parent_product_for_sku' => true,
 ];
