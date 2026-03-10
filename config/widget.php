@@ -569,7 +569,13 @@ return [
         '@inside' => null,
         '@client' => null,
         'model' => ['customer_profile'],
-        '@attributes' => [],
+        '@attributes' => [
+            [
+                'name' => ':show-subscribe-newsletter',
+                'type' => 'boolean',
+                'value' => true,
+            ]
+        ],
         '@nestedItems' => [],
         'description' => '',
     ],
@@ -1533,7 +1539,7 @@ return [
                 'hint' => 'During placing order should it check quantity availability in warehouse',
             ],
             [
-                'name' => ':widget-title',
+                'name' => 'widget-title',
                 'type' => 'text',
                 'value' => 'Quick Order',
             ],
