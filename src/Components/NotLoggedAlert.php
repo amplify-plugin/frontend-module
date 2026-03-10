@@ -13,11 +13,6 @@ use Illuminate\Support\Facades\Config;
 class NotLoggedAlert extends BaseComponent
 {
     /**
-     * @var array
-     */
-    public $options;
-
-    /**
      * Create a new component instance.
      */
     public function __construct(
@@ -31,8 +26,7 @@ class NotLoggedAlert extends BaseComponent
         public string $buttonClass = '',
         public string $buttonColorClass = '',
     ) {
-        $this->options = Config::get('amplify.widget.'.__CLASS__, []);
-
+        parent::__construct();
     }
 
     /**

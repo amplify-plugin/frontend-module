@@ -12,11 +12,6 @@ use Illuminate\Contracts\View\View;
 class Image extends BaseComponent
 {
     /**
-     * @var array
-     */
-    public $options;
-
-    /**
      * @var string|string
      */
     public $source;
@@ -36,14 +31,6 @@ class Image extends BaseComponent
 
         $this->source = $source;
         $this->alternativeText = $alternativeText;
-    }
-
-    /**
-     * Whether the component should be rendered
-     */
-    public function shouldRender(): bool
-    {
-        return true;
     }
 
     /**
