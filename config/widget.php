@@ -569,7 +569,13 @@ return [
         '@inside' => null,
         '@client' => null,
         'model' => ['customer_profile'],
-        '@attributes' => [],
+        '@attributes' => [
+            [
+                'name' => ':show-subscribe-newsletter',
+                'type' => 'boolean',
+                'value' => true,
+            ]
+        ],
         '@nestedItems' => [],
         'description' => '',
     ],

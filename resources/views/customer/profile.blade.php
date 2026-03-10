@@ -82,24 +82,25 @@
                             </div>
                         </div>
                     @endif
-
-                    <div class="col-md-6">
-                        <div class="form-check d-flex align-items-center h-100 p-0 mt-1">
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input @error('subscribe') is-invalid @enderror"
-                                       type="checkbox"
-                                       name="subscribe"
-                                       id="subscribe"
-                                       name="subscribe"
-                                    {{ $account->subscribed ? 'checked' : '' }}>
-                                <label class="custom-control-label" aria-label="custom-control-label"
-                                       for="subscribe">{{ __('Subscribe me to Newsletter') }}</label>
-                                @error('subscribe')
-                                <p class="text-danger my-2">{{ $message }}</p>
-                                @enderror
+                    @if($showSubscribeNewsletter)
+                        <div class="col-md-6">
+                            <div class="form-check d-flex align-items-center h-100 p-0 mt-1">
+                                <div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input @error('subscribe') is-invalid @enderror"
+                                        type="checkbox"
+                                        name="subscribe"
+                                        id="subscribe"
+                                        name="subscribe"
+                                        {{ $account->subscribed ? 'checked' : '' }}>
+                                    <label class="custom-control-label" aria-label="custom-control-label"
+                                        for="subscribe">{{ __('Subscribe me to Newsletter') }}</label>
+                                    @error('subscribe')
+                                    <p class="text-danger my-2">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
                 </div>
             </div>
             <div class="card-footer bg-white">

@@ -27,7 +27,7 @@ class Profile extends BaseComponent
     /**
      * Create a new component instance.
      */
-    public function __construct()
+    public function __construct(public bool $showSubscribeNewsletter = true)
     {
         parent::__construct();
 
