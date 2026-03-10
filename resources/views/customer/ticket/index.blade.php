@@ -37,8 +37,8 @@
                             <td>
                                 {{ !empty($ticket->priority) ? \Amplify\System\Ticket\Models\Ticket::PRIORITY_LABEL[$ticket->priority] : '' }}
                             </td>
-                            <td data-order="{{ $ticket->updated_at->format('Y-m-d H:i:s') }}">
-                                {{ carbon_datetime($ticket->updated_at) }}
+                            <td data-order="{{ optional($ticket->updated_at)->format('Y-m-d H:i:s') }}">
+                                {{ $ticket->updated_at ? carbon_datetime($ticket->updated_at) : '' }}
                             </td>
                             @if (customer(true)->can('ticket.tickets'))
                                 <td class="d-flex flex-column justify-content-center m-0">
