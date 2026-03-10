@@ -59,6 +59,7 @@ class ShopByManufacturer extends BaseComponent
         $initialQuery = Manufacturer::query();
 
         $filteredGroupedManufacturers = $groupedManufacturers = $initialQuery
+            ->whereNull('archived_at')
             ->when($this->onlyFeatured == true, function (Builder $builder) {
                 return $builder->where('featured', true);
             })
@@ -102,6 +103,7 @@ class ShopByManufacturer extends BaseComponent
 
         if (Request::has('search')) {
             $filteredGroupedManufacturers = $initialQuery
+                ->whereNull('archived_at')
                 ->where('name', 'like', '%'.request()->search.'%')
                 ->get()
                 ->sortBy('name', SORT_NATURAL | SORT_FLAG_CASE)
