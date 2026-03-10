@@ -1539,7 +1539,7 @@ return [
                 'hint' => 'During placing order should it check quantity availability in warehouse',
             ],
             [
-                'name' => ':widget-title',
+                'name' => 'widget-title',
                 'type' => 'text',
                 'value' => 'Quick Order',
             ],
