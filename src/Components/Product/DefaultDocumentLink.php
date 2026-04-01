@@ -30,7 +30,8 @@ class DefaultDocumentLink extends BaseComponent
      */
     public function render(): View|Closure|string
     {
+        $filePath = $this->document->document_file_path ?? $this->document->file_path;
 
-        return view('widget::product.default-document-link');
+        return view('widget::product.default-document-link', compact('filePath'));
     }
 }
