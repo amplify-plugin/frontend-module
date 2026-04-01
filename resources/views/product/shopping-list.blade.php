@@ -41,7 +41,7 @@
                     return;
                 }
 
-                $.ajax('{{ route('frontend.favourites.index') }}', {
+                $.ajax('{{ route('frontend.favourites.search') }}', {
                     beforeSend: () => {
                         $(container).empty();
 
@@ -63,7 +63,7 @@
                             html += `<li class="text-primary text-truncate">
                                     <a href="javascript:void(0);" class="text-decoration-none" title="${value.name}"
                                     onclick="Amplify.addToExistingOrderList(${value.id}, ${productId}, 'product', '${title}')">
-                                    ${value.name} (${value.list_type})
+                                    ${value.name} ${value.list_type}
                                     </a>
                                 </li>`;
                         });

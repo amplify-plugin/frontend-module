@@ -620,13 +620,20 @@ window.Amplify = {
                         $.each(result.data, function (index, item) {
                             $('#swal2-select').append('<option value="' + index + '">' + item + '</option>');
                         });
+                        if (result.count >= 2) {
+                            $('#swal2-select').css({
+                                'display': 'flex',
+                            }).addClass('swal2-input');
+                        } else {
+                            $('#swal2-select').css({
+                                'display': 'none',
+                            }).addClass('swal2-input');
+                            let firstValue = Object.keys(result.data)[0];
+                            $('#swal2-select').val(firstValue).trigger('change');
+                        }
                     })
                 },
                 didOpen: function () {
-                    $('#swal2-select').css({
-                        'display': 'flex',
-                    }).addClass('swal2-input');
-
                     $('#swal2-textarea').css('display', 'flex').attr('placeholder', 'Enter description');
                 }
             })

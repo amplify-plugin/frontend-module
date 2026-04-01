@@ -76,6 +76,14 @@ class Index extends BaseComponent
             'product_count' => strlen($this->productCountLabel) != 0,
         ];
 
-        return view('widget::customer.order-list.index', compact('orderLists', 'columns'));
+        $listTypes = config('amplify.constant.favorite_list_type');
+
+        if (!config('amplify.basic.enable_quick_list', true)) {
+            unset($listTypes['quick-list']);
+        }
+
+        $singleType = count($listTypes) == 1;
+
+        return view('widget::customer.order-list.index', compact('orderLists', 'columns', 'listTypes', 'singleType'));
     }
 }
