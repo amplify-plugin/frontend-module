@@ -7,7 +7,7 @@
             <p class="subtitle">{!! $displayableSubTitle !!}</p>
         @endif
     </div>
-    <ul class="nav nav-tabs nav-fill registration-tabs">
+    <ul class="{{ $headerClass }}">
         @stack('tab-title')
     </ul>
     <div class="tab-content p-3">

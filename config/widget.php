@@ -76,6 +76,12 @@ return [
                 'value' => 'Registration takes less than a minute but gives you full control over your orders.',
                 'hint' => 'Display message on register widget',
             ],
+            [
+                'name' => 'header-class',
+                'type' => 'text',
+                'value' => 'nav nav-tabs nav-fill registration-tabs',
+                'hint' => 'Default tab header default classes',
+            ],
         ],
         '@nestedItems' => [
             [
