@@ -28,7 +28,7 @@ class VerifyEmailController extends Controller
         NotificationFactory::call(Event::REGISTRATION_REQUEST_ACCEPTED,
             ['customer_id' => $contact->customer_id, 'contact_id' => $contact->id]);
 
-        return redirect()->to(frontendHomeURL().'?verified=1')
+        return redirect()->to(frontendHomeURL().'/login?verified=1')
             ->with('success', __('Email verification successful. Please sign in with your credentials.'));
     }
 }
