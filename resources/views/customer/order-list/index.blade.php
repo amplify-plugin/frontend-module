@@ -28,19 +28,18 @@
                     </div>
                     <div class="col-md-6 mb-2 mb-md-0 my-2">
                         <div class="d-flex justify-content-center justify-content-md-end">
-                            @if (customer(true)->can('favorites.manage-personal-list') && customer(true)->can('favorites.use-global-list'))
+                            @if (customer(true)->can('favorites.manage-personal-list') && customer(true)->can('favorites.use-global-list') && !$singleType)
                                 <label>
                                     <select name="type" onchange="$('#customer-item-list-search-form').submit();"
                                             class="form-control  form-control-sm">
-                                        <option {{ request('type') == '' ? 'selected' : '' }} value="">All Type
+                                        <option {{ request('type') == '' ? 'selected' : '' }} value="">
+                                            All Type
                                         </option>
-                                        <option {{ request('type') == 'personal' ? 'selected' : '' }} value="personal">
-                                            Personal
-                                        </option>
-                                        <option {{ request('type') == 'global' ? 'selected' : '' }} value="global">
-                                            Global
-                                        </option>
-
+                                        @foreach($listTypes as $type => $label)
+                                            <option value="{{ $type }}" @selected(request('type') == $type)>
+                                                {{ $label }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </label>
                             @endif
@@ -61,7 +60,7 @@
                                         <thead>
                                         <tr>
                                             <th width="20">{{ sort_link('id', '#') }}</th>
-                                            @if ($columns['list_type'])
+                                            @if ($columns['list_type'] && !$singleType)
                                                 <th>{{ sort_link('list_type', 'Type') }}</th>
                                             @endif
 
@@ -98,7 +97,7 @@
                                                     {{ $orderLists->firstItem() + $key }}
                                                 </th>
 
-                                                @if ($columns['list_type'])
+                                                @if ($columns['list_type'] && !$singleType)
                                                     <td width="100">{{ $orderList->list_type_label }}</td>
                                                 @endif
 
@@ -184,10 +183,10 @@
                                                     @endif
                                                     @if (customer(true)->can('favorites.manage-global-list') || customer(true)->can('favorites.manage-personal-list'))
                                                         <a class="dropdown-item delete-modal"
-                                                           href="{{ route('frontend.order-lists.destroy', $orderList->id) }}"
-                                                           data-target="#delete-modal" data-toggle="modal"
-                                                           onclick="setFormAction(this)">
-                                                            <i class="icon-trash mr-1"></i> Delete
+                                                           href="javascript:void(0)"
+                                                           data-action="{{ route('frontend.order-lists.destroy', $orderList->id) }}"
+                                                           onclick="Amplify.deleteConfirmation(this, '{{ $widgetTitle }}')">
+                                                            <i class="icon-trash mr-1"></i> {{ __('Delete') }}
                                                         </a>
                                                     @endif
                                                 @endif
@@ -255,6 +254,7 @@
                 }, ms || 0);
             };
         }
+
         $(document).on("keyup change", "#search", debounce(function (e) {
             $("#customer-item-list-search-form").submit();
         }, 500));

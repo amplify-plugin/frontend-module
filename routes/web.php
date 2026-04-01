@@ -240,6 +240,7 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
             ->only('index', 'show');
 
         Route::resource('favourites', FavouriteController::class)->where(['favourite' => '[\d]+']);
+        Route::get('favourites/search', [FavouriteController::class, 'apiSearch'])->name('favourites.search');
         Route::delete('favourites/{product}/item', [FavouriteController::class, 'destroyOrderListItem'])->name('favourites.destroy-item');
         Route::post('favourites/{favourite}/sync-product', [FavouriteController::class, 'syncProduct']);
 
