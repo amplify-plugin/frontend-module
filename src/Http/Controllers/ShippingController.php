@@ -35,24 +35,38 @@ class ShippingController extends Controller
         ];
 
         if (config('amplify.client_code') === 'STV') {
+            // Conditionally require state for countries that need it (US, CA, MX)
+            $country = strtoupper((string) $request->input('shipping_country', ''));
+            if (in_array($country, ['US', 'CA', 'MX'], true)) {
+                $rules['shipping_state'] = 'required|string|max:255';
+            }
+        }
 
-            $address1 = trim($request->input('shipping_address1', ''));
+        try {
+            // Let Laravel throw ValidationException automatically
+            $validatedData = $request->validate($rules);
 
-            if (! empty($address1)) {
-                // Extract first token from address 1
-                $firstToken = preg_split('/\s+/', $address1)[0] ?? $address1;
+            // Generate shipping_number if not provided, based on address1 for all clients
+            if (empty($validatedData['shipping_number'])) {
+                $address1 = trim($validatedData['shipping_address1']);
+                $baseCode = 'ADDR'; // default fallback
 
-                // Keep only alphanumeric + hyphens (sanitized token)
-                $baseCode = preg_replace('/[^A-Za-z0-9\-]/', '', $firstToken);
+                if (!empty($address1)) {
+                    // Step 1: Extract the first word/token from the address (e.g., "123 Main St" -> "123")
+                    $firstToken = preg_split('/\s+/', $address1)[0] ?? $address1;
 
-                // If sanitization removed everything, fallback to raw token without spaces
-                if ($baseCode === '') {
-                    $baseCode = preg_replace('/\s+/', '', $firstToken);
-                }
+                    // Step 2: Sanitize to keep only alphanumeric characters and hyphens (e.g., "123-Main" -> "123Main")
+                    $baseCode = preg_replace('/[^A-Za-z0-9\-]/', '', $firstToken);
 
-                // Guarantee a usable baseCode
-                if ($baseCode === '') {
-                    $baseCode = 'ADDR'; // fallback safety
+                    // Step 3: If sanitization removed everything (e.g., special chars only), fallback to raw token without spaces
+                    if ($baseCode === '') {
+                        $baseCode = preg_replace('/\s+/', '', $firstToken);
+                    }
+
+                    // Step 4: Guarantee a usable baseCode (final fallback if still empty)
+                    if ($baseCode === '') {
+                        $baseCode = 'ADDR';
+                    }
                 }
 
                 $candidate = $baseCode;
@@ -65,23 +79,11 @@ class ShippingController extends Controller
                         ->exists()
                 ) {
                     $counter++;
-                    $candidate = $baseCode.'-'.$counter;
+                    $candidate = $baseCode . '-' . $counter;
                 }
 
-                // Auto-apply generated unique code into the request
-                $request->merge(['shipping_number' => $candidate]);
+                $validatedData['shipping_number'] = $candidate;
             }
-
-            // Conditionally require state for countries that need it (US, CA, MX)
-            $country = strtoupper((string) $request->input('shipping_country', ''));
-            if (in_array($country, ['US', 'CA', 'MX'], true)) {
-                $rules['shipping_state'] = 'required|string|max:255';
-            }
-        }
-
-        try {
-            // Let Laravel throw ValidationException automatically
-            $validatedData = $request->validate($rules);
 
             $validateAddress = ErpApi::validateCustomerShippingLocation([
                 'ship_to_name' => $validatedData['shipping_name'] ?? null,
