@@ -47,7 +47,7 @@ class ShippingController extends Controller
             $validatedData = $request->validate($rules);
 
             // Generate shipping_number if not provided, based on address1 for all clients
-            if (empty($validatedData['shipping_number'])) {
+            if (empty($validatedData['shipping_number'] ?? null)) {
                 $address1 = trim($validatedData['shipping_address1']);
                 $baseCode = 'ADDR'; // default fallback
 
@@ -137,9 +137,13 @@ class ShippingController extends Controller
             return response()->json(['success' => true, 'address' => $erpAddress]);
 
         } catch (ValidationException $e) {
+            // Log validation errors
+            \Log::warning('ShippingController store validation error: ' . json_encode($e->errors()));
             // Return validation errors in JSON
             return response()->json(['errors' => $e->errors()], 422);
         } catch (\Throwable $th) {
+            // Log the error
+            \Log::error('ShippingController store error: ' . $th->getMessage(), ['trace' => $th->getTraceAsString()]);
             // Return any other errors
             return response()->json(['message' => $th->getMessage()], 500);
         }
