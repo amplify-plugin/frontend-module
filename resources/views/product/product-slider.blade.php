@@ -51,17 +51,17 @@
                                 <input id="product_qty_{{ $key }}" type="hidden" name="qty[]" value="1"
                                        min="1" max="" class="form-control">
                             </div>
-                            {{-- @if ($show_customer_list || $show_cart_btn)
+                            @if ($show_customer_list || $show_cart_btn)
                                 <div class="product-buttons d-flex justify-content-between">
 
-                                    @if ($show_customer_list)
+                                    {{-- @if ($show_customer_list)
                                         <x-product.favourite-manage-button
                                             class="mr-2"
                                             :already-exists="$product->exists_in_favorite"
                                             :favourite-list-id="$product->favorite_list_id"
                                             :product-id="$product->id"
                                         />
-                                    @endif
+                                    @endif --}}
 
                                     @if ($show_cart_btn)
                                         <a class="btn btn-outline-primary btn-block @if ($small_button) btn-sm @endif"
@@ -71,7 +71,7 @@
                                         </a>
                                     @endif
                                 </div>
-                            @endif --}}
+                            @endif
                         </div>
                     </div>
                 </div>
