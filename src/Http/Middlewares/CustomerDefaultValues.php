@@ -2,6 +2,7 @@
 
 namespace Amplify\Frontend\Http\Middlewares;
 
+use Amplify\ErpApi\ErpApiService;
 use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\System\Backend\Models\ContactLogin;
 use Amplify\System\Backend\Models\CustomerAddress;
@@ -44,7 +45,10 @@ class CustomerDefaultValues
                     $attr['customer_po_required'] = $customer->customer_po_required ?? false;
                     $attr['carrier_code'] = $customer->carrier_code ?? null;
 
-                    $request->session()->put('ship_to_address', ErpApi::init('default')->adapter()->renderSingleCustomerShippingLocation($attr)->toArray());
+                    // Use DefaultErpService adapter directly for rendering (doesn't switch main ErpApiService)
+                    $defaultAdapter = config('amplify.erp.configurations.default.adapter');
+                    $defaultService = new $defaultAdapter();
+                    $request->session()->put('ship_to_address', $defaultService->adapter()->renderSingleCustomerShippingLocation($attr)->toArray());
                 }
             }
         }
