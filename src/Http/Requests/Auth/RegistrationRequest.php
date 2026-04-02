@@ -40,6 +40,7 @@ class RegistrationRequest extends FormRequest
                 Rule::unique('contacts'),
             ],
             'phone_number' => 'required|string|max:255|ascii',
+            'phone_extension' => 'nullable|string|max:255|ascii',
             'industry_classification_id' => 'nullable|integer|exists:industry_classifications,id',
             'address_name' => 'nullable|string|max:255|ascii',
             'address_1' => 'required|string|max:255|ascii',
