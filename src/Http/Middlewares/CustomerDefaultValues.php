@@ -46,9 +46,9 @@ class CustomerDefaultValues
                     $attr['carrier_code'] = $customer->carrier_code ?? null;
 
                     // Use DefaultErpService adapter directly for rendering (doesn't switch main ErpApiService)
-                    $defaultAdapter = config('amplify.erp.configurations.default.adapter');
-                    $defaultService = new $defaultAdapter();
-                    $request->session()->put('ship_to_address', $defaultService->adapter()->renderSingleCustomerShippingLocation($attr)->toArray());
+                    $defaultAdapterClass = config('amplify.erp.configurations.default.adapter');
+                    $defaultService = new $defaultAdapterClass();
+                    $request->session()->put('ship_to_address', $defaultService->adapter->renderSingleCustomerShippingLocation($attr)->toArray());
                 }
             }
         }
