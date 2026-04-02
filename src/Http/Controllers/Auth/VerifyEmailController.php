@@ -29,6 +29,7 @@ class VerifyEmailController extends Controller
             ['customer_id' => $contact->customer_id, 'contact_id' => $contact->id]);
 
         return redirect()->to(frontendHomeURL().'/login?verified=1')
-            ->with('success', __('Email verification successful. Please sign in with your credentials.'));
+            ->with('success', __('Email verification successful. Please sign in with your credentials.'))
+            ->with('alert', true);
     }
 }
