@@ -361,7 +361,7 @@ window.Amplify = {
             error: function (xhr) {
                 Amplify.alert(xhr.responseJSON.message ?? xhr.statusText, 'Cart');
             },
-        });
+        }).done(() => Amplify.attachQuantityInputEvents());
     },
 
     renderCartSummaryItemRow(product, index) {
@@ -453,6 +453,48 @@ window.Amplify = {
             />
         </div>
     `);
+    },
+
+    attachQuantityInputEvents() {
+        document.querySelectorAll('input[data-quantity]')
+            .forEach((input) => {
+                console.log(input);
+                input.addEventListener('input', function () {
+                    let value = this.value;
+
+                    // Remove invalid characters
+                    value = value.replace(/[^0-9.]/g, '');
+
+                    // Allow only one dot
+                    const parts = value.split('.');
+                    if (parts.length > 2) {
+                        value = parts[0] + '.' + parts.slice(1).join('');
+                    }
+
+                    this.value = value;
+                });
+                input.addEventListener('keydown', function (e) {
+                    const allowedKeys = [
+                        'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'
+                    ];
+
+                    if (e.key === 'ArrowUp') {
+                        Amplify.handleQuantityChange('#' + e.target.id, 'increment');
+                    }
+
+                    if (e.key === 'ArrowDown') {
+                        Amplify.handleQuantityChange('#' + e.target.id, 'decrement');
+                    }
+
+                    if (allowedKeys.includes(e.key)
+                        || (e.key >= '0' && e.key <= '9')
+                        || (e.key === '.' && !this.value.includes('.'))) {
+
+                        return;
+                    }
+                    e.preventDefault();
+                });
+            });
     },
 
     /**
@@ -550,7 +592,25 @@ window.Amplify = {
             }
         }
 
+        if (targetElement.value.length > 0 && this.verifyQuantityInterval(targetElement.value, qtyInterval) === false) {
+            this.alert(
+                `Product ${productCode} requires a order pack(s) of ${qtyInterval}. You entered ${targetElement.value}.`,
+                'Cart');
+            targetElement.value = this.toNearestQtyInterval(targetElement.value, qtyInterval);
+            return false;
+        }
+
         return true;
+    },
+
+    verifyQuantityInterval(value, interval) {
+        if (interval <= 0) return false;
+        return Math.abs(value % interval) < 1e-10;
+    },
+
+    toNearestQtyInterval(value, interval) {
+        if (interval === 0) return value;
+        return Math.ceil(value / interval) * interval;
     },
 
     /**
