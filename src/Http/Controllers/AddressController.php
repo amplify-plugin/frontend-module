@@ -10,6 +10,7 @@ use Amplify\System\Backend\Models\CustomerAddress;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
@@ -159,6 +160,12 @@ class AddressController extends Controller
                     'zip_code' => $erpAddress->ShipToZipCode,
                 ]);
             }
+
+            $customerNumber = customer_check()
+                ? customer()->erp_id
+                : config('amplify.frontend.guest_default');
+
+            Cache::forget("getCustomerShippingLocationList-{$customerNumber}");
 
             Session::flash('success', 'Address Added Successfully');
 
