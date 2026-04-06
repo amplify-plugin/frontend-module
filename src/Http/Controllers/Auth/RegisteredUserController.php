@@ -291,6 +291,7 @@ class RegisteredUserController extends Controller
                 'template_customer_number' => config('amplify.frontend.guest_default'),
                 'email_address' => $customer->email,
                 'phone_number' => $customer->phone,
+                'phone_ext' => $customer->phone_ext,
                 'customer_name' => $customer->customer_name,
                 'contact' => null,
                 'address_1' => $customer->address_1,
