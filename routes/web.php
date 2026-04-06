@@ -253,6 +253,8 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
         Route::resource('quick-lists', QuickListController::class)
             ->where(['quick_list' => '[\d]+']);
 
+        Route::get('shipping-addresses', [ShippingController::class, 'index'])
+            ->name('shipping-addresses.index');
         Route::post('shipping-address/create', [ShippingController::class, 'store']);
         Route::post('/ship-to-address-save', [ShippingController::class, 'saveShipToAddress'])
             ->name('ship-to-address.store');

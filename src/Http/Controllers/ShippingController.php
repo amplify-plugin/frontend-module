@@ -9,10 +9,18 @@ use Amplify\System\Backend\Models\CustomerAddress;
 use Amplify\System\Backend\Models\Warehouse;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\ValidationException;
 
 class ShippingController extends Controller
 {
+    public function index()
+    {
+        return response()->json(
+            ErpApi::getCustomerShippingLocationList()?->toArray() ?? []
+        );
+    }
+
     public function store(Request $request)
     {
         // Define validation rules first (outside of try)
@@ -133,6 +141,12 @@ class ShippingController extends Controller
                     'zip_code' => $erpAddress->ShipToZipCode,
                 ]);
             }
+
+            $customerNumber = customer_check()
+                ? customer()->erp_id
+                : config('amplify.frontend.guest_default');
+
+            Cache::forget("getCustomerShippingLocationList-{$customerNumber}");
 
             return response()->json(['success' => true, 'address' => $erpAddress]);
 
