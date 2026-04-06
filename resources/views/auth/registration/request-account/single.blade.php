@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-6">
         {!! \Form::rText('contact_name', trans('Name'), null, true, ['placeholder' => trans('Name')]) !!}
     </div>
     <div class="col-md-6">
@@ -41,14 +41,14 @@
     {{ $slot }}
 </div>
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-12">
         @if ($newsletterSubscription)
             {!! \Form::rCheckbox('contact_newsletter', '', [
                 'yes' => config('app.name') . ' ' . trans('newsletter subscription.'),
             ]) !!}
         @endif
     </div>
-    <div class="col-md-6">
+    <div class="col-md-12">
         @if ($acceptTermsConfirmation)
             <input type="hidden" name="required[]" value="contact_accept_term" />
             {!! \Form::rCheckbox(
