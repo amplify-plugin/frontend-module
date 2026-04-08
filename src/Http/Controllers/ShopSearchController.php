@@ -7,6 +7,8 @@ use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\System\Backend\Models\Product;
 use Amplify\System\Traits\ProductDetailTrait;
 use App\Http\Controllers\Controller;
+use ErrorException;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -23,7 +25,12 @@ class ShopSearchController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @throws \ErrorException
+     * @param string|null $query
+     * @return RedirectResponse|string
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws ErrorException
+     * @throws BindingResolutionException
      */
     public function __invoke(?string $query = null): RedirectResponse|string
     {
@@ -32,26 +39,42 @@ class ShopSearchController extends Controller
         $eaProductData = store()->eaProductsData;
         $products = $eaProductData->getProducts();
         $searchMessage = $eaProductData->getMessage();
+        $searchQuery = request()->get('q', $query);
 
-        if (! empty($products) && count($products) === 1 && empty($searchMessage) && ! request()->filled('page')) {
-            $seoPath = $eaProductData->getCurrentSeoPath();
-            $firstProduct = array_shift($products);
+        $canRedirectToSingleProduct =
+            ! empty($searchQuery)
+            && empty($searchMessage)
+            && ! request()->filled('page')
+            && ! empty($products)
+            && count($products) === 1;
 
-            if (! empty($firstProduct->Sku_Id) && ! empty($skuId = explode('-', $firstProduct->Sku_Id)[1])) {
-                $dbProduct = Product::find($skuId);
-                $firstProduct->Product_Id = $firstProduct->Amplify_Id = $skuId;
-                $firstProduct->Product_Slug = $dbProduct->product_slug;
+        if ($canRedirectToSingleProduct) {
+            $firstProduct = reset($products);
+
+            if ($searchQuery === $firstProduct->Product_Code) {
+                $seoPath = $eaProductData->getCurrentSeoPath();
+
+                if (! empty($firstProduct->Sku_Id)) {
+                    $parts = explode('-', $firstProduct->Sku_Id);
+                    $skuId = $parts[1] ?? null;
+
+                    if ($skuId && $dbProduct = Product::find($skuId)) {
+                        $firstProduct->Product_Id = $skuId;
+                        $firstProduct->Amplify_Id = $skuId;
+                        $firstProduct->Product_Slug = $dbProduct->product_slug;
+                    }
+                }
+
+                return redirect(frontendSingleProductURL($firstProduct, $seoPath));
             }
-
-            return \redirect(frontendSingleProductURL($firstProduct, $seoPath));
-
         }
 
         $this->loadPageByType('shop');
 
-        Cookie::queue('showView', active_shop_view(), MONTH / 60, '/'.config('amplify.frontend.shop_page_prefix'));
+        $shopPath = '/'.config('amplify.frontend.shop_page_prefix');
 
-        Cookie::queue('resultsPerPage', results_per_page(), MONTH / 60, '/'.config('amplify.frontend.shop_page_prefix'));
+        Cookie::queue('showView', active_shop_view(), MONTH / 60, $shopPath);
+        Cookie::queue('resultsPerPage', results_per_page(), MONTH / 60, $shopPath);
 
         return $this->render();
     }
@@ -61,7 +84,7 @@ class ShopSearchController extends Controller
     /**
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
-     * @throws \ErrorException
+     * @throws ErrorException
      */
     public function getQuickView($id): JsonResponse
     {
