@@ -30,7 +30,7 @@
                         </button>
                     </span>
                 <label for="search-input" class="sr-only">Search</label>
-                <input class="form-control" type="text" name="search" placeholder="{{$placeholder}}" id="search-input" />
+                <input class="form-control" type="text" name="search" placeholder="{{$searchPlaceholder}}" id="search-input" />
             </form>
         </div>
     </div>
@@ -51,7 +51,7 @@
                     @foreach ($manufacturers as $manufacturer)
                         <a class="font-weight-bold my-2 text-decoration-none"
                         data-toggle="tooltip" data-placement="top" title="{{ $manufacturer['name'] }}"
-                           href="{{ frontendShopURL('Brand:'.$manufacturer['code']) }}">
+                           href="{{ frontendShopURL($searchAttribute.':'.$manufacturer['code']) }}">
                             <div class="d-flex flex-column justify content-center align-items-center">
                                 <div class="card m-2 w-auto">
                                     @if(!$nameOnly)

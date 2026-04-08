@@ -242,7 +242,7 @@
                                                 @endif
                                                 @if (customer(true)->can('invoices.pay') && config('amplify.payment.allow_payments'))
                                                     @if ($amount > 0 && $summary['AllowArPayments'] === 'Yes')
-                                                        <a href="{{ route('customer.cenpos-invoices-pay.index', ['invoices[]' => $summary['InvoiceNumber']]) }}"
+                                                        <a href="{{ route('frontend.customer.cenpos-invoices-pay.index', ['invoices[]' => $summary['InvoiceNumber']]) }}"
                                                            class="btn btn-primary btn-sm d-block mr-0 mt-2">
                                                             <i class="icon-usd mr-1"></i> Pay
                                                         </a>

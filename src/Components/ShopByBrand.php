@@ -15,27 +15,17 @@ use Illuminate\Support\Facades\Request;
  */
 class ShopByBrand extends BaseComponent
 {
-    /**
-     * @var array
-     */
-    public $options;
-
-    private bool $onlyFeatured;
-
-    public bool $nameOnly;
-
-    public string $placeholder;
 
     /**
      * Create a new component instance.
      */
-    public function __construct(string $onlyFeatured = 'false', string $nameOnly = 'false', string $searchPlaceholder = 'Search site')
+    public function __construct(public bool   $onlyFeatured = false,
+                                public bool   $nameOnly = false,
+                                public string $searchPlaceholder = 'Search site',
+                                public string $searchAttribute = 'Brand')
     {
         parent::__construct();
 
-        $this->onlyFeatured = UtilityHelper::typeCast($onlyFeatured, 'bool');
-        $this->nameOnly = UtilityHelper::typeCast($nameOnly, 'bool');
-        $this->placeholder = $searchPlaceholder;
     }
 
     /**
@@ -67,7 +57,7 @@ class ShopByBrand extends BaseComponent
             ->groupBy(function ($item, $key) {
                 $firstLetter = $item->title[0];
 
-                if (! ctype_alnum($firstLetter)) {
+                if (!ctype_alnum($firstLetter)) {
                     return '@';
                 }
 
@@ -75,11 +65,11 @@ class ShopByBrand extends BaseComponent
             })
             ->sortKeys();
 
-        if (! request()->has('key') && ! request()->has('search')) {
+        if (!request()->has('key') && !request()->has('search')) {
             $filteredGroupedBrands = $filteredGroupedBrands->map(function ($brandItems) {
                 return [
                     'totalItems' => count($brandItems),
-                    'brands' => $brandItems->take(6),
+                    'brands'     => $brandItems->take(6),
                 ];
             });
         }
@@ -89,7 +79,7 @@ class ShopByBrand extends BaseComponent
                 $filteredGroupedBrands->toArray(),
                 function ($item) {
                     if (request()->key == '*') {
-                        if (! ctype_alnum((string) $item)) {
+                        if (!ctype_alnum((string)$item)) {
                             return true;
                         }
                     }
@@ -102,13 +92,13 @@ class ShopByBrand extends BaseComponent
 
         if (Request::has('search')) {
             $filteredGroupedBrands = $initialQuery
-                ->where('title', 'like', '%'.request()->search.'%')
+                ->where('title', 'like', '%' . request()->search . '%')
                 ->get()
                 ->sortBy('title', SORT_NATURAL | SORT_FLAG_CASE)
                 ->groupBy(function ($item, $key) {
                     $firstLetter = $item->title[0];
 
-                    if (! ctype_alnum($firstLetter)) {
+                    if (!ctype_alnum($firstLetter)) {
                         return '@';
                     }
 
@@ -118,7 +108,7 @@ class ShopByBrand extends BaseComponent
                 ->map(function ($brandItems) {
                     return [
                         'totalItems' => count($brandItems),
-                        'brands' => $brandItems->take(6),
+                        'brands'     => $brandItems->take(6),
                     ];
                 })
                 ->toArray();
@@ -131,8 +121,8 @@ class ShopByBrand extends BaseComponent
 
         return [
             'filtered_brands' => $filteredGroupedBrands,
-            'brands' => $groupedBrands,
-            'btn_class' => $class,
+            'brands'          => $groupedBrands,
+            'btn_class'       => $class,
         ];
     }
 }
