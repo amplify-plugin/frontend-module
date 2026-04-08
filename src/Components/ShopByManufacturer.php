@@ -15,27 +15,17 @@ use Illuminate\Support\Facades\Request;
  */
 class ShopByManufacturer extends BaseComponent
 {
-    /**
-     * @var array
-     */
-    public $options;
-
-    private bool $onlyFeatured;
-
-    public bool $nameOnly;
-
-    public string $placeholder;
 
     /**
      * Create a new component instance.
      */
-    public function __construct(string $onlyFeatured = 'false', string $nameOnly = 'false', string $searchPlaceholder = 'Search site')
+    public function __construct(public bool   $onlyFeatured = false,
+                                public bool   $nameOnly = false,
+                                public string $searchPlaceholder = 'Search site',
+                                public string $searchAttribute = 'Brand')
     {
         parent::__construct();
 
-        $this->onlyFeatured = UtilityHelper::typeCast($onlyFeatured, 'bool');
-        $this->nameOnly = UtilityHelper::typeCast($nameOnly, 'bool');
-        $this->placeholder = $searchPlaceholder;
     }
 
     /**
@@ -66,9 +56,11 @@ class ShopByManufacturer extends BaseComponent
             ->get()
             ->sortBy('name', SORT_NATURAL | SORT_FLAG_CASE)
             ->groupBy(function ($item, $key) {
-                $firstLetter = isset($item->name[0]) ? $item->name[0] : '@';
+                $firstLetter = isset($item->name[0])
+                    ? $item->name[0]
+                    : '@';
 
-                if (! ctype_alnum($firstLetter)) {
+                if (!ctype_alnum($firstLetter)) {
                     return '@';
                 }
 
@@ -76,10 +68,10 @@ class ShopByManufacturer extends BaseComponent
             })
             ->sortKeys();
 
-        if (! request()->has('key') && ! request()->has('search')) {
+        if (!request()->has('key') && !request()->has('search')) {
             $filteredGroupedManufacturers = $filteredGroupedManufacturers->map(function ($manufacturerItems) {
                 return [
-                    'totalItems' => count($manufacturerItems),
+                    'totalItems'    => count($manufacturerItems),
                     'manufacturers' => $manufacturerItems->take(6),
                 ];
             });
@@ -90,7 +82,7 @@ class ShopByManufacturer extends BaseComponent
                 $filteredGroupedManufacturers->toArray(),
                 function ($item) {
                     if (request()->key == '*') {
-                        if (! ctype_alnum((string) $item)) {
+                        if (!ctype_alnum((string)$item)) {
                             return true;
                         }
                     }
@@ -104,13 +96,15 @@ class ShopByManufacturer extends BaseComponent
         if (Request::has('search')) {
             $filteredGroupedManufacturers = $initialQuery
                 ->whereNull('archived_at')
-                ->where('name', 'like', '%'.request()->search.'%')
+                ->where('name', 'like', '%' . request()->search . '%')
                 ->get()
                 ->sortBy('name', SORT_NATURAL | SORT_FLAG_CASE)
                 ->groupBy(function ($item, $key) {
-                    $firstLetter = isset($item->name[0]) ? $item->name[0] : '@';
+                    $firstLetter = isset($item->name[0])
+                        ? $item->name[0]
+                        : '@';
 
-                    if (! ctype_alnum($firstLetter)) {
+                    if (!ctype_alnum($firstLetter)) {
                         return '@';
                     }
 
@@ -119,7 +113,7 @@ class ShopByManufacturer extends BaseComponent
                 ->sortKeys()
                 ->map(function ($manufacturerItems) {
                     return [
-                        'totalItems' => count($manufacturerItems),
+                        'totalItems'    => count($manufacturerItems),
                         'manufacturers' => $manufacturerItems->take(6),
                     ];
                 })
@@ -133,8 +127,8 @@ class ShopByManufacturer extends BaseComponent
 
         return [
             'filtered_manufacturers' => $filteredGroupedManufacturers,
-            'manufacturers' => $groupedManufacturers,
-            'btn_class' => $class,
+            'manufacturers'          => $groupedManufacturers,
+            'btn_class'              => $class,
         ];
     }
 }

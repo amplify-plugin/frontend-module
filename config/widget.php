@@ -1512,19 +1512,25 @@ return [
         'model' => ['static_page'],
         '@attributes' => [
             [
-                'name' => 'only-featured',
+                'name' => ':only-featured',
                 'type' => 'boolean',
                 'value' => false,
             ],
             [
-                'name' => 'name-only',
+                'name' => ':name-only',
                 'type' => 'boolean',
                 'value' => false,
             ],
             [
                 'name' => 'search-placeholder',
                 'type' => 'text',
-                'value' => 'Search site',
+                'value' => 'Search Brand',
+            ],
+            [
+                'name' => 'search-attribute',
+                'type' => 'text',
+                'hint' => 'Use the exact EasyAsk attribute name from your catalog (e.g. Brand, Brands). Enter the name only—do not add a leading colon (:).',
+                'value' => 'Brand',
             ],
         ],
         '@nestedItems' => null,
@@ -3726,12 +3732,12 @@ return [
         'model' => ['static_page'],
         '@attributes' => [
             [
-                'name' => 'only-featured',
+                'name' => ':only-featured',
                 'type' => 'boolean',
                 'value' => false,
             ],
             [
-                'name' => 'name-only',
+                'name' => ':name-only',
                 'type' => 'boolean',
                 'value' => false,
             ],
@@ -3739,6 +3745,12 @@ return [
                 'name' => 'search-placeholder',
                 'type' => 'text',
                 'value' => 'Search Brand',
+            ],
+            [
+                'name' => 'search-attribute',
+                'type' => 'text',
+                'hint' => 'Use the exact EasyAsk attribute name from your catalog (e.g. Brand, Brands). Enter the name only—do not add a leading colon (:).',
+                'value' => 'Brand',
             ],
         ],
         '@nestedItems' => null,
