@@ -3744,13 +3744,13 @@ return [
             [
                 'name' => 'search-placeholder',
                 'type' => 'text',
-                'value' => 'Search Manufacturer',
+                'value' => 'Search Brand',
             ],
             [
                 'name' => 'search-attribute',
                 'type' => 'text',
-                'hint' => 'Use the exact EasyAsk attribute name from your catalog (e.g. Manufacturer, Manufacturers). Enter the name only—do not add a leading colon (:).',
-                'value' => 'Manufacturer',
+                'hint' => 'Use the exact EasyAsk attribute name from your catalog (e.g. Brand, Brands). Enter the name only—do not add a leading colon (:).',
+                'value' => 'Brand',
             ],
         ],
         '@nestedItems' => null,
