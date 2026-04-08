@@ -42,7 +42,8 @@ class ShopSearchController extends Controller
         $searchQuery = request()->get('q', $query);
 
         $canRedirectToSingleProduct =
-            ! empty($searchQuery)
+            config('amplify.frontend.redirect_to_product_detail_page_on_search')
+            && ! empty($searchQuery)
             && empty($searchMessage)
             && ! request()->filled('page')
             && ! empty($products)
