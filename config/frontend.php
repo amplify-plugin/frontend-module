@@ -22,6 +22,7 @@ return [
     'guest_checkout' => false,
     'force_shipping_address_customer_id' => null,
     'guest_add_to_cart' => false,
+    'redirect_to_product_detail_page_on_search' => false,
     'product_available_text' => 'Available',
     'product_not_available_text' => 'Available in 3-5 days',
     'right_sidebar' => true,
