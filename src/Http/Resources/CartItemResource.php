@@ -47,7 +47,7 @@ class CartItemResource extends JsonResource
             'note' => $this->getSourceMessage($this->source, $this->source_type, $this->expiry_date, $this->additional_info),
             'custom_item_info' => $this->source_type == 'custom_item' ? json_decode($this->additional_info) : '',
             'ncnr_msg' => (isset($this->additional_info['is_ncnr']))
-                ? $this->additional_info['is_ncnr'] ? '<span class="text-warning">It is a <b>Non-Cancelable, Non-Returnable</b> item</span>' : ''
+                ? $this->additional_info['is_ncnr'] ? '<span class="ncnr-text">'.__('It is a Non-Cancelable, Non-Returnable item').'</span>' : ''
                 : '',
             'ship_restriction' => $ship_restriction,
             'error' => $this->additional_info['error'] ?? '',
