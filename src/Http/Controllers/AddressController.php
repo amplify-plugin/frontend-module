@@ -146,6 +146,10 @@ class AddressController extends Controller
                 'zip_code' => $validated['zip_code'],
             ]);
 
+            if (isset($erpAddress->Message) && ! empty($erpAddress->Message)) {
+                throw new \Exception($erpAddress->Message);
+            }
+
             if (config('amplify.client_code') != 'ACP' && ! empty($erpAddress->ShipToNumber)) {
                 CustomerAddress::create([
                     'customer_id' => $request->input('customer_id', customer()->getKey()),
@@ -173,7 +177,7 @@ class AddressController extends Controller
             return redirect()->route('frontend.addresses.index');
         } catch (\Throwable $th) {
             Log::error($th);
-            Session::flash('error', 'Sorry something went wrong...');
+            Session::flash('error', $th->getMessage() ?? 'Sorry something went wrong...');
 
             return back();
         }

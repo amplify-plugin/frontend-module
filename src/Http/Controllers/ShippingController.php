@@ -128,6 +128,10 @@ class ShippingController extends Controller
                 'zip_code' => $validatedData['shipping_zip'],
             ]);
 
+            if (isset($erpAddress->Message) && ! empty($erpAddress->Message)) {
+                throw new \Exception($erpAddress->Message);
+            }
+
             if (config('amplify.client_code') !== 'ACP' && ! empty($erpAddress->ShipToNumber)) {
                 CustomerAddress::create([
                     'customer_id' => customer()->getKey(),
