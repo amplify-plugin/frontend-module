@@ -400,7 +400,10 @@ window.Amplify = {
      */
     async loadCartDropdown() {
         await $.ajax(this.cartUrl(), {
-            beforeSend: () => Amplify.renderEmptyCart('/assets/img/preloader.gif'),
+            beforeSend: () => {
+                Amplify.renderEmptyCart('/assets/img/preloader.gif');
+                $("#cart-menu-subtotal").hide();
+            },
             method: 'GET',
             dataType: 'json',
             headers: {
@@ -409,7 +412,9 @@ window.Amplify = {
             success: function (res) {
                 $('.cart-dropdown').empty();
                 if (res.data.products.length > 0) {
+                    $("#cart-menu-subtotal").show();
                     $('.total_cart_items').text(res.data.item_count);
+                    $('.total_cart_items').removeClass('d-none');
                     res.data.products.forEach((product, index) => {
                         $('.cart-dropdown').append(`
                         <div class="dropdown-product-item" id="cart_products_${index}">
@@ -442,8 +447,10 @@ window.Amplify = {
     },
 
     renderEmptyCart(imageUrl = '/assets/img/empty_cart.png') {
+        $("#cart-menu-subtotal").hide();
         $('.total_cart_items').text(0);
         $('.total_cart_amount').text('$0.00');
+        $('.total_cart_items').addClass('d-none');
 
         $('.cart-dropdown').append(`
         <div id="cart_items" class="text-center" style="min-height: 250px;">
@@ -458,7 +465,6 @@ window.Amplify = {
     attachQuantityInputEvents() {
         document.querySelectorAll('input[data-quantity]')
             .forEach((input) => {
-                console.log(input);
                 input.addEventListener('input', function () {
                     let value = this.value;
 
