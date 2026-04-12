@@ -465,7 +465,6 @@ window.Amplify = {
     attachQuantityInputEvents() {
         document.querySelectorAll('input[data-quantity]')
             .forEach((input) => {
-                console.log(input);
                 input.addEventListener('input', function () {
                     let value = this.value;
 
