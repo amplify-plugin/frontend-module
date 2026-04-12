@@ -5,6 +5,7 @@ namespace Amplify\Frontend\Http\Controllers;
 use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\Frontend\Events\CartUpdated;
 use Amplify\Frontend\Http\Requests\ShippingOptionRequest;
+use Amplify\Frontend\Http\Rules\PhoneNumberRule;
 use Amplify\System\Backend\Models\CustomerAddress;
 use Amplify\System\Backend\Models\Warehouse;
 use App\Http\Controllers\Controller;
@@ -32,8 +33,8 @@ class ShippingController extends Controller
             'shipping_address3' => 'nullable|string|max:255|ascii',
             'shipping_contact1' => 'nullable|string|max:255|ascii',
             'shipping_contact2' => 'nullable|string|max:255|ascii',
-            'shipping_phone1' => 'nullable|string|min:10|max:255|ascii',
-            'shipping_phone2' => 'nullable|string|min:10|max:255|ascii',
+            'shipping_phone1' => ['nullable', new PhoneNumberRule()],
+            'shipping_phone2' => ['nullable', new PhoneNumberRule()],
             'shipping_email1' => 'nullable|string|email:dns,rfc|max:255|ascii',
             'shipping_email2' => 'nullable|string|email:dns,rfc|max:255|ascii',
             'shipping_country' => 'required|string|size:2|ascii',
@@ -139,6 +140,7 @@ class ShippingController extends Controller
                     'state' => $erpAddress->ShipToState,
                     'city' => $erpAddress->ShipToCity,
                     'zip_code' => $erpAddress->ShipToZipCode,
+                    'phone' => $validatedData['shipping_phone1'] ?? null,
                 ]);
             }
 

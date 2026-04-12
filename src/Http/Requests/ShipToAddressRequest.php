@@ -2,6 +2,7 @@
 
 namespace Amplify\Frontend\Http\Requests;
 
+use Amplify\Frontend\Http\Rules\PhoneNumberRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -41,6 +42,7 @@ class ShipToAddressRequest extends FormRequest
             'zip_code' => 'nullable|string|max:255|ascii',
             'state' => 'nullable|string|size:2|ascii',
             'country_code' => 'nullable|string|size:2|ascii',
+            'phone' => ['nullable', new PhoneNumberRule()],
         ];
 
         if ($this->method() == 'PUT') {

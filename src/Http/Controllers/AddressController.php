@@ -136,7 +136,7 @@ class AddressController extends Controller
                 'address_3' => $validated['address_3'] ?? null,
                 'contact' => $validated['shipping_contact1'] ?? null,
                 'contact_2' => $validated['shipping_contact2'] ?? null,
-                'phone_1' => $validated['shipping_phone1'] ?? null,
+                'phone_1' => $validated['phone'] ?? null,
                 'phone_2' => $validated['shipping_phone2'] ?? null,
                 'email_1' => $validated['shipping_email1'] ?? null,
                 'email_2' => $validated['shipping_email2'] ?? null,
@@ -158,6 +158,7 @@ class AddressController extends Controller
                     'state' => $erpAddress->ShipToState,
                     'city' => $erpAddress->ShipToCity,
                     'zip_code' => $erpAddress->ShipToZipCode,
+                    'phone' => $validated['phone'] ?? null,
                 ]);
             }
 

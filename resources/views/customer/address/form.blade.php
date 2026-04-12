@@ -83,6 +83,13 @@
                             'title'     => __("Digits, hyphen only (4–10)"),
                         ]) !!}
                     </div>
+                    <div class="col-md-6">
+                        {!! \Form::rText('phone', __('Phone'), old('phone', $address->phone ?? ''), false, [
+                            'maxlength' => 20,
+                            'title'     => __("Digits, spaces, parentheses, slash and hyphen only"),
+                            'data-allow'=> "phone"
+                        ]) !!}
+                    </div>
                 </div>
 
                 <div class="form-group" style="margin-bottom: 0 !important;">
@@ -148,6 +155,8 @@
                 address_line: /[^A-Za-z0-9\s\-\.,#\/']/g,
                 // letters + spaces + hyphen + apostrophe + dot
                 city: /[^A-Za-z\s\-\.']/g,
+                // digits, spaces, (), / and -
+                phone: /[^0-9\s\-\(\)\/]/g,
                 // digits only
                 postal_code: /[0-9\-]/g
             };
