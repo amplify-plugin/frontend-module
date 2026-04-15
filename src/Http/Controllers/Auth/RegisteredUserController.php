@@ -153,6 +153,7 @@ class RegisteredUserController extends Controller
                 'account_title_id' => $request->input('contact_account_title'),
                 'name' => $request->input('name'),
                 'phone' => $request->input('phone_number', $erpData['CustomerPhone'] ?? null),
+                'phone_ext' => $request->input('phone_extension', $erpData['CustomerPhoneExt'] ?? null),
                 'password' => $request->input('password'),
                 'email' => $request->input('email'),
                 'login_id' => $request->input('email'),
