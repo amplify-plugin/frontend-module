@@ -67,21 +67,20 @@
 
                                                 <div class="d-flex align-items-center justify-content-between cs-w-420">
                                                     <div><b>Quantity/{{ $product->ERP->PricingUnitOfMeasure }}</b></div>
-                                                    <div
-                                                        class="gap-3 count align-items-center p-2 border rounded d-flex"
-                                                        style="position: unset">
-                                                        <span
-                                                            class="qty-minus bg-secondary text-dark d-flex align-items-center justify-content-center fw-600">
-                                                            <i class="icon-minus"></i>
-                                                        </span>
-                                                        <p class="mb-0 mx-2 fw-600 qty-field">0</p>
-                                                        <span
-                                                            class="qty-plus text-white d-flex align-items-center justify-content-center fw-600">
-                                                            <i class="icon-plus"></i>
-                                                        </span>
+                                                    <div class="align-items-center d-flex gap-2 qty-section">
+                                                        <button type="button"
+                                                                onclick="Amplify.handleQuantityChange('#product_qty_{{ $index }}', 'decrement');"
+                                                                class="operator">-
+                                                        </button>
+                                                        <input type="text" class="qty-input" id="product_qty_{{ $index }}" name="qty" value="1"
+                                                               data-min-order-qty="1" data-qty-interval="1"
+                                                               min="1" step="1" style="width: 50px; text-align: center;"/>
+                                                        <button type="button"
+                                                                onclick="Amplify.handleQuantityChange('#product_qty_{{ $index }}', 'increment');"
+                                                                class="operator operator-dark">+
+                                                        </button>
                                                     </div>
                                                 </div>
-                                                <input id="product_qty_{{ $index }}" name="qty" type="hidden" value="0">
                                                 <input id="product_code_{{ $index }}" name="product_code[]"
                                                        type="hidden" value="{{ $product->product_code }}">
                                                 <input id="{{ 'product_warehouse_' . $index }}" type="hidden"
@@ -160,30 +159,6 @@
 @php
     push_js(function () {
         return <<<HTML
-        function resetQuantity() {
-            \$('.sku-item').data('qty', 0);
-            \$('.qty-field').html(0);
-        }
-        \$('.qty-plus').on('click', function (e) {
-            let target = \$(e.currentTarget);
-            let qty;
-            if(qty = parseInt(target.prev().html())+1) {
-                target.prev().html(qty);
-                target.closest('.sku-item').data('qty', qty);
-                target.closest('.sku-item').find('input[name="qty"]').val(qty);
-            }
-        });
-
-        $('.qty-minus').on('click', function (e) {
-            let target = \$(e.currentTarget);
-            let qty;
-            if((qty = parseInt(target.next().html())-1) >= 0) {
-                target.next().html(qty);
-                target.closest('.sku-item').data('qty', qty);
-                target.closest('.sku-item').find('input[name="qty"]').val(qty);
-            }
-        });
-
         const ORDER_DATE_RANGER = '#created_date_range';
 
         $(document).ready(function () {
