@@ -89,7 +89,7 @@
                                     <div id="collapse{{$index}}" class="collapse" aria-labelledby="heading{{$index}}"
                                          data-parent="#sku_details_table_body">
                                         <div class="card-body">
-                                            <table class="table table-bordered view-histroy">
+                                            <table class="table table-bordered view-history">
                                                 <thead>
                                                 <tr>
                                                     <th>{{ __('Order date') }}</th>
@@ -132,23 +132,13 @@
         </div>
     </div>
 </div>
-<style>
-    .qty-plus {
-        background-color: #202549 !important;
-    }
-</style>
-@php
-    push_js(function () {
-        return <<<HTML
-        const ORDER_DATE_RANGER = '#created_date_range';
 
+@pushonce("footer-script")
+    <script>
         $(document).ready(function () {
-            var startDate = $("#created_start_date").val();
-            var endDate = $("#created_end_date").val();
-            var table =  $(".view-histroy").DataTable();
+            $("#order-table").DataTable();
+            var table =  $(".view-history").DataTable();
             table.order([0, 'desc']).draw();
-
-            initOrderCreatedDateRangePicker(startDate, endDate);
         });
-HTML;}, 'footer-script');
-@endphp
+    </script>
+@endpushonce
