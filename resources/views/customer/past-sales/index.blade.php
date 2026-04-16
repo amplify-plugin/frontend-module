@@ -5,7 +5,7 @@
                 <table class="products-table table table-bordered table-hover" id="order-table">
                     <thead>
                     <tr>
-                        <th>Items</th>
+                        <th>{{ __('Items') }}</th>
                     </tr>
                     </thead>
                     <tbody class="accordion" id="sku_details_table_body">
@@ -26,7 +26,7 @@
                                                         class="d-block d-md-inline font-weight-bold mr-md-2 mb-2 mb-md-0">{{ $product->local_product_name }}</span></a>
                                                 {!! $product->local_short_description !!}
                                             </p>
-                                            <p><b>Product Code:</b> {{ $product->product_code }}</p>
+                                            <p><b>{{ __('Product Code') }}:</b> {{ $product->product_code }}</p>
 
                                             <div class="d-flex flex-wrap gap-col-3">
                                                 @foreach ($product->attributes as $attribute)
@@ -52,43 +52,24 @@
                                                 @endfor
 
                                                 <p class="d-flex justify-content-between mb-2">
-                                                    <span><b>Your Price</b>/ {{ $product->ERP->PricingUnitOfMeasure }}</span>
-                                                    <span>
-                                                    @if ($product?->campaignProduct)
-                                                            <del>
-                                                            {{ price_format($product->ERP->Price) }}
-                                                        </del>
-                                                            <b>{{ price_format($product->campaignProduct->discount) }}</b>
-                                                        @else
-                                                            {{ price_format($product->ERP->Price) }}
-                                                        @endif
-                                                    </span>
+                                                    <span><b>{{ __('Your Price') }}</b></span>
+                                                    <x-product.price
+                                                        element="span"
+                                                        :product="$product"
+                                                        :value="$product->ERP?->Price"
+                                                        :uom="$product->ERP?->UnitOfMeasure ?? 'EA'"/>
                                                 </p>
 
-                                                <div class="d-flex align-items-center justify-content-between cs-w-420">
-                                                    <div><b>Quantity/{{ $product->ERP->PricingUnitOfMeasure }}</b></div>
-                                                    <div class="align-items-center d-flex gap-2 qty-section">
-                                                        <button type="button"
-                                                                onclick="Amplify.handleQuantityChange('#product_qty_{{ $index }}', 'decrement');"
-                                                                class="operator">-
-                                                        </button>
-                                                        <input type="text" class="qty-input" id="product_qty_{{ $index }}" name="qty" value="1"
-                                                               data-min-order-qty="1" data-qty-interval="1"
-                                                               min="1" step="1" style="width: 50px; text-align: center;"/>
-                                                        <button type="button"
-                                                                onclick="Amplify.handleQuantityChange('#product_qty_{{ $index }}', 'increment');"
-                                                                class="operator operator-dark">+
-                                                        </button>
-                                                    </div>
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <b>{{ __('Quantity') }}</b>
+                                                    <x-cart.quantity-update :product="$product" :index="$index"/>
                                                 </div>
-                                                <input id="product_code_{{ $index }}" name="product_code[]"
-                                                       type="hidden" value="{{ $product->product_code }}">
-                                                <input id="{{ 'product_warehouse_' . $index }}" type="hidden"
-                                                       value="{{ optional(optional(customer(true))->warehouse)->code }}" />
 
-                                                <button class="btn btn-danger" id="add_to_order_btn_{{$index}}"
-                                                        onclick="addSingleProductToOrder({{$index}})">
-                                                    Add to Cart
+                                                <button class="btn btn-danger"
+                                                        data-warehouse="{{ $product->ERP->WarehouseID ?? \ErpApi::getCustomerDetail()->DefaultWarehouse }}"
+                                                        data-options="{{ json_encode(['code' => $product->product_code]) }}"
+                                                        onclick="Amplify.addSingleItemToCart(this, '#cart-item-{{ $index }}')">
+                                                    {{ __('Add to Cart') }}
                                                 </button>
                                             </div>
                                         @endif
@@ -101,7 +82,7 @@
                                                 type="button"
                                                 data-toggle="collapse" data-target="#collapse{{$index}}"
                                                 aria-expanded="true" aria-controls="collapse{{$index}}">
-                                            View History
+                                            {{ __('View History') }}
                                         </button>
                                     </div>
 
@@ -111,11 +92,11 @@
                                             <table class="table table-bordered view-histroy">
                                                 <thead>
                                                 <tr>
-                                                    <th>Order date</th>
-                                                    <th>Order Invoice Num.</th>
-                                                    <th width="30">UOM</th>
-                                                    <th>Qty</th>
-                                                    <th>Price</th>
+                                                    <th>{{ __('Order date') }}</th>
+                                                    <th>{{ __('Order Invoice Num.') }}</th>
+                                                    <th width="30">{{ __('UOM') }}</th>
+                                                    <th>{{ __('Qty') }}</th>
+                                                    <th>{{ __('Price') }}</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
