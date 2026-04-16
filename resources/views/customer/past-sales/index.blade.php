@@ -5,7 +5,7 @@
                 <table class="products-table table table-bordered table-hover" id="order-table">
                     <thead>
                     <tr>
-                        <th>Items</th>
+                        <th>{{ __('Items') }}</th>
                     </tr>
                     </thead>
                     <tbody class="accordion" id="sku_details_table_body">
@@ -26,7 +26,7 @@
                                                         class="d-block d-md-inline font-weight-bold mr-md-2 mb-2 mb-md-0">{{ $product->local_product_name }}</span></a>
                                                 {!! $product->local_short_description !!}
                                             </p>
-                                            <p><b>Product Code:</b> {{ $product->product_code }}</p>
+                                            <p><b>{{ __('Product Code') }}:</b> {{ $product->product_code }}</p>
 
                                             <div class="d-flex flex-wrap gap-col-3">
                                                 @foreach ($product->attributes as $attribute)
@@ -52,44 +52,24 @@
                                                 @endfor
 
                                                 <p class="d-flex justify-content-between mb-2">
-                                                    <span><b>Your Price</b>/ {{ $product->ERP->PricingUnitOfMeasure }}</span>
-                                                    <span>
-                                                    @if ($product?->campaignProduct)
-                                                            <del>
-                                                            {{ price_format($product->ERP->Price) }}
-                                                        </del>
-                                                            <b>{{ price_format($product->campaignProduct->discount) }}</b>
-                                                        @else
-                                                            {{ price_format($product->ERP->Price) }}
-                                                        @endif
-                                                    </span>
+                                                    <span><b>{{ __('Your Price') }}</b></span>
+                                                    <x-product.price
+                                                        element="span"
+                                                        :product="$product"
+                                                        :value="$product->ERP?->Price"
+                                                        :uom="$product->ERP?->UnitOfMeasure ?? 'EA'"/>
                                                 </p>
 
-                                                <div class="d-flex align-items-center justify-content-between cs-w-420">
-                                                    <div><b>Quantity/{{ $product->ERP->PricingUnitOfMeasure }}</b></div>
-                                                    <div
-                                                        class="gap-3 count align-items-center p-2 border rounded d-flex"
-                                                        style="position: unset">
-                                                        <span
-                                                            class="qty-minus bg-secondary text-dark d-flex align-items-center justify-content-center fw-600">
-                                                            <i class="icon-minus"></i>
-                                                        </span>
-                                                        <p class="mb-0 mx-2 fw-600 qty-field">0</p>
-                                                        <span
-                                                            class="qty-plus text-white d-flex align-items-center justify-content-center fw-600">
-                                                            <i class="icon-plus"></i>
-                                                        </span>
-                                                    </div>
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <b>{{ __('Quantity') }}</b>
+                                                    <x-cart.quantity-update :product="$product" :index="$index"/>
                                                 </div>
-                                                <input id="product_qty_{{ $index }}" name="qty" type="hidden" value="0">
-                                                <input id="product_code_{{ $index }}" name="product_code[]"
-                                                       type="hidden" value="{{ $product->product_code }}">
-                                                <input id="{{ 'product_warehouse_' . $index }}" type="hidden"
-                                                       value="{{ optional(optional(customer(true))->warehouse)->code }}" />
 
-                                                <button class="btn btn-danger" id="add_to_order_btn_{{$index}}"
-                                                        onclick="addSingleProductToOrder({{$index}})">
-                                                    Add to Cart
+                                                <button class="btn btn-danger"
+                                                        data-warehouse="{{ $product->ERP->WarehouseID ?? \ErpApi::getCustomerDetail()->DefaultWarehouse }}"
+                                                        data-options="{{ json_encode(['code' => $product->product_code]) }}"
+                                                        onclick="Amplify.addSingleItemToCart(this, '#cart-item-{{ $index }}')">
+                                                    {{ __('Add to Cart') }}
                                                 </button>
                                             </div>
                                         @endif
@@ -102,21 +82,21 @@
                                                 type="button"
                                                 data-toggle="collapse" data-target="#collapse{{$index}}"
                                                 aria-expanded="true" aria-controls="collapse{{$index}}">
-                                            View History
+                                            {{ __('View History') }}
                                         </button>
                                     </div>
 
                                     <div id="collapse{{$index}}" class="collapse" aria-labelledby="heading{{$index}}"
                                          data-parent="#sku_details_table_body">
                                         <div class="card-body">
-                                            <table class="table table-bordered view-histroy">
+                                            <table class="table table-bordered view-history">
                                                 <thead>
                                                 <tr>
-                                                    <th>Order date</th>
-                                                    <th>Order Invoice Num.</th>
-                                                    <th width="30">UOM</th>
-                                                    <th>Qty</th>
-                                                    <th>Price</th>
+                                                    <th>{{ __('Order date') }}</th>
+                                                    <th>{{ __('Order Invoice Num.') }}</th>
+                                                    <th width="30">{{ __('UOM') }}</th>
+                                                    <th>{{ __('Qty') }}</th>
+                                                    <th>{{ __('Price') }}</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -152,47 +132,13 @@
         </div>
     </div>
 </div>
-<style>
-    .qty-plus {
-        background-color: #202549 !important;
-    }
-</style>
-@php
-    push_js(function () {
-        return <<<HTML
-        function resetQuantity() {
-            \$('.sku-item').data('qty', 0);
-            \$('.qty-field').html(0);
-        }
-        \$('.qty-plus').on('click', function (e) {
-            let target = \$(e.currentTarget);
-            let qty;
-            if(qty = parseInt(target.prev().html())+1) {
-                target.prev().html(qty);
-                target.closest('.sku-item').data('qty', qty);
-                target.closest('.sku-item').find('input[name="qty"]').val(qty);
-            }
-        });
 
-        $('.qty-minus').on('click', function (e) {
-            let target = \$(e.currentTarget);
-            let qty;
-            if((qty = parseInt(target.next().html())-1) >= 0) {
-                target.next().html(qty);
-                target.closest('.sku-item').data('qty', qty);
-                target.closest('.sku-item').find('input[name="qty"]').val(qty);
-            }
-        });
-
-        const ORDER_DATE_RANGER = '#created_date_range';
-
+@pushonce("footer-script")
+    <script>
         $(document).ready(function () {
-            var startDate = $("#created_start_date").val();
-            var endDate = $("#created_end_date").val();
-            var table =  $(".view-histroy").DataTable();
+            $("#order-table").DataTable();
+            var table =  $(".view-history").DataTable();
             table.order([0, 'desc']).draw();
-
-            initOrderCreatedDateRangePicker(startDate, endDate);
         });
-HTML;}, 'footer-script');
-@endphp
+    </script>
+@endpushonce
