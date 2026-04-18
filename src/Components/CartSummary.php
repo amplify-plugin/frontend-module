@@ -15,7 +15,8 @@ class CartSummary extends BaseComponent
     public function __construct(public string $backToUrl = 'home',
         public bool $createOrderListFromCart = true,
         public bool $allowChangeShipTo = true,
-        public string $orderListLabel = 'Shopping List'
+        public string $orderListLabel = 'Shopping List',
+        public string $updateStyle = 'line',
     ) {
         parent::__construct();
     }
@@ -33,15 +34,6 @@ class CartSummary extends BaseComponent
      */
     public function render(): View|Closure|string
     {
-        //        $class = match (config('amplify.client_code')) {
-        //            'RHS' => \Amplify\Frontend\Components\Client\Rhsparts\CartSummary::class,
-        //            default => \Amplify\Frontend\Components\Client\Demo\CartSummary::class,
-        //        };
-        //
-        //        $this->component = new $class;
-        //
-        //        $this->component->attributes = $this->attributes;
-
         $templateBrandColor = theme_option(key: 'primary_color', default: '#002767');
 
         $isCartEmpty = ! getCart()->cartItems()->exists();

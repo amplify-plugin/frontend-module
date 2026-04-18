@@ -75,7 +75,7 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
     $productRoutePrefix = config('amplify.frontend.product_page_prefix');
 
     Route::get("{$productRoutePrefix}/{identifier}/{slug?}", ProductDetailController::class)
-        ->where(['identifier' => '([a-zA-Z0-9\-\_\[\]\(\)\+ ]+)'])
+        ->where(['identifier' => '([a-zA-Z0-9\-\_\[\]\(\)\+\#\. ]+)', 'slug' => '(.+)'])
         ->name('shop.show');
 
     Route::name('shop.')->prefix(config('amplify.frontend.shop_page_prefix'))->controller(\Amplify\Frontend\Http\Controllers\ShopSearchController::class)->group(function () {
@@ -86,11 +86,16 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
 
     Route::apiResource('carts', \Amplify\Frontend\Http\Controllers\CartController::class)
         ->where(['cart' => '[0-9]+'])
-        ->except('update');
+        ->except('update', 'show', 'destroy');
+
+    Route::patch('carts', [\Amplify\Frontend\Http\Controllers\CartController::class, 'update'])
+        ->name('carts.update');
+
+    Route::delete('carts', [\Amplify\Frontend\Http\Controllers\CartController::class, 'destroy'])
+        ->name('carts.destroy');
+
     Route::delete('carts/remove/{cartItem}', [\Amplify\Frontend\Http\Controllers\CartController::class, 'remove'])
         ->name('carts.remove-item');
-    Route::patch('carts/update/{cartItem}', [\Amplify\Frontend\Http\Controllers\CartController::class, 'update'])
-        ->name('carts.update-item');
     Route::post('carts/order-file', [\Amplify\Frontend\Http\Controllers\CartController::class, 'orderFile'])->name('carts.order-file');
     // lookup a single product code (used by quick-order widget)
     Route::post('carts/code-lookup', [\Amplify\Frontend\Http\Controllers\CartController::class, 'codeLookup'])->name('carts.code-lookup');

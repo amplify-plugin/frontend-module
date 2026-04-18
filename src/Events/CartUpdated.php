@@ -19,7 +19,8 @@ class CartUpdated
     /**
      * Create a new event instance.
      *
-     * @param  Cart  $cartModel
+     * @param Cart $cart
+     * @param OrderTotal|null $orderTotal
      */
     public function __construct(Cart $cart, ?OrderTotal $orderTotal = null)
     {

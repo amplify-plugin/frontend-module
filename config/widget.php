@@ -555,7 +555,16 @@ return [
                 'type' => 'text',
                 'value' => 'Shopping List',
             ],
-
+            [
+                'name' => 'update-style',
+                'type' => 'select',
+                'value' => 'bulk',
+                'options' => [
+                    'bulk' => 'Bulk Update',
+                    'line' => 'Single Line Update',
+                ],
+                'hint' => 'How update cart button display and function.',
+            ],
         ],
         '@nestedItems' => [
             [
@@ -3513,7 +3522,18 @@ return [
         '@inside' => null,
         '@client' => null,
         'model' => [],
-        '@attributes' => [],
+        '@attributes' => [
+            [
+                'name' => 'update-style',
+                'type' => 'select',
+                'value' => 'bulk',
+                'options' => [
+                    'bulk' => 'Bulk Update',
+                    'line' => 'Single Line Update',
+                ],
+                'hint' => 'How update cart button display and function.',
+            ],
+        ],
         '@nestedItems' => [],
         'description' => '',
     ],

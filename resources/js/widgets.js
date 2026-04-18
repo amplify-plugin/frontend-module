@@ -13,7 +13,6 @@ window.swal = Swal.mixin({
 window.Amplify = {
     cartUrl: () => '/carts',
     cartItemRemoveUrl: () => '/carts/remove/cart_item_id',
-    cartItemUpdateUrl: () => '/carts/update/cart_item_id',
     maxCartItemQuantity: () => 9999999999,
     favouritesCreateUrl: () => '/favourites',
     orderListUrl: () => '/order-lists',
@@ -192,12 +191,11 @@ window.Amplify = {
      * @param element
      */
     clearCart(element) {
-        const actionLink = element.dataset.actionLink;
         this.confirm('Are you sure to remove all items from shopping cart?',
             'Cart', 'Confirm', {
                 preConfirm: async () => {
                     return await $.ajax({
-                        url: actionLink,
+                        url: this.cartUrl(),
                         type: 'DELETE',
                         data: {},
                         header: {
@@ -223,7 +221,15 @@ window.Amplify = {
                         window.location.replace(origin + pathname);
                     }, 2000);
                 }
-            }).catch((error) => console.error(error));
+            })
+            .catch((error) => console.error(error));
+    },
+
+    discardQtyChange(event, selector = 'input[data-quantity]') {
+        document.querySelectorAll(selector)
+            .forEach(el => el.value = el.dataset.quantity);
+
+        this.handleQuantityChange(selector, 'input');
     },
 
     removeCartItem(cartItemId, redirect = true) {
@@ -279,7 +285,7 @@ window.Amplify = {
         const targetElement = document.querySelector(target);
         const quantity = targetElement.value;
 
-        const actionLink = this.cartItemUpdateUrl().replace('cart_item_id', cartItemId);
+        const actionLink = this.cartUrl();
         const warehouseCode = targetElement.dataset.warehouseCode;
         const productCode = targetElement.dataset.productCode;
 
@@ -300,8 +306,82 @@ window.Amplify = {
                     url: actionLink,
                     type: 'PATCH',
                     data: {
-                        'quantity': quantity,
-                        product_warehouse_code: warehouseCode,
+                        products: [
+                            {
+                                id: cartItemId,
+                                qty: Number(quantity),
+                                product_code: productCode,
+                                product_warehouse_code: warehouseCode,
+                            }
+                        ]
+                    },
+                    header: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    success: function (result) {
+                        if (result.success) {
+                            Swal.close();
+                            Amplify.notify('success', result.message, 'Cart');
+                            setTimeout(() => {
+                                const {origin, pathname} = window.location;
+                                window.location.replace(origin + pathname);
+                            }, 2000);
+                        }
+                    },
+                    error: function (xhr) {
+                        Swal.showValidationMessage(`<p>${xhr.responseJSON.message ?? xhr.statusText}</p>`);
+                        Swal.hideLoading();
+                    },
+                });
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        });
+    },
+
+    updateCart(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        let itemChanged = [];
+
+        document.querySelectorAll('#cart-summary input[data-quantity]')
+            .forEach(function (input) {
+                let currentValue = input.value;
+                let originalValue = input.dataset.quantity;
+
+                if (currentValue !== originalValue) {
+                    itemChanged.push({
+                        id: Number(input.id.replace('cart-item-', '')),
+                        qty: Number(currentValue),
+                        product_code: input.dataset.productCode,
+                        product_warehouse_code: input.dataset.warehouseCode,
+                    })
+                }
+            });
+
+        if (itemChanged.length === 0) {
+            return;
+        }
+
+        swal.fire({
+            title: 'Cart',
+            icon: 'warning',
+            backdrop: true,
+            showCancelButton: false,
+            text: `Updating product information in cart...`,
+            confirmButtonText: 'Okay',
+            customClass: {
+                confirmButton: 'btn btn-outline-secondary'
+            },
+            willOpen: () => document.querySelector('.swal2-actions').style.justifyContent = 'center',
+            didOpen: () => {
+                return $.ajax({
+                    beforeSend: () => Swal.showLoading(),
+                    url: this.cartUrl(),
+                    type: 'PATCH',
+                    data: {
+                        products: itemChanged,
                     },
                     header: {
                         'Content-Type': 'application/json',
@@ -336,8 +416,8 @@ window.Amplify = {
             beforeSend: function () {
                 $('#cart-item-summary').html(
                     `<tr>
-                        <td colspan='50' class="text-center padding-top-1x bg-transparent">
-                                <img src='/assets/img/preloader.gif' alt="preloader"/>
+                        <td colspan='50' style="display: flex; width: 100%; justify-content: center; padding-top: 1.5rem; padding-bottom: 1.5rem; min-height: 100px">
+                                <img src='/vendor/widget/img/loading.gif' alt="preloader"/>
                          </td>
                   </tr>`,
                 );
@@ -401,7 +481,7 @@ window.Amplify = {
     async loadCartDropdown() {
         await $.ajax(this.cartUrl(), {
             beforeSend: () => {
-                Amplify.renderEmptyCart('/assets/img/preloader.gif');
+                Amplify.renderEmptyCart('/vendor/widget/img/loading.gif');
                 $("#cart-menu-subtotal").hide();
             },
             method: 'GET',
@@ -606,6 +686,15 @@ window.Amplify = {
             return false;
         }
 
+        window.dispatchEvent(new CustomEvent('qty-change', {
+            detail: {
+                target: targetElement,
+                quantity: Number(targetElement.value),
+                id: targetElement.id,
+                changed: targetElement.value !== targetElement.dataset.quantity,
+            }
+        }));
+
         return true;
     },
 
@@ -617,6 +706,39 @@ window.Amplify = {
     toNearestQtyInterval(value, interval) {
         if (interval === 0) return value;
         return Math.ceil(value / interval) * interval;
+    },
+
+    listenQtyChangeOnCartSummary(event, updateStyle = 'bulk') {
+        const {changed, id} = event.detail;
+
+        if (updateStyle === 'line') {
+            const cartId = id.replace('cart-item-', '');
+            if (changed) {
+                $(`#update-button-${cartId}`).show();
+                $(`#discard-button-${cartId}`).show();
+            } else {
+                $(`#update-button-${cartId}`).hide();
+                $(`#discard-button-${cartId}`).hide();
+            }
+        }
+
+        let hasAnyChange = false;
+
+        document.querySelectorAll('#cart-summary input[data-quantity]').forEach(function (input) {
+            if (input.value !== input.dataset.quantity) {
+                hasAnyChange = true;
+            }
+        });
+
+        (hasAnyChange)
+            ? $(`#checkout-btn`).hide()
+            : $(`#checkout-btn`).show();
+
+        if (updateStyle === 'bulk') {
+            (hasAnyChange)
+                ? $('#quantity-update-actions').removeClass('d-none')
+                : $('#quantity-update-actions').addClass('d-none');
+        }
     },
 
     /**
