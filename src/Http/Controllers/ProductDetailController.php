@@ -37,7 +37,7 @@ class ProductDetailController extends Controller
 
         try {
 
-            $eaKey = $product instanceof ItemRow ? $product->Product_Id : $product->id;
+            $eaKey = $product instanceof ItemRow ? $product->Amplify_Id : $product->id;
 
             store()->eaProductDetail = Sayt::storeProductDetail($eaKey, \request('ref'), ['return_skus' => request('return_skus', false)]);
 

@@ -7,7 +7,7 @@
     </button>
 
     <input
-            data-quantity="{{ $min_qty ?? '{min_qty}' }}"
+            data-quantity="{{ $quantity ?? '{quantity}' }}"
             type="text"
             inputmode="numeric"
             data-product-code="{{ $code ?? '{code}' }}"

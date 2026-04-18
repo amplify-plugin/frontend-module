@@ -1,0 +1,8 @@
+.x-cart-item-actions {
+  display: grid;
+  gap: 12px;
+  justify-content: end;
+  .update-from-cart, .remove-from-cart, .discard-from-cart {
+    margin: 0 !important;
+  }
+}

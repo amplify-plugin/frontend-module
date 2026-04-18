@@ -39,7 +39,7 @@ class RegistrationRequest extends FormRequest
                 Rule::unique('customers'),
                 Rule::unique('contacts'),
             ],
-            'phone_number' => 'required|string|max:255|ascii',
+            'phone_number' => 'required|string|min:10|max:255|ascii',
             'phone_extension' => 'nullable|string|max:255|ascii',
             'industry_classification_id' => 'nullable|integer|exists:industry_classifications,id',
             'address_name' => 'nullable|string|max:255|ascii',
