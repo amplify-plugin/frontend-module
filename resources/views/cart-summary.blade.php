@@ -344,18 +344,20 @@
 @pushonce('footer-script')
     @if(!$isCartEmpty)
         <script>
-            window.addEventListener(
-                'qty-change',
-                (event) => Amplify.listenQtyChangeOnCartSummary(event, '{{ $updateStyle }}')
-            );
-
-            document.addEventListener('DOMContentLoaded', () => Amplify.loadCartSummary());
-
-            @if($updateStyle == 'bulk')
-                document.querySelector('#update-quantities-btn').addEventListener(
-                    'click', (event)  => Amplify.updateCart(event)
+            $(document).ready(function () {
+                window.addEventListener(
+                    'qty-change',
+                    (event) => Amplify.listenQtyChangeOnCartSummary(event, '{{ $updateStyle }}')
                 );
-            @endif
+
+                Amplify.loadCartSummary();
+
+                @if($updateStyle == 'bulk')
+                document.querySelector('#update-quantities-btn').addEventListener(
+                    'click', (event) => Amplify.updateCart(event)
+                );
+                @endif
+            })
         </script>
     @endif
 @endpushonce

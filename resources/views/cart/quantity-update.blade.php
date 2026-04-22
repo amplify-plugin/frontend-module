@@ -33,6 +33,6 @@
 
 @pushonce('footer-script')
     <script>
-        document.addEventListener('DOMContentLoaded', Amplify.attachQuantityInputEvents.bind(Amplify));
+        $(document).ready(() => Amplify.attachQuantityInputEvents());
     </script>
 @endpushonce

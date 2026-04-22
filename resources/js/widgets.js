@@ -417,7 +417,7 @@ window.Amplify = {
                 $('#cart-item-summary').html(
                     `<tr>
                         <td colspan='50' style="display: flex; width: 100%; justify-content: center; padding-top: 1.5rem; padding-bottom: 1.5rem; min-height: 100px">
-                                <img src='/vendor/widget/img/loading.gif' alt="preloader"/>
+                                <img src='/vendor/widget/img/loading.gif' alt="preloader" style="max-width: 52px; height: auto; object-fit: contain" class="img-fluid"/>
                          </td>
                   </tr>`,
                 );
@@ -535,16 +535,18 @@ window.Amplify = {
         $('.cart-dropdown').append(`
         <div id="cart_items" class="text-center" style="min-height: 250px;">
             <img src="${imageUrl}"
-                style="max-width: 160px !important;"
-                class="img-fluid mt-5" alt="No items in cart"
+                style="max-width: 48px; margin-top: 35%"
+                class="img-fluid" alt="No items in cart"
             />
         </div>
     `);
     },
 
     attachQuantityInputEvents() {
-        document.querySelectorAll('input[data-quantity]')
+        console.log("attachQuantityInputEvents");
+        document.querySelectorAll('input.item-quantity')
             .forEach((input) => {
+
                 input.addEventListener('input', function () {
                     let value = this.value;
 
@@ -558,7 +560,10 @@ window.Amplify = {
                     }
 
                     this.value = value;
+
+                    Amplify.handleQuantityChange('#' + this.id, 'input');
                 });
+
                 input.addEventListener('keydown', function (e) {
                     const allowedKeys = [
                         'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'
