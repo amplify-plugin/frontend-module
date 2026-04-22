@@ -17,14 +17,12 @@ class PhoneNumberRule implements ValidationRule
             return;
         }
 
-        if (! is_string($value) || ! preg_match('/^[0-9\-\(\)\/\s]+$/', $value)) {
-            $fail('Phone number contains invalid characters.');
+        if (! ctype_digit($value)) {
+            $fail('Phone number must contain digits only.');
             return;
         }
 
-        $digits = preg_replace('/\D/', '', $value) ?? '';
-
-        if (strlen($digits) < $this->minDigits) {
+        if (strlen($value) < $this->minDigits) {
             $fail("Phone number must contain at least {$this->minDigits} digits.");
         }
     }
