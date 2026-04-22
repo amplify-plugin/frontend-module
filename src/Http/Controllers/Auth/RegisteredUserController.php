@@ -4,6 +4,7 @@ namespace Amplify\Frontend\Http\Controllers\Auth;
 
 use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\ErpApi\Jobs\ContactProfileSyncJob;
+use Amplify\Frontend\Events\NewCustomerRegistered;
 use Amplify\Frontend\Http\Requests\Auth\ContactAccountRequest;
 use Amplify\Frontend\Http\Requests\Auth\RegistrationRequest;
 use Amplify\Frontend\Traits\HasDynamicPage;
@@ -367,6 +368,8 @@ class RegisteredUserController extends Controller
             'customer_id' => $customer->id,
             'contact_id' => $contact->id,
         ]);
+
+        event(new NewCustomerRegistered($customer));
 
         if (config('amplify.security.skip_contact_approval', false)) {
             NotificationFactory::call(Event::REGISTRATION_REQUEST_ACCEPTED,

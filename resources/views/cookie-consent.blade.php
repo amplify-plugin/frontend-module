@@ -12,13 +12,13 @@
                     <button type="button" class="btn btn-success btn-sm my-0 font-weight-bold"
                             onclick="acceptCookie();">
                         <i class="icon-check mr-1"></i>
-                        Accept
+                        Okay
                     </button>
-                    <button type="button" class="btn btn-outline-success btn-sm my-0 mr-0"
-                            onclick="rejectCookie()">
-                        <i class="icon-circle-cross mr-1"></i>
-                        Decline
-                    </button>
+{{--                    <button type="button" class="btn btn-outline-success btn-sm my-0 mr-0"--}}
+{{--                            onclick="rejectCookie()">--}}
+{{--                        <i class="icon-circle-cross mr-1"></i>--}}
+{{--                        Decline--}}
+{{--                    </button>--}}
                 </div>
             </div>
         </div>
