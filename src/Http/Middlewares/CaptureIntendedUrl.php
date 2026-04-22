@@ -14,6 +14,7 @@ class CaptureIntendedUrl
         'forgot-password',
         'reset-password',
         'register',
+        'verify-email/*'
     ];
 
     /**
