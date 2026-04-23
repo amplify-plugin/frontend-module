@@ -2,7 +2,7 @@
     <div class="custom-control custom-checkbox">
         <input class="custom-control-input" type="checkbox" id="remember_me" tabindex="3" name="remember_me">
         <label class="custom-control-label" for="remember_me">{{ trans('Remember me')}}</label>
-        <span class="invalid-feedback d-block">
+        <span id="remember_me-error" class="invalid-feedback d-block">
             @error('remember_me') {{ $message }} @enderror
         </span>
     </div>
