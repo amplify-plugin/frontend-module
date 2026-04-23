@@ -17,7 +17,23 @@ mix.setResourceRoot('resources')
     .sass('resources/scss/widgets.scss', 'public/css/widgets.css')
     .js('resources/js/widgets.js', 'public/js/widgets.js')
     .copy('resources/js/modernizr.min.js', 'public/js/modernizr.min.js')
-    .copy('resources/js/utility.js', 'public/js/utility.js')
+    .combine([
+        'resources/js/vendor/jquery.min.js',
+        'resources/js/vendor/popper.min.js',
+        'resources/js/vendor/photoswipe.min.js',
+        'resources/js/vendor/bootstrap.min.js',
+        'resources/js/vendor/imagesloaded.pkgd.min.js',
+        'resources/js/vendor/isotope.pkgd.min.js',
+        'resources/js/vendor/owl.carousel.min.js',
+        'resources/js/vendor/photoswipe-ui-default.min.js',
+        'resources/js/vendor/velocity.min.js',
+        'resources/js/vendor/jquery.validate.min.js',
+        'resources/js/vendor/additional-methods.min.js',
+        'resources/js/vendor/select2.min.js',
+        'resources/js/vendor/moment.min.js',
+        'resources/js/vendor/daterangepicker.min.js',
+        'resources/js/utility.js'
+    ], 'public/js/vendor.js')
     .options({
         processCssUrls: false,
         terser: {

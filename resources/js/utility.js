@@ -202,6 +202,94 @@ function cartHide(ele, event) {
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
     });
 
+    $.validator.methods.email = function (value, element) {
+        return this.optional(element) || /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/.test(value);
+    };
+
+    $.validator.setDefaults({
+        errorElement: 'span',
+        errorClass: 'is-invalid',
+        validClass: 'is-valid',
+        messages: {
+            email: 'The {0} must be a valid email address.'
+        },
+        highlight: function (element, errorClass) {
+            $(element).addClass(errorClass);
+        },
+        unhighlight: function (element, errorClass) {
+            $(element).removeClass(errorClass);
+            const name = $(element).attr('name');
+            $('#' + name + '-error').text('');
+        },
+        errorPlacement: function (error, element) {
+            const name = element.attr('name');
+            const $errorEl = $('#' + name + '-error');
+
+            if ($errorEl.length) {
+                $errorEl.text(error.text()).show();
+            } else {
+                error.attr('id', name + '-error');
+                element.after(error);
+            }
+        }
+    });
+
+    $.extend($.validator.messages, {
+            required: "The {0} field is required.",
+            remote: "Please fix this field.",
+            email: "The {0} must be a valid email address.",
+            url: "The {0} is not a valid URL.",
+            date: "The {0} is not a valid date.",
+            dateISO: "The {0} is not a valid ISO format date.",
+            number: "The {0} must be a number.",
+            digits: "The {0} must be an integer.",
+            equalTo: "The {0} and {1} must match.",
+            maxlength: $.validator.format( "The {0} must not be greater than {1} characters." ),
+            minlength: $.validator.format( "The {0} must be at least {1} characters." ),
+            rangelength: $.validator.format( "The {0} must be between {1} and {2} characters." ),
+            range: $.validator.format( "The {0} must be between {1} and {2}." ),
+            max: $.validator.format( "The {0} must not be greater than {1}." ),
+            min: $.validator.format( "The {0} must be at least {1}." ),
+            step: $.validator.format( "The {0} must be a multiple of {1}." )
+    });
+
+    $.extend($.validator.prototype, {
+        defaultMessage: function (element, rule) {
+            if (typeof rule === "string") {
+                rule = {method: rule};
+            }
+
+            let message = this.findDefined(
+                this.customMessage(element.name, rule.method),
+                this.customDataMessage(element, rule.method),
+                !this.settings.ignoreTitle && element.title || undefined,
+                $.validator.messages[rule.method],
+                "<strong>Warning: No message defined for " + element.name + "</strong>"
+            );
+
+            let params = rule.parameters;
+
+            rule.parameters = [];
+
+            rule.parameters.push((element.dataset.field || element.name || 'field')
+                .toString()
+                .replace(/_/g, ' '));
+
+            rule.parameters.push(params);
+
+
+            const pattern = /\$?\{(\d+)\}/g;
+
+            if (typeof message === "function") {
+                message = message.call($.validator, ...rule.parameters, element);
+
+            } else if (pattern.test(message)) {
+                message = $.validator.format(message.replace(pattern, "{$1}"), ...rule.parameters);
+            }
+            return message;
+        },
+    });
+
     const showCart = document.getElementById('show-cart');
 
     if (showCart) {
@@ -220,5 +308,60 @@ function cartHide(ele, event) {
         cartHide(showAccount, event);
         cartHide(showAccountExchange, event);
     });
+
+    // Animated Scroll to Top Button
+    //------------------------------------------------------------------------------
+    var $scrollTop = $('.scroll-to-top-btn');
+    if ($scrollTop.length > 0) {
+        $(window).on('scroll', function () {
+            if ($(this).scrollTop() > 600) {
+                $scrollTop.addClass('visible');
+            } else {
+                $scrollTop.removeClass('visible');
+            }
+        });
+        $scrollTop.on('click', function (e) {
+            e.preventDefault();
+            $('html').velocity('scroll', {
+                offset: 0,
+                duration: 1200,
+                easing: 'easeOutExpo',
+                mobileHA: false
+            });
+        });
+    }
+
+
+    // Smooth scroll to element
+    //---------------------------------------------------------
+    $(document).on('click', '.scroll-to', function (event) {
+        var target = $(this).attr('href');
+        if ('#' === target) {
+            return false;
+        }
+
+        var $target = $(target);
+        if ($target.length > 0) {
+            var $elemOffsetTop = $target.data('offset-top') || 70;
+            $('html').velocity('scroll', {
+                offset: $(this.hash).offset().top - $elemOffsetTop,
+                duration: 1000,
+                easing: 'easeOutExpo',
+                mobileHA: false
+            });
+        }
+        event.preventDefault();
+    });
+
+    // Tooltips
+    //------------------------------------------------------------------------------
+    $('[data-toggle="tooltip"]').tooltip();
+
+    // Popovers
+    //------------------------------------------------------------------------------
+    $('[data-toggle="popover"]').popover();
+
+    //Select2 Defaults
+    $.fn.select2.defaults.set("theme", "bootstrap4");
 }
 (window.$);

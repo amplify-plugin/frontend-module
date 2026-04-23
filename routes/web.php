@@ -75,7 +75,7 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
     $productRoutePrefix = config('amplify.frontend.product_page_prefix');
 
     Route::get("{$productRoutePrefix}/{identifier}/{slug?}", ProductDetailController::class)
-        ->where(['identifier' => '([a-zA-Z0-9\-\_\[\]\(\)\+\#\. ]+)', 'slug' => '(.+)'])
+        ->where(['identifier' => '([a-zA-Z0-9\-\_\[\]\(\)\+\#\.\"\~ ]+)', 'slug' => '(.+)'])
         ->name('shop.show');
 
     Route::name('shop.')->prefix(config('amplify.frontend.shop_page_prefix'))->controller(\Amplify\Frontend\Http\Controllers\ShopSearchController::class)->group(function () {
