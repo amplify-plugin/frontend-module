@@ -4,6 +4,7 @@ namespace Amplify\Frontend\Components\Auth\Registration;
 
 use Amplify\Frontend\Abstracts\BaseComponent;
 use Amplify\System\Backend\Models\AccountTitle;
+use Amplify\System\Helpers\SecurityHelper;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Str;
@@ -53,7 +54,9 @@ class RequestAccountTab extends BaseComponent
     {
         $accountTitles = AccountTitle::enabled()->get()->pluck('name', 'id')->toArray();
 
-        return view('widget::auth.registration.request-account-tab', compact('accountTitles'));
+        $minPasswordLength = SecurityHelper::passwordLength();
+
+        return view('widget::auth.registration.request-account-tab', compact('accountTitles', 'minPasswordLength'));
     }
 
     public function htmlAttributes(): string
@@ -110,10 +113,5 @@ class RequestAccountTab extends BaseComponent
         }
 
         return trans($this->submitButtonLabel);
-    }
-
-    public function minPasswordLength()
-    {
-        return config('amplify.security.password_length', '8');
     }
 }

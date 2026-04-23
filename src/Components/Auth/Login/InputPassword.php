@@ -3,6 +3,7 @@
 namespace Amplify\Frontend\Components\Auth\Login;
 
 use Amplify\Frontend\Abstracts\BaseComponent;
+use Amplify\System\Helpers\SecurityHelper;
 use Closure;
 use Illuminate\Contracts\View\View;
 
@@ -13,7 +14,10 @@ class InputPassword extends BaseComponent
 {
     public function __construct(
         public bool $togglePassword = false,
-    ) {}
+    )
+    {
+        parent::__construct();
+    }
 
     /**
      * Whether the component should be rendered
@@ -28,7 +32,8 @@ class InputPassword extends BaseComponent
      */
     public function render(): View|Closure|string
     {
+        $minPasswordLength = SecurityHelper::passwordLength();
 
-        return view('widget::auth.login.input-password');
+        return view('widget::auth.login.input-password', compact('minPasswordLength'));
     }
 }
