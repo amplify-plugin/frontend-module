@@ -133,10 +133,23 @@ class CartController extends Controller
 
                 \event(new CartUpdated($cart));
 
-                return response()->json(['message' => __('Your current cart items are removed'), 'success' => true], 200);
+                return response()->json([
+                    'message' => __('Selected cart item is removed'),
+                    'success' => true,
+                    'data' => [
+                        'total' => $cart->cartItems()->count()
+                    ]
+                ], 200);
             }
 
-            return response()->json(['message' => __('Failed to clear the current cart items.'), 'success' => false], 500);
+            return response()->json([
+                'message' => __('Failed to clear the current cart items.'),
+                'success' => false,
+                'data' => [
+                    'total' => $cart->cartItems()->count()
+                ]
+            ], 500);
+
         } catch (\Exception $exception) {
 
             Log::error($exception);
