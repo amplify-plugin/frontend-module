@@ -1690,6 +1690,11 @@ return [
                 'value' => false,
             ],
             [
+                'name' => 'order-list-label',
+                'type' => 'text',
+                'value' => 'Order list',
+            ],
+            [
                 'name' => ':show-navigation',
                 'type' => 'boolean',
                 'value' => false,
