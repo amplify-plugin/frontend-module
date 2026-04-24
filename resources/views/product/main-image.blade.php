@@ -48,3 +48,11 @@
         </div>
     </div>
 @endpushonce
+
+@pushonce('footer-script')
+    <script>
+        $(function () {
+            Amplify.initPhotoSwipeFromDOM('.gallery-wrapper');
+        });
+    </script>
+@endpushonce

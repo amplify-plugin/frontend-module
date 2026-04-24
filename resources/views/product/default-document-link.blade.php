@@ -1,5 +1,5 @@
 <div {!! $htmlAttributes !!}>
-    <a href="{{ $filePath }}" target="_blank" class="d-flex gap-2 text-decoration-none">
+    <a href="{{ $filePath }}" target="_blank" class="d-flex text-decoration-none">
         <img class="product-default-document-image"
              src="{{ asset('vendor/widget/img/pdf-file.png') }}"
              alt="{{$document->name ?? 'Document'}} Icon">

@@ -114,3 +114,9 @@
         </div>
     </div>
 </div>
+
+@pushonce('footer-script')
+    <script>
+        $(document).ready(() => Amplify.filterFaqList($('[data-filter-list]')));
+    </script>
+@endpushonce

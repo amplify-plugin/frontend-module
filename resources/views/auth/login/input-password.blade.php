@@ -13,6 +13,8 @@
                 autocomplete="current-password"
                 tabindex="2"
                 required
+                minlength="{{ $minPasswordLength }}"
+                maxlength="255"
         />
         @if ($togglePassword)
             <span
@@ -23,7 +25,7 @@
             </span>
         @endif
     </div>
-    <span class="invalid-feedback d-block">
+    <span id="password-error" class="invalid-feedback d-block">
         @error('password') {{ $message }} @enderror
     </span>
 </div>

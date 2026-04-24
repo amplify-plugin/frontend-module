@@ -133,3 +133,11 @@
         </div>
     </div>
 @endpush
+
+@pushonce('footer-script')
+    <script>
+        $(function () {
+            Amplify.initPhotoSwipeFromDOM('.gallery-wrapper');
+        });
+    </script>
+@endpushonce
