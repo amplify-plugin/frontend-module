@@ -1,6 +1,6 @@
 <div {!! $htmlAttributes !!}>
-    @if(!$products->isEmpty())
-        @if($show_title)
+    @if($products->isNotEmpty())
+        @if($showTitle)
             <h3 class="product-slider-title">
                 {{ __($title) }}
             </h3>
@@ -11,7 +11,7 @@
             @foreach ($products as $key => $product)
                 <div class="grid-item">
                     <div class="product-card">
-                        @if ($show_top_discount_badge)
+                        @if ($showTopDiscountBadge && $showPrice)
                             <div class="product-badge text-danger">
                                 {{ discount_badge_label($product->price, $product->old_price) }}
                             </div>
@@ -21,54 +21,60 @@
                                  alt="{{ __($product->name ?? '') }}">
                         </a>
                         <div class="product-body">
-                            <div class="product-description {{ $show_price ? "slider-product-info": ""}}">
-                                <p class="mb-0">
-                                    <a
-                                        class="manufacturer-name text-decoration-none"
-                                        href="{{ $product->detail_link }}"
-                                    >
+                            <div class="product-description {{ $showPrice ? "slider-product-info": ""}}">
+                                @if ($displayManufacturer)
+                                    <a class="manufacturer-name text-decoration-none mb-2"
+                                       href="{{ $product->detail_link }}">
                                         {{ $product->manufacturer ?? "" }}
                                     </a>
-                                    <small class="short-desc">
+                                @endif
+
+                                @if($displayShortDescription && !empty($product->short_description))
+                                    <small class="short-desc d-block">
                                         {!! $product->short_description ?? "" !!}
                                     </small>
-                                </p>
+                                @endif
                                 <p class="product-title mb-0">
                                     <a href="{{ $product->detail_link }}"
                                        title="{{ __($product->name ?? '') }}">
                                         {{ __($product->name ?? '') }}
                                     </a>
                                 </p>
+
                                 @if ($displayProductCode)
-                                    <p class="product-code"><span>{{ __('Product Code:') }}</span> {{ $product->product_code }}</p>
+                                    <p class="product-code">
+                                        <span>{{ __('Product Code:') }}</span> {{ $product->product_code }}</p>
                                 @endif
-                                @if ($show_price)
-                                    <h4 class="hide-product-price product-price">
-                                        {{ customer_check() ? checkPrice($product->id, $product->price) : '-' }}
-                                    </h4>
+
+                                @if($showPrice && ($showGuestPrice || customer_check()))
+                                    <x-product.price
+                                            element="h4"
+                                            class="product-price d-flex w-100 justify-content-center"
+                                            :product="$product"
+                                            :value="$product->price"
+                                            :uom="$product->uom"
+                                            :std-price="$showTopDiscountBadge ? $product->old_price : null"
+                                    />
                                 @endif
                                 <x-product-hidden-fields :product="$product" :input="$key"/>
                                 <input id="product_qty_{{ $key }}" type="hidden" name="qty[]" value="1"
                                        min="1" max="" class="form-control">
                             </div>
-                            @if ($show_customer_list || $show_cart_btn)
+                            @if ($showOrderList || $showCartBtn)
                                 <div class="product-buttons d-flex justify-content-between">
-
-                                    {{-- @if ($show_customer_list)
-                                        <x-product.favourite-manage-button
-                                            class="mr-2"
-                                            :already-exists="$product->exists_in_favorite"
-                                            :favourite-list-id="$product->favorite_list_id"
-                                            :product-id="$product->id"
-                                        />
-                                    @endif --}}
-
-                                    @if ($show_cart_btn)
-                                        <a class="btn btn-outline-primary btn-block @if ($small_button) btn-sm @endif"
+                                    @if ($showCartBtn)
+                                        <a class="btn btn-outline-primary btn-block @if ($smallButton) btn-sm @endif"
                                            href="{{ $product->detail_link }}">
-                                            <i class="pe-7s-cart"
-                                               style="font-weight: bolder"></i> {{ __($cart_button_label) }}
+                                            {{ __($cartButtonLabel) }}
                                         </a>
+                                    @endif
+                                    @if ($showOrderList)
+                                        <x-product-shopping-list
+                                                :product-id="$product->id"
+                                                :index="$key"
+                                                :widget-title="$orderListLabel"
+                                                :addLabel="'Add to '.$orderListLabel"
+                                        />
                                     @endif
                                 </div>
                             @endif
