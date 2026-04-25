@@ -1,4 +1,8 @@
 const mix = require('laravel-mix');
+const { exec } = require('child_process');
+const fs = require('fs');
+const path = require('path');
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -9,6 +13,29 @@ const mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
+
+class PublishWidgetAssets {
+    apply(compiler) {
+        compiler.hooks.done.tap('RunCommandIfArtisanExists', (stats) => {
+            if (stats.hasErrors()) return;
+
+            // adjust path relative to your webpack.mix.js
+            const artisanPath = path.resolve(__dirname, '../../artisan');
+
+            if (fs.existsSync(artisanPath)) {
+                exec('php ../../artisan vendor:publish --tag=widget-asset --ansi --force', (err, stdout, stderr) => {
+                    if (err) {
+                        console.error(err);
+                        return;
+                    }
+                    console.log(stdout);
+                });
+            } else {
+                console.log('artisan file not found, skipping...');
+            }
+        });
+    }
+}
 
 
 mix.setResourceRoot('resources')
@@ -44,5 +71,10 @@ mix.setResourceRoot('resources')
                 }
             }
         },
+    })
+    .webpackConfig({
+        plugins: [
+            new PublishWidgetAssets(),
+        ]
     })
     .version();
