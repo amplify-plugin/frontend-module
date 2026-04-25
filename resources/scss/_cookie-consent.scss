@@ -8,5 +8,35 @@
  */
 
 .x-cookie-consent {
-    // Write your widget custom style here.
+  .modal-dialog {
+    .modal-content {
+      .modal-body {
+
+        .modal-title {
+          font-size: 1.25rem;
+          margin-bottom: 0.5rem;
+          padding-bottom: 0.25rem;
+          font-weight: bold;
+          border-bottom: 1px solid gray;
+        }
+
+        .modal-actions {
+          margin-top: 0.5rem;
+          display: flex;
+          width: 100%;
+          justify-content: end;
+
+          .btn-consent {
+            margin: 0;
+            background-color: var(--primary, '#0073ce');
+            color: white;
+
+            @media(max-width: 576px) {
+              width: 100%;
+            }
+          }
+        }
+      }
+    }
+  }
 }
