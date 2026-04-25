@@ -4,6 +4,7 @@ namespace Amplify\Frontend\Http\Middlewares;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class CaptureIntendedUrl
@@ -14,7 +15,10 @@ class CaptureIntendedUrl
         'forgot-password',
         'reset-password',
         'register',
-        'verify-email/*'
+        'verify-email/*',
+        'login',
+        'registration',
+
     ];
 
     /**
@@ -25,7 +29,7 @@ class CaptureIntendedUrl
     public function handle(Request $request, Closure $next): Response
     {
         if (
-            ! $request->is($this->except) &&
+            ! $request->is(...$this->except) &&
             $request->isMethod('GET') &&
             $request->route() &&
             ! $request->routeIs('frontend.login*') &&
