@@ -199,7 +199,25 @@ function cartHide(ele, event) {
 
 {
     $.ajaxSetup({
-        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        xhrFields: {
+            withCredentials: true
+        }
+    });
+
+    $.ajaxPrefilter(function (options, originalOptions, xhr) {
+
+        // remove wrong header if set anywhere
+        if (options.headers && options.headers['X-CSRF-TOKEN']) {
+            delete options.headers['X-CSRF-TOKEN'];
+        }
+
+        // always inject correct token from cookie
+        const match = document.cookie.match(/(^|;\s*)XSRF-TOKEN=([^;]+)/);
+        const token = match ? decodeURIComponent(match[2]) : null;
+
+        if (token) {
+            xhr.setRequestHeader('X-XSRF-TOKEN', token);
+        }
     });
 
     $.validator.methods.email = function (value, element) {
