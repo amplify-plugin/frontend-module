@@ -1265,7 +1265,7 @@ window.Amplify = {
                 linkEl = figureEl.children[0]; // <a> element
 
                 // create slide object
-                if ($(linkEl).data('type') == 'video') {
+                if ($(linkEl).data('type') === 'video') {
                     item = {
                         html: $(linkEl).data('video')
                     };
@@ -1472,7 +1472,8 @@ window.Amplify = {
         }
     },
 
-    productSlider: function () {
+    productSlider: function (target) {
+        let $productCarousel = $(target);
         // Carousel init
         $productCarousel.owlCarousel({
             items: 1,
