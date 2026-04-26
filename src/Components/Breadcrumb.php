@@ -174,7 +174,7 @@ class Breadcrumb extends BaseComponent
             $this->push($breadcrumb->getLabel(), frontendShopURL([
                 $breadcrumb->getSEOPath(),
                 'view' => active_shop_view(),
-                'per_page' => request('per_page', getPaginationLengths()[0]),
+                'per_page' => results_per_page(),
                 'sort_by' => request('sort_by', ''),
             ]));
         }
