@@ -480,10 +480,7 @@ window.Amplify = {
      */
     async loadCartDropdown() {
         await $.ajax(this.cartUrl(), {
-            beforeSend: () => {
-                Amplify.renderEmptyCart('/vendor/widget/img/loading.gif');
-                $("#cart-menu-subtotal").hide();
-            },
+            beforeSend: () => Amplify.renderEmptyCart('/vendor/widget/img/loading.gif', true),
             method: 'GET',
             dataType: 'json',
             headers: {
@@ -526,18 +523,18 @@ window.Amplify = {
         });
     },
 
-    renderEmptyCart(imageUrl = '/assets/img/empty_cart.png') {
+    renderEmptyCart(imageUrl = '/assets/img/empty_cart.png', loading = false) {
+        $('.cart-dropdown').empty();
         $("#cart-menu-subtotal").hide();
         $('.total_cart_items').text(0);
         $('.total_cart_amount').text('$0.00');
         $('.total_cart_items').addClass('d-none');
 
+        let className = loading ? 'loading' : 'loaded';
+
         $('.cart-dropdown').append(`
-        <div id="cart_items" class="text-center" style="min-height: 250px;">
-            <img src="${imageUrl}"
-                style="max-width: 48px; margin-top: 35%"
-                class="img-fluid" alt="No items in cart"
-            />
+        <div id="cart_items" class="${className}">
+            <img src="${imageUrl}" class="img-fluid" alt="No items in cart"/>
         </div>
     `);
     },
@@ -1038,7 +1035,7 @@ window.Amplify = {
             // }
 
             await $.ajax(this.cartUrl(), {
-                beforeSend: () => Amplify.renderEmptyCart('/assets/img/preloader.gif'),
+                beforeSend: () => Amplify.renderEmptyCart('/assets/img/preloader.gif', true),
                 method: 'POST',
                 dataType: 'json',
                 data: {

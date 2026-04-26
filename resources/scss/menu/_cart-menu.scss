@@ -8,5 +8,32 @@
  */
 
 .x-menu-cart-menu {
-    // Write your widget custom style here.
+  position: relative;
+  flex-shrink: 0 !important;
+
+  .toolbar-dropdown {
+    .toolbar-close {
+      color: #0c1021;
+    }
+
+    .cart-dropdown {
+      #cart_items {
+        text-align: center;
+        &.loading {
+          img {
+            max-width: 56px;
+            height: 56px;
+            margin-top: 35%;
+            object-fit: contain;
+          }
+        }
+
+        &.loaded {
+          img {
+            max-height: 225px;
+          }
+        }
+      }
+    }
+  }
 }
