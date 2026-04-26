@@ -12,16 +12,12 @@ use Illuminate\Contracts\View\View;
 class ProductGallery extends BaseComponent
 {
     /**
-     * @var array
-     */
-    public $options;
-
-    /**
      * Create a new component instance.
      */
     public function __construct(
         public $image,
-        public $erpAdditionalImages = []
+        public $erpAdditionalImages = [],
+        public $product = null,
     ) {
         parent::__construct();
     }
