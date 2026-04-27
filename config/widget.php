@@ -551,6 +551,12 @@ return [
                 'value' => true,
             ],
             [
+                'name' => ':show-submit-quote-button',
+                'hint' => 'Under construction',
+                'type' => 'boolean',
+                'value' => false,
+            ],
+            [
                 'name' => 'order-list-label',
                 'type' => 'text',
                 'value' => 'Shopping List',

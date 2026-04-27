@@ -15,6 +15,7 @@ class CartSummary extends BaseComponent
     public function __construct(public string $backToUrl = 'home',
         public bool $createOrderListFromCart = true,
         public bool $allowChangeShipTo = true,
+        public bool $showSubmitQuoteButton = false,
         public string $orderListLabel = 'Shopping List',
         public string $updateStyle = 'line',
     ) {

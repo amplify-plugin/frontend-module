@@ -20,6 +20,7 @@ use Amplify\Frontend\Http\Controllers\Auth\RegisteredUserController;
 use Amplify\Frontend\Http\Controllers\Auth\VerifyEmailController;
 use Amplify\Frontend\Http\Controllers\BrandIndexController;
 use Amplify\Frontend\Http\Controllers\CampaignController;
+use Amplify\Frontend\Http\Controllers\CartSubmitQuoteController;
 use Amplify\Frontend\Http\Controllers\CheckoutController;
 use Amplify\Frontend\Http\Controllers\ContactLoginController;
 use Amplify\Frontend\Http\Controllers\CustomerPartNumberController;
@@ -99,6 +100,7 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
     Route::post('carts/order-file', [\Amplify\Frontend\Http\Controllers\CartController::class, 'orderFile'])->name('carts.order-file');
     // lookup a single product code (used by quick-order widget)
     Route::post('carts/code-lookup', [\Amplify\Frontend\Http\Controllers\CartController::class, 'codeLookup'])->name('carts.code-lookup');
+    Route::post('carts/submit-quote', CartSubmitQuoteController::class)->name('carts.submit-quote');
     Route::post('/remove/carts', [\Amplify\Frontend\Http\Controllers\CartController::class, 'removeCarts'])->name('frontend.remove-carts');
     Route::get('checkout', CheckoutController::class)->name('checkout');
     Route::post('subscribe', NewsletterSubscriptionController::class)->name('subscribe');
