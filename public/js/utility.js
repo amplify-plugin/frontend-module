@@ -197,7 +197,7 @@ function cartHide(ele, event) {
     }
 }
 
-{
+$(document).ready(function () {
     $.ajaxSetup({
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
     });
@@ -220,5 +220,4 @@ function cartHide(ele, event) {
         cartHide(showAccount, event);
         cartHide(showAccountExchange, event);
     });
-}
-(window.$);
+});
