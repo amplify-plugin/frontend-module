@@ -197,7 +197,7 @@ function cartHide(ele, event) {
     }
 }
 
-{
+$(document).ready(function () {
     $.ajaxSetup({
         xhrFields: {
             withCredentials: true
@@ -381,5 +381,4 @@ function cartHide(ele, event) {
 
     //Select2 Defaults
     $.fn.select2.defaults.set("theme", "bootstrap4");
-}
-(window.$);
+});
