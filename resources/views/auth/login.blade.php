@@ -1,7 +1,7 @@
 <div {!! $htmlAttributes !!}>
     <form method="post" action="{{route('frontend.login')}}" id="login-box">
         <input type="hidden" name="previous_url"
-               value="{{ !$referrer || strpos($referrer, config('app.url')) !== 0 ? '' : url()->previous() }}">
+               value="{{ $referrer && str_starts_with($referrer, config('app.url')) ? $referrer : url()->previous() }}">
         @csrf
 
         @if($honeyPotProtection)
