@@ -248,7 +248,7 @@
             </div>
         </div>
     @else
-        <div id="cart-summary mb-2">
+        <div id="cart-summary" class="mb-2">
             @if($allowChangeShipTo && !empty($shipToAddress))
                 <h4 class="border-bottom align-baseline pb-2 mb-3">
                     <i class="icon-map" style="margin-top: -8px"></i> Current Shipping Address
@@ -258,7 +258,8 @@
                         <a href="{{ route('frontend.addresses.index') }}"
                            class="btn btn-sm btn-outline-primary position-absolute px-2 m-0"
                            style="right: 1rem">
-                            <i class="pe-7s-edit font-weight-bolder" title="{{ __('Change Shipping Address') }}" data-toggle="tooltip"></i>
+                            <i class="pe-7s-edit font-weight-bolder" title="{{ __('Change Shipping Address') }}"
+                               data-toggle="tooltip"></i>
                             <span class="d-none d-sm-inline-block">{{ __('Change Shipping Address') }}</span>
                         </a>
                         @empty($shipToAddress)
@@ -277,10 +278,10 @@
                 <table class="table table-hover">
                     <thead>
                     <tr>
-                        <th class="py-2 text-center">Product</th>
-                        <th class="py-2 text-center" width="200">Quantity</th>
-                        <th class="py-2 text-center">Price</th>
-                        <th class="py-2 text-center" width="100">Subtotal</th>
+                        <th class="py-2 text-center">{{ __('Product') }}</th>
+                        <th class="py-2 text-center" width="200">{{ __('Quantity') }}</th>
+                        <th class="py-2 text-center">{{ __('Price') }}</th>
+                        <th class="py-2 text-center" width="100">{{ __('Total') }}</th>
                         <th class="py-2 text-center" width="110"></th>
                     </tr>
                     </thead>
@@ -288,7 +289,10 @@
                     <tfoot>
                     <tr>
                         <td colspan="4" class="text-right">
-                            Subtotal: <span class="font-weight-bold" id="order-subtotal">$0.00</span>
+                            {{ __('Subtotal:') }}
+                            <span class="font-weight-bold" id="order-subtotal">
+                                {{ currency_format(value: '0.00', withSymbol: true) }}
+                            </span>
                         </td>
                         <td width="110"></td>
                     </tr>
@@ -298,14 +302,14 @@
         </div>
         <div class="shopping-cart-footer d-md-flex justify-content-md-between d-grid">
             <a class="btn btn-outline-secondary align-items-center" href="{{ $backToShoppingUrl() }}">
-                <i class="icon-arrow-left"></i>&nbsp;Back to Shopping
+                <i class="icon-arrow-left"></i>&nbsp;{{ __('Back to Shopping') }}
             </a>
             <div class="d-md-flex d-grid gap-2 justify-content-center">
                 <butoon type="button"
                         class="btn btn-primary"
                         data-action-link="{{ route('frontend.carts.destroy', $cartId) }}"
                         onclick="Amplify.clearCart(this)">
-                    <i class="icon-circle-cross"></i>&nbsp;Clear Cart
+                    <i class="icon-circle-cross"></i>&nbsp;{{ __('Clear Cart') }}
                 </butoon>
                 @if($createOrderListFromCart)
                     <button type="button"
@@ -315,9 +319,24 @@
                     </button>
                 @endif
             </div>
-            <a class="btn btn-success align-items-center" href="{{ route('frontend.checkout') }}">
-                Checkout&nbsp;<i class="icon-arrow-right"></i>
+            <a id="checkout-btn" class="btn btn-success align-items-center" href="{{ route('frontend.checkout') }}">
+                {{ __('Checkout') }}&nbsp;<i class="icon-arrow-right"></i>
             </a>
+            @if($updateStyle == 'bulk')
+                <div id="quantity-update-actions" class="gap-2 d-none">
+                    <button type="button"
+                            onclick="Amplify.discardQtyChange(event)"
+                            class="btn discard-from-cart">
+                        <i class="icon-reload"></i>&nbsp;{{ __('Revert') }}
+                    </button>
+                    <button
+                            type="button"
+                            id="update-quantities-btn"
+                            class="btn update-from-cart">
+                        <i class="icon-check"></i>&nbsp;{{ __('Update') }}
+                    </button>
+                </div>
+            @endif
         </div>
     @endif
 </div>
@@ -325,7 +344,20 @@
 @pushonce('footer-script')
     @if(!$isCartEmpty)
         <script>
-            document.addEventListener('DOMContentLoaded', () => Amplify.loadCartSummary());
+            $(document).ready(function () {
+                window.addEventListener(
+                    'qty-change',
+                    (event) => Amplify.listenQtyChangeOnCartSummary(event, '{{ $updateStyle }}')
+                );
+
+                Amplify.loadCartSummary();
+
+                @if($updateStyle == 'bulk')
+                document.querySelector('#update-quantities-btn').addEventListener(
+                    'click', (event) => Amplify.updateCart(event)
+                );
+                @endif
+            })
         </script>
     @endif
 @endpushonce

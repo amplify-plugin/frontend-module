@@ -1,13 +1,13 @@
 <div {!! $htmlAttributes !!}>
-    <div class="product-item">
-        <a class="product-thumb" href="{url}">
-            <img src="{image}" class="img-thumbnail" alt="{name}">
-        </a>
-        <div class="product-info">
+    <a class="product-thumb" href="{url}">
+        <img src="{image}" class="img-thumbnail" alt="{name}">
+    </a>
+    <div class="product-info">
+        <a href="{url}" class="product-link">
             <p class="product-title">
-                <a href="{url}">{name}</a>
+                {name}
             </p>
-            {!! $slot !!}
-        </div>
+        </a>
+        {!! $slot !!}
     </div>
 </div>

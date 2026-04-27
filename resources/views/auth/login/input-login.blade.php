@@ -11,9 +11,11 @@
                placeholder="{{ __('Email') }}"
                autocomplete="username"
                tabindex="1"
+               minlength="5"
+               maxlength="255"
                required>
     </div>
-    <span class="invalid-feedback d-block">
+    <span id="email-error" class="invalid-feedback d-block">
         @error('email') {{ $message }} @enderror
     </span>
 </div>

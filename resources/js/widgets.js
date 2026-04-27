@@ -13,7 +13,6 @@ window.swal = Swal.mixin({
 window.Amplify = {
     cartUrl: () => '/carts',
     cartItemRemoveUrl: () => '/carts/remove/cart_item_id',
-    cartItemUpdateUrl: () => '/carts/update/cart_item_id',
     maxCartItemQuantity: () => 9999999999,
     favouritesCreateUrl: () => '/favourites',
     orderListUrl: () => '/order-lists',
@@ -192,12 +191,11 @@ window.Amplify = {
      * @param element
      */
     clearCart(element) {
-        const actionLink = element.dataset.actionLink;
         this.confirm('Are you sure to remove all items from shopping cart?',
             'Cart', 'Confirm', {
                 preConfirm: async () => {
                     return await $.ajax({
-                        url: actionLink,
+                        url: this.cartUrl(),
                         type: 'DELETE',
                         data: {},
                         header: {
@@ -223,7 +221,15 @@ window.Amplify = {
                         window.location.replace(origin + pathname);
                     }, 2000);
                 }
-            }).catch((error) => console.error(error));
+            })
+            .catch((error) => console.error(error));
+    },
+
+    discardQtyChange(event, selector = 'input[data-quantity]') {
+        document.querySelectorAll(selector)
+            .forEach(el => el.value = el.dataset.quantity);
+
+        this.handleQuantityChange(selector, 'input');
     },
 
     removeCartItem(cartItemId, redirect = true) {
@@ -279,7 +285,7 @@ window.Amplify = {
         const targetElement = document.querySelector(target);
         const quantity = targetElement.value;
 
-        const actionLink = this.cartItemUpdateUrl().replace('cart_item_id', cartItemId);
+        const actionLink = this.cartUrl();
         const warehouseCode = targetElement.dataset.warehouseCode;
         const productCode = targetElement.dataset.productCode;
 
@@ -300,8 +306,82 @@ window.Amplify = {
                     url: actionLink,
                     type: 'PATCH',
                     data: {
-                        'quantity': quantity,
-                        product_warehouse_code: warehouseCode,
+                        products: [
+                            {
+                                id: cartItemId,
+                                qty: Number(quantity),
+                                product_code: productCode,
+                                product_warehouse_code: warehouseCode,
+                            }
+                        ]
+                    },
+                    header: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    success: function (result) {
+                        if (result.success) {
+                            Swal.close();
+                            Amplify.notify('success', result.message, 'Cart');
+                            setTimeout(() => {
+                                const {origin, pathname} = window.location;
+                                window.location.replace(origin + pathname);
+                            }, 2000);
+                        }
+                    },
+                    error: function (xhr) {
+                        Swal.showValidationMessage(`<p>${xhr.responseJSON.message ?? xhr.statusText}</p>`);
+                        Swal.hideLoading();
+                    },
+                });
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        });
+    },
+
+    updateCart(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        let itemChanged = [];
+
+        document.querySelectorAll('#cart-summary input[data-quantity]')
+            .forEach(function (input) {
+                let currentValue = input.value;
+                let originalValue = input.dataset.quantity;
+
+                if (currentValue !== originalValue) {
+                    itemChanged.push({
+                        id: Number(input.id.replace('cart-item-', '')),
+                        qty: Number(currentValue),
+                        product_code: input.dataset.productCode,
+                        product_warehouse_code: input.dataset.warehouseCode,
+                    })
+                }
+            });
+
+        if (itemChanged.length === 0) {
+            return;
+        }
+
+        swal.fire({
+            title: 'Cart',
+            icon: 'warning',
+            backdrop: true,
+            showCancelButton: false,
+            text: `Updating product information in cart...`,
+            confirmButtonText: 'Okay',
+            customClass: {
+                confirmButton: 'btn btn-outline-secondary'
+            },
+            willOpen: () => document.querySelector('.swal2-actions').style.justifyContent = 'center',
+            didOpen: () => {
+                return $.ajax({
+                    beforeSend: () => Swal.showLoading(),
+                    url: this.cartUrl(),
+                    type: 'PATCH',
+                    data: {
+                        products: itemChanged,
                     },
                     header: {
                         'Content-Type': 'application/json',
@@ -336,8 +416,8 @@ window.Amplify = {
             beforeSend: function () {
                 $('#cart-item-summary').html(
                     `<tr>
-                        <td colspan='50' class="text-center padding-top-1x bg-transparent">
-                                <img src='/assets/img/preloader.gif' alt="preloader"/>
+                        <td colspan='50' style="display: flex; width: 100%; justify-content: center; padding-top: 1.5rem; padding-bottom: 1.5rem; min-height: 100px">
+                                <img src='/vendor/widget/img/loading.gif' alt="preloader" style="max-width: 52px; height: auto; object-fit: contain" class="img-fluid"/>
                          </td>
                   </tr>`,
                 );
@@ -400,10 +480,7 @@ window.Amplify = {
      */
     async loadCartDropdown() {
         await $.ajax(this.cartUrl(), {
-            beforeSend: () => {
-                Amplify.renderEmptyCart('/assets/img/preloader.gif');
-                $("#cart-menu-subtotal").hide();
-            },
+            beforeSend: () => Amplify.renderEmptyCart('/vendor/widget/img/loading.gif', true),
             method: 'GET',
             dataType: 'json',
             headers: {
@@ -446,25 +523,26 @@ window.Amplify = {
         });
     },
 
-    renderEmptyCart(imageUrl = '/assets/img/empty_cart.png') {
+    renderEmptyCart(imageUrl = '/assets/img/empty_cart.png', loading = false) {
+        $('.cart-dropdown').empty();
         $("#cart-menu-subtotal").hide();
         $('.total_cart_items').text(0);
         $('.total_cart_amount').text('$0.00');
         $('.total_cart_items').addClass('d-none');
 
+        let className = loading ? 'loading' : 'loaded';
+
         $('.cart-dropdown').append(`
-        <div id="cart_items" class="text-center" style="min-height: 250px;">
-            <img src="${imageUrl}"
-                style="max-width: 160px !important;"
-                class="img-fluid mt-5" alt="No items in cart"
-            />
+        <div id="cart_items" class="${className}">
+            <img src="${imageUrl}" class="img-fluid" alt="No items in cart"/>
         </div>
     `);
     },
 
     attachQuantityInputEvents() {
-        document.querySelectorAll('input[data-quantity]')
+        document.querySelectorAll('input.item-quantity')
             .forEach((input) => {
+
                 input.addEventListener('input', function () {
                     let value = this.value;
 
@@ -478,7 +556,10 @@ window.Amplify = {
                     }
 
                     this.value = value;
+
+                    Amplify.handleQuantityChange('#' + this.id, 'input');
                 });
+
                 input.addEventListener('keydown', function (e) {
                     const allowedKeys = [
                         'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'
@@ -606,6 +687,15 @@ window.Amplify = {
             return false;
         }
 
+        window.dispatchEvent(new CustomEvent('qty-change', {
+            detail: {
+                target: targetElement,
+                quantity: Number(targetElement.value),
+                id: targetElement.id,
+                changed: targetElement.value !== targetElement.dataset.quantity,
+            }
+        }));
+
         return true;
     },
 
@@ -617,6 +707,39 @@ window.Amplify = {
     toNearestQtyInterval(value, interval) {
         if (interval === 0) return value;
         return Math.ceil(value / interval) * interval;
+    },
+
+    listenQtyChangeOnCartSummary(event, updateStyle = 'bulk') {
+        const {changed, id} = event.detail;
+
+        if (updateStyle === 'line') {
+            const cartId = id.replace('cart-item-', '');
+            if (changed) {
+                $(`#update-button-${cartId}`).show();
+                $(`#discard-button-${cartId}`).show();
+            } else {
+                $(`#update-button-${cartId}`).hide();
+                $(`#discard-button-${cartId}`).hide();
+            }
+        }
+
+        let hasAnyChange = false;
+
+        document.querySelectorAll('#cart-summary input[data-quantity]').forEach(function (input) {
+            if (input.value !== input.dataset.quantity) {
+                hasAnyChange = true;
+            }
+        });
+
+        (hasAnyChange)
+            ? $(`#checkout-btn`).hide()
+            : $(`#checkout-btn`).show();
+
+        if (updateStyle === 'bulk') {
+            (hasAnyChange)
+                ? $('#quantity-update-actions').removeClass('d-none')
+                : $('#quantity-update-actions').addClass('d-none');
+        }
     },
 
     /**
@@ -912,7 +1035,7 @@ window.Amplify = {
             // }
 
             await $.ajax(this.cartUrl(), {
-                beforeSend: () => Amplify.renderEmptyCart('/assets/img/preloader.gif'),
+                beforeSend: () => Amplify.renderEmptyCart('/assets/img/preloader.gif', true),
                 method: 'POST',
                 dataType: 'json',
                 data: {
@@ -1066,5 +1189,307 @@ window.Amplify = {
                 }
             })
             .catch((error) => console.error(error));
+    },
+
+    filterFaqList(trigger) {
+        trigger.each(function () {
+            var self = $(this),
+                target = self.data('filter-list'),
+                search = self.find('input[type=text]'),
+                filters = self.find('input[type=radio]'),
+                list = $(target).find('.list-group-item');
+
+            // Search
+            search.keyup(function () {
+                var searchQuery = search.val();
+                list.each(function () {
+                    var text = $(this).text().toLowerCase();
+                    (text.indexOf(searchQuery.toLowerCase()) === 0) ? $(this).show() : $(this).hide();
+                });
+            });
+
+            // Filters
+            filters.on('click', function (e) {
+                var targetItem = $(this).val();
+                if (targetItem !== 'all') {
+                    list.hide();
+                    $('[data-filter-item=' + targetItem + ']').show();
+                } else {
+                    list.show();
+                }
+
+            });
+        });
+    },
+
+    shopCategories() {
+        var categoryToggle = $('.widget-categories .has-children > a');
+
+        function closeCategorySubmenu() {
+            categoryToggle.parent().removeClass('expanded');
+        }
+
+        categoryToggle.on('click', function (e) {
+            if ($(e.target).parent().is('.expanded')) {
+                closeCategorySubmenu();
+            } else {
+                closeCategorySubmenu();
+                $(this).parent().addClass('expanded');
+            }
+        });
+    },
+
+    // Gallery (Photoswipe)
+    //------------------------------------------------------------------------------
+    initPhotoSwipeFromDOM(gallerySelector = '.gallery-wrapper') {
+        // parse slide data (url, title, size ...) from DOM elements
+        // (children of gallerySelector)
+        var parseThumbnailElements = function (el) {
+            var thumbElements = $(el).find('.gallery-item:not(.isotope-hidden)').get(),
+                numNodes = thumbElements.length,
+                items = [],
+                figureEl,
+                linkEl,
+                size,
+                item;
+
+            for (var i = 0; i < numNodes; i++) {
+
+                figureEl = thumbElements[i]; // <figure> element
+
+                // include only element nodes
+                if (figureEl.nodeType !== 1) {
+                    continue;
+                }
+
+                linkEl = figureEl.children[0]; // <a> element
+
+                // create slide object
+                if ($(linkEl).data('type') === 'video') {
+                    item = {
+                        html: $(linkEl).data('video')
+                    };
+                } else {
+                    size = linkEl.getAttribute('data-size').split('x');
+                    item = {
+                        src: linkEl.getAttribute('href'),
+                        w: parseInt(size[0], 10),
+                        h: parseInt(size[1], 10)
+                    };
+                }
+
+                if (figureEl.children.length > 1) {
+                    item.title = $(figureEl).find('.caption').html();
+                }
+
+                if (linkEl.children.length > 0) {
+                    item.msrc = linkEl.children[0].getAttribute('src');
+                }
+
+                item.el = figureEl; // save link to element for getThumbBoundsFn
+                items.push(item);
+            }
+
+            return items;
+        };
+
+        // find nearest parent element
+        var closest = function closest(el, fn) {
+            return el && (fn(el) ? el : closest(el.parentNode, fn));
+        };
+
+        function hasClass(element, cls) {
+            return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
+        }
+
+        // triggers when user clicks on thumbnail
+        var onThumbnailsClick = function (e) {
+            e = e || window.event;
+            e.preventDefault ? e.preventDefault() : e.returnValue = false;
+
+            var eTarget = e.target || e.srcElement;
+
+            // find root element of slide
+            var clickedListItem = closest(eTarget, function (el) {
+                return (hasClass(el, 'gallery-item'));
+            });
+
+            if (!clickedListItem) {
+                return;
+            }
+
+            // find index of clicked item by looping through all child nodes
+            // alternatively, you may define index via data- attribute
+            var clickedGallery = clickedListItem.closest('.gallery-wrapper'),
+                childNodes = $(clickedListItem.closest('.gallery-wrapper')).find('.gallery-item:not(.isotope-hidden)').get(),
+                numChildNodes = childNodes.length,
+                nodeIndex = 0,
+                index;
+
+            for (var i = 0; i < numChildNodes; i++) {
+                if (childNodes[i].nodeType !== 1) {
+                    continue;
+                }
+
+                if (childNodes[i] === clickedListItem) {
+                    index = nodeIndex;
+                    break;
+                }
+                nodeIndex++;
+            }
+
+            if (index >= 0) {
+                // open PhotoSwipe if valid index found
+                openPhotoSwipe(index, clickedGallery);
+            }
+            return false;
+        };
+
+        // parse picture index and gallery index from URL (#&pid=1&gid=2)
+        var photoswipeParseHash = function () {
+            var hash = window.location.hash.substring(1),
+                params = {};
+
+            if (hash.length < 5) {
+                return params;
+            }
+
+            var vars = hash.split('&');
+            for (var i = 0; i < vars.length; i++) {
+                if (!vars[i]) {
+                    continue;
+                }
+                var pair = vars[i].split('=');
+                if (pair.length < 2) {
+                    continue;
+                }
+                params[pair[0]] = pair[1];
+            }
+
+            if (params.gid) {
+                params.gid = parseInt(params.gid, 10);
+            }
+
+            return params;
+        };
+
+        var openPhotoSwipe = function (index, galleryElement, disableAnimation, fromURL) {
+            var pswpElement = document.querySelectorAll('.pswp')[0],
+                gallery,
+                options,
+                items;
+
+            items = parseThumbnailElements(galleryElement);
+
+            // define options (if needed)
+            options = {
+
+                closeOnScroll: false,
+
+                // define gallery index (for URL)
+                galleryUID: galleryElement.getAttribute('data-pswp-uid'),
+
+                getThumbBoundsFn: function (index) {
+                    // See Options -> getThumbBoundsFn section of documentation for more info
+                    var thumbnail = items[index].el.getElementsByTagName('img')[0]; // find thumbnail
+                    if ($(thumbnail).length > 0) {
+                        var pageYScroll = window.pageYOffset || document.documentElement.scrollTop,
+                            rect = thumbnail.getBoundingClientRect();
+
+                        return {
+                            x: rect.left,
+                            y: rect.top + pageYScroll,
+                            w: rect.width
+                        };
+                    }
+                }
+
+            };
+
+            // PhotoSwipe opened from URL
+            if (fromURL) {
+                if (options.galleryPIDs) {
+                    // parse real index when custom PIDs are used
+                    // http://photoswipe.com/documentation/faq.html#custom-pid-in-url
+                    for (var j = 0; j < items.length; j++) {
+                        if (items[j].pid == index) {
+                            options.index = j;
+                            break;
+                        }
+                    }
+                } else {
+                    // in URL indexes start from 1
+                    options.index = parseInt(index, 10) - 1;
+                }
+            } else {
+                options.index = parseInt(index, 10);
+            }
+
+            // exit if index not found
+            if (isNaN(options.index)) {
+                return;
+            }
+
+            if (disableAnimation) {
+                options.showAnimationDuration = 0;
+            }
+
+            // Pass data to PhotoSwipe and initialize it
+            gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
+            gallery.init();
+
+            gallery.listen('beforeChange', function () {
+                var currItem = $(gallery.currItem.container);
+                $('.pswp__video').removeClass('active');
+                var currItemIframe = currItem.find('.pswp__video').addClass('active');
+                $('.pswp__video').each(function () {
+                    if (!$(this).hasClass('active')) {
+                        $(this).attr('src', $(this).attr('src'));
+                    }
+                });
+            });
+
+            gallery.listen('close', function () {
+                $('.pswp__video').each(function () {
+                    $(this).attr('src', $(this).attr('src'));
+                });
+            });
+
+        };
+
+        // loop through all gallery elements and bind events
+        var galleryElements = document.querySelectorAll(gallerySelector);
+
+        for (var i = 0, l = galleryElements.length; i < l; i++) {
+            galleryElements[i].setAttribute('data-pswp-uid', i + 1);
+            galleryElements[i].onclick = onThumbnailsClick;
+        }
+
+        // Parse URL and open gallery if it contains #&pid=3&gid=1
+        var hashData = photoswipeParseHash();
+        if (hashData.pid && hashData.gid) {
+            openPhotoSwipe(hashData.pid, galleryElements[hashData.gid - 1], true, true);
+        }
+    },
+
+    productSlider: function (target) {
+        let $productCarousel = $(target);
+        // Carousel init
+        $productCarousel.owlCarousel({
+            items: 1,
+            loop: false,
+            dots: false,
+            URLhashListener: true,
+            startPosition: 'URLHash',
+            onTranslate: function(e) {
+                var i = e.item.index;
+                var $activeHash = $('.owl-item').eq(i).find('[data-hash]').attr('data-hash');
+                $('.product-thumbnails li').removeClass('active');
+                $('[href="#' + $activeHash + '"]').parent().addClass('active');
+                $('.gallery-wrapper .gallery-item').removeClass('active');
+                $('[data-hash="' + $activeHash + '"]').parent().addClass('active');
+
+            }
+        });
     }
 }

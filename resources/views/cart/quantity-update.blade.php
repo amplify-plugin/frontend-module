@@ -7,7 +7,7 @@
     </button>
 
     <input
-            data-quantity="{{ $min_qty ?? '{min_qty}' }}"
+            data-quantity="{{ $quantity ?? '{quantity}' }}"
             type="text"
             inputmode="numeric"
             data-product-code="{{ $code ?? '{code}' }}"
@@ -33,6 +33,6 @@
 
 @pushonce('footer-script')
     <script>
-        document.addEventListener('DOMContentLoaded', Amplify.attachQuantityInputEvents.bind(Amplify));
+        $(document).ready(() => Amplify.attachQuantityInputEvents());
     </script>
 @endpushonce

@@ -1,19 +1,13 @@
 <div {!! $htmlAttributes !!}>
     <div class="product-gallery">
-        {{-- <div class="gallery-wrapper"> --}}
-        {{--     <div class="gallery-item video-btn text-center"> --}}
-        {{--         <a href="#" --}}
-        {{--            data-toggle="tooltip" --}}
-        {{--            data-type="video" --}}
-        {{--            data-video="&lt;div class=&quot;wrapper&quot;&gt;&lt;div class=&quot;video-wrapper&quot;&gt;&lt;iframe class=&quot;pswp__video&quot; width=&quot;960&quot; height=&quot;640&quot; src=&quot;//www.youtube.com/embed/B81qd2v6alw?rel=0&quot; frameborder=&quot;0&quot; allowfullscreen&gt;&lt;/iframe&gt;&lt;/div&gt;&lt;/div&gt;" --}}
-        {{--            title="Watch video"></a> --}}
-        {{--     </div> --}}
-        {{-- </div> --}}
         <div class="product-carousel owl-carousel gallery-wrapper">
             <div class="gallery-item" data-hash="item-one">
                 <a data-size="1000x667" href="{{ $productImage->main ?? ' ' }}">
                     <img src="{{ $productImage->main ?? ' ' }}" alt="Product">
                 </a>
+                @if(!empty($product))
+                    <span class="caption">{{ $product->product_name }}</span>
+                @endif
             </div>
 
             @if (!empty($productImage->additional))
@@ -53,10 +47,12 @@
             @endif
         </div>
 
-        <ul class="product-thumbnails thumbnails-carousel owl-carousel">
-            <li class="active overflow-hidden item">
-                <a class="product-thumbnail w-100" href="#item-one">
-                    <img src="{{ $productImage->main ?? ' ' }}" alt="Product" class="img-fluid" />
+        <ul class="product-thumbnails thumbnails-carousel owl-carousel"
+{{--            data-owl-carousel='{"nav":true,"dots":false,"center":true,"items":4}'--}}
+        >
+            <li class="active item">
+                <a class="product-thumbnail" href="#item-one">
+                    <img src="{{ $productImage->main ?? ' ' }}" alt="Product" class="img-fluid"/>
                 </a>
             </li>
 
@@ -75,7 +71,7 @@
                     @else
                         <li class="item">
                             <a class="product-thumbnail" href="#{{ 'item-' . $key }}">
-                                <img src="{{ assets_image($image ?? '') }}" alt="Product" />
+                                <img src="{{ assets_image($image ?? '') }}" alt="Product"/>
                             </a>
                         </li>
                     @endif
@@ -87,8 +83,8 @@
                     <li class="item">
                         <a class="product-thumbnail" href="#{{ 'erp-item-' . $key }}">
                             <img
-                                src="{{ 'https://www.spisafety.com/images/products/thumb/' . $additionalImage['value'] }}"
-                                alt="Product" />
+                                    src="{{ 'https://www.spisafety.com/images/products/thumb/' . $additionalImage['value'] }}"
+                                    alt="Product"/>
                         </a>
                     </li>
                 @endforeach
@@ -133,3 +129,13 @@
         </div>
     </div>
 @endpush
+
+@pushonce('footer-script')
+    <script>
+        $(function () {
+            Amplify.initPhotoSwipeFromDOM('.gallery-wrapper');
+
+            Amplify.productSlider('.product-carousel');
+        });
+    </script>
+@endpushonce

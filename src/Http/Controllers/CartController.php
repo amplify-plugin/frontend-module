@@ -56,7 +56,10 @@ class CartController extends Controller
 
         $this->loadPageByType('cart');
 
-        return $this->render();
+        return response($this->render())
+                ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+                ->header('Pragma', 'no-cache')
+                ->header('Expires', '0');
     }
 
     public function store(AddToCartRequest $request)
@@ -130,10 +133,23 @@ class CartController extends Controller
 
                 \event(new CartUpdated($cart));
 
-                return response()->json(['message' => __('Your current cart items are removed'), 'success' => true], 200);
+                return response()->json([
+                    'message' => __('Selected cart item is removed'),
+                    'success' => true,
+                    'data' => [
+                        'total' => $cart->cartItems()->count()
+                    ]
+                ], 200);
             }
 
-            return response()->json(['message' => __('Failed to clear the current cart items.'), 'success' => false], 500);
+            return response()->json([
+                'message' => __('Failed to clear the current cart items.'),
+                'success' => false,
+                'data' => [
+                    'total' => $cart->cartItems()->count()
+                ]
+            ], 500);
+
         } catch (\Exception $exception) {
 
             Log::error($exception);
@@ -142,26 +158,28 @@ class CartController extends Controller
         }
     }
 
-    public function update(CartItem $cartItem, Request $request)
+    public function update(AddToCartRequest $request)
     {
-        $request->validate([
-            'quantity' => 'required|numeric|min:1',
-        ]);
-
         $payload = [
             'meta' => [],
             'errors' => [],
         ];
 
-        $quantity = $request->input('quantity');
+        $cart = getCart();
 
-        $payload['items'] = CartItem::where('cart_id', '=', $cartItem->cart_id)
+        $itemChanges = $request->input('products');
+
+        //@TODO improve cart update to only update changes
+        //$payload['items'] = CartItem::whereIn('id', array_column($itemChanges, 'id'))
+        $payload['items'] = CartItem::where('cart_id', $cart->getKey())
             ->get()
-            ->map(function ($entry) use ($cartItem, $quantity) {
-                $entry->quantity = $entry->getKey() == $cartItem->getKey()
-                    ? $quantity
-                    : $entry->quantity;
-
+            ->map(function ($entry) use (&$itemChanges) {
+                foreach ($itemChanges as $item) {
+                    if ($item['id'] == $entry->getKey()) {
+                        $entry->quantity = $item['qty'];
+                        break;
+                    }
+                }
                 return $entry;
             })
             ->toArray();
@@ -183,8 +201,6 @@ class CartController extends Controller
 
         try {
 
-            $cart = $cartItem->cart;
-
             $cart->cartItems()->delete();
 
             $cart->cartItems()->createMany($data['items']);
@@ -201,8 +217,10 @@ class CartController extends Controller
         }
     }
 
-    public function destroy(Cart $cart)
+    public function destroy()
     {
+        $cart = getCart();
+
         try {
             if ($cart->cartItems()->delete()) {
 

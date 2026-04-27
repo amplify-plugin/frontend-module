@@ -555,7 +555,16 @@ return [
                 'type' => 'text',
                 'value' => 'Shopping List',
             ],
-
+            [
+                'name' => 'update-style',
+                'type' => 'select',
+                'value' => 'bulk',
+                'options' => [
+                    'bulk' => 'Bulk Update',
+                    'line' => 'Single Line Update',
+                ],
+                'hint' => 'How update cart button display and function.',
+            ],
         ],
         '@nestedItems' => [
             [
@@ -1635,7 +1644,7 @@ return [
         'model' => ['static_page'],
         '@attributes' => [
             [
-                'name' => 'show-title',
+                'name' => ':show-title',
                 'type' => 'boolean',
                 'value' => true,
             ],
@@ -1645,58 +1654,68 @@ return [
                 'value' => 'Featured Products',
             ],
             [
-                'name' => 'merchandising-zone',
+                'name' => ':merchandising-zone',
                 'type' => 'merchandises-dropdown',
                 'value' => '',
             ],
-            ['name' => 'products-limit', 'type' => 'text', 'value' => 5],
+            ['name' => ':products-limit', 'type' => 'number', 'value' => 5],
             [
-                'name' => 'show-cart-btn',
+                'name' => ':show-cart-btn',
                 'type' => 'boolean',
                 'value' => true,
             ],
             [
                 'name' => 'cart-button-label',
                 'type' => 'text',
-                'value' => 'Add to Order',
+                'value' => 'View details',
             ],
             [
-                'name' => 'small-button',
+                'name' => ':small-button',
                 'type' => 'boolean',
                 'value' => true,
             ],
             [
-                'name' => 'show-price',
+                'name' => ':show-price',
                 'type' => 'boolean',
                 'value' => true,
             ],
             [
-                'name' => 'show-top-discount-badge',
+                'name' => ':show-top-discount-badge',
                 'type' => 'boolean',
                 'value' => false,
             ],
             [
-                'name' => 'show-customer-list',
+                'name' => ':show-order-list',
                 'type' => 'boolean',
                 'value' => false,
             ],
             [
-                'name' => 'show-navigation',
+                'name' => 'order-list-label',
+                'type' => 'text',
+                'value' => 'Order list',
+            ],
+            [
+                'name' => ':show-navigation',
                 'type' => 'boolean',
                 'value' => false,
             ],
             [
-                'name' => 'display-product-code',
+                'name' => ':display-product-code',
                 'type' => 'boolean',
                 'value' => false,
             ],
             [
-                'name' => 'display-short-description',
+                'name' => ':display-short-description',
                 'type' => 'boolean',
                 'value' => false,
             ],
             [
-                'name' => 'display-manufacturer',
+                'name' => ':display-manufacturer',
+                'type' => 'boolean',
+                'value' => false,
+            ],
+            [
+                'name' => ':show-guest-price',
                 'type' => 'boolean',
                 'value' => false,
             ],
@@ -3513,7 +3532,18 @@ return [
         '@inside' => null,
         '@client' => null,
         'model' => [],
-        '@attributes' => [],
+        '@attributes' => [
+            [
+                'name' => 'update-style',
+                'type' => 'select',
+                'value' => 'bulk',
+                'options' => [
+                    'bulk' => 'Bulk Update',
+                    'line' => 'Single Line Update',
+                ],
+                'hint' => 'How update cart button display and function.',
+            ],
+        ],
         '@nestedItems' => [],
         'description' => '',
     ],

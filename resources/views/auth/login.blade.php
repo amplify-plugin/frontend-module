@@ -1,7 +1,7 @@
 <div {!! $htmlAttributes !!}>
     <form method="post" action="{{route('frontend.login')}}" id="login-box">
         <input type="hidden" name="previous_url"
-               value="{{ !$referrer || strpos($referrer, config('app.url')) !== 0 ? '' : url()->previous() }}">
+               value="{{ $referrer && str_starts_with($referrer, config('app.url')) ? $referrer : url()->previous() }}">
         @csrf
 
         @if($honeyPotProtection)
@@ -58,10 +58,6 @@
                 }
             });
 
-            $form.on('input', 'input', function () {
-                $(this).closest('.form-group').find('.invalid-feedback').text('');
-            });
-
             // Loader
             function disableBtn() {
                 $btn.prop('disabled', true)
@@ -78,27 +74,6 @@
 
             // Validate
             $form.validate({
-                rules: {
-                    email: {required: true, email: true},
-                    password: {required: true, minlength: {{ $minPassLength }}}
-                },
-                messages: {
-                    email: {required: "{{ __('The email field is required.') }}", email: "{{ __('The email must be a valid email address.') }}"},
-                    password: {
-                        required: "{{ __('The password field is required.') }}",
-                        minlength: "{{ __('The :attribute must be at least :min characters.', ['attribute' => 'password', 'min' => $minPassLength]) }}"
-                    }
-                },
-                highlight: function (el) {
-                    $(el).removeClass('is-valid').addClass('is-invalid');
-                },
-                unhighlight: function (el) {
-                    $(el).removeClass('is-invalid').addClass('is-valid');
-                },
-                errorPlacement: function (error, element) {
-                    // Put error message in the <span.invalid-feedback>
-                    element.closest('.form-group').find('.invalid-feedback').html(error);
-                },
                 submitHandler: function (form) {
                     disableBtn();
                     form.submit();

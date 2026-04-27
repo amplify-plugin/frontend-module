@@ -11,12 +11,9 @@ use Illuminate\Contracts\View\View;
  */
 class ItemActions extends BaseComponent
 {
-    /**
-     * Whether the component should be rendered
-     */
-    public function shouldRender(): bool
+    public function __construct(public string $updateStyle = 'line')
     {
-        return true;
+        parent::__construct();
     }
 
     /**
@@ -24,7 +21,6 @@ class ItemActions extends BaseComponent
      */
     public function render(): View|Closure|string
     {
-
         return view('widget::cart.item-actions');
     }
 }

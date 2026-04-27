@@ -6,6 +6,7 @@ use Amplify\Frontend\Abstracts\BaseComponent;
 use Amplify\System\Backend\Models\AccountTitle;
 use Amplify\System\Backend\Models\Country;
 use Amplify\System\Backend\Models\IndustryClassification;
+use Amplify\System\Helpers\SecurityHelper;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Str;
@@ -59,7 +60,9 @@ class NewCustomerTab extends BaseComponent
 
         $accountTitles = AccountTitle::enabled()->get()->pluck('name', 'id')->toArray();
 
-        return view('widget::auth.registration.new-cash-customer-tab', compact('countries', 'industries', 'accountTitles'));
+        $minPasswordLength = SecurityHelper::passwordLength();
+
+        return view('widget::auth.registration.new-cash-customer-tab', compact('countries', 'industries', 'accountTitles', 'minPasswordLength'));
     }
 
     public function htmlAttributes(): string
