@@ -324,7 +324,9 @@
                         type="button"
                         id="submit-quote-btn"
                         class="btn btn-warning align-items-center"
-                        data-submit-url="{{ route('frontend.carts.submit-quote') }}"
+                        data-url="{{ route('frontend.carts.submit-quote') }}"
+                        data-backtoshop="{{ $backToShoppingUrl() }}"
+                        onclick="Amplify.submitCartAsQuote(this)"
                 >
                         {{ __('Submit Quote') }}&nbsp;<i class="icon-file"></i>
                 </button>
@@ -367,70 +369,6 @@
                     'click', (event) => Amplify.updateCart(event)
                 );
                 @endif
-
-                // Handle submit quote action
-                const submitQuoteBtn = document.querySelector('#submit-quote-btn');
-                if (submitQuoteBtn) {
-                    submitQuoteBtn.addEventListener('click', function () {
-                    const backToUrl = @json($backToShoppingUrl());
-
-                        window.Amplify.confirm(
-                            'Are you sure to submit this as a quotation?',
-                            'Quotation',
-                            'Submit',
-                            {
-                                customClass: {
-                                    confirmButton: 'btn btn-primary',
-                                },
-                                preConfirm: () => {
-                                    const submitUrl = submitQuoteBtn.getAttribute('data-submit-url');
-                                    return $.ajax({
-                                        url: submitUrl,
-                                        method: 'POST',
-                                        data: {
-                                            cart_id: '{{ $cartId }}'
-                                        }
-                                    }).then((data) => {
-                                        if (data?.success) {
-                                            window.Amplify.confirm(
-                                                    data.message,
-                                                    'Quotation',
-                                                    'Continue Shopping',
-                                                    {
-                                                        icon: 'success',
-                                                        cancelButtonText: 'Review Quotation',
-                                                        customClass: {
-                                                            actions: 'w-100 d-flex justify-content-center',
-                                                            confirmButton: 'btn btn-primary',
-                                                            cancelButton: 'btn btn-secondary',
-                                                        }
-                                                    }
-                                            ).then((result) => {
-                                                    if (result.isConfirmed) {
-                                                        window.location.href = backToUrl;
-                                                        return;
-                                                    }
-
-                                                    if (result.isDismissed) {
-                                                        window.location.href = (result.dismiss === 'cancel')
-                                                            ? (data.redirect_to || backToUrl)
-                                                            : backToUrl;
-                                                    }
-                                            });
-                                        }
-
-                                        return data;
-                                    }).catch((err) => {
-                                            let response = err.responseJSON || err.response;
-                                            window.Amplify.alert(response?.message ?? response?.statusText ?? 'Something went wrong', 'Quotation', {icon: 'error'});
-                                            throw err;
-                                    });
-                                },
-                            }
-                        );
-                    });
-                }
-
 
             })
         </script>
