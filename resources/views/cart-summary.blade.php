@@ -319,21 +319,22 @@
                     </button>
                 @endif
             </div>
-            @if($showSubmitQuoteButton)
-                <button
-                        type="button"
-                        id="submit-quote-btn"
-                        class="btn btn-warning align-items-center"
-                        data-url="{{ route('frontend.carts.submit-quote') }}"
-                        data-backtoshop="{{ $backToShoppingUrl() }}"
-                        onclick="Amplify.submitCartAsQuote(this)"
-                >
-                        {{ __('Submit Quote') }}&nbsp;<i class="icon-file"></i>
-                </button>
-            @endif
-            <a id="checkout-btn" class="btn btn-success align-items-center" href="{{ route('frontend.checkout') }}">
-                {{ __('Checkout') }}&nbsp;<i class="icon-arrow-right"></i>
-            </a>
+            <div id="checkout-btn">
+                @if($showSubmitQuoteButton)
+                    <button
+                            type="button"
+                            id="submit-quote-btn"
+                            class="btn btn-warning align-items-center"
+                            data-url="{{ route('frontend.carts.submit-quote') }}"
+                            data-backtoshop="{{ $backToShoppingUrl() }}"
+                            onclick="Amplify.submitCartAsQuote(this)">
+                        <i class="icon-file"></i>&nbsp;{{ __('Submit Quote') }}
+                    </button>
+                @endif
+                <a class="btn btn-success align-items-center" href="{{ route('frontend.checkout') }}">
+                    {{ __('Checkout') }}&nbsp;<i class="icon-arrow-right"></i>
+                </a>
+            </div>
             @if($updateStyle == 'bulk')
                 <div id="quantity-update-actions" class="gap-2 d-none">
                     <button type="button"
