@@ -1491,5 +1491,76 @@ window.Amplify = {
 
             }
         });
-    }
+    },
+
+    // Submit cart as quote
+    submitCartAsQuote(submitQuoteBtn) {
+        // Prevent multiple submissions
+        if (submitQuoteBtn.dataset.submitting === 'true') {
+            return;
+        }
+
+        const submitUrl = submitQuoteBtn.dataset.url;
+        const redirectUrl = submitQuoteBtn.dataset.backtoshop ?? window.location.href;
+
+        if (!submitUrl) {
+            return;
+        }
+
+        Amplify.confirm(
+            'Are you sure to submit this as a quotation?',
+            'Quotation',
+            'Submit',
+            {
+                customClass: {
+                    confirmButton: 'btn btn-primary',
+                },
+                preConfirm: () => {
+                    submitQuoteBtn.dataset.submitting = 'true';
+
+                    return $.ajax({
+                        url: submitUrl,
+                        method: 'POST'
+                    }).then((data) => {
+                        submitQuoteBtn.dataset.submitting = 'false';
+
+                        if (data?.success) {
+                            Amplify.confirm(
+                                data.message,
+                                'Quotation',
+                                'Continue Shopping',
+                                {
+                                    icon: 'success',
+                                    cancelButtonText: 'Review Quotation',
+                                    customClass: {
+                                        actions: 'w-100 d-flex justify-content-center',
+                                        confirmButton: 'btn btn-primary',
+                                        cancelButton: 'btn btn-secondary',
+                                    }
+                                }
+                            ).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = redirectUrl;
+                                    return;
+                                }
+
+                                if (result.isDismissed) {
+                                    window.location.href = (result.dismiss === 'cancel')
+                                        ? (data.redirect_to || redirectUrl)
+                                        : redirectUrl;
+                                }
+                            });
+                        }
+
+                        return data;
+                    }).catch((err) => {
+                        submitQuoteBtn.dataset.submitting = 'false';
+                        let response = err.responseJSON || err.response;
+                        Amplify.alert(response?.message ?? response?.statusText ?? 'Something went wrong', 'Quotation', {icon: 'error'});
+                        throw err;
+                    });
+                },
+            }
+        );
+    },
 }
