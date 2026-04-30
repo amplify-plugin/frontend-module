@@ -1,3 +1,7 @@
+@php
+    $group = json_decode(json_encode($group));
+@endphp
+
 <div @class(["col-md-6", "d-none" => empty($group->group_items) ])>
     <h4>{{ $group->group_name ?? '' }}</h4>
     <table class="table table-striped">
