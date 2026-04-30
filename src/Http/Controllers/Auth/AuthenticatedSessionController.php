@@ -67,7 +67,7 @@ class AuthenticatedSessionController extends Controller
         }
 
         $guestSessionToken = \Illuminate\Support\Facades\Session::token();
-        $request->session()->flush();
+
         @cache()->forget("{$guestSessionToken}-customer-model");
         @cache()->forget("{$guestSessionToken}-mobile-menu");
         @cache()->forget("{$guestSessionToken}-primary-menu");
@@ -111,8 +111,6 @@ class AuthenticatedSessionController extends Controller
             }
 
             Auth::guard(Contact::AUTH_GUARD)->logout();
-
-            $request->session()->flush();
 
             $request->session()->regenerateToken();
 
