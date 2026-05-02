@@ -1502,25 +1502,46 @@ window.Amplify = {
 
         const submitUrl = submitQuoteBtn.dataset.url;
         const redirectUrl = submitQuoteBtn.dataset.backtoshop ?? window.location.href;
+        const noteLabel = submitQuoteBtn.dataset.noteLabel ?? 'Comments';
+        const notePlaceholder = submitQuoteBtn.dataset.notePlaceholder ?? 'Enter comments';
 
         if (!submitUrl) {
             return;
         }
 
+        const noteFieldHtml = `
+            <div class="form-group text-left mb-0">
+                <label for="quote-order-notes" class="font-weight-bold">${noteLabel}</label>
+                <textarea
+                    id="quote-order-notes"
+                    class="form-control"
+                    rows="3"
+                    placeholder="${notePlaceholder}"
+                ></textarea>
+            </div>
+        `;
+
         Amplify.confirm(
-            'Are you sure to submit this as a quotation?',
+            '',
             'Quotation',
             'Submit',
             {
+                html: noteFieldHtml,
+                cancelButtonText: 'Cancel',
                 customClass: {
                     confirmButton: 'btn btn-primary',
                 },
                 preConfirm: () => {
+                    const orderNotes = document.getElementById('quote-order-notes')?.value ?? '';
+
                     submitQuoteBtn.dataset.submitting = 'true';
 
                     return $.ajax({
                         url: submitUrl,
-                        method: 'POST'
+                        method: 'POST',
+                        data: {
+                            order_notes: orderNotes,
+                        }
                     }).then((data) => {
                         submitQuoteBtn.dataset.submitting = 'false';
 

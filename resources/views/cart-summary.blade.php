@@ -327,6 +327,8 @@
                             class="btn btn-warning align-items-center"
                             data-url="{{ route('frontend.carts.submit-quote') }}"
                             data-backtoshop="{{ $backToShoppingUrl() }}"
+                            data-note-label="{{ $quoteNoteLabel() }}"
+                            data-note-placeholder="{{ $quoteNotePlaceholder() }}"
                             onclick="Amplify.submitCartAsQuote(this)">
                         <i class="icon-file"></i>&nbsp;{{ __('Submit Quote') }}
                     </button>
