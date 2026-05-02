@@ -557,6 +557,16 @@ return [
                 'value' => false,
             ],
             [
+                'name' => 'quote-note-label',
+                'type' => 'text',
+                'value' => 'Quote Notes',
+            ],
+            [
+                'name' => 'quote-note-placeholder',
+                'type' => 'text',
+                'value' => 'Enter notes for this quote request.',
+            ],
+            [
                 'name' => 'order-list-label',
                 'type' => 'text',
                 'value' => 'Shopping List',
