@@ -30,7 +30,7 @@ class CartController extends Controller
 
     public function __construct()
     {
-        if (! config('amplify.frontend.guest_add_to_cart')) {
+        if (!config('amplify.frontend.guest_add_to_cart')) {
             $this->middleware('customers');
         }
     }
@@ -40,26 +40,26 @@ class CartController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->expectsJson()) {
-
-            $cart = \getCart();
-
-            if ($cart instanceof Cart) {
-
-                $cart->load(['cartItems', 'cartItems.product.manufacturerRelation']);
-
-                return new CartResource($cart);
-            }
-
-            return new CartResource(null);
-        }
-
         $this->loadPageByType('cart');
 
         return response($this->render())
-                ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
-                ->header('Pragma', 'no-cache')
-                ->header('Expires', '0');
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', '0');
+    }
+
+    public function show()
+    {
+        $cart = \getCart();
+
+        if ($cart instanceof Cart) {
+
+            $cart->load(['cartItems', 'cartItems.product.manufacturerRelation']);
+
+            return new CartResource($cart);
+        }
+
+        return new CartResource(null);
     }
 
     public function store(AddToCartRequest $request)
@@ -86,7 +86,7 @@ class CartController extends Controller
                 return $data;
             });
 
-        if (! empty($data['errors'])) {
+        if (!empty($data['errors'])) {
             return $this->apiResponse(false, count($data['errors']) == 1
                 ? Arr::first(Arr::flatten($data['errors']))
                 : __('There are issue(s) appeared on your order (marked in red). Please correct before adding to the Cart.'), 400,
@@ -104,7 +104,7 @@ class CartController extends Controller
 
             \event(new CartUpdated($cart));
 
-            return $this->apiResponse(true, __('Product(s) added to cart successfully.'));
+            return $this->apiResponse(true, __('Product(s) added to cart successfully.'), 200, ['data' => ['total' => cart_count_badge($cart)]]);
 
         } catch (\Exception $exception) {
 
@@ -137,7 +137,7 @@ class CartController extends Controller
                     'message' => __('Selected cart item is removed'),
                     'success' => true,
                     'data' => [
-                        'total' => $cart->cartItems()->count()
+                        'total' => cart_count_badge($cart)
                     ]
                 ], 200);
             }
@@ -146,13 +146,11 @@ class CartController extends Controller
                 'message' => __('Failed to clear the current cart items.'),
                 'success' => false,
                 'data' => [
-                    'total' => $cart->cartItems()->count()
+                    'total' => cart_count_badge($cart)
                 ]
             ], 500);
 
         } catch (\Exception $exception) {
-
-            Log::error($exception);
 
             return $this->apiResponse(false, $exception->getMessage(), 500);
         }
@@ -195,7 +193,7 @@ class CartController extends Controller
                 return $data;
             });
 
-        if (! empty($data['errors'])) {
+        if (!empty($data['errors'])) {
             $this->apiResponse(false, Arr::first(Arr::flatten($data['errors'])), 500, ['errors' => $data['errors']]);
         }
 
@@ -243,7 +241,7 @@ class CartController extends Controller
     public function orderFile(OrderFileRequest $request): JsonResponse
     {
         $file = request()->file('file');
-        $fileName = time().'_'.$file->getClientOriginalName();
+        $fileName = time() . '_' . $file->getClientOriginalName();
         $filePath = $file->storeAs('public/quick_order/', $fileName);
 
         $fileExtension = strtoupper($file->getClientOriginalExtension());
@@ -255,7 +253,7 @@ class CartController extends Controller
             default => null
         };
 
-        $fileData = Excel::toArray((object) [], $filePath, 'local', $readerType);
+        $fileData = Excel::toArray((object)[], $filePath, 'local', $readerType);
 
         $firstSheet = array_shift($fileData);
 
@@ -263,7 +261,7 @@ class CartController extends Controller
             throw ValidationException::withMessages(['file' => 'The file is empty or only have headers.']);
         }
 
-        $firstSheet = array_filter($firstSheet, fn ($value) => ! empty($value[0]));
+        $firstSheet = array_filter($firstSheet, fn($value) => !empty($value[0]));
 
         // Remove Header
         if (isset($firstSheet[0][0])) {
@@ -307,7 +305,7 @@ class CartController extends Controller
 
             $erpCustomer = ErpApi::getCustomerDetail();
 
-            if (! Str::contains($warehouseString, $erpCustomer->DefaultWarehouse)) {
+            if (!Str::contains($warehouseString, $erpCustomer->DefaultWarehouse)) {
                 $warehouseString = "$warehouseString,{$erpCustomer->DefaultWarehouse}";
             }
 
@@ -317,7 +315,7 @@ class CartController extends Controller
                 $erpProductCodes[] = [
                     'item' => $product->product_code,
                     'uom' => $product->uom,
-                    'qty' => ! empty($items[$product->product_code]['quantity']) ? $items[$product->product_code]['quantity'] : $product->min_order_qty,
+                    'qty' => !empty($items[$product->product_code]['quantity']) ? $items[$product->product_code]['quantity'] : $product->min_order_qty,
                 ];
             }
 
@@ -329,7 +327,7 @@ class CartController extends Controller
             unset($erpProductCodes);
 
             if ($erpProductDetails->isEmpty()) {
-                return $this->apiResponse(false, __(product_not_avail_message().' for all products'), 500);
+                return $this->apiResponse(false, __(product_not_avail_message() . ' for all products'), 500);
             }
 
             $warehouse_codes = array_unique([$erpCustomer->DefaultWarehouse, customer()?->warehouse?->code, config('amplify.frontend.guest_checkout_warehouse')]);
@@ -405,7 +403,7 @@ class CartController extends Controller
             ]
         );
 
-        if (! $product) {
+        if (!$product) {
             return $this->apiResponse(false, $message, 404);
         }
 
@@ -416,8 +414,8 @@ class CartController extends Controller
 
             $erpCustomer = ErpApi::getCustomerDetail();
 
-            if (! Str::contains($warehouseString, $erpCustomer->DefaultWarehouse)) {
-                $warehouseString .= ','.$erpCustomer->DefaultWarehouse;
+            if (!Str::contains($warehouseString, $erpCustomer->DefaultWarehouse)) {
+                $warehouseString .= ',' . $erpCustomer->DefaultWarehouse;
             }
 
             $erpProductCodes = [];

@@ -54,8 +54,16 @@ class CartSummary extends BaseComponent
 
     public function createOrderListLabel(): string
     {
-        return 'Create '.$this->orderListLabel;
+        return trans('Create '.$this->orderListLabel);
     }
+
+    public function htmlAttributes(): string
+    {
+        $this->attributes = $this->attributes->merge(['data-update-style' => $this->updateStyle]);
+
+        return parent::htmlAttributes();
+    }
+
 
     public function backToShoppingUrl(): string
     {

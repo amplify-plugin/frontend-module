@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
 
 class DynamicPageLoadController extends Controller
@@ -21,21 +20,16 @@ class DynamicPageLoadController extends Controller
 
     public function __construct(Request $request)
     {
-        if (! App::runningInConsole()) {
-            $this->handleDynamicMiddleware($request); // Add dynamic middleware for dynamic-page route.
-            if (! $this->page) {
-                abort(404, 'Page not found!');
-            }
+        $this->handleDynamicMiddleware($request);
 
-            $request->merge(['DynamicPageModel' => $this->page]);
-        }
+        $request->merge(['DynamicPageModel' => $this->page]);
     }
 
     /**
      * @throws BindingResolutionException
      * @throws \ErrorException
      */
-    public function __invoke(?string $slug = null): string
+    public function __invoke(?string $slug = null, Request $request): string
     {
         if (! $this->page) {
             abort(404, 'Page Not Found');
