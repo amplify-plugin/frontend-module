@@ -16,6 +16,8 @@ class CartSummary extends BaseComponent
         public bool $createOrderListFromCart = true,
         public bool $allowChangeShipTo = true,
         public bool $showSubmitQuoteButton = false,
+        public ?string $quoteNoteLabel = null,
+        public ?string $quoteNotePlaceholder = null,
         public string $orderListLabel = 'Shopping List',
         public string $updateStyle = 'line',
     ) {
@@ -64,6 +66,15 @@ class CartSummary extends BaseComponent
         return parent::htmlAttributes();
     }
 
+    public function quoteNoteLabel(): string
+    {
+        return $this->quoteNoteLabel ?? 'Quote Notes';
+    }
+
+    public function quoteNotePlaceholder(): string
+    {
+        return $this->quoteNotePlaceholder ?? 'Enter notes for this quote request.';
+    }
 
     public function backToShoppingUrl(): string
     {
