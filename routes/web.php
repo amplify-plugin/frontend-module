@@ -89,6 +89,8 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
         ->where(['cart' => '[0-9]+'])
         ->except('update', 'show', 'destroy');
 
+    Route::get('carts/show', [\Amplify\Frontend\Http\Controllers\CartController::class, 'show'])->name('carts.show');
+
     Route::patch('carts', [\Amplify\Frontend\Http\Controllers\CartController::class, 'update'])
         ->name('carts.update');
 
