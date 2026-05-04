@@ -12,17 +12,11 @@ class CartResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $itemCount = (config('amplify.frontend.cart_item_badge_style', 'items') == 'items')
-            ? $this->cartItems->count()
-            : $this->cartItems->sum('quantity');
 
-        if ($itemCount > 99) {
-            $itemCount = '99+';
-        }
 
         return [
             'id' => $this->id,
-            'item_count' => $itemCount,
+            'item_count' => cart_count_badge($this),
             'products' => empty($this->resource) ? [] : CartItemResource::collection($this->whenLoaded('cartItems')),
             'status' => boolval($this->status ?? 0),
             'sub_total' => \currency_format($this->sub_total, $this->currency, true),

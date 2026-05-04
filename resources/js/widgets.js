@@ -11,7 +11,7 @@ window.swal = Swal.mixin({
 });
 
 window.Amplify = {
-    cartUrl: () => '/carts',
+    cartUrl: (append = '') => '/carts' + append,
     cartItemRemoveUrl: () => '/carts/remove/cart_item_id',
     maxCartItemQuantity: () => 9999999999,
     favouritesCreateUrl: () => '/favourites',
@@ -232,6 +232,16 @@ window.Amplify = {
         this.handleQuantityChange(selector, 'input');
     },
 
+    renderCartItemBadge(count) {
+        if (count.length > 0) {
+            $('.total_cart_items').text(count);
+            $('.total_cart_items').removeClass('d-none');
+        } else {
+            $('.total_cart_items').text(count);
+            $('.total_cart_items').addClass('d-none');
+        }
+    },
+
     removeCartItem(cartItemId, redirect = true) {
         const actionLink = this.cartItemRemoveUrl().replace('cart_item_id', cartItemId);
         return this.confirm('Are you sure to remove this item from cart?',
@@ -259,16 +269,8 @@ window.Amplify = {
             .then(function (result) {
                 if (result.isConfirmed) {
                     Amplify.notify('success', result.value.message, 'Cart');
-                    if (redirect) {
-                        setTimeout(() => {
-                            const {origin, pathname} = window.location;
-                            window.location.replace(origin + pathname);
-                        }, 2000);
-                        return true;
-                    } else {
-                        Amplify.loadCartDropdown();
-                        return result;
-                    }
+                    window.dispatchEvent(new CustomEvent('qty-removed'));
+                    Amplify.renderCartItemBadge(result.value?.data?.total ?? '');
                 }
             })
             .catch((error) => console.error(error));
@@ -412,30 +414,47 @@ window.Amplify = {
      * table
      */
     async loadCartSummary() {
+        window.addEventListener(
+            'qty-change',
+            function (event) {
+                let container = document.querySelector('div.x-cart-summary');
+                Amplify.listenQtyChangeOnCartSummary(event, container.dataset.updateStyle);
+            }
+        );
+
+        window.addEventListener(
+            'qty-removed',
+            (event) => Amplify.loadCartSummary()
+        );
+
         await $.ajax({
-            beforeSend: function () {
-                $('#cart-item-summary').html(
-                    `<tr>
-                        <td colspan='50' style="display: flex; width: 100%; justify-content: center; padding-top: 1.5rem; padding-bottom: 1.5rem; min-height: 100px">
-                                <img src='/vendor/widget/img/loading.gif' alt="preloader" style="max-width: 52px; height: auto; object-fit: contain" class="img-fluid"/>
-                         </td>
-                  </tr>`,
-                );
+            beforeSend: () => {
+                $('#cart-preloader').show();
+                $('#cart-skeleton').hide();
+                $('#cart-summary').hide();
             },
-            url: this.cartUrl(),
+            url: this.cartUrl('/show'),
             method: 'GET',
             dataType: 'json',
             headers: {
                 Accept: 'application/json'
             },
             success: function (response) {
+                $('#cart-preloader').hide();
                 $('#cart-item-summary').empty();
+
                 if (response.data.products.length > 0) {
+                    $("#cart-skeleton").hide();
+                    $("#cart-summary").show();
                     $(response.data.products).each(function (index, item) {
                         let layout = Amplify.renderCartSummaryItemRow(item, index);
                         $('#cart-item-summary').append(layout);
                     });
+                } else {
+                    $("#cart-skeleton").show();
+                    $("#cart-summary").hide();
                 }
+
                 $('#order-subtotal').text(response.data.sub_total);
             },
             error: function (xhr) {
@@ -479,7 +498,7 @@ window.Amplify = {
      * @returns {Promise<void>}
      */
     async loadCartDropdown() {
-        await $.ajax(this.cartUrl(), {
+        await $.ajax(this.cartUrl('/show'), {
             beforeSend: () => Amplify.renderEmptyCart('/vendor/widget/img/loading.gif', true),
             method: 'GET',
             dataType: 'json',
@@ -1048,7 +1067,7 @@ window.Amplify = {
                 },
                 success: function (res) {
                     Amplify.notify('success', res.message, 'Cart');
-                    Amplify.loadCartDropdown();
+                    Amplify.renderCartItemBadge(res.data?.total ?? '');
                 },
                 error: function (xhr) {
                     Amplify.alert(xhr.responseJSON?.message ?? 'Something Went Wrong. PLease try again later.', 'Cart');
@@ -1102,6 +1121,7 @@ window.Amplify = {
                         success: function (response) {
                             if (response.success) {
                                 Amplify.notify('success', response.message, 'Cart');
+                                Amplify.renderCartItemBadge(response?.data?.total ?? '');
                                 setTimeout(() => {
                                     const {origin, pathname} = window.location;
                                     window.location.replace(origin + pathname);
@@ -1497,7 +1517,7 @@ window.Amplify = {
             dots: false,
             URLhashListener: true,
             startPosition: 'URLHash',
-            onTranslate: function(e) {
+            onTranslate: function (e) {
                 var i = e.item.index;
                 var $activeHash = $('.owl-item').eq(i).find('[data-hash]').attr('data-hash');
                 $('.product-thumbnails li').removeClass('active');
