@@ -1270,12 +1270,28 @@ window.Amplify = {
                         html: $(linkEl).data('video')
                     };
                 } else {
-                    size = linkEl.getAttribute('data-size').split('x');
-                    item = {
-                        src: linkEl.getAttribute('href'),
-                        w: parseInt(size[0], 10),
-                        h: parseInt(size[1], 10)
-                    };
+                    const sizeAttr = linkEl.getAttribute('data-size');
+
+                    if (sizeAttr) {
+                        // ✅ USE data-size
+                        const size = sizeAttr.split('x');
+
+                        item = {
+                            src: linkEl.getAttribute('href'),
+                            w: parseInt(size[0], 10),
+                            h: parseInt(size[1], 10)
+                        };
+
+                    } else {
+                        // 🔥 FIX: get size from existing <img> (NO async)
+                        const imgEl = linkEl.querySelector('img');
+
+                        item = {
+                            src: linkEl.getAttribute('href'),
+                            w: imgEl?.naturalWidth || imgEl?.width || 800,
+                            h: imgEl?.naturalHeight || imgEl?.height || 600
+                        };
+                    }
                 }
 
                 if (figureEl.children.length > 1) {
@@ -1490,6 +1506,28 @@ window.Amplify = {
                 $('[data-hash="' + $activeHash + '"]').parent().addClass('active');
 
             }
+        });
+    },
+
+    thumbnailCarousel : function (target) {
+        let $thumbnailCarousel = $(target);
+        // Carousel init
+        $thumbnailCarousel.owlCarousel({
+            margin: 10,
+            dots: false,
+            nav: true,
+            autoWidth: true,
+            responsive: {
+                0: {
+                    items: 3,
+                },
+                600: {
+                    items: 4,
+                },
+                1000: {
+                    items: 5,
+                },
+            },
         });
     },
 
