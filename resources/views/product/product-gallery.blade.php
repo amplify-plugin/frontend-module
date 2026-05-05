@@ -2,7 +2,7 @@
     <div class="product-gallery">
         <div class="product-carousel owl-carousel gallery-wrapper">
             <div class="gallery-item" data-hash="item-one">
-                <a data-size="1000x667" href="{{ $productImage->main ?? ' ' }}">
+                <a  href="{{ $productImage->main ?? ' ' }}">
                     <img src="{{ $productImage->main ?? ' ' }}" alt="Product">
                 </a>
                 @if(!empty($product))
@@ -26,7 +26,7 @@
                         </div>
                     @else
                         <div class="gallery-item" data-hash="{{ 'item-' . $key }}">
-                            <a data-size="1000x667" href="{{ assets_image($image ?? '') }}">
+                            <a href="{{ assets_image($image ?? '') }}">
                                 <img src="{{ assets_image($image ?? '') }}" alt="Product">
                             </a>
                         </div>
@@ -37,7 +37,7 @@
             @if (!empty($erpAdditionalImages))
                 @foreach ($erpAdditionalImages as $key => $additionalImage)
                     <div class="gallery-item" data-hash="{{ 'erp-item-' . $key }}">
-                        <a data-size="1000x667"
+                        <a
                            href="{{ 'https://www.spisafety.com/images/products/' . $additionalImage['value'] }}">
                             <img src="{{ 'https://www.spisafety.com/images/products/' . $additionalImage['value'] }}"
                                  alt="Product">
@@ -47,10 +47,8 @@
             @endif
         </div>
 
-        <ul class="product-thumbnails thumbnails-carousel owl-carousel"
-{{--            data-owl-carousel='{"nav":true,"dots":false,"center":true,"items":4}'--}}
-        >
-            <li class="active item">
+        <ul class="product-thumbnails thumbnails-carousel owl-carousel">
+            <li class="item active">
                 <a class="product-thumbnail" href="#item-one">
                     <img src="{{ $productImage->main ?? ' ' }}" alt="Product" class="img-fluid"/>
                 </a>
@@ -83,8 +81,9 @@
                     <li class="item">
                         <a class="product-thumbnail" href="#{{ 'erp-item-' . $key }}">
                             <img
-                                    src="{{ 'https://www.spisafety.com/images/products/thumb/' . $additionalImage['value'] }}"
-                                    alt="Product"/>
+                                src="{{ 'https://www.spisafety.com/images/products/thumb/' . $additionalImage['value'] }}"
+                                alt="Product"
+                            />
                         </a>
                     </li>
                 @endforeach
@@ -136,6 +135,7 @@
             Amplify.initPhotoSwipeFromDOM('.gallery-wrapper');
 
             Amplify.productSlider('.product-carousel');
+            Amplify.thumbnailCarousel('.thumbnails-carousel');
         });
     </script>
 @endpushonce
