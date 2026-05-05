@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'ui_disabled' => env('AMPLIFY_FRONTEND_DISABLED', true),
     'shop_page_prefix' => env('AMPLIFY_SHOP_PAGE_PREFIX', 'store'),
     'product_page_prefix' => env('AMPLIFY_PRODUCT_PAGE_PREFIX', 'product'),
     'excluded_page_types' => ['static_page', 'shop_by_catalog'],
