@@ -13,6 +13,13 @@ class RoleController extends Controller
 {
     use HasDynamicPage;
 
+    public function __construct()
+    {
+        if (config('amplify.security.single_team_for_customers')) {
+            abort(401, 'Feature is inactive please contact System Administrator.');
+        }
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -21,6 +28,7 @@ class RoleController extends Controller
     public function index(): string
     {
         $this->loadPageByType('role');
+
         if (! customer(true)->can('role.view')) {
             abort(403);
         }
