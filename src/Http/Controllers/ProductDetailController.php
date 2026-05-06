@@ -13,6 +13,7 @@ use Amplify\System\Sayt\Facade\Sayt;
 use App\Http\Controllers\Controller;
 use ErrorException;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -68,7 +69,10 @@ class ProductDetailController extends Controller
     public function relatedProducts(Request $request, Product $product)
     {
         $dbProduct = $product;
-        $relationTypeId = $request->get('relation_type') ?? null;
+        $relationTypeIds = collect(explode(',', (string) $request->get('relation_type', '')))
+            ->map(fn ($id) => (int) trim($id))
+            ->filter()
+            ->values();
 
         // Fetch all relations for this product once
         $relations = ProductRelation::where('product_id', $dbProduct->id)->get();
@@ -78,16 +82,21 @@ class ProductDetailController extends Controller
         $relationTypes = ProductRelationshipType::whereIn('id', $typeIds)->get();
 
         // Default to the first available relation type if none selected
-        if (empty($relationTypeId) && $relationTypes->isNotEmpty()) {
-            $relationTypeId = $relationTypes->first()->id;
+        if ($relationTypeIds->isEmpty() && $relationTypes->isNotEmpty()) {
+            $relationTypeIds = collect([$relationTypes->first()->id]);
         }
 
         // Filter related product IDs from the already fetched relations
-        $relatedIds = $relations->when($relationTypeId, fn ($c) => $c->where('product_relationship_type_id', $relationTypeId))->pluck('related_product_id');
+        $relatedIds = $relations
+            ->when($relationTypeIds->isNotEmpty(), fn ($c) => $c->whereIn('product_relationship_type_id', $relationTypeIds->all()))
+            ->pluck('related_product_id')
+            ->unique()
+            ->values();
 
         // Load related products with attributes
         $perPage = $request->get('per_page', getPaginationLengths()[0]);
 
+        /** @var LengthAwarePaginator $related */
         $related = Product::with(['attributes'])
             ->whereIn('id', $relatedIds)
             ->paginate($perPage);
@@ -96,8 +105,8 @@ class ProductDetailController extends Controller
             return '';
         }
 
-        $items = $related
-            ->map(function ($p) {
+        $items = $related->getCollection()
+            ->map(function (Product $p) {
                 return [
                     'item' => $p->product_code,
                     'uom' => $p->uom ?? 'EA',
@@ -128,7 +137,7 @@ class ProductDetailController extends Controller
         $warehouse_codes = array_unique([$erpCustomer->DefaultWarehouse ?? null, customer()?->warehouse?->code ?? null, config('amplify.frontend.guest_checkout_warehouse')]);
 
         // Enrich related products with ERP data and DB fields
-        $related->transform(function ($rp) use ($priceAvailability, $warehouse_codes) {
+        $related->setCollection($related->getCollection()->transform(function (Product $rp) use ($priceAvailability, $warehouse_codes) {
             $filtered = $priceAvailability->where('ItemNumber', $rp->product_code)->whereIn('WarehouseID', $warehouse_codes);
             $rp->ERP = $filtered->isNotEmpty() ? $filtered->first() : $priceAvailability->where('ItemNumber', $rp->product_code)->first();
             $rp->total_quantity_available = $priceAvailability->where('ItemNumber', $rp->product_code)->sum('QuantityAvailable');
@@ -143,7 +152,7 @@ class ProductDetailController extends Controller
             $rp->is_ncnr = $rp->is_ncnr ?? false;
             $rp->ship_restriction = $rp->ship_restriction ?? false;
             $rp->pricing = true;
-            $rp->specifications = $rp->attributes
+            $rp->specifications = collect($rp->attributes)
                 ->map(function ($item) {
                     $value = $item->pivot->attribute_value;
                     $value = UtilityHelper::isJson($value) ? json_decode($value, true)[config('app.locale')] ?? null : $value;
@@ -156,7 +165,7 @@ class ProductDetailController extends Controller
                 ->toArray();
 
             return $rp;
-        });
+        }));
 
         try {
             // If this is an AJAX request, return only the product list partial
@@ -166,7 +175,7 @@ class ProductDetailController extends Controller
                     'relatedProducts' => $related,
                     'product' => $dbProduct,
                     'relationTypes' => $relationTypes,
-                    'selectedRelationType' => $relationTypeId,
+                    'selectedRelationType' => $relationTypeIds->implode(','),
                 ])->render(),
             ]);
         } catch (\Exception $e) {
