@@ -13,7 +13,11 @@ class AddToCartRequest extends FormRequest
      */
     public function authorize()
     {
-        return haveAnyPermissions(['shop.add-to-cart', 'order.add-to-cart']);
+        if (customer_check()) {
+            return customer(true)->canAny(['cart.add', 'cart.update']);
+        }
+
+        return config('amplify.frontend.guest_add_to_cart');
     }
 
     /**
