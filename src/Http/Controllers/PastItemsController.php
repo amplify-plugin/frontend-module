@@ -15,9 +15,8 @@ class PastItemsController extends Controller
      */
     public function index()
     {
-        if (! customer(true)->can('past-items.past-items-list')) {
-            abort(403);
-        }
+        hasAccessOrFail('past-items.list');
+
         $this->loadPageByType('past_items');
 
         return $this->render();
@@ -73,9 +72,8 @@ class PastItemsController extends Controller
 
     public function history()
     {
-        if (! customer(true)->can('past-items.past-items-history')) {
-            abort(403);
-        }
+        hasAccessOrFail('past-items.history');
+
         $this->loadPageByType('past_items_history');
 
         return $this->render();

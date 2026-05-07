@@ -11,7 +11,7 @@ class UpdateOrderListRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return customer(true)->can('order-list.update');
     }
 
     /**

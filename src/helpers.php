@@ -22,7 +22,7 @@ if (!function_exists('frontend_permissions')) {
 //            'checkout' => 'choose-warehouse,choose-shipto,credit-card-payment,payment-on-accounts',
             'contact' => 'l,v,c,u,d,impersonate',
 //            'dashboard' => 'allow-dashboard',
-            'order-list' => 'manage-global-list,use-global-list,manage-personal-list',
+            'order-list' => 'l,v,c,u,d',
             'invoices' => 'v,pay',
 //            'login-management' => 'manage-logins,impersonate',
             'message' => 'messaging',
