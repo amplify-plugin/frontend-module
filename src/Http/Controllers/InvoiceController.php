@@ -17,7 +17,7 @@ class InvoiceController extends Controller
     public function index()
     {
         $this->loadPageByType('invoice');
-        if (! customer(true)->can('invoices.view')) {
+        if (! customer(true)->can('invoices.list')) {
             abort(403);
         }
 
@@ -46,7 +46,7 @@ class InvoiceController extends Controller
     public function show(string $id)
     {
         $this->loadPageByType('invoice_detail');
-        if (! customer(true)->can('invoices.view')) {
+        if (! customer(true)->can('invoices.details')) {
             abort(403);
         }
 

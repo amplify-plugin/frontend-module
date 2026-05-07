@@ -151,7 +151,7 @@
                                     @if (customer(true)->can('invoices.pay') && config('amplify.payment.allow_payments'))
                                         <th class="text-center">Pay</th>
                                     @endif
-                                    @if (customer(true)->canAny(['invoices.view', 'invoices.pay']))
+                                    @if (customer(true)->canAny(['invoices.details', 'invoices.pay']))
                                         <th>Actions</th>
                                     @endif
                                 </tr>
@@ -232,9 +232,9 @@
                                                 @endif
                                             </td>
                                         @endif
-                                        @if (customer(true)->canAny(['invoices.view', 'invoices.pay']))
+                                        @if (customer(true)->canAny(['invoices.details', 'invoices.pay']))
                                             <td class="flex-column justify-content-center m-0">
-                                                @if (customer(true)->can('invoices.view'))
+                                                @if (customer(true)->can('invoices.details'))
                                                     <a class="btn btn-outline-warning btn-sm text-decoration-none m-0"
                                                        href="{{ route('frontend.invoices.show',['invoice' => $summary['InvoiceNumber'], 'status' => $summary['InvoiceStatus'], 'suffix' => $summary['InvoiceSuffix'] ?? '']) }}">
                                                         <i class="icon-eye mr-1"></i> Details

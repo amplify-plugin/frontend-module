@@ -23,7 +23,7 @@ if (!function_exists('frontend_permissions')) {
             'contact' => 'l,v,c,u,d,impersonate',
 //            'dashboard' => 'allow-dashboard',
             'order-list' => 'manage-global-list,use-global-list,manage-personal-list',
-            'invoices' => 'v,pay',
+            'invoices' => 'l,dt,pay',
 //            'login-management' => 'manage-logins,impersonate',
             'message' => 'messaging',
             'order' => 'l,dt',
