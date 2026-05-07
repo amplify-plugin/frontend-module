@@ -23,10 +23,9 @@ class AddressController extends Controller
      */
     public function index()
     {
+        hasAccessOrFail('address.list');
+
         $this->loadPageByType('address');
-        if (! customer(true)->can('ship-to-addresses.list')) {
-            abort(403);
-        }
 
         return $this->render();
     }
@@ -36,11 +35,9 @@ class AddressController extends Controller
      */
     public function create()
     {
-        $this->loadPageByType('address_create');
+        hasAccessOrFail('address.create');
 
-        if (! customer(true)->can('ship-to-addresses.add')) {
-            abort(403);
-        }
+        $this->loadPageByType('address_create');
 
         return $this->render();
     }
@@ -188,12 +185,11 @@ class AddressController extends Controller
      */
     public function show(CustomerAddress $address)
     {
+        hasAccessOrFail('address.view');
+
         store()->addressModel = $address;
 
         $this->loadPageByType('address_details');
-        if (! customer(true)->can('ship-to-addresses.view')) {
-            abort(403);
-        }
 
         return $this->render();
     }
@@ -203,13 +199,11 @@ class AddressController extends Controller
      */
     public function edit(CustomerAddress $address)
     {
+        hasAccessOrFail('address.update');
+
         store()->addressModel = $address;
 
         $this->loadPageByType('address_edit');
-
-        if (! customer(true)->can('ship-to-addresses.update')) {
-            abort(403);
-        }
 
         return $this->render();
     }
@@ -237,9 +231,8 @@ class AddressController extends Controller
      */
     public function destroy(CustomerAddress $address)
     {
-        if (! customer(true)->can('ship-to-addresses.remove')) {
-            abort(403);
-        }
+        hasAccessOrFail('address.delete');
+
         try {
             $this->updateContactDefaultAddressIfAddressIsConstrainedToIt($address);
 
@@ -258,6 +251,8 @@ class AddressController extends Controller
      */
     public function setDefault(CustomerAddress $address): RedirectResponse
     {
+        hasAccessOrFail('address.setDefault');
+
         // Get customer object through the belongsTo relation between Contact and Customer then update it's default address
         customer(true)->customer()->update([
             'default_address_id' => $address->id,

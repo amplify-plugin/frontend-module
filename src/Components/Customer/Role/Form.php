@@ -14,13 +14,6 @@ use Illuminate\Contracts\View\View;
 class Form extends BaseComponent
 {
     /**
-     * @var array
-     */
-    public $options;
-
-    private bool $editable;
-
-    /**
      * @var CustomerRole|null
      */
     public $role;
@@ -30,11 +23,9 @@ class Form extends BaseComponent
      *
      * @throws \ErrorException
      */
-    public function __construct($editable)
+    public function __construct(public bool $editable)
     {
         parent::__construct();
-
-        $this->editable = UtilityHelper::typeCast($editable, 'boolean');
 
         if ($this->editable) {
             $this->role = store('contactRoleModel');
@@ -46,7 +37,8 @@ class Form extends BaseComponent
      */
     public function shouldRender(): bool
     {
-        return true;
+        return customer(true)->canAny(['role.edit', 'role.create'])
+            && !config('amplify.security.single_team_for_customers');
     }
 
     /**

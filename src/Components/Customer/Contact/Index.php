@@ -34,7 +34,7 @@ class Index extends BaseComponent
      */
     public function shouldRender(): bool
     {
-        return customer(true)->can('contact-management.list');
+        return customer(true)->can('contact.list');
     }
 
     /**

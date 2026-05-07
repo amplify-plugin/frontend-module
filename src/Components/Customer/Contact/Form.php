@@ -29,7 +29,7 @@ class Form extends BaseComponent
     /**
      * Create a new component instance.
      *
-     * @param  bool  $editable
+     * @param bool $editable
      *
      * @throws \ErrorException
      */
@@ -49,7 +49,7 @@ class Form extends BaseComponent
      */
     public function shouldRender(): bool
     {
-        return true;
+        return customer(true)->canAny('contact.create', 'contact.update');
     }
 
     /**
@@ -58,7 +58,10 @@ class Form extends BaseComponent
     public function render(): View|Closure|string
     {
         $addresses = \Amplify\System\Backend\Models\CustomerAddress::where('customer_id', customer()->id)->get();
-        $roles = \Amplify\System\Backend\Models\Role::where(['team_id' => customer()->id, 'guard_name' => 'customer'])->get();
+
+        $roles = \Amplify\System\Backend\Models\Role::where('guard_name', Contact::AUTH_GUARD)
+            ->where('team_id', getPermissionsTeamId())
+            ->get();
 
         $action_route = route('frontend.contacts.store');
         $action_method = 'POST';

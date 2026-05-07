@@ -13,15 +13,7 @@ class ShipToAddressRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if ($this->method() == 'POST' && customer(true)->can('ship-to-addresses.add')) {
-            return true;
-        }
-
-        if ($this->method() == 'PUT' && customer(true)->can('ship-to-addresses.update')) {
-            return true;
-        }
-
-        return false;
+        return customer(true)->canAny('address.create', 'address.update');
     }
 
     /**

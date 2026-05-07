@@ -3,6 +3,7 @@
 namespace Amplify\Frontend\Components\Customer\Contact;
 
 use Amplify\Frontend\Abstracts\BaseComponent;
+use Amplify\System\Backend\Models\Contact;
 use Closure;
 use Illuminate\Contracts\View\View;
 
@@ -11,20 +12,6 @@ use Illuminate\Contracts\View\View;
  */
 class Details extends BaseComponent
 {
-    /**
-     * @var array
-     */
-    public $options;
-
-    /**
-     * Create a new component instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-    }
-
     /**
      * Whether the component should be rendered
      */
@@ -45,7 +32,9 @@ class Details extends BaseComponent
         }
 
         $addresses = \Amplify\System\Backend\Models\CustomerAddress::where('customer_id', customer()->id)->get();
-        $roles = \Amplify\System\Backend\Models\Role::where(['team_id' => customer()->id, 'guard_name' => 'customer'])->get();
+        $roles = \Amplify\System\Backend\Models\Role::where('guard_name', Contact::AUTH_GUARD)
+            ->where('team_id', getPermissionsTeamId())
+            ->get();
 
         return view('widget::customer.contact.show', [
             'contact' => $contact,
