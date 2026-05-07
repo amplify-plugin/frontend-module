@@ -37,7 +37,7 @@ if (!function_exists('frontend_permissions')) {
             'role' => 'v,manage',
             'saved-carts' => 'l',
             'ship-to-addresses' => 'l,v,a,u,r',
-            'shop' => 'add-to-cart,browse',
+            'shop' => 'add-to-cart,browse,search,search-in-result,in-stock-filter,brands,banner,categories',
             'switch-account' => 'switch-account',
             'ticket' => 'tickets',
         ];
