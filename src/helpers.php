@@ -30,7 +30,7 @@ if (!function_exists('frontend_permissions')) {
 //            'order-approval' => 'approve',
 //            'order-processing-rules' => 'manage-rules',
 //            'order-rejected' => 'l,v',
-            'past-items' => 'past-items-list, past-items-history',
+            'past-items' => 'past-items-list,past-items-history',
 //            'profile' => 'change-start-page',
 //            'quote' => 'v,rfq',
 //            'reports' => 'summary',
