@@ -34,7 +34,7 @@ class ShopSearchController extends Controller
      */
     public function __invoke(?string $query = null): RedirectResponse|string
     {
-        abort_unless(! customer_check() || customer(true)->can('shop.browse'), 403);
+        abort_unless(! customer_check() || customer(true)->can('shop.search'), 403);
 
         $eaProductData = store()->eaProductsData;
         $products = $eaProductData->getProducts();
