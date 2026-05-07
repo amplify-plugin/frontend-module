@@ -15,8 +15,6 @@ class HomeController extends Controller
      */
     public function __invoke(Request $request)
     {
-        abort_unless(! customer_check() || customer(true)->can('shop.browse'), 403);
-
         $this->loadPageByType('home');
 
         return $this->render();
