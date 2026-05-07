@@ -38,12 +38,12 @@
                 <x-site.data-table-wrapper id="order-item-table">
                     <x-slot name="rightside">
                         <div class="d-flex justify-content-center justify-content-md-end">
-                            @if(customer(true)->can('order.create'))
+                            @if(customer(true)->can('cart.add'))
                                 <button type="button" class="btn btn-sm btn-primary btn-right m-2  create-order">
                                     {{__('Create Order')}}
                                 </button>
                             @endif
-                            @if(customer(true)->can('order.add-to-cart'))
+                            @if(customer(true)->can('cart.add'))
                                 <button type="button" class="btn btn-sm btn-primary btn-right my-2 ml-2 mr-0 text-capitalize"
                                         onclick="addToCart()">
                                     {{__('add all items to the cart')}}
@@ -61,7 +61,7 @@
                             <th>{{ __('Name') }}</th>
                             <th>{{ __('Price') }}</th>
                             <th>{{ __('Qty') }}</th>
-                            @if(customer(true)->can('order.add-to-cart'))
+                            @if(customer(true)->can('cart.add'))
                                 <th style="width: 125px">{{ __('Action') }}</th>
                             @endif
                         </tr>
@@ -95,7 +95,7 @@
                                 <td>{{ price_format($item['ActualSellPrice'] ?? 0) }}</td>
                                 @endif
                                 <td><span class="text-medium">{{ $item['QuantityOrdered'] }}</span></td>
-                                @if(customer(true)->can('order.add-to-cart'))
+                                @if(customer(true)->can('cart.add'))
                                     <td style="width: 125px">
                                         <button class="btn btn-sm btn-warning btn-add-to-cart" type="button"
                                                 onclick="addSingleProductToOrder({{ $counter }})">

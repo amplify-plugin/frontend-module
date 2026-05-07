@@ -35,7 +35,7 @@ class Details extends BaseComponent
      */
     public function shouldRender(): bool
     {
-        return customer(true)->can('invoices.view');
+        return customer(true)->can('invoices.details');
     }
 
     /**

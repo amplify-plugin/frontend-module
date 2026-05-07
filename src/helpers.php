@@ -23,10 +23,10 @@ if (!function_exists('frontend_permissions')) {
             'contact' => 'l,v,c,u,d,impersonate',
 //            'dashboard' => 'allow-dashboard',
             'order-list' => 'l,v,c,u,d',
-            'invoices' => 'v,pay',
+            'invoices' => 'l,dt,pay',
 //            'login-management' => 'manage-logins,impersonate',
             'message' => 'messaging',
-            'order' => 'v,c,add-to-cart',
+            'order' => 'l,dt',
 //            'order-approval' => 'approve',
 //            'order-processing-rules' => 'manage-rules',
 //            'order-rejected' => 'l,v',
@@ -40,7 +40,7 @@ if (!function_exists('frontend_permissions')) {
             'shop' => 'browse,search,search-in-result,in-stock-filter,brands,banner,categories',
 //            'switch-account' => 'switch-account',
 //            'ticket' => 'tickets',
-            'cart' => 'add,view,remove,checkout',
+            'cart' => 'add,v,remove,checkout',
         ];
     }
 }
