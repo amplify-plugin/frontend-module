@@ -30,7 +30,7 @@
                             </div>
                         </div>
                     </div>
-                    @if (customer(true)->can('contact-management.add'))
+                    @if (customer(true)->can('contact.create'))
                         <div class="col-md-6 mb-2 mb-md-0">
                             <div class="d-flex justify-content-center justify-content-md-end">
                                 <a class="btn btn-sm btn-success mr-0" href="{{ route('frontend.contacts.create') }}">
@@ -80,7 +80,7 @@
                                                 @if ($columns['monthly_budget_limit'])
                                                     <th>{{ $monthlyBudgetLimitLabel ?? 'Monthly Limit' }}</th>
                                                 @endif
-                                                @if (customer(true)->canAny(['contact-management.view', 'contact-management.update', 'contact-management.remove']))
+                                                @if (customer(true)->canAny(['contact.view', 'contact.update', 'contact.remove', 'contact.impersonate']))
                                                     <th style="width: 125px">{{ __('Actions') }}</th>
                                                 @endif
                                             </tr>
@@ -134,7 +134,7 @@
                                                     @if ($columns['monthly_budget_limit'])
                                                         <td>{{ $contact->monthly_budget_limit ?? 'N/A' }}</td>
                                                     @endif
-                                                    @if (checkPermissionLength(['contact-management.view', 'contact-management.update', 'contact-management.remove']) > 1)
+                                                    @if (checkPermissionLength(['contact.view', 'contact.update', 'contact.remove']) > 1)
                                                         <td class="text-right" style="width: 125px">
                                                             <div class="btn-group m-0">
                                                                 <button type="button"
@@ -143,20 +143,20 @@
                                                                     Actions
                                                                 </button>
                                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                                    @if (customer(true)->can('contact-management.view'))
+                                                                    @if (customer(true)->can('contact.view'))
                                                                         <a class="dropdown-item"
                                                                            href="{{ route('frontend.contacts.show', $contact->id) }}">
                                                                             <i class="icon-eye mr-1"></i> {{ __('Preview') }}
                                                                         </a>
                                                                     @endif
-                                                                    @if (customer(true)->can('contact-management.update'))
+                                                                    @if (customer(true)->can('contact.update'))
                                                                         <a class="dropdown-item"
                                                                            href="{{ route('frontend.contacts.edit', $contact->id) }}">
                                                                             <i class="pe-7s-edit font-weight-bolder mr-1"></i>
                                                                             {{ __('Update') }}
                                                                         </a>
                                                                     @endif
-                                                                    @if (customer(true)->can('contact-management.remove'))
+                                                                    @if (customer(true)->can('contact.remove'))
                                                                         <a class="dropdown-item"
                                                                            href="javascript:void(0);"
                                                                            onclick="Amplify.deleteConfirmation(this, 'Contact')"
@@ -169,7 +169,7 @@
                                                             </div>
                                                         </td>
                                                     @else
-                                                        @if (customer(true)->can('contact-management.view'))
+                                                        @if (customer(true)->can('contact.view'))
                                                             @include(
                                                                 'widget::customer.permission-component',
                                                                 [
@@ -181,7 +181,7 @@
                                                                 ]
                                                             )
                                                         @endif
-                                                        @if (customer(true)->can('contact-management.update'))
+                                                        @if (customer(true)->can('contact.update'))
                                                             @include(
                                                                 'widget::customer.permission-component',
                                                                 [
@@ -193,7 +193,7 @@
                                                                 ]
                                                             )
                                                         @endif
-                                                        @if (customer(true)->can('contact-management.remove'))
+                                                        @if (customer(true)->can('contact.remove'))
                                                             @include(
                                                                 'widget::customer.permission-component',
                                                                 [

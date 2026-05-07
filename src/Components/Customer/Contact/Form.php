@@ -49,7 +49,7 @@ class Form extends BaseComponent
      */
     public function shouldRender(): bool
     {
-        return true;
+        return customer(true)->canAny('contact.create', 'contact.update');
     }
 
     /**
