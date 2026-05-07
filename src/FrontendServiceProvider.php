@@ -4,6 +4,7 @@ namespace Amplify\Frontend;
 
 use Amplify\Frontend\Http\Middlewares\CaptureIntendedUrl;
 use Amplify\Frontend\Http\Middlewares\ContactForceShippingAddressSelection;
+use Amplify\Frontend\Http\Middlewares\FrontendDisabled;
 use Amplify\Frontend\Providers\EventServiceProvider;
 use Amplify\Frontend\Providers\ValidationServiceProvider;
 use Amplify\Frontend\Providers\WidgetServiceProvider;
@@ -62,6 +63,7 @@ class FrontendServiceProvider extends ServiceProvider
                 ProtectAgainstSpam::class,
                 ContactForceShippingAddressSelection::class,
                 CaptureIntendedUrl::class,
+                FrontendDisabled::class
             ]);
         }
     }
