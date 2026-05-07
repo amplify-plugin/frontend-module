@@ -48,6 +48,7 @@ class AddressController extends Controller
      */
     public function store(ShipToAddressRequest $request)
     {
+        hasAccessOrFail('address.create');
         $validated = $request->validated();
 
         // STV Client: Auto-generate unique address code from first address line
