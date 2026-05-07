@@ -26,7 +26,7 @@ if (!function_exists('frontend_permissions')) {
             'invoices' => 'v,pay',
 //            'login-management' => 'manage-logins,impersonate',
             'message' => 'messaging',
-            'order' => 'v,c,add-to-cart',
+            'order' => 'l,dt',
 //            'order-approval' => 'approve',
 //            'order-processing-rules' => 'manage-rules',
 //            'order-rejected' => 'l,v',

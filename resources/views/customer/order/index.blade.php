@@ -55,7 +55,7 @@
                             <th>{{ __('Warehouse') }}</th>
                             <th>{{ __('Created At') }}</th>
                             <th>{{ __('Total') }}</th>
-                            @if (customer(true)->can('order.view'))
+                            @if (customer(true)->can('order.details'))
                                 <th>{{ __('Action') }}</th>
                             @endif
                         </tr>
@@ -88,7 +88,7 @@
                                 <td class="text-right">
                                     <span class="text-medium">{{ price_format($order['TotalOrderValue'] ?? 0) }}</span>
                                 </td>
-                                @if (customer(true)->can('order.view'))
+                                @if (customer(true)->can('order.details'))
                                     <td class="d-flex flex-column justify-content-center m-0">
                                         <a class="btn btn-outline-primary btn-sm text-decoration-none mb-1"
                                             href="{{ route('frontend.orders.show', [$order['OrderNumber'], 'suffix' => $order['OrderSuffix']]) }}">

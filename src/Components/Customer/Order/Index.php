@@ -18,7 +18,7 @@ class Index extends BaseComponent
      */
     public function shouldRender(): bool
     {
-        return customer(true)->can('order.view');
+        return customer(true)->can('order.list');
     }
 
     /**
