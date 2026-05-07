@@ -23,9 +23,7 @@ class OrderListController extends Controller
      */
     public function index(Request $request)
     {
-        if (! in_array(true, [customer(true)->can('favorites.use-global-list'), customer(true)->can('favorites.manage-personal-list')])) {
-            abort(403, 'You don\'t have permission to use this feature');
-        }
+        hasAccessOrFail('order-list.list');
 
         if ($request->wantsJson()) {
             try {
@@ -138,9 +136,7 @@ class OrderListController extends Controller
      */
     public function show(string $id, Request $request)
     {
-        if (! in_array(true, [customer(true)->can('favorites.manage-global-list'), customer(true)->can('favorites.manage-personal-list')])) {
-            abort(403);
-        }
+        hasAccessOrFail('order-list.view');
 
         $orderList = OrderList::find($id);
 
@@ -164,10 +160,6 @@ class OrderListController extends Controller
      */
     public function update(UpdateOrderListRequest $request, string $id): JsonResponse
     {
-        if (! in_array(true, [customer(true)->can('favorites.manage-personal-list'), customer(true)->can('favorites.manage-personal-list')])) {
-            abort(403, 'You don\'t have permission to use this feature');
-        }
-
         $orderList = OrderList::findOrFail($id);
 
         $title = $request->input('title', 'Order List');
@@ -235,9 +227,7 @@ class OrderListController extends Controller
      */
     public function destroy($favourite): JsonResponse
     {
-        if (! in_array(true, [customer(true)->can('favorites.manage-global-list'), customer(true)->can('favorites.manage-personal-list')])) {
-            abort(403, 'Your are not allowed to delete favorite list.');
-        }
+        hasAccessOrFail('order-list.delete');
 
         try {
 

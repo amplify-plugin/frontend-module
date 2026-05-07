@@ -13,7 +13,7 @@ class FavoriteListRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return customer(true)->canAny(['order-list.create', 'order-list.update']);
     }
 
     /**
