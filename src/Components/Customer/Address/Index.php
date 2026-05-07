@@ -33,7 +33,7 @@ class Index extends BaseComponent
      */
     public function shouldRender(): bool
     {
-        return customer(true)->can('ship-to-addresses.list');
+        return customer(true)->can('address.list');
     }
 
     /**
@@ -56,6 +56,7 @@ class Index extends BaseComponent
         ];
 
         $addresses = CustomerAddress::whereCustomerId(customer()->getKey())
+            ->whereNotNull('address_code')
             ->where(function ($query) use ($search) {
                 $query->where('address_name', 'like', "%{$search}%")
                     ->orWhere('address_code', 'like', "%{$search}%")
