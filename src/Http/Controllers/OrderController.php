@@ -18,7 +18,7 @@ class OrderController extends Controller
     public function index(): string
     {
         $this->loadPageByType('order');
-        if (! customer(true)->can('order.view')) {
+        if (! customer(true)->can('order.list')) {
             abort(403);
         }
 
@@ -47,7 +47,7 @@ class OrderController extends Controller
     public function show(string $id)
     {
         $this->loadPageByType('order_detail');
-        if (! customer(true)->can('order.view')) {
+        if (! customer(true)->can('order.details')) {
             abort(403);
         }
 
