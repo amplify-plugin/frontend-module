@@ -56,7 +56,11 @@ class ProductList extends BaseComponent
      */
     public function shouldRender(): bool
     {
-        return true;
+        if (customer_check()) {
+            return config('amplify.sayt.enabled', true) && customer(true)->can('shop.search');
+        }
+
+        return config('amplify.sayt.enabled', true);
     }
 
     /**
