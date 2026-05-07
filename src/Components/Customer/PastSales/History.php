@@ -13,26 +13,13 @@ use Illuminate\Contracts\View\View;
  */
 class History extends BaseComponent
 {
-    /**
-     * @var array
-     */
-    public $options;
-
-    /**
-     * Create a new component instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-    }
 
     /**
      * Whether the component should be rendered
      */
     public function shouldRender(): bool
     {
-        return customer(true)->can('past-items.past-items-history');
+        return customer(true)->can('past-items.history');
     }
 
     /**
