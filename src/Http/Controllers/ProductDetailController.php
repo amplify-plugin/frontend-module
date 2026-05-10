@@ -96,9 +96,15 @@ class ProductDetailController extends Controller
         // Load related products with attributes
         $perPage = $request->get('per_page', getPaginationLengths()[0]);
 
+        $uniqueRelatedIds = Product::query()
+            ->whereIn('id', $relatedIds)
+            ->selectRaw('MAX(id) as id')
+            ->groupBy('product_code')
+            ->pluck('id');
+
         /** @var LengthAwarePaginator $related */
         $related = Product::with(['attributes'])
-            ->whereIn('id', $relatedIds)
+            ->whereIn('id', $uniqueRelatedIds)
             ->paginate($perPage);
 
         if ($related->isEmpty()) {
