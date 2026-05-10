@@ -13,7 +13,6 @@
                 autocomplete="current-password"
                 tabindex="2"
                 required
-                minlength="{{ $minPasswordLength }}"
                 maxlength="255"
         />
         @if ($togglePassword)

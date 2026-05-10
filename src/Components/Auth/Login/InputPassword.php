@@ -32,8 +32,6 @@ class InputPassword extends BaseComponent
      */
     public function render(): View|Closure|string
     {
-        $minPasswordLength = SecurityHelper::passwordLength();
-
-        return view('widget::auth.login.input-password', compact('minPasswordLength'));
+        return view('widget::auth.login.input-password');
     }
 }
