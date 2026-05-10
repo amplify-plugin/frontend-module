@@ -8,7 +8,9 @@ use Amplify\Frontend\Events\NewCustomerRegistered;
 use Amplify\Frontend\Http\Requests\Auth\ContactAccountRequest;
 use Amplify\Frontend\Http\Requests\Auth\RegistrationRequest;
 use Amplify\Frontend\Traits\HasDynamicPage;
+use Amplify\System\Backend\Models\Contact;
 use Amplify\System\Backend\Models\Customer;
+use Amplify\System\Backend\Models\CustomerRole;
 use Amplify\System\Backend\Models\Event;
 use Amplify\System\Backend\Models\IndustryClassification;
 use Amplify\System\Factories\NotificationFactory;
@@ -349,6 +351,17 @@ class RegisteredUserController extends Controller
             ]);
         }
 
+        if(config('amplify.basic.is_permission_system_enabled')){
+            $defaultRole =CustomerRole::where('is_default', true)
+            ->where('guard_name', Contact::AUTH_GUARD)
+            ->when(config('permission.teams'), fn($q) => $q->where('team_id', $contact->customer_id))->first();
+
+            if($defaultRole){
+                $contact->assignRole($defaultRole);
+            }
+        }
+
+
         if (config('amplify.erp.auto_create_contact')) {
             ContactProfileSyncJob::dispatch($contact->toArray());
         }
@@ -380,6 +393,17 @@ class RegisteredUserController extends Controller
                 'contact_id' => $contact->id,
             ]);
         }
+
+         if(config('amplify.basic.is_permission_system_enabled')){
+            $defaultRole =CustomerRole::where('is_default', true)
+            ->where('guard_name', Contact::AUTH_GUARD)
+            ->when(config('permission.teams'), fn($q) => $q->where('team_id', $contact->customer_id))->first();
+
+            if($defaultRole){
+                $contact->assignRole($defaultRole);
+            }
+        }
+
 
         if (config('amplify.erp.auto_create_contact')) {
             ContactProfileSyncJob::dispatch($contact->toArray());

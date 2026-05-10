@@ -41,11 +41,32 @@ class Login extends BaseComponent
      */
     public function render(): View|Closure|string
     {
-        $this->referrer = session('url.intended', '/');
+        $this->referrer = $this->safeReferrer(session('url.intended'));
 
         $minPassLength = SecurityHelper::passwordLength();
 
         return view('widget::auth.login', compact('minPassLength'));
+    }
+
+    protected function safeReferrer(?string $referrer): string
+    {
+        $fallback = route('frontend.dashboard');
+
+        if (empty($referrer)) {
+            return $fallback;
+        }
+
+        if (! str_starts_with($referrer, config('app.url'))) {
+            return $fallback;
+        }
+
+        foreach (['/verify-email/', '/login', '/forgot-password', '/reset-password', '/registration', '/force-reset-password', '/admin/'] as $blockedPath) {
+            if (str_contains($referrer, $blockedPath)) {
+                return $fallback;
+            }
+        }
+
+        return $referrer;
     }
 
     public function displayableTitle()
