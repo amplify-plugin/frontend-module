@@ -44,15 +44,18 @@ class Index extends BaseComponent
 
                 // Global lists
                 if (customer(true)->canAny([
-                    'favorites.use-global-list',
-                    'favorites.manage-global-list'
+                    'order-list.list',
+                    'order-list.view',
+                    'order-list.create',
+                    'order-list.update',
+                    'order-list.delete',
                 ])) {
 
                     $query->orWhere('list_type', 'global');
                 }
 
                 // Personal lists (only own data)
-                if (customer(true)->can('favorites.manage-personal-list')) {
+                if (customer(true)->can('order-list.list')) {
 
                     $query->orWhere(function ($personalQuery) {
 
