@@ -15,14 +15,14 @@ class Index extends BaseComponent
     /**
      * Create a new component instance.
      */
-    public function __construct(public string $nameLabel = '',
+    public function __construct(
+        public string $nameLabel = '',
         public string $listTypeLabel = '',
         public string $descriptionLabel = '',
         public string $productCountLabel = '',
         public string $widgetTitle = 'Order List'
     ) {
         parent::__construct();
-
     }
 
     /**
@@ -32,42 +32,66 @@ class Index extends BaseComponent
     {
         $request = request();
 
-        $orderLists = OrderList::where('customer_id', customer()->id)
+        $orderLists = OrderList::query()
+
+            // Type filter from request
             ->when($request->filled('type'), function ($q) use ($request) {
                 $q->where('list_type', $request->input('type'));
-            })->where(function ($query) {
-                $query->when(customer(true)->canAny(['favorites.use-global-list', 'favorites.manage-global-list', 'favorites.manage-personal-list']), function ($q) {
-                    if (customer(true)->canAny(['favorites.use-global-list', 'favorites.manage-global-list']) && customer(true)->can('favorites.manage-personal-list')) {
-                        $q->where('list_type', 'global')->orWhere('list_type', 'personal');
-                    } elseif (customer(true)->canAny(['favorites.use-global-list', 'favorites.manage-global-list'])) {
-                        $q->where('list_type', 'global');
-                    } elseif (customer(true)->can('favorites.manage-personal-list')) {
-                        $q->where('list_type', 'personal');
-                    }
+            })
+
+            // Permission based filtering
+            ->where(function ($query) {
+
+                // Global lists
+                if (customer(true)->canAny([
+                    'order-list.list',
+                    'order-list.view',
+                    'order-list.create',
+                    'order-list.update',
+                    'order-list.delete',
+                ])) {
+
+                    $query->orWhere('list_type', 'global');
+                }
+
+                // Personal lists (only own data)
+                if (customer(true)->can('order-list.list')) {
+
+                    $query->orWhere(function ($personalQuery) {
+
+                        $personalQuery
+                            ->where('list_type', 'personal')
+                            ->where('contact_id', auth('customer')->user()->id);
+                    });
+                }
+            })
+
+            // Search
+            ->when($request->filled('search'), function ($q) use ($request) {
+
+                $search = strtolower($request->search);
+
+                $q->where(function ($searchQuery) use ($search) {
+
+                    $searchQuery
+                        ->where('name', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%");
                 });
             })
-            ->when($request->filled('search'), function ($q) use ($request) {
-                $q->where('name', 'like', '%'.strtolower($request->search).'%')
-                    ->orWhere('description', 'like', '%'.strtolower($request->search).'%');
-            })
-            // TODO: Last change wise filter.
-            // ->when($request->filled('filtered_start_date'), function ($q) use ($request) {
-            //     $q->where(function (Builder $query) use ($request) {
-            //         $start = \Carbon\Carbon::parse($request->input('filtered_start_date'))->toDateTimeString();
-            //         $query->where('created_at', '>=', $start)
-            //             ->orWhere('updated_at', '>=', $start);
-            //     });
-            // })
-            // ->when($request->filled('filtered_end_date'), function ($q) use ($request) {
-            //     $q->where(function (Builder $query) use ($request) {
-            //         $end = \Carbon\Carbon::parse($request->input('filtered_end_date'))->toDateTimeString();
-            //         $query->where('created_at', '<=', $end)
-            //             ->orWhere('updated_at', '<=', $end);
-            //     });
-            // })
+
+            // Exclude quick list
             ->where('list_type', '!=', 'quick-list')
-            ->orderBy($request->input('sort', 'id'), $request->input('dir', 'desc'))
-            ->paginate($request->input('per_page', getPaginationLengths()[0]));
+
+            // Sorting
+            ->orderBy(
+                $request->input('sort', 'id'),
+                $request->input('dir', 'desc')
+            )
+
+            // Pagination
+            ->paginate(
+                $request->input('per_page', getPaginationLengths()[0])
+            );
 
         $columns = [
             'name' => strlen($this->nameLabel) != 0,
