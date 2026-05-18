@@ -23,7 +23,7 @@
     <div class="col-md-6">
         {!! \Form::rPassword('contact_password', trans('Password'), true, [
             'placeholder' => trans('Enter Password'),
-            'minlength' => $minPasswordLength(),
+            'minlength' => $minPasswordLength,
             'maxlength' => '255',
             'tabindex' => 8,
         ]) !!}
@@ -31,7 +31,7 @@
     <div class="col-md-6">
         {!! \Form::rPassword('contact_password_confirmation', trans('Retype Password'), true, [
             'placeholder' => trans('Enter Password'),
-            'minlength' => $minPasswordLength(),
+            'minlength' => $minPasswordLength,
             'maxlength' => '255',
             'tabindex' => 9,
         ]) !!}
