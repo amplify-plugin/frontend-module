@@ -11,16 +11,33 @@ window.swal = Swal.mixin({
 });
 
 window.Amplify = {
+    config : {},
+    init(config) {
+        this.config = config;
+    },
     cartUrl: (append = '') => '/carts' + append,
     cartItemRemoveUrl: () => '/carts/remove/cart_item_id',
     maxCartItemQuantity: () => 9999999999,
     favouritesCreateUrl: () => '/favourites',
     orderListUrl: () => '/order-lists',
 
+    productNotAvailableMessage(code) {
+
+        // return `Part number ${code} is not available on our website. Please contact your representative, email us at <a href="mailto::email">:email</a> , or call us at <a href="tel::phone">:phone.', [
+        //                 'code' => $item['product_code'],
+        //                 'email' => config('amplify.cms.email'),
+        //                 'phone' => config('amplify.cms.phone'),
+        //             ])`
+    },
+
     isHtml(text) {
         return new DOMParser()
             .parseFromString(text, 'text/html')
             .body.children.length > 0;
+    },
+
+    isNumeric(value) {
+        return /^-?\d+(\.\d+)?$/.test(value);
     },
 
     /**
@@ -626,7 +643,14 @@ window.Amplify = {
 
         targetElement.max = this.maxCartItemQuantity();
 
-        const minOrderQty = parseFloat(targetElement.dataset.minOrderQty);
+        let minOrderQty = targetElement.dataset.minOrderQty;
+
+        if (!this.isNumeric(minOrderQty)) {
+            this.alert(`You entered an invalid quantity. Product ${productCode} requires a quantity between 1 and ${this.maxCartItemQuantity()}.`, 'Cart');
+            return false;
+        }
+
+        minOrderQty = parseFloat(minOrderQty);
 
         if (!minOrderQty) {
             this.alert(`Target input element [${target}] doesn't have "data-min-order-qty" attribute set or is empty.`, 'Cart');
@@ -635,7 +659,12 @@ window.Amplify = {
 
         targetElement.min = minOrderQty;
 
-        const qtyInterval = parseFloat(targetElement.dataset.qtyInterval);
+        let qtyInterval = targetElement.dataset.qtyInterval;
+
+        if (!this.isNumeric(qtyInterval)) {
+            this.alert(`You entered an invalid quantity. Product ${productCode} requires a quantity between 1 and ${this.maxCartItemQuantity()}.`, 'Cart');
+            return false;
+        }
 
         if (!qtyInterval) {
             this.alert(`Target input element [${target}] doesn't have "data-qty-interval" attribute set or is empty.`, 'Cart');
@@ -1529,7 +1558,7 @@ window.Amplify = {
         });
     },
 
-    thumbnailCarousel : function (target) {
+    thumbnailCarousel: function (target) {
         let $thumbnailCarousel = $(target);
         // Carousel init
         $thumbnailCarousel.owlCarousel({

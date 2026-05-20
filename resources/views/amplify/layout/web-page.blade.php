@@ -7,11 +7,21 @@
     {!! $head ?? '' !!}
 </head>
 <body {!! $htmlAttributes !!}>
-    @stack('off-canvas-menu')
-    {!! $slot !!}
-    <x-scroll-to-top/>
-    <x-amplify.foot/>
-    {!! $foot ?? '' !!}
-    {{--    @livewireScripts--}}
+@if($tag_manager_id)
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id={{ $tag_manager_id }}"
+                height="0"
+                width="0"
+                style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+@endif
+@stack('off-canvas-menu')
+{!! $slot !!}
+<x-scroll-to-top/>
+<x-amplify.foot/>
+{!! $foot ?? '' !!}
+{{--    @livewireScripts--}}
 </body>
 </html>
