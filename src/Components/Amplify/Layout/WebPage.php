@@ -24,7 +24,9 @@ class WebPage extends BaseComponent
      */
     public function render(): View|Closure|string
     {
-        return view('widget::amplify.layout.web-page');
+        $tag_manager_id = config('amplify.google.google_tag_manager_id');
+
+        return view('widget::amplify.layout.web-page', compact('tag_manager_id'));
     }
 
     /**
