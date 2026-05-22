@@ -241,8 +241,9 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
         Route::get('tracking/{invoice}', [InvoiceController::class, 'trackInvoice'])
             ->name('invoices.tracking.invoice');
 
-        Route::resource('orders', OrderController::class)->only('index', 'show');
-        Route::post('orders/{id}/approve', [OrderController::class, 'approve'])->name('orders.approve');
+        Route::resource('orders', OrderController::class)->only('index', 'show')->where(['order' => '[0-9]+']);
+        Route::post('orders/export', \Amplify\Frontend\Http\Controllers\Order\ExportController::class)->name('orders.export');
+        Route::post('orders/{id}/approve', [OrderController::class, 'approve'])->name('orders.approve')->where(['id' => '[0-9]+']);
         Route::resource('drafts', DraftController::class)->only('index', 'show');
 
         Route::resource('quotations', QuotationController::class)

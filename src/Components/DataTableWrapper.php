@@ -12,27 +12,12 @@ use Illuminate\Contracts\View\View;
 class DataTableWrapper extends BaseComponent
 {
     /**
-     * @var array
-     */
-    public $options;
-
-    private ?string $id;
-
-    public array $dataTableOptions = [];
-
-    /**
      * Create a new component instance.
      */
-    public function __construct(?string $id = null, array $dataTableOptions = [])
+    public function __construct(public ?string $id = null, public array $dataTableOptions = [])
     {
         parent::__construct();
 
-        $this->id = $id;
-
-        // Default DataTable options
-        $this->dataTableOptions = array_merge([
-            'search' => true,
-        ], $dataTableOptions);
     }
 
     /**
@@ -43,14 +28,32 @@ class DataTableWrapper extends BaseComponent
         return true;
     }
 
+    private function mergeDefaultDtOptions(): void
+    {
+        $this->dataTableOptions = array_merge([
+            'searching' => true,
+            'language' => [
+                'search' => '_INPUT_',
+                'searchPlaceholder' => 'Search...',
+            ],
+            'lengthMenu' => getPaginationLengths(),
+            'order' => [[0, 'desc']]
+        ], $this->dataTableOptions);
+
+        if (empty($this->dataTableOptions['dom'])) {
+            $this->dataTableOptions['dom'] = (isset($this->dataTableOptions['searching']) && $this->dataTableOptions['searching'])
+                ? '<f><"row"<"col-sm-12"tr>><"row mt-2"<"col-sm-12 col-md-5"l><"col-sm-12 col-md-7"p>>'
+                : '<"row"<"col-sm-12"tr>><"row mt-2"<"col-sm-12 col-md-5"l><"col-sm-12 col-md-7"p>>';
+        }
+    }
+
     /**
      * Get the view / contents that represent the component.
      */
     public function render(): View|Closure|string
     {
-        return view('widget::data-table-wrapper', [
-            'id' => $this->id,
-            'dataTableOptions ' => $this->dataTableOptions,
-        ]);
+        $this->mergeDefaultDtOptions();
+
+        return view('widget::data-table-wrapper');
     }
 }

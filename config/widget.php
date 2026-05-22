@@ -1170,10 +1170,20 @@ return [
         'model' => ['order'],
         '@attributes' => [
             [
-                'name' => 'is-quotation',
-                'type' => 'boolean',
-                'value' => false,
+                'name' => ':export-threshold',
+                'type' => 'number',
+                'value' => 10,
             ],
+            [
+                'name' => ':export-type',
+                'type' => 'select',
+                'value' => 'Xlsx',
+                'options' => [
+                    'xlsx' => 'Xlsx',
+                    'csv' => 'Csv',
+                ]
+            ],
+
         ],
         '@nestedItems' => [],
         'description' => '',

@@ -11,7 +11,7 @@ window.swal = Swal.mixin({
 });
 
 window.Amplify = {
-    config : {},
+    config: {},
     init(config) {
         this.config = config;
     },
@@ -20,6 +20,7 @@ window.Amplify = {
     maxCartItemQuantity: () => 9999999999,
     favouritesCreateUrl: () => '/favourites',
     orderListUrl: () => '/order-lists',
+    orderExportUrl: () => '/orders/export',
 
     productNotAvailableMessage(code) {
 
@@ -1671,4 +1672,89 @@ window.Amplify = {
             }
         );
     },
+
+    exportOrders(event, element) {
+        event.preventDefault();
+        event.stopPropagation();
+        const entries = parseInt(element.dataset.entries);
+        const threshold = parseInt(element.dataset.threshold);
+        const mime = element.dataset.mime ?? 'Xlsx';
+
+        const message = entries > threshold
+            ? 'Exporting a large entries may take time. We will send you over email?'
+            : `Exporting ${entries} entries. Do you want to proceed?`;
+
+        this.confirm(message, 'Orders', 'Export', {
+            customClass: {
+                confirmButton: 'btn btn-primary',
+                cancelButton: 'btn btn-outline-secondary',
+            },
+            preConfirm: async () => {
+                try {
+                    return await $.ajax(this.orderExportUrl(), {
+                        type: 'POST',
+                        data: JSON.stringify({
+                            entries: entries,
+                            threshold: threshold,
+                            mime: mime,
+                            filters: window.location.search.substring(1),
+                        }),
+                        contentType: 'application/json; charset=UTF-8',
+                        headers: {
+                            Accept: 'application/json'
+                        },
+                        success: function (result) {
+                            return result;
+                        },
+                        error: function (xhr) {
+                            Swal.showValidationMessage(`<p>${xhr.responseJSON.message ?? xhr.statusText}</p>`);
+                            Swal.hideLoading();
+                        },
+                    });
+                } catch (error) {
+                    return false;
+                }
+            },
+        }).then(function (result) {
+            if (result.isConfirmed) {
+                Amplify.notify(result.value.success ? 'success' : 'error', result.value.message, 'Orders');
+
+                let response = result.value.data;
+
+                if (!response || !response.content) {
+                    return;
+                }
+
+                const byteCharacters = atob(response.content);
+
+                const byteNumbers = new Array(byteCharacters.length);
+
+                for (let i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+
+                const byteArray = new Uint8Array(byteNumbers);
+
+                const blob = new Blob(
+                    [byteArray],
+                    {type: response.mime}
+                );
+
+                const url = URL.createObjectURL(blob);
+
+                const a = document.createElement('a');
+
+                a.href = url;
+                a.download = response.filename;
+
+                document.body.appendChild(a);
+
+                a.click();
+
+                a.remove();
+
+                URL.revokeObjectURL(url);
+            }
+        })
+    }
 }

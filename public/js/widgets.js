@@ -4681,6 +4681,9 @@ window.Amplify = {
   orderListUrl: function orderListUrl() {
     return '/order-lists';
   },
+  orderExportUrl: function orderExportUrl() {
+    return '/orders/export';
+  },
   productNotAvailableMessage: function productNotAvailableMessage(code) {
 
     // return `Part number ${code} is not available on our website. Please contact your representative, email us at <a href="mailto::email">:email</a> , or call us at <a href="tel::phone">:phone.', [
@@ -6329,6 +6332,90 @@ window.Amplify = {
           });
           throw err;
         });
+      }
+    });
+  },
+  exportOrders: function exportOrders(event, element) {
+    var _element$dataset$mime,
+      _this8 = this;
+    event.preventDefault();
+    event.stopPropagation();
+    var entries = parseInt(element.dataset.entries);
+    var threshold = parseInt(element.dataset.threshold);
+    var mime = (_element$dataset$mime = element.dataset.mime) !== null && _element$dataset$mime !== void 0 ? _element$dataset$mime : 'Xlsx';
+    var message = entries > threshold ? 'Exporting a large entries may take time. We will send you over email?' : "Exporting ".concat(entries, " entries. Do you want to proceed?");
+    this.confirm(message, 'Orders', 'Export', {
+      customClass: {
+        confirmButton: 'btn btn-primary',
+        cancelButton: 'btn btn-outline-secondary'
+      },
+      preConfirm: function () {
+        var _preConfirm8 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee1() {
+          var _t4;
+          return _regenerator().w(function (_context1) {
+            while (1) switch (_context1.p = _context1.n) {
+              case 0:
+                _context1.p = 0;
+                _context1.n = 1;
+                return $.ajax(_this8.orderExportUrl(), {
+                  type: 'POST',
+                  data: JSON.stringify({
+                    entries: entries,
+                    threshold: threshold,
+                    mime: mime,
+                    filters: window.location.search.substring(1)
+                  }),
+                  contentType: 'application/json; charset=UTF-8',
+                  headers: {
+                    Accept: 'application/json'
+                  },
+                  success: function success(result) {
+                    return result;
+                  },
+                  error: function error(xhr) {
+                    var _xhr$responseJSON$mes11;
+                    sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().showValidationMessage("<p>".concat((_xhr$responseJSON$mes11 = xhr.responseJSON.message) !== null && _xhr$responseJSON$mes11 !== void 0 ? _xhr$responseJSON$mes11 : xhr.statusText, "</p>"));
+                    sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().hideLoading();
+                  }
+                });
+              case 1:
+                return _context1.a(2, _context1.v);
+              case 2:
+                _context1.p = 2;
+                _t4 = _context1.v;
+                return _context1.a(2, false);
+            }
+          }, _callee1, null, [[0, 2]]);
+        }));
+        function preConfirm() {
+          return _preConfirm8.apply(this, arguments);
+        }
+        return preConfirm;
+      }()
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        Amplify.notify(result.value.success ? 'success' : 'error', result.value.message, 'Orders');
+        var response = result.value.data;
+        if (!response || !response.content) {
+          return;
+        }
+        var byteCharacters = atob(response.content);
+        var byteNumbers = new Array(byteCharacters.length);
+        for (var i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        var byteArray = new Uint8Array(byteNumbers);
+        var blob = new Blob([byteArray], {
+          type: response.mime
+        });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = response.filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
       }
     });
   }
