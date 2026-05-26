@@ -13,6 +13,11 @@ use Illuminate\Contracts\View\View;
  */
 class Index extends BaseComponent
 {
+    public function __construct(public int $exportThreshold = 10, public string $exportType = 'Xlsx')
+    {
+        parent::__construct();
+    }
+
     /**
      * Whether the component should be rendered
      */

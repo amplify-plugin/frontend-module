@@ -1,37 +1,34 @@
 @pushonce('plugin-style')
-    <link type="stylesheet" href="https://cdn.datatables.net/v/bs4/dt-1.13.1/datatables.min.css" />
+    <link type="stylesheet" href="https://cdn.datatables.net/v/bs4/dt-1.13.1/datatables.min.css"/>
+
 @endpushonce
 
 @pushonce('plugin-script')
     <script src="https://cdn.datatables.net/v/bs4/dt-1.13.1/datatables.min.js"></script>
 @endpushonce
 
-@php
-    $search = $dataTableOptions['search'] ?? true;
-@endphp
-
 <div class="row">
-    <div class="col-md-4 my-2 mb-md-0">
-        @if($search)
+    @if($dataTableOptions['searching'])
+        <div class="col-md-4 my-2 mb-md-0">
             <div id="search_filter" class="d-flex justify-content-center justify-content-md-start"></div>
-        @endif
-    </div>
+        </div>
+    @endif
 
     @if(isset($rightside))
         <div class="col-md-8 mb-2 mb-md-0 my-2">
-            {{ $rightside ?? '' }}
+            {!! $rightside ?? '' !!}
         </div>
     @endif
 
     @if(isset($fullsection))
         <div class="col-12">
-            {{ $fullsection ?? '' }}
+            {!! $fullsection ?? '' !!}
         </div>
     @endif
 </div>
 
 <div class="table-responsive pb-4 pb-md-0">
-    {{ $slot }}
+    {!! $slot !!}
 </div>
 
 @if(isset($id))
@@ -39,26 +36,10 @@
         <script>
             $(document).ready(function () {
 
-                const table = $('#{{ $id }}').DataTable({
-                    searching: @json($search),
+                const table = $('#{{ $id }}').DataTable(@json($dataTableOptions));
 
-                    dom: @json(
-                        $search
-                            ? '<f><"row"<"col-sm-12"tr>><"row mt-2"<"col-sm-12 col-md-5"l><"col-sm-12 col-md-7"p>>'
-                            : '<"row"<"col-sm-12"tr>><"row mt-2"<"col-sm-12 col-md-5"l><"col-sm-12 col-md-7"p>>'
-                    ),
-
-                    language: {
-                        search: '_INPUT_',
-                        searchPlaceholder: 'Search...',
-                    },
-
-                    lengthMenu: @json(getPaginationLengths()),
-                    order: [[0, 'desc']],
-                });
-
-                @if($search)
-                    $('#{{ $id }}_filter').appendTo($('#search_filter'));
+                @if($dataTableOptions['searching'])
+                $('#{{ $id }}_filter').appendTo($('#search_filter'));
                 @endif
             });
         </script>
