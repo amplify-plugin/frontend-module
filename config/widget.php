@@ -1170,6 +1170,11 @@ return [
         'model' => ['order'],
         '@attributes' => [
             [
+                'name' => ':allow-export',
+                'type' => 'bool',
+                'value' => false,
+            ],
+            [
                 'name' => ':export-threshold',
                 'type' => 'number',
                 'value' => 10,
