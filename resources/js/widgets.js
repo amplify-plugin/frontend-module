@@ -667,6 +667,8 @@ window.Amplify = {
             return false;
         }
 
+        qtyInterval = parseFloat(qtyInterval);
+
         if (!qtyInterval) {
             this.alert(`Target input element [${target}] doesn't have "data-qty-interval" attribute set or is empty.`, 'Cart');
             return false;
