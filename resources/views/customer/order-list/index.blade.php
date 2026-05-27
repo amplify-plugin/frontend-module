@@ -28,7 +28,7 @@
                     </div>
                     <div class="col-md-6 mb-2 mb-md-0 my-2">
                         <div class="d-flex justify-content-center justify-content-md-end">
-                            @if (customer(true)->can('favorites.manage-personal-list') && customer(true)->can('favorites.use-global-list') && !$singleType)
+                            @if (customer(true)->can('order-list.list') && !$singleType)
                                 <label>
                                     <select name="type" onchange="$('#customer-item-list-search-form').submit();"
                                             class="form-control  form-control-sm">
@@ -59,13 +59,13 @@
                                     <table class="table table-bordered table-striped table-hover my-1">
                                         <thead>
                                         <tr>
-                                            <th width="20">{{ sort_link('id', '#') }}</th>
+                                            <th width="20">#</th>
                                             @if ($columns['list_type'] && !$singleType)
-                                                <th>{{ sort_link('list_type', 'Type') }}</th>
+                                                <th>Type</th>
                                             @endif
 
                                             @if ($columns['name'])
-                                                <th class="35%">{{ sort_link('name', 'Name') }}</th>
+                                                <th class="35%">Name</th>
                                             @endif
 
 
@@ -77,14 +77,11 @@
                                                 <th>{{ __('Items') }}</th>
                                             @endif
 
-                                            <th width="125">{{ sort_link('updated_at', 'Last Changed') }}</th>
+                                            <th width="125">Last Changed</th>
                                             @if (customer(true)->canAny([
-                                                    'favorite.allow-details',
-                                                    'favorite.allow-personal-details',
-                                                    'favorite.allow-update',
-                                                    'favorite.allow-personal-update',
-                                                    'favorite.allow-delete',
-                                                    'favorite.allow-personal-delete',
+                                                    'order-list.view',
+                                                    'order-list.update',
+                                                    'order-list.delete',
                                                 ]))
                                                 <th>{{ __('Actions') }}</th>
                                             @endif
@@ -105,7 +102,6 @@
                                                     <td>{{ $orderList->name }}</td>
                                                 @endif
 
-
                                                 @if ($columns['description'])
                                                     <td>
                                                         <p class="cs-truncate-1">
@@ -119,10 +115,12 @@
                                                 @endif
 
                                                 <td>{{ carbon_date($orderList->updated_at) }}</td>
-                                                @if (checkPermissionLength([
-                                                        'favorites.manage-global-list',
-                                                        'favorites.use-global-list',
-                                                        'favorites.manage-personal-list',]) > 1)
+
+                                                @if (customer(true)->canAny([
+                                                    'order-list.view',
+                                                    'order-list.update',
+                                                    'order-list.delete',
+                                                ]))
                                                     <td width="125">
                                                         <div class="btn-group m-0">
                                                             <button type="button"
@@ -131,13 +129,13 @@
                                                                 Actions
                                                             </button>
                                                             <div class="dropdown-menu dropdown-menu-right">
-                                                                @if (customer(true)->can('favorites.manage-global-list') || customer(true)->can('favorites.manage-personal-list'))
+                                                                @if (customer(true)->can('order-list.view'))
                                                                     <a class="dropdown-item"
                                                                        href="{{ route('frontend.order-lists.show', $orderList->id) }}">
                                                                         <i class="icon-eye mr-1"></i> {{ __('Preview') }}
                                                                     </a>
                                                                 @endif
-                                                                @if (customer(true)->can('favorites.manage-personal-list') || customer(true)->can('favorites.manage-personal-list'))
+                                                                @if (customer(true)->can('order-list.update'))
                                                                     <a class="dropdown-item"
                                                                        href="javascript:void(0)"
                                                                        onclick="Amplify.manageOrderList(this, '{{ $widgetTitle }}', {{ $orderList->id }});"
@@ -145,7 +143,7 @@
                                                                         <i class="pe-7s-edit font-weight-bolder mr-1"></i> {{ __('Update') }}
                                                                     </a>
                                                                 @endif
-                                                                @if (customer(true)->can('favorites.manage-global-list') || customer(true)->can('favorites.manage-personal-list'))
+                                                                @if (customer(true)->can('order-list.delete'))
                                                                     <a class="dropdown-item"
                                                                        href="javascript:void(0)"
                                                                        data-action="{{ route('frontend.order-lists.destroy', $orderList->id) }}"
@@ -156,39 +154,6 @@
                                                             </div>
                                                         </div>
                                                     </td>
-                                                @else
-                                                    @if (customer(true)->can('favorites.manage-global-list') || customer(true)->can('favorites.manage-personal-list'))
-                                                        @include(
-                                                            'widget::customer.permission-component',
-                                                            [
-                                                                'data' => $orderList,
-                                                                'label' => 'View',
-                                                                'route' => route(
-                                                                    'frontend.order-lists.show',
-                                                                    $orderList->id),
-                                                            ]
-                                                        )
-                                                    @endif
-                                                    @if (customer(true)->can('favorites.manage-personal-list') || customer(true)->can('favorites.manage-personal-list'))
-                                                        @include(
-                                                            'widget::customer.permission-component',
-                                                            [
-                                                                'data' => $orderList,
-                                                                'label' => 'View',
-                                                                'route' => route(
-                                                                    'frontend.order-lists.update',
-                                                                    $orderList->id),
-                                                            ]
-                                                        )
-                                                    @endif
-                                                    @if (customer(true)->can('favorites.manage-global-list') || customer(true)->can('favorites.manage-personal-list'))
-                                                        <a class="dropdown-item delete-modal"
-                                                           href="javascript:void(0)"
-                                                           data-action="{{ route('frontend.order-lists.destroy', $orderList->id) }}"
-                                                           onclick="Amplify.deleteConfirmation(this, '{{ $widgetTitle }}')">
-                                                            <i class="icon-trash mr-1"></i> {{ __('Delete') }}
-                                                        </a>
-                                                    @endif
                                                 @endif
                                             </tr>
                                         @empty
