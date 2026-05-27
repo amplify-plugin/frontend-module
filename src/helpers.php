@@ -40,7 +40,7 @@ if (!function_exists('frontend_permissions')) {
             'shop' => 'browse,search,search-in-result,in-stock-filter,brands,banner,categories',
 //            'switch-account' => 'switch-account',
 //            'ticket' => 'tickets',
-            'cart' => 'add,v,remove,checkout',
+            'cart' => 'add,v,remove,checkout,submit-quote',
         ];
     }
 }
