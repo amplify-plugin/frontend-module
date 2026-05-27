@@ -322,7 +322,7 @@
                 @endif
             </div>
             <div id="checkout-btn">
-                @if($showSubmitQuoteButton)
+                @if($showSubmitQuoteButton && (customer_check() && customer(true)->can('cart.submit-quote')))
                     <button
                             type="button"
                             id="submit-quote-btn"
@@ -335,9 +335,11 @@
                         <i class="icon-file"></i>&nbsp;{{ __('Submit Quote') }}
                     </button>
                 @endif
-                <a class="btn btn-success align-items-center" href="{{ route('frontend.checkout') }}">
-                    {{ __('Checkout') }}&nbsp;<i class="icon-arrow-right"></i>
-                </a>
+                @if((customer_check() && customer(true)->can('cart.checkout')) || config('amplify.frontend.guest_checkout'))
+                    <a class="btn btn-success align-items-center" href="{{ route('frontend.checkout') }}">
+                        {{ __('Checkout') }}&nbsp;<i class="icon-arrow-right"></i>
+                    </a>
+                @endif
             </div>
             @if($updateStyle == 'bulk')
                 <div id="quantity-update-actions" class="gap-2 d-none">
