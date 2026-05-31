@@ -43,11 +43,20 @@ class FavouriteController extends Controller
         $singleType = count($listTypes) == 1;
 
         try {
+            $contact = auth('customer')->user();
+
             $lists = OrderList::select('id', 'name', 'list_type', 'contact_id', 'customer_id')
-                ->whereCustomerId(customer()->getKey())
-                ->where(function ($query) {
-                    $query->whereNull('contact_id')
-                        ->orWhere('contact_id', customer(true)->getKey());
+                ->with('orderListItems')
+                ->where(function ($query) use ($contact) {
+                    $query->where(function ($personalQuery) use ($contact) {
+                        $personalQuery
+                            ->where('list_type', 'personal')
+                            ->where('contact_id', $contact->id);
+                    })->orWhere(function ($globalQuery) use ($contact) {
+                        $globalQuery
+                            ->where('list_type', 'global')
+                            ->where('customer_id', $contact->customer_id);
+                    });
                 })
                 ->when(!config('amplify.basic.enable_quick_list', true), function ($query) {
                     $query->where('list_type', '!=', 'quick-list');
