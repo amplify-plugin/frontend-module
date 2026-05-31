@@ -31,6 +31,7 @@ class Index extends BaseComponent
     public function render(): View|Closure|string
     {
         $request = request();
+        $contact = auth('customer')->user();
 
         $orderLists = OrderList::query()
 
@@ -40,7 +41,7 @@ class Index extends BaseComponent
             })
 
             // Permission based filtering
-            ->where(function ($query) {
+            ->where(function ($query) use ($contact) {
 
                 // Global lists
                 if (customer(true)->canAny([
@@ -51,17 +52,20 @@ class Index extends BaseComponent
                     'order-list.delete',
                 ])) {
 
-                    $query->orWhere('list_type', 'global');
+                    $query->orWhere(function ($globalQuery) use ($contact) {
+                        $globalQuery
+                            ->where('list_type', 'global')
+                            ->where('customer_id', $contact->customer_id);
+                    });
                 }
 
                 // Personal lists (only own data)
                 if (customer(true)->can('order-list.list')) {
 
-                    $query->orWhere(function ($personalQuery) {
-
+                    $query->orWhere(function ($personalQuery) use ($contact) {
                         $personalQuery
                             ->where('list_type', 'personal')
-                            ->where('contact_id', auth('customer')->user()->id);
+                            ->where('contact_id', $contact->id);
                     });
                 }
             })
