@@ -1683,7 +1683,7 @@ window.Amplify = {
         const mime = element.dataset.mime ?? 'Xlsx';
 
         const message = entries > threshold
-            ? 'Exporting a large entries may take time. We will send you over email?'
+            ? 'Exporting a large number of entries will take time.  The report will be sent to your registered email address.'
             : `Exporting ${entries} entries. Do you want to proceed?`;
 
         this.confirm(message, 'Orders', 'Export', {
