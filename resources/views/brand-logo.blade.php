@@ -3,7 +3,7 @@
         <!-- Off-Canvas Toggle (#mobile-menu)-->
         <a class="offcanvas-toggle menu-toggle" href="#mobile-menu" data-toggle="offcanvas"></a>
         <!-- Site Logo-->
-        <a class="site-logo" href="{{ route('frontend.index') }}">
+        <a class="site-logo" href="{{ config('amplify.cms.brand_logo_url') ?: route('frontend.index') }}">
             <img src="{{ config('amplify.cms.logo_path', asset('img/Amplify Logo 280 tagline.png')) }}"
                  alt="{{$imageAlt ?? config('app.name', 'Amplify')}}">
         </a>
