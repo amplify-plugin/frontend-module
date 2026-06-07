@@ -8,7 +8,6 @@ use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
-use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
@@ -45,48 +44,49 @@ class OrderExport implements FromView, ShouldAutoSize, WithEvents
 
                 // Global styling
                 $sheet->getStyle($range)->applyFromArray([
-                    "borders" => [
-                        "allBorders" => [
-                            "borderStyle" => Border::BORDER_THIN,
-                            "color" => ["rgb" => "000000"],
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' => Border::BORDER_THIN,
+                            'color' => ['rgb' => '000000'],
                         ],
                     ],
-                    "font" => [
-                        "color" => ["rgb" => "000000"],
+                    'font' => [
+                        'color' => ['rgb' => '000000'],
                     ],
-                    "alignment" => [
-                        "horizontal" => Alignment::HORIZONTAL_LEFT,
+                    'alignment' => [
+                        'horizontal' => Alignment::HORIZONTAL_LEFT,
+                        'vertical'   => Alignment::VERTICAL_TOP,
+                        'wrapText'   => true,
                     ],
                 ]);
 
                 // Header styling
                 $sheet->getStyle("A1:{$highestColumn}1")->applyFromArray([
-                    "font" => [
-                        "bold" => true,
-                        "color" => ["rgb" => "000000"],
+                    'font' => [
+                        'bold' => true,
+                        'color' => ['rgb' => '000000'],
                     ],
-                    "fill" => [
-                        "fillType" => Fill::FILL_SOLID,
-                        "startColor" => ["rgb" => "FFFF00"],
+                    'fill' => [
+                        'fillType' => Fill::FILL_SOLID,
+                        'startColor' => ['rgb' => 'FFFF00'],
                     ],
                 ]);
 
-                // Apply fixed width and text format to all columns
-                foreach (range("A", $highestColumn) as $column) {
-                    // Width ≈ 120 pixels
+                // Fixed width + text format
+                foreach (range('A', $highestColumn) as $column) {
+
+                    // ~120px
                     $sheet->getColumnDimension($column)->setWidth(17);
 
                     // Force text format
-                    $sheet
-                        ->getStyle("{$column}1:{$column}{$highestRow}")
+                    $sheet->getStyle("{$column}1:{$column}{$highestRow}")
                         ->getNumberFormat()
-                        ->setFormatCode("@");
+                        ->setFormatCode('@');
+                }
 
-                    // Left align
-                    $sheet
-                        ->getStyle("{$column}1:{$column}{$highestRow}")
-                        ->getAlignment()
-                        ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+                // Auto-adjust row heights for wrapped text
+                for ($row = 1; $row <= $highestRow; $row++) {
+                    $sheet->getRowDimension($row)->setRowHeight(-1);
                 }
             },
         ];
