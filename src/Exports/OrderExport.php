@@ -8,6 +8,7 @@ use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
@@ -23,8 +24,8 @@ class OrderExport implements FromView, ShouldAutoSize, WithEvents
      */
     public function view(): View
     {
-        return view('system::report.order', [
-            'orders' => $this->orders,
+        return view("system::report.order", [
+            "orders" => $this->orders,
         ]);
     }
 
@@ -35,59 +36,57 @@ class OrderExport implements FromView, ShouldAutoSize, WithEvents
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
-
-                $sheet = $event->sheet;
+                $sheet = $event->sheet->getDelegate();
 
                 $highestRow = $sheet->getHighestRow();
                 $highestColumn = $sheet->getHighestColumn();
 
-                $range = 'A1:' . $highestColumn . $highestRow;
+                $range = "A1:{$highestColumn}{$highestRow}";
 
-                // All cells border + black text
+                // Global styling
                 $sheet->getStyle($range)->applyFromArray([
-                    'borders' => [
-                        'allBorders' => [
-                            'borderStyle' => Border::BORDER_THIN,
-                            'color' => [
-                                'rgb' => '000000',
-                            ],
+                    "borders" => [
+                        "allBorders" => [
+                            "borderStyle" => Border::BORDER_THIN,
+                            "color" => ["rgb" => "000000"],
                         ],
                     ],
-
-                    'font' => [
-                        'color' => [
-                            'rgb' => '000000',
-                        ],
+                    "font" => [
+                        "color" => ["rgb" => "000000"],
+                    ],
+                    "alignment" => [
+                        "horizontal" => Alignment::HORIZONTAL_LEFT,
                     ],
                 ]);
 
-                // Header style
-                $sheet->getStyle('A1:' . $highestColumn . '1')
-                    ->applyFromArray([
+                // Header styling
+                $sheet->getStyle("A1:{$highestColumn}1")->applyFromArray([
+                    "font" => [
+                        "bold" => true,
+                        "color" => ["rgb" => "000000"],
+                    ],
+                    "fill" => [
+                        "fillType" => Fill::FILL_SOLID,
+                        "startColor" => ["rgb" => "FFFF00"],
+                    ],
+                ]);
 
-                        'font' => [
-                            'bold' => true,
-                            'color' => [
-                                'rgb' => '000000',
-                            ],
-                        ],
+                // Apply fixed width and text format to all columns
+                foreach (range("A", $highestColumn) as $column) {
+                    // Width ≈ 120 pixels
+                    $sheet->getColumnDimension($column)->setWidth(17);
 
-                        'fill' => [
-                            'fillType' => Fill::FILL_SOLID,
-                            'startColor' => [
-                                'rgb' => 'FFFF00',
-                            ],
-                        ],
-                    ]);
+                    // Force text format
+                    $sheet
+                        ->getStyle("{$column}1:{$column}{$highestRow}")
+                        ->getNumberFormat()
+                        ->setFormatCode("@");
 
-                // Right align columns
-                foreach (['H', 'I', 'J', 'M', 'N'] as $column) {
-
-                    $sheet->getStyle(
-                        $column . '1:' . $column . $highestRow
-                    )->getAlignment()->setHorizontal(
-                        Alignment::HORIZONTAL_RIGHT
-                    );
+                    // Left align
+                    $sheet
+                        ->getStyle("{$column}1:{$column}{$highestRow}")
+                        ->getAlignment()
+                        ->setHorizontal(Alignment::HORIZONTAL_LEFT);
                 }
             },
         ];
