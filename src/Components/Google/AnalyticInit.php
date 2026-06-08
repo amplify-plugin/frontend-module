@@ -99,7 +99,7 @@ class AnalyticInit extends BaseComponent
             if ($product?->brand()?->exists()) {
                 $data['brand']['@type'] = 'Brand';
                 $data['brand']['name'] = $product->brand->title ?? '';
-            } elseif (! empty($product->brand_name)) {
+            } elseif (!empty($product->brand_name)) {
                 $data['brand']['@type'] = 'Brand';
                 $data['brand']['name'] = $product->brand_name ?? '';
             }
@@ -139,8 +139,8 @@ class AnalyticInit extends BaseComponent
         return match ($type) {
             'Organization' => "{$baseUrl}/#organization",
             'WebSite' => "{$baseUrl}/#website",
-            'Product' => request()->url().'/#product',
-            default => request()->url().'/#breadcrumb',
+            'Product' => request()->url() . '/#product',
+            default => request()->url() . '/#breadcrumb',
         };
     }
 
@@ -160,6 +160,8 @@ class AnalyticInit extends BaseComponent
             $data[] = match ($page->page_type) {
                 'shop' => $this->shopAnalytics(),
                 'single_product' => $this->productAnalytics(),
+                'cart' => $this->cartAnalytics(),
+                'checkout' => $this->cartAnalytics('begin_checkout'),
                 default => [],
             };
         }
@@ -203,7 +205,7 @@ class AnalyticInit extends BaseComponent
         return $event;
     }
 
-    private function productAnalytics() : array
+    private function productAnalytics(): array
     {
         $event = [
             'event' => 'view_item',
@@ -238,4 +240,24 @@ class AnalyticInit extends BaseComponent
         return $event;
     }
 
+    private function cartAnalytics($event = 'view_cart'): array
+    {
+        $cart = getCart();
+
+        return [
+            'event' => $event,
+            'ecommerce' => [
+                'currency' => config('amplify.basic.global_currency', 'USD'),
+                'value' => round($cart->sub_total ?? 0, 2),
+                'items' => $cart->cartItems->map(function ($cartItem) {
+                    return [
+                        'item_id' => $cartItem->product_code,
+                        'item_name' => $cartItem->product_name,
+                        'price' => round($cartItem->unitprice ?? 0, 2),
+                        'quantity' => $cartItem->quantity
+                    ];
+                })->toArray(),
+            ]
+        ];
+    }
 }
