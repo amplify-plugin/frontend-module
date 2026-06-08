@@ -25,6 +25,12 @@
 @endif
 
 <script type="application/ld+json">
-    @json($pageSchemaForGoogle(), JSON_PRETTY_PRINT)
+    @json($pageSchemaForGA(), JSON_PRETTY_PRINT)
 
+</script>
+
+<script>
+@foreach($pageAnalyticDataForGA() as $analytics)
+ window.dataLayer.push(@json($analytics));
+@endforeach
 </script>

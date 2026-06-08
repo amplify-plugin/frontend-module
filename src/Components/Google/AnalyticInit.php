@@ -3,7 +3,7 @@
 namespace Amplify\Frontend\Components\Google;
 
 use Amplify\Frontend\Abstracts\BaseComponent;
-use Closure;
+use Amplify\System\Sayt\Classes\RemoteResults;
 use Illuminate\Contracts\View\View;
 
 /**
@@ -22,7 +22,7 @@ class AnalyticInit extends BaseComponent
     /**
      * Get the view / contents that represent the component.
      */
-    public function render(): View|Closure|string
+    public function render(): View|\Closure|string
     {
         $analytics_id = config('amplify.google.google_analytics_id', '');
 
@@ -47,7 +47,7 @@ class AnalyticInit extends BaseComponent
         ]);
     }
 
-    public function pageSchemaForGoogle()
+    public function pageSchemaForGA()
     {
         $type = $this->determineGooglePageType();
 
@@ -143,4 +143,99 @@ class AnalyticInit extends BaseComponent
             default => request()->url().'/#breadcrumb',
         };
     }
+
+    /**
+     * @throws \ErrorException
+     */
+    public function pageAnalyticDataForGA()
+    {
+        $data = [];
+
+        $data[] = customer_check()
+            ? ['sei_user_type' => 'logged_in', 'sei_user_id' => customer(true)->getKey()]
+            : ['sei_user_type' => 'guest', 'sei_user_id' => 'public'];
+
+        if ($page = store('dynamicPageModel')) {
+
+            $data[] = match ($page->page_type) {
+                'shop' => $this->shopAnalytics(),
+                'single_product' => $this->productAnalytics(),
+                default => [],
+            };
+        }
+
+        return array_filter($data, fn($item) => !empty($item));
+    }
+
+    private function shopAnalytics(): array
+    {
+        $event = [
+            'event' => 'view_item_list',
+            'ecommerce' => [
+                'item_list_name' => 'Search Results',
+                'item_list_id' => 'search_results',
+                'currency' => config('amplify.basic.global_currency', 'USD'),
+                'items' => [],
+            ]
+        ];
+
+        /**
+         * @var RemoteResults $eaResponse
+         */
+        if ($eaResponse = store('eaProductsData')) {
+
+            $currentPage = $eaResponse->getCurrentPage();
+            $resultPerPage = $eaResponse->getResultsPerPage();
+
+            if (!$eaResponse->noResultFound()) {
+                foreach ($eaResponse->getProducts() as $index => $product) {
+                    $event['ecommerce']['items'][] = [
+                        'index' => (($currentPage - 1) * $resultPerPage) + $index + 1,
+                        'item_id' => $product->Sku_ProductCode ?? $product->Product_Code,
+                        'item_name' => $product->Product_Name,
+                        'item_brand' => $product->Manufacturer,
+                        'item_category' => null,
+                    ];
+                }
+            }
+        }
+
+        return $event;
+    }
+
+    private function productAnalytics() : array
+    {
+        $event = [
+            'event' => 'view_item',
+            'ecommerce' => [
+                'currency' => config('amplify.basic.global_currency', 'USD'),
+                'items' => [],
+            ]
+        ];
+
+        /**
+         * @var RemoteResults $eaResponse
+         */
+        if ($eaResponse = store('eaProductsData')) {
+
+            if (!$eaResponse->noResultFound()) {
+                foreach ($eaResponse->getProducts() as $product) {
+
+                    $price = $product->Price?->toFloat() ?? $product->Msrp?->toFloat() ?? null;
+
+                    $event['ecommerce']['value'] = !empty($price) ? round($price, 2) : null;
+
+                    $event['ecommerce']['items'][] = [
+                        'item_id' => $product->Sku_ProductCode ?? $product->Product_Code,
+                        'item_name' => $product->Product_Name,
+                        'item_brand' => $product->Manufacturer,
+                        'item_category' => null,
+                    ];
+                }
+            }
+        }
+
+        return $event;
+    }
+
 }
