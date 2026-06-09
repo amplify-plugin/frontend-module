@@ -12,6 +12,8 @@ class UpdateCustomerListener
      */
     public function handle(ContactLoggedIn $event): void
     {
+        request()->session()->flash('loggedIn', true);
+
         CustomerProfileSyncJob::dispatch(['customer_id' => $event->contact->customer->id]);
     }
 }

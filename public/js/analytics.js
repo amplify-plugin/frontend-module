@@ -1,0 +1,1 @@
+window.addEventListener("add_to_cart",function(n){console.log(n)});
