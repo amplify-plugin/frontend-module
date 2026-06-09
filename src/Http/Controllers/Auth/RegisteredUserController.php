@@ -83,6 +83,8 @@ class RegisteredUserController extends Controller
 
             DB::commit();
 
+            $request->session()->flash('contactSignedUp', true);
+
             // Newsletter + Notification
             $this->handlePostRegistrationForRequestAccount($request, $contact);
 
@@ -173,6 +175,8 @@ class RegisteredUserController extends Controller
             DB::commit();
 
             $this->handlePostRegistrationForNewRetailCustomer($request, $customer, $contact);
+
+            $request->session()->flash('customerSignedUp', true);
 
             return redirect()->to('/')
                 ->with([

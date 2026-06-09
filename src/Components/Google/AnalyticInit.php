@@ -155,6 +155,18 @@ class AnalyticInit extends BaseComponent
             ? ['sei_user_type' => 'logged_in', 'sei_user_id' => customer(true)->getKey()]
             : ['sei_user_type' => 'guest', 'sei_user_id' => 'public'];
 
+        if (session()->has('loggedIn')) {
+            $data[] = ['event' => 'login', 'method' => 'password'];
+        }
+
+        if (session()->has('customerSignedUp')) {
+            $data[] = ['event' => 'sign_up', 'method' => 'registration', 'type' => 'new_retail_customer'];
+        }
+
+        if (session()->has('contactSignedUp')) {
+            $data[] = ['event' => 'sign_up', 'method' => 'registration', 'type' => 'request_account'];
+        }
+
         if ($page = store('dynamicPageModel')) {
 
             $data[] = match ($page->page_type) {

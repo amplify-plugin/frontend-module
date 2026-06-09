@@ -104,7 +104,12 @@ class CartController extends Controller
 
             \event(new CartUpdated($cart));
 
-            return $this->apiResponse(true, __('Product(s) added to cart successfully.'), 200, ['data' => ['total' => cart_count_badge($cart)]]);
+            return $this->apiResponse(true, __('Product(s) added to cart successfully.'), 200, [
+                'data' => [
+                    'total' => cart_count_badge($cart),
+                    'items' => array_values($data['items'])
+                ]
+            ]);
 
         } catch (\Exception $exception) {
 
@@ -121,34 +126,35 @@ class CartController extends Controller
      */
     public function remove(string $cartItemId)
     {
-        try {
+        $cart = getCart();
 
-            $cart = getCart();
+        try {
 
             $products = (Str::contains($cartItemId, ',', true))
                 ? explode(',', $cartItemId)
                 : $cartItemId;
 
+            $cartItems = CartItem::where('cart_id', $cart->getKey())->whereIn('id', Arr::wrap($products));
+
+            $deletedItems = $cartItems->toArray();
+
             if ($cart->cartItems()->whereIn('id', Arr::wrap($products))->delete()) {
 
                 \event(new CartUpdated($cart));
 
-                return response()->json([
-                    'message' => __('Selected cart item is removed'),
-                    'success' => true,
+                return $this->apiResponse(true, __('Selected cart item is removed'), 200, [
                     'data' => [
-                        'total' => cart_count_badge($cart)
+                        'total' => cart_count_badge($cart),
+                        'items' => array_values($deletedItems)
                     ]
-                ], 200);
+                ]);
             }
 
-            return response()->json([
-                'message' => __('Failed to clear the current cart items.'),
-                'success' => false,
+            return $this->apiResponse(false, __('Failed to clear the current cart items.'), 500, [
                 'data' => [
                     'total' => cart_count_badge($cart)
                 ]
-            ], 500);
+            ]);
 
         } catch (\Exception $exception) {
 
@@ -220,12 +226,19 @@ class CartController extends Controller
         $cart = getCart();
 
         try {
+
+            $deletedItems = $cart->cartItems->toArray();
+
             if ($cart->cartItems()->delete()) {
 
                 \event(new CartUpdated($cart));
 
-                return $this->apiResponse(true, __('Your current cart items are removed.'));
-
+                return $this->apiResponse(true, __('Your current cart items are removed.'), 200, [
+                    'data' => [
+                        'total' => cart_count_badge($cart),
+                        'items' => $deletedItems
+                    ]
+                ]);
             }
 
             return $this->apiResponse(false, __('Failed to clear the current cart items.'), 500);

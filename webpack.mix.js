@@ -43,6 +43,7 @@ mix.setResourceRoot('resources')
     .copyDirectory('resources/img', 'public/img')
     .sass('resources/scss/widgets.scss', 'public/css/widgets.css')
     .js('resources/js/widgets.js', 'public/js/widgets.js')
+    .js('resources/js/google-analytics.js', 'public/js/google-analytics.js')
     .copy('resources/js/modernizr.min.js', 'public/js/modernizr.min.js')
     .combine([
         'resources/js/vendor/jquery.min.js',

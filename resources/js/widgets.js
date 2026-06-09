@@ -1,4 +1,5 @@
 import Swal from 'sweetalert2';
+import {AddToCartEvent, RemoveFromCartEvent} from './events.js';
 
 window.swal = Swal.mixin({
     theme: 'bootstrap-4-light',
@@ -234,6 +235,7 @@ window.Amplify = {
             .then(function (result) {
                 if (result.isConfirmed) {
                     Amplify.notify('success', result.value.message, 'Cart');
+                    window.dispatchEvent(new RemoveFromCartEvent(result.value?.data?.items));
                     setTimeout(() => {
                         const {origin, pathname} = window.location;
                         window.location.replace(origin + pathname);
@@ -288,6 +290,7 @@ window.Amplify = {
                 if (result.isConfirmed) {
                     Amplify.notify('success', result.value.message, 'Cart');
                     window.dispatchEvent(new CustomEvent('qty-removed'));
+                    window.dispatchEvent(new RemoveFromCartEvent(result.value?.data?.items ?? []));
                     Amplify.renderCartItemBadge(result.value?.data?.total ?? '');
                 }
             })
@@ -1085,6 +1088,8 @@ window.Amplify = {
             //     cartItem.source_type = options.source_type;
             // }
 
+            let page = document.querySelector('meta[name="category"]')?.content ?? 'static';
+
             await $.ajax(this.cartUrl(), {
                 beforeSend: () => Amplify.renderEmptyCart('/assets/img/preloader.gif', true),
                 method: 'POST',
@@ -1099,6 +1104,12 @@ window.Amplify = {
                 },
                 success: function (res) {
                     Amplify.notify('success', res.message, 'Cart');
+
+                    window.dispatchEvent(new AddToCartEvent({
+                        page: page,
+                        items: res?.data?.items ?? []
+                    }));
+
                     Amplify.renderCartItemBadge(res.data?.total ?? '');
                 },
                 error: function (xhr) {
@@ -1134,6 +1145,9 @@ window.Amplify = {
             willOpen: () => document.querySelector('.swal2-actions').style.justifyContent = 'center',
             didOpen: () => {
                 try {
+
+                    let page = document.querySelector('meta[name="category"]')?.content ?? 'static';
+
                     return $.ajax(this.cartUrl(), {
                         beforeSend: () => {
                             Swal.showLoading();
@@ -1153,6 +1167,10 @@ window.Amplify = {
                         success: function (response) {
                             if (response.success) {
                                 Amplify.notify('success', response.message, 'Cart');
+                                window.dispatchEvent(new AddToCartEvent({
+                                    page: page,
+                                    items: response?.data?.items ?? []
+                                }));
                                 Amplify.renderCartItemBadge(response?.data?.total ?? '');
                                 setTimeout(() => {
                                     const {origin, pathname} = window.location;
@@ -1684,7 +1702,9 @@ window.Amplify = {
 
         const message = entries > threshold
             ? 'Exporting a large number of entries will take time.  The report will be sent to your registered email address.'
-            : `Exporting ${entries} entries. Do you want to proceed?`;
+            : (entries == 1)
+                ? `Exporting one entry. Do you want to proceed?`
+                : `Exporting ${entries} entries. Do you want to proceed?`;
 
         this.confirm(message, 'Orders', 'Export', {
             customClass: {

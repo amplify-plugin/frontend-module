@@ -32,6 +32,10 @@ class WidgetServiceProvider extends ServiceProvider
                         mix('js/widgets.js', 'vendor/widget')
                     ], 'plugin-script');
 
+                    if (!empty(config('amplify.google.google_tag_manager_id'))) {
+                        push_js(mix('js/google-analytics.js', 'vendor/widget'), 'footer-script');
+                    }
+
                     foreach (config('amplify.widget', []) as $classNameSpace => $options) {
                         Widget::process($classNameSpace, $options['name']);
                     }
