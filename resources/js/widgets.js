@@ -1,5 +1,5 @@
 import Swal from 'sweetalert2';
-import {AddToCartEvent, RemoveFromCartEvent} from './events.js';
+import {AddToCartEvent, RemoveFromCartEvent, RequestQuoteEvent} from './events.js';
 
 window.swal = Swal.mixin({
     theme: 'bootstrap-4-light',
@@ -13,6 +13,7 @@ window.swal = Swal.mixin({
 
 window.Amplify = {
     config: {},
+    cart: null,
     init(config) {
         this.config = config;
     },
@@ -40,6 +41,27 @@ window.Amplify = {
 
     isNumeric(value) {
         return /^-?\d+(\.\d+)?$/.test(value);
+    },
+
+    getCart() {
+        if (!this.cart) {
+            $.ajax({
+                url: this.cartUrl('/show'),
+                method: 'GET',
+                dataType: 'json',
+                headers: {
+                    Accept: 'application/json'
+                },
+                success: function (response) {
+                    Amplify.cart = response;
+                },
+                error: function (xhr) {
+                    console.error(xhr.responseJSON.message ?? xhr.statusText, 'Cart');
+                },
+            });
+        }
+
+        return this.cart;
     },
 
     /**
@@ -461,6 +483,7 @@ window.Amplify = {
                 Accept: 'application/json'
             },
             success: function (response) {
+                Amplify.cart = response;
                 $('#cart-preloader').hide();
                 $('#cart-item-summary').empty();
 
@@ -479,6 +502,7 @@ window.Amplify = {
                 $('#order-subtotal').text(response.data.sub_total);
             },
             error: function (xhr) {
+                Amplify.cart = null;
                 Amplify.alert(xhr.responseJSON.message ?? xhr.statusText, 'Cart');
             },
         }).done(() => Amplify.attachQuantityInputEvents());
@@ -527,6 +551,7 @@ window.Amplify = {
                 Accept: 'application/json'
             },
             success: function (res) {
+                Amplify.cart = res;
                 $('.cart-dropdown').empty();
                 if (res.data.products.length > 0) {
                     $("#cart-menu-subtotal").show();
@@ -558,6 +583,7 @@ window.Amplify = {
                 }
             },
             error: function (xhr, status) {
+                Amplify.cart = null;
                 Amplify.renderEmptyCart();
             }
         });
@@ -1654,6 +1680,11 @@ window.Amplify = {
                         submitQuoteBtn.dataset.submitting = 'false';
 
                         if (data?.success) {
+                            window.dispatchEvent(new RequestQuoteEvent({
+                                quote_number: data.order_number,
+                                items: data.items,
+                            }))
+
                             Amplify.confirm(
                                 data.message,
                                 'Quotation',

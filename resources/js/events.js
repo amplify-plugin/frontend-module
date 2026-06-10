@@ -103,14 +103,6 @@ export class AddToCartEvent extends EcommerceEvent {
     }
 }
 
-export class Event extends EcommerceEvent {
-    static EVENT_NAME = 'add_to_cart';
-
-    constructor(data) {
-        super(AddToCartEvent.EVENT_NAME, data);
-    }
-}
-
 export class RemoveFromCartEvent extends EcommerceEvent {
     static EVENT_NAME = 'remove_from_cart';
 
@@ -146,6 +138,14 @@ export class AddShippingInfoEvent extends EcommerceEvent {
 
     constructor(data) {
         super(AddShippingInfoEvent.EVENT_NAME, data);
+    }
+}
+
+export class RequestQuoteEvent extends EcommerceEvent {
+    static EVENT_NAME = 'request_quote';
+
+    constructor(data) {
+        super(RequestQuoteEvent.EVENT_NAME, data);
     }
 }
 
