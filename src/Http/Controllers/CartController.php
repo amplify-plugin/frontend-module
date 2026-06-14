@@ -134,7 +134,7 @@ class CartController extends Controller
                 ? explode(',', $cartItemId)
                 : $cartItemId;
 
-            $cartItems = CartItem::where('cart_id', $cart->getKey())->whereIn('id', Arr::wrap($products));
+            $cartItems = CartItem::where('cart_id', $cart->getKey())->whereIn('id', Arr::wrap($products))->get();
 
             $deletedItems = $cartItems->toArray();
 
