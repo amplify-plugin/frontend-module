@@ -27,9 +27,9 @@
                     element="span"/>
         @endif
         <x-product.name element="span" :product="$product" class="product-title d-block"/>
-        <div class="hidden-xs-down product-summary">
-            {!! $product->short_description ? strip_tags($product->short_description): '' !!}
-        </div>
+
+        <x-product.short-description :content="$product->short_description ?? ''"/>
+
         <x-product.price
                 element="div"
                 class="w-100 d-flex justify-content-md-start justify-content-center product-price"
