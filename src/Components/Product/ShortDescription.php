@@ -32,6 +32,6 @@ class ShortDescription extends BaseComponent
     public function render(): View|Closure|string
     {
 
-        return view('widget::product.description');
+        return view('widget::product.short-description');
     }
 }
