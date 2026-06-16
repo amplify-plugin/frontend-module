@@ -152,8 +152,8 @@ class AnalyticInit extends BaseComponent
         $data = [];
 
         $data[] = customer_check()
-            ? ['sei_user_type' => 'logged_in', 'sei_user_id' => customer(true)->getKey()]
-            : ['sei_user_type' => 'guest', 'sei_user_id' => 'public'];
+            ? ['sei_user_type' => 'logged_in', 'sei_user_id' => customer(true)->getKey(), 'sei_user_name' => customer(true)->name ?? 'Guest']
+            : ['sei_user_type' => 'guest', 'sei_user_id' => 'public', 'sei_user_name' => 'Guest'];
 
         if (session()->has('loggedIn')) {
             $data[] = ['event' => 'login', 'method' => 'password'];
