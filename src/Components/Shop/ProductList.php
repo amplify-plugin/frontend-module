@@ -90,13 +90,14 @@ class ProductList extends BaseComponent
         $dbProducts = Product::whereIn('id', $ids)->get();
 
         foreach ($products as $index => $product) {
-            $erpProductCodes[] = [
-                'item' => $product->Product_Code,
-                'uom' => $product->UoM,
-                'qty' => $dbProducts->firstWhere('id', '=', $product->Amplify_Id)?->min_order_qty ?? 1,
-            ];
 
             $dbProduct = $dbProducts->firstWhere('id', '=', $product->Amplify_Id);
+
+            $erpProductCodes[] = [
+                'item' => $product->Product_Code,
+                'uom' => $dbProduct?->uom ?? null,
+                'qty' => $dbProduct?->min_order_qty ?? 1,
+            ];
 
             $orderList = $this->productExistOnFavorite($product->Amplify_Id, $product);
             $product->exists_in_favorite = $orderList != null;
@@ -139,7 +140,7 @@ class ProductList extends BaseComponent
             if (! empty($erpProductCodes)) {
 
                 $erpProductDetails = ErpApi::getProductPriceAvailability([
-                    'items' => $erpProductCodes, 'warehouse' => $warehouseString,
+                    'items' => $erpProductCodes, 'warehouse' => trim($warehouseString,',')
                 ]);
 
                 $warehouse_codes = array_unique([$erpCustomer->DefaultWarehouse, customer()?->warehouse?->code, config('amplify.frontend.guest_checkout_warehouse')]);
