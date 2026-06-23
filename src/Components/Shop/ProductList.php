@@ -117,6 +117,7 @@ class ProductList extends BaseComponent
             $product->min_order_qty = $dbProduct->min_order_qty;
             $product->qty_interval = $dbProduct->qty_interval;
             $product->allow_back_order = $dbProduct->allow_back_order ?? false;
+            $product->short_description = $ownProduct->short_description ?? null;
 
             $products[$index] = $product;
         }
@@ -164,7 +165,6 @@ class ProductList extends BaseComponent
                     $product->min_order_qty = $product->ERP->MinOrderQuantity ?? $ownProduct->min_order_qty;
                     $product->qty_interval = $product->ERP->QuantityInterval ?? $ownProduct->qty_interval;
                     $product->allow_back_order = $product->ERP->AllowBackOrder ?? $ownProduct->allow_back_order ?? false;
-                    $product->short_description = $ownProduct->short_description ?? null;
                 });
 
             }

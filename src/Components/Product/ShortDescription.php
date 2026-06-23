@@ -3,8 +3,6 @@
 namespace Amplify\Frontend\Components\Product;
 
 use Amplify\Frontend\Abstracts\BaseComponent;
-use Amplify\System\Backend\Models\Product;
-use Amplify\System\Sayt\Classes\ItemRow;
 use Closure;
 use Illuminate\Contracts\View\View;
 
@@ -13,7 +11,7 @@ use Illuminate\Contracts\View\View;
  */
 class ShortDescription extends BaseComponent
 {
-    public function __construct(public ItemRow|Product $product, public mixed $loop = null)
+    public function __construct(public ?string $content = null, public int $lines = 2)
     {
         parent::__construct();
     }
@@ -23,7 +21,7 @@ class ShortDescription extends BaseComponent
      */
     public function shouldRender(): bool
     {
-        return true;
+        return !empty($this->content);
     }
 
     /**
@@ -31,7 +29,6 @@ class ShortDescription extends BaseComponent
      */
     public function render(): View|Closure|string
     {
-
         return view('widget::product.short-description');
     }
 }
