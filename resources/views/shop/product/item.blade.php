@@ -28,7 +28,7 @@
         @endif
         <x-product.name element="span" :product="$product" class="product-title d-block"/>
 
-        <x-product.short-description :content="$product->short_description ?? ''"/>
+        <x-product.short-description :content="$product->short_description" :lines="2"/>
 
         <x-product.price
                 element="div"

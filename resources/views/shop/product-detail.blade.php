@@ -7,7 +7,7 @@
             <x-product.item-number :product="$product" format="{product_code}" element="h4"
                                    class="text-primary font-weight-bold my-3"/>
 
-            <h2 class="product-title lead">{{ $product->Product_Name ?? '' }}</h2>
+            <h2 class="product-title">{{ $product->Product_Name ?? '' }}</h2>
 
             <x-product-manufacture-image :product="$product"/>
 
@@ -19,9 +19,7 @@
                     :uom="$product->ERP?->UnitOfMeasure ?? 'EA'"
                     :std-price="$product->Msrp->toFloat()"/>
 
-            <div class="product-full-summary">
-                {!! $product->short_description ?? '' !!}
-            </div>
+            <x-product.short-description :content="$product->short_description ?? ''" :lines="2"/>
 
             <div class="row margin-top-1x">
                 <div class="col-sm-4">
@@ -82,6 +80,7 @@
                  'sku' => ['label' => 'Products'],
                 'feature' => ['label' => 'Features', 'style' => 'list'],
                 'specification' => ['label' => 'Specifications', 'style' => 'list'],
+                'document',
                 'related-products' => ['label' => 'Related'],
             ]">
         <x-slot:before>

@@ -96,7 +96,7 @@ class Breadcrumb extends BaseComponent
     {
         return getIsDynamicSiteFromCache()
             ? request()->getSchemeAndHttpHost().'/'.getDynamicSiteSlugFromCache()
-            : route('frontend.index');
+            : config('amplify.cms.brand_logo_url', route('frontend.index'));
     }
 
     protected function loadDynamicPageBreadcrumbs(?Page $page = null): void
