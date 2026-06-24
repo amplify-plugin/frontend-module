@@ -210,6 +210,8 @@
 @use 'site-language-change';
 @use 'cart/item-info';
 @use 'cart/item-actions';
+@use 'notice/slider';
+
 .swal2-container {
     z-index: 99999 !important;
 }
