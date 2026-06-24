@@ -47,7 +47,9 @@ class QuickAction extends BaseComponent
             'available' => ErpApi::allowMultiWarehouse()
                 ? $this->product->total_quantity_available ?? 1
                 : $this->product->ERP->QuantityAvailable ?? 1,
-            'customer_back_order' => ErpApi::getCustomerDetail()->BackorderCode == 'Y',
+            'customer_back_order' => config('amplify.basic.enable_guest_pricing')
+                ? ErpApi::getCustomerDetail()->BackorderCode == 'Y'
+                : customer_check() && ErpApi::getCustomerDetail()->BackorderCode == 'Y',
             'product_back_order' => boolval($this->product->allow_back_order ?? 0),
         ];
 
