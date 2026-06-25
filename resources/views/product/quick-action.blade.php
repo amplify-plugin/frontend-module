@@ -14,7 +14,7 @@
         </div>
     @else
         @if($addToCart)
-            <div @class(['gap-2', 'd-flex' => $productView == 'list', 'd-grid' => $productView == 'grid'])>
+            <div @class(['gap-2', 'd-grid d-md-flex' => $productView == 'list', 'd-grid' => $productView == 'grid'])>
                 <x-cart.quantity-update :product="$product" :index="$index"/>
                 <button
                         data-warehouse="{{ $defaultWarehouse }}"
