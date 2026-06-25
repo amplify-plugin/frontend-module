@@ -139,29 +139,29 @@ class ProductList extends BaseComponent
 
             if (! empty($erpProductCodes)) {
 
-                $erpProductDetails = ErpApi::getProductPriceAvailability([
+                $productPriceAvailability = ErpApi::getProductPriceAvailability([
                     'items' => $erpProductCodes, 'warehouse' => trim($warehouseString,',')
                 ]);
 
                 $warehouse_codes = array_unique([$erpCustomer->DefaultWarehouse, customer()?->warehouse?->code, config('amplify.frontend.guest_checkout_warehouse')]);
 
-                array_walk($products, function (ItemRow &$product) use ($erpProductDetails, $warehouse_codes, $dbProducts) {
+                array_walk($products, function (ItemRow &$product) use ($productPriceAvailability, $warehouse_codes, $dbProducts) {
 
-                    $filteredPriceAvailability = $erpProductDetails
+                    $filteredPriceAvailability = $productPriceAvailability
                         ->where('ItemNumber', $product->Product_Code)
                         ->whereIn('WarehouseID', $warehouse_codes);
 
                     $product->ERP = $filteredPriceAvailability->isNotEmpty()
                         ? $filteredPriceAvailability->first()
-                        : $erpProductDetails->where('ItemNumber', $product->Product_Code)
+                        : $productPriceAvailability->where('ItemNumber', $product->Product_Code)
                             ->first();
 
-                    $product->avaliable = $erpProductDetails
+                    $product->avaliable = $productPriceAvailability
                         ->where('ItemNumber', $product->Product_Code)
                         ->where('QuantityAvailable', '>=', 1)
                         ->count();
 
-                    $product->total_quantity_available = $erpProductDetails->where('ItemNumber', $product->Product_Code)->sum('QuantityAvailable');
+                    $product->total_quantity_available = $productPriceAvailability->where('ItemNumber', $product->Product_Code)->sum('QuantityAvailable');
                     $ownProduct = $dbProducts->firstWhere('id', '=', $product->Amplify_Id);
                     $product->min_order_qty = $product->ERP->MinOrderQuantity ?? $ownProduct->min_order_qty;
                     $product->qty_interval = $product->ERP->QuantityInterval ?? $ownProduct->qty_interval;

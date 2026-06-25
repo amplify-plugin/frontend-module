@@ -24,7 +24,7 @@ class Slider extends BaseComponent
     {
         parent::__construct();
 
-        $this->notices = Notice::whereDate('started_at', '>=', now())
+        $this->notices = Notice::whereDate('started_at', '<=', now())
             ->whereDate('ended_at', '>=', now())
             ->where('enabled', true)
             ->get();

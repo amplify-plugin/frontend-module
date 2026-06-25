@@ -17,6 +17,7 @@ class Index extends BaseComponent
      * @var LengthAwarePaginator
      */
     public $notices;
+
     public function __construct()
     {
         parent::__construct();
@@ -24,7 +25,8 @@ class Index extends BaseComponent
         $this->notices = Notice::where('enabled', true)
             ->when(request()->filled('id'), function ($query) {
                 return $query->where('id', request('id'));
-            })
+            })->whereDate('started_at', '<=', now())
+            ->whereDate('ended_at', '>=', now())
             ->paginate(15);
     }
 
