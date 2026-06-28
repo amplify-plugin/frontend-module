@@ -34,6 +34,8 @@ class MyProfileController extends Controller
         $contact = customer(true);
         $contact->name = $request->input('name');
         $contact->phone = $request->input('phone');
+        $contact->account_title_id = $request->input('account_title_id');
+
         $contact->redirect_route = $request->input('redirect_route', 'dashboard');
         if ($request->filled('new_password')) {
             $contact->password = $request->input('new_password');
