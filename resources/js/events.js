@@ -35,6 +35,15 @@ export class EcommerceEvent extends CustomEvent {
 |--------------------------------------------------------------------------
 */
 
+export class InitEvent extends SystemEvent {
+    static EVENT_NAME = 'amplify.init';
+
+    constructor(data) {
+        super(InitEvent.EVENT_NAME, data);
+    }
+}
+
+
 export class QuantityChangeEvent extends SystemEvent {
     static EVENT_NAME = 'qty_change';
 

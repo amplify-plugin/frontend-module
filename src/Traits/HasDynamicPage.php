@@ -17,7 +17,7 @@ trait HasDynamicPage
      * to display on this request
      * N.B: For page id/type declaration
      *
-     * @param  null  $id
+     * @param null $id
      *
      * @throws \ErrorException
      *
@@ -31,7 +31,7 @@ trait HasDynamicPage
 
         $page = Page::published()->find($id);
 
-        if (! $page) {
+        if (!$page) {
             abort(404, 'Page Not Found');
         }
 
@@ -43,7 +43,7 @@ trait HasDynamicPage
      * to display on this request
      * N.B: For page type declaration
      *
-     * @param  null  $type
+     * @param null $type
      *
      * @throws \ErrorException
      *
@@ -57,7 +57,7 @@ trait HasDynamicPage
 
         $page = Page::published()->wherePageType($type)->first();
 
-        if (! $page) {
+        if (!$page) {
             abort(404, 'Page Not Found');
         }
 
@@ -69,7 +69,7 @@ trait HasDynamicPage
      * from slug to display on this request
      * N.B: For page type declaration
      *
-     * @param  string|null  $slug
+     * @param string|null $slug
      *
      * @throws \ErrorException
      *
@@ -85,7 +85,7 @@ trait HasDynamicPage
 
         $page = Page::published()->whereSlug($slug)->first();
 
-        if (! $page) {
+        if (!$page) {
             abort(404, 'Page Not Found');
         }
 
@@ -109,8 +109,7 @@ trait HasDynamicPage
 
         push_css($page->styles ?? '', 'internal-style');
 
-        $component = new class($this->wrapPageContent($page->content ?? '')) extends \Illuminate\View\Component
-        {
+        $component = new class($this->wrapPageContent($page->content ?? '')) extends \Illuminate\View\Component {
             protected $template;
 
             public function __construct($template)
@@ -160,8 +159,8 @@ trait HasDynamicPage
     private function pushToStack(View &$view, string $prefix, string $group): void
     {
         $name = ($group == AssetsLoader::DEFAULT_GROUP) ? "{$prefix}-{$group}" : $group;
-        $view->getFactory()->startPush($name, trim(AssetsFacade::{$prefix}($group)).PHP_EOL);
-        if (! empty($content)) {
+        $view->getFactory()->startPush($name, trim(AssetsFacade::{$prefix}($group)) . PHP_EOL);
+        if (!empty($content)) {
             $view->getFactory()->stopPush();
         }
     }
@@ -211,11 +210,49 @@ trait HasDynamicPage
             mix('js/scripts.min.js', $themePrefix),
         ], 'template-script');
 
+        $this->pushConfigToFrontend();
+
         if (file_exists(public_path("{$themePrefix}/js/custom.js"))) {
             push_js([
                 mix('js/custom.js', $themePrefix),
             ], 'custom-script');
         }
+    }
+
+    private function pushConfigToFrontend()
+    {
+        $data = [
+            'env' => config('app.env', 'local'),
+            'name' => config('app.name', 'Amplify'),
+            'debug' => config('app.debug', false),
+            'currency' => config('amplify.basic.global_currency', 'USD'),
+            'language' => config('amplify.basic.default_language', 'en'),
+            'dateTimeFormat' => config('amplify.basic.date_time_format', 'Y-m-d H:i:s'),
+            'dateFormat' => config('amplify.basic.date_format', 'Y-m-d'),
+            'allowGuestPrice' => config('amplify.basic.enable_guest_pricing', false),
+            'cart' => [
+                'maxQuantity' => config('amplify.basic.max_cart_item_quantity', 9999999999),
+                'notAvailableMsg' => __('Part number :code is not available on our website. Please contact your representative, email us at <a href="mailto::email">:email</a> , or call us at <a href="tel::phone">:phone.', [
+                    'code' => "__product_code__",
+                    'email' => config('amplify.cms.email'),
+                    'phone' => config('amplify.cms.phone'),
+                ]),
+            ],
+            'url' => [
+                'carts' => url()->route('frontend.carts.index'),
+                'favourites' => url()->route('frontend.favourites.store'),
+                'orderLists' => url()->route('frontend.order-lists.store'),
+                'orderExport' => url()->route('frontend.orders.export'),
+            ]
+        ];
+
+
+        $jsonConfig = json_encode($data, JSON_PRETTY_PRINT);
+
+        push_js(
+            fn() => "document.addEventListener('DOMContentLoaded', () => Amplify.init({$jsonConfig}))",
+            'template-script'
+        );
     }
 
     private function wrapPageContent(string $content): string
@@ -234,8 +271,8 @@ HTML;
     /**
      * Build a standardized API JSON response.
      *
-     * @param  int  $status  HTTP status code (default: 200)
-     * @param  array  $extra  Additional data to merge into the response
+     * @param int $status HTTP status code (default: 200)
+     * @param array $extra Additional data to merge into the response
      */
     public function apiResponse(bool $success, string $message, int $status = 200, array $extra = []): \Illuminate\Http\JsonResponse
     {

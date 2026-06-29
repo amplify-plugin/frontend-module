@@ -1,5 +1,5 @@
 import Swal from 'sweetalert2';
-import {AddToCartEvent, RemoveFromCartEvent, RequestQuoteEvent} from './events.js';
+import {AddToCartEvent, InitEvent, RemoveFromCartEvent, RequestQuoteEvent} from './events.js';
 
 window.swal = Swal.mixin({
     theme: 'bootstrap-4-light',
@@ -12,25 +12,39 @@ window.swal = Swal.mixin({
 });
 
 window.Amplify = {
-    config: {},
-    cart: null,
+    config: {
+        env: 'production',
+        name: 'Amplify',
+        debug: false,
+        currency: 'USD',
+        language: 'en',
+        dateFormat: 'dd/mm/yyyy',
+        dateTimeFormat: 'dd/mm/yyyy',
+        allowGuestPrice: false,
+        cart: {},
+        url: {
+            carts: '/carts',
+            favourites: '/favourites',
+            orderLists: '/order-lists',
+            orderExport: '/orders/export',
+        }
+    },
+    cart: {},
+
     init(config) {
         this.config = config;
+        window.dispatchEvent(new InitEvent(this.config));
     },
-    cartUrl: (append = '') => '/carts' + append,
+
+    cartUrl: (append = '') => this.config.url.carts + append,
     cartItemRemoveUrl: () => '/carts/remove/cart_item_id',
     maxCartItemQuantity: () => 9999999999,
-    favouritesCreateUrl: () => '/favourites',
-    orderListUrl: () => '/order-lists',
-    orderExportUrl: () => '/orders/export',
+    favouritesCreateUrl: () => this.config.url.favourites,
+    orderListUrl: () => this.config.url.orderLists,
+    orderExportUrl: () => this.cart.url.orderExport,
 
     productNotAvailableMessage(code) {
-
-        // return `Part number ${code} is not available on our website. Please contact your representative, email us at <a href="mailto::email">:email</a> , or call us at <a href="tel::phone">:phone.', [
-        //                 'code' => $item['product_code'],
-        //                 'email' => config('amplify.cms.email'),
-        //                 'phone' => config('amplify.cms.phone'),
-        //             ])`
+        return `${this.config.cart.notAvailableMsg}`.replace('__product_code__', code).toString();
     },
 
     isHtml(text) {
@@ -676,7 +690,7 @@ window.Amplify = {
         let minOrderQty = targetElement.dataset.minOrderQty;
 
         if (!this.isNumeric(minOrderQty)) {
-            this.alert(`You entered an invalid quantity. Product ${productCode} requires a quantity between 1 and ${this.maxCartItemQuantity()}.`, 'Cart');
+            this.alert(this.productNotAvailableMessage(productCode), 'Cart');
             return false;
         }
 
@@ -1612,6 +1626,7 @@ window.Amplify = {
             margin: 10,
             dots: false,
             nav: true,
+            navText: ["", ""],
             autoWidth: true,
             responsive: {
                 0: {
