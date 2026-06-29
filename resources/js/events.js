@@ -39,6 +39,9 @@ export class InitEvent extends SystemEvent {
     static EVENT_NAME = 'amplify.init';
 
     constructor(data) {
+
+        console.log("Amplify Initialized...");
+
         super(InitEvent.EVENT_NAME, data);
     }
 }
