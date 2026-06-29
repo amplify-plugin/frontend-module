@@ -266,7 +266,7 @@ class AnalyticInit extends BaseComponent
                         'item_id' => $cartItem->product_code,
                         'item_name' => $cartItem->product_name,
                         'price' => round($cartItem->unitprice ?? 0, 2),
-                        'quantity' => $cartItem->quantity
+                        'quantity' => floatval($cartItem->quantity)
                     ];
                 })->toArray(),
             ]
