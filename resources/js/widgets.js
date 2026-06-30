@@ -39,11 +39,21 @@ window.Amplify = {
     cartUrl(append = '') {
         return this.config.url.carts + append;
     },
-    cartItemRemoveUrl: () => '/carts/remove/cart_item_id',
-    maxCartItemQuantity: () => 9999999999,
-    favouritesCreateUrl: () => this.config.url.favourites,
-    orderListUrl: () => this.config.url.orderLists,
-    orderExportUrl: () => this.cart.url.orderExport,
+    cartItemRemoveUrl() {
+        return '/carts/remove/cart_item_id';
+    },
+    maxCartItemQuantity() {
+        return this.config.cart.maxQuantity;
+    },
+    favouritesCreateUrl() {
+        return this.config.url.favourites;
+    },
+    orderListUrl() {
+        return this.config.url.orderLists;
+    },
+    orderExportUrl() {
+        return this.config.url.orderExport;
+    },
 
     productNotAvailableMessage(code) {
         return `${this.config.cart.notAvailableMsg}`.replace('__product_code__', code).toString();
@@ -1761,7 +1771,7 @@ window.Amplify = {
             },
             preConfirm: async () => {
                 try {
-                    return await $.ajax(this.orderExportUrl(), {
+                    return await $.ajax(Amplify.orderExportUrl(), {
                         type: 'POST',
                         data: JSON.stringify({
                             entries: entries,
@@ -1782,6 +1792,7 @@ window.Amplify = {
                         },
                     });
                 } catch (error) {
+                    console.error(error);
                     return false;
                 }
             },
@@ -1825,6 +1836,8 @@ window.Amplify = {
 
                 URL.revokeObjectURL(url);
             }
+        }).catch((err) => {
+            console.error(err);
         })
     }
 }
