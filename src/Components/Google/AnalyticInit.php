@@ -156,15 +156,15 @@ class AnalyticInit extends BaseComponent
             : ['sei_user_type' => 'guest', 'sei_user_id' => 'public', 'sei_user_name' => 'Guest'];
 
         if (session()->has('loggedIn')) {
-            $data[] = ['event' => 'login', 'method' => 'password'];
+            $data[] = ['event' => 'login', 'method' => 'password', 'ecommerce' => null];
         }
 
         if (session()->has('customerSignedUp')) {
-            $data[] = ['event' => 'sign_up', 'method' => 'registration', 'type' => 'new_retail_customer'];
+            $data[] = ['event' => 'sign_up', 'method' => 'registration', 'type' => 'new_retail_customer', 'ecommerce' => null];
         }
 
         if (session()->has('contactSignedUp')) {
-            $data[] = ['event' => 'sign_up', 'method' => 'registration', 'type' => 'request_account'];
+            $data[] = ['event' => 'sign_up', 'method' => 'registration', 'type' => 'request_account', 'ecommerce' => null];
         }
 
         if ($page = store('dynamicPageModel')) {
@@ -266,7 +266,7 @@ class AnalyticInit extends BaseComponent
                         'item_id' => $cartItem->product_code,
                         'item_name' => $cartItem->product_name,
                         'price' => round($cartItem->unitprice ?? 0, 2),
-                        'quantity' => $cartItem->quantity
+                        'quantity' => floatval($cartItem->quantity)
                     ];
                 })->toArray(),
             ]

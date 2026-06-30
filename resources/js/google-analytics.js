@@ -134,7 +134,7 @@ window.addEventListener('request_quote', function (event) {
                 item_id: item.product_code,
                 item_name: item.product_name,
                 price: parseFloat(item.unitprice),
-                quantity: item.qty
+                quantity: item.quantity ?? item.qty ?? null
             });
         });
 

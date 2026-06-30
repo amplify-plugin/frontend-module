@@ -36,7 +36,9 @@ window.Amplify = {
         window.dispatchEvent(new InitEvent(this.config));
     },
 
-    cartUrl: (append = '') => this.config.url.carts + append,
+    cartUrl(append = '') {
+        return this.config.url.carts + append;
+    },
     cartItemRemoveUrl: () => '/carts/remove/cart_item_id',
     maxCartItemQuantity: () => 9999999999,
     favouritesCreateUrl: () => this.config.url.favourites,
@@ -587,7 +589,7 @@ window.Amplify = {
                             <a class="dropdown-product-title" href="${product.url}">
                                 ${product.product_name}
                             </a>
-                            <span class="dropdown-product-details">${product.qty} x ${product.price} = ${product.subtotal}</span>
+                            <span class="dropdown-product-details" style="font-size: 90%">${product.qty} @ ${product.price}/${product.uom} = ${product.subtotal}</span>
                         </div>
                     </div>`);
                     });

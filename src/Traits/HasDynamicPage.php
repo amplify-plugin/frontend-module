@@ -250,7 +250,7 @@ trait HasDynamicPage
         $jsonConfig = json_encode($data, JSON_PRETTY_PRINT);
 
         push_js(
-            fn() => "document.addEventListener('DOMContentLoaded', () => Amplify.init({$jsonConfig}))",
+            fn() => "Amplify.init({$jsonConfig});",
             'template-script'
         );
     }
