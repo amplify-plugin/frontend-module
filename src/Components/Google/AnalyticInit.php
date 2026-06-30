@@ -230,22 +230,22 @@ class AnalyticInit extends BaseComponent
         /**
          * @var RemoteResults $eaResponse
          */
-        if ($eaResponse = store('eaProductsData')) {
+        if ($eaResponse = store('eaProductDetail')) {
 
             if (!$eaResponse->noResultFound()) {
-                foreach ($eaResponse->getProducts() as $product) {
 
-                    $price = $product->Price?->toFloat() ?? $product->Msrp?->toFloat() ?? null;
+                $product = $eaResponse->getFirstProduct();
 
-                    $event['ecommerce']['value'] = !empty($price) ? round($price, 2) : null;
+                $price = $product->Price?->toFloat() ?? $product->Msrp?->toFloat() ?? null;
 
-                    $event['ecommerce']['items'][] = [
-                        'item_id' => $product->Sku_ProductCode ?? $product->Product_Code,
-                        'item_name' => $product->Product_Name,
-                        'item_brand' => $product->Manufacturer,
-                        'item_category' => null,
-                    ];
-                }
+                $event['ecommerce']['value'] = !empty($price) ? round($price, 2) : null;
+
+                $event['ecommerce']['items'][] = [
+                    'item_id' => $product->Sku_ProductCode ?? $product->Product_Code,
+                    'item_name' => $product->Product_Name,
+                    'item_brand' => $product->Manufacturer,
+                    'item_category' => null,
+                ];
             }
         }
 
