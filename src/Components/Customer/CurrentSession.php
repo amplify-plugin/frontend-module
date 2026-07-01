@@ -32,9 +32,9 @@ class CurrentSession extends BaseComponent
 
             $contact = customer(true);
             $customer = $contact->customer;
-            $currentLogin = $contact->contactLogins()->latest()->first();
-            $sessionWarehouse = $currentLogin?->warehouse ?? null;
-            $sessionShipTo = $currentLogin?->customerAddress ?? null;
+            $assignmentLogin = $contact->assignmentLogins()->where('customer_id', $customer->getKey())->first();
+            $sessionWarehouse = $assignmentLogin?->warehouse ?? null;
+            $sessionShipTo = $assignmentLogin?->customerAddress ?? null;
 
             $sessionInfo['Account Name'] = $contact->name ?? 'N/A';
             $sessionInfo['Customer'] = $customer->customer_name ? "{$customer->erp_id} - {$customer->customer_name}" : 'N/A';
