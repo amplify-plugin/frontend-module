@@ -39,18 +39,23 @@ window.Amplify = {
     cartUrl(append = '') {
         return this.config.url.carts + append;
     },
+
     cartItemRemoveUrl() {
         return '/carts/remove/cart_item_id';
     },
+
     maxCartItemQuantity() {
         return this.config.cart.maxQuantity;
     },
+
     favouritesCreateUrl() {
         return this.config.url.favourites;
     },
+
     orderListUrl() {
         return this.config.url.orderLists;
     },
+
     orderExportUrl() {
         return this.config.url.orderExport;
     },
@@ -1839,5 +1844,46 @@ window.Amplify = {
         }).catch((err) => {
             console.error(err);
         })
+    },
+
+    compareProducts(target, product, action, attach = null) {
+        const defaultContent = target?.innerHTML ?? '';
+
+        $.ajax(this.config.url.productCompare, {
+            beforeSend: () => {
+                target.innerHTML = '<i class="icon-loader spinner"></i> Processing...';
+
+                if (action === 'list') {
+                    document.querySelector(attach).innerHTML = '';
+                }
+            },
+            method: "POST",
+            dataType: "json",
+            data: {
+                product: product ?? null,
+                action: action,
+            },
+            success: (response) => {
+                if (action === 'list') {
+                    document.querySelector(attach).innerHTML = response.data.html;
+                } else {
+                    this.alert(response.message, 'Product Comparison', {
+                        icon: response.success === true ? 'success' : 'error',
+                        timer: 2500,
+                        timerProgressBar: true,
+                    });
+                }
+            },
+            error: (xhr) => {
+                this.alert(
+                    xhr.responseJSON?.message ?? 'Something Went Wrong. PLease try again later.',
+                    'Product Comparison', {
+                        timer: 2500,
+                        timerProgressBar: true,
+                    });
+            }
+        }).always(() => {
+            target.innerHTML = defaultContent;
+        });
     }
 }

@@ -1,0 +1,3 @@
+<{{$element}} {!! $htmlAttributes !!}>
+{{ $slot ?? '' }}
+</{{$element}}>

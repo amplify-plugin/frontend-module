@@ -243,6 +243,7 @@ trait HasDynamicPage
                 'favourites' => url()->route('frontend.favourites.store'),
                 'orderLists' => url()->route('frontend.order-lists.store'),
                 'orderExport' => url()->route('frontend.orders.export'),
+                'productCompare' => url()->route('frontend.product-compare')
             ]
         ];
 

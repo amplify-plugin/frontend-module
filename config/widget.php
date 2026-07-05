@@ -1,5 +1,7 @@
 <?php
 
+use Amplify\Frontend\Components;
+
 /**
  * if widget attribute reserved equals true then theme developers cannot update this
  * if widget attribute internal equals true then widget will not display in user page create interface
@@ -7,7 +9,7 @@
 
 return [
 
-    Amplify\Frontend\Components\Auth\Login::class => [
+    Components\Auth\Login::class => [
         'name' => 'login',
         'reserved' => true,
         'internal' => false,
@@ -55,7 +57,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Login widget',
     ],
-    Amplify\Frontend\Components\Auth\Registration::class => [
+    Components\Auth\Registration::class => [
         'name' => 'registration',
         'reserved' => true,
         'internal' => false,
@@ -265,7 +267,7 @@ return [
             ],
         ],
     ],
-    Amplify\Frontend\Components\Auth\Registration\RequestAccountTab::class => [
+    Components\Auth\Registration\RequestAccountTab::class => [
         'name' => 'request-account-tab',
         'reserved' => true,
         'internal' => false,
@@ -340,7 +342,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Request account tab widget',
     ],
-    Amplify\Frontend\Components\Auth\Registration\NewCustomerTab::class => [
+    Components\Auth\Registration\NewCustomerTab::class => [
         'name' => 'new-customer-tab',
         'reserved' => true,
         'internal' => true,
@@ -430,7 +432,7 @@ return [
         '@nestedItems' => [],
         'description' => 'New cash customer tab widget',
     ],
-    Amplify\Frontend\Components\Auth\Registration\AdditionalTab::class => [
+    Components\Auth\Registration\AdditionalTab::class => [
         'name' => 'additional-tab',
         'reserved' => true,
         'internal' => true,
@@ -441,7 +443,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Additional tab widget',
     ],
-    Amplify\Frontend\Components\Auth\ForgotPassword::class => [
+    Components\Auth\ForgotPassword::class => [
         'name' => 'forgot-password',
         'reserved' => true,
         'internal' => false,
@@ -471,7 +473,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Auth\ForceResetPassword::class => [
+    Components\Auth\ForceResetPassword::class => [
         'name' => 'force-reset-password',
         'reserved' => true,
         'internal' => false,
@@ -489,7 +491,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Auth\Login\InputLogin::class => [
+    Components\Auth\Login\InputLogin::class => [
         'name' => 'auth.login.input-login',
         'reserved' => true,
         'internal' => true,
@@ -500,7 +502,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Login widget',
     ],
-    Amplify\Frontend\Components\Auth\Login\InputPassword::class => [
+    Components\Auth\Login\InputPassword::class => [
         'name' => 'auth.login.input-password',
         'reserved' => true,
         'internal' => true,
@@ -511,7 +513,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Login widget',
     ],
-    Amplify\Frontend\Components\Auth\Login\InputRememberForgotPassword::class => [
+    Components\Auth\Login\InputRememberForgotPassword::class => [
         'name' => 'auth.login.input-remember-forgot-password',
         'reserved' => true,
         'internal' => true,
@@ -522,7 +524,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Login widget',
     ],
-    Amplify\Frontend\Components\CartSummary::class => [
+    Components\CartSummary::class => [
         'name' => 'cart-summary',
         'reserved' => true,
         'internal' => false,
@@ -593,7 +595,7 @@ return [
             ],
         ],
     ],
-    Amplify\Frontend\Components\Customer\Profile::class => [
+    Components\Customer\Profile::class => [
         'name' => 'customer.profile',
         'reserved' => true,
         'internal' => false,
@@ -610,7 +612,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\SwitchAccount::class => [
+    Components\Customer\SwitchAccount::class => [
         'name' => 'customer.switch-account',
         'reserved' => true,
         'internal' => false,
@@ -621,7 +623,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\Dashboard::class => [
+    Components\Customer\Dashboard::class => [
         'name' => 'customer.dashboard',
         'reserved' => true,
         'internal' => false,
@@ -632,7 +634,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\Ticket\Index::class => [
+    Components\Customer\Ticket\Index::class => [
         'name' => 'customer.ticket.list',
         'reserved' => true,
         'internal' => false,
@@ -643,7 +645,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\Ticket\Create::class => [
+    Components\Customer\Ticket\Create::class => [
         'name' => 'customer.ticket.create',
         'reserved' => true,
         'internal' => false,
@@ -654,7 +656,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\Ticket\Conversation::class => [
+    Components\Customer\Ticket\Conversation::class => [
         'name' => 'customer.ticket.conversation',
         'reserved' => true,
         'internal' => false,
@@ -665,7 +667,7 @@ return [
         '@nestedItems' => null,
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\Invoice\Index::class => [
+    Components\Customer\Invoice\Index::class => [
         'name' => 'customer.invoice.list',
         'reserved' => true,
         'internal' => false,
@@ -742,7 +744,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\Invoice\Details::class => [
+    Components\Customer\Invoice\Details::class => [
         'name' => 'customer.invoice.details',
         'reserved' => true,
         'internal' => false,
@@ -769,7 +771,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\AccountSummary::class => [
+    Components\Customer\AccountSummary::class => [
         'name' => 'customer.account-summary',
         'reserved' => false,
         'internal' => false,
@@ -780,7 +782,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\Address\Index::class => [
+    Components\Customer\Address\Index::class => [
         'name' => 'customer.address.list',
         'reserved' => true,
         'internal' => false,
@@ -828,7 +830,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\Address\Detail::class => [
+    Components\Customer\Address\Detail::class => [
         'name' => 'customer.address.details',
         'reserved' => true,
         'internal' => false,
@@ -839,7 +841,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\Address\Form::class => [
+    Components\Customer\Address\Form::class => [
         'name' => 'customer.address.form',
         'reserved' => true,
         'internal' => false,
@@ -850,7 +852,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\Draft\Index::class => [
+    Components\Customer\Draft\Index::class => [
         'name' => 'customer.cart.list',
         'reserved' => true,
         'internal' => false,
@@ -861,7 +863,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\Draft\Details::class => [
+    Components\Customer\Draft\Details::class => [
         'name' => 'customer.cart.details',
         'reserved' => true,
         'internal' => false,
@@ -872,7 +874,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\Quotation\Index::class => [
+    Components\Customer\Quotation\Index::class => [
         'name' => 'customer.quotation.list',
         'reserved' => true,
         'internal' => false,
@@ -934,7 +936,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\Quotation\Details::class => [
+    Components\Customer\Quotation\Details::class => [
         'name' => 'customer.quotation.details',
         'reserved' => true,
         'internal' => false,
@@ -956,7 +958,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\Favourites::class => [
+    Components\Customer\Favourites::class => [
         'name' => 'customer.favourites',
         'reserved' => true,
         'internal' => false,
@@ -988,7 +990,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\OrderList\Index::class => [
+    Components\Customer\OrderList\Index::class => [
         'name' => 'customer.order-list.list',
         'reserved' => true,
         'internal' => false,
@@ -1025,7 +1027,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\OrderList\Details::class => [
+    Components\Customer\OrderList\Details::class => [
         'name' => 'customer.order-list.details',
         'reserved' => true,
         'internal' => false,
@@ -1042,7 +1044,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\Contact\Index::class => [
+    Components\Customer\Contact\Index::class => [
         'name' => 'customer.contact.list',
         'reserved' => true,
         'internal' => false,
@@ -1094,7 +1096,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\Contact\Form::class => [
+    Components\Customer\Contact\Form::class => [
         'name' => 'customer.contact.form',
         'reserved' => true,
         'internal' => false,
@@ -1111,7 +1113,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\Contact\Details::class => [
+    Components\Customer\Contact\Details::class => [
         'name' => 'customer.contact.details',
         'reserved' => true,
         'internal' => false,
@@ -1122,7 +1124,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\Role\Index::class => [
+    Components\Customer\Role\Index::class => [
         'name' => 'customer.role.list',
         'reserved' => true,
         'internal' => false,
@@ -1133,7 +1135,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\Role\Form::class => [
+    Components\Customer\Role\Form::class => [
         'name' => 'customer.role.form',
         'reserved' => true,
         'internal' => false,
@@ -1150,7 +1152,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\Role\Detail::class => [
+    Components\Customer\Role\Detail::class => [
         'name' => 'customer.role.details',
         'reserved' => true,
         'internal' => false,
@@ -1161,7 +1163,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\Order\Index::class => [
+    Components\Customer\Order\Index::class => [
         'name' => 'customer.order.list',
         'reserved' => true,
         'internal' => false,
@@ -1193,7 +1195,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\Order\Details::class => [
+    Components\Customer\Order\Details::class => [
         'name' => 'customer.order.details',
         'reserved' => true,
         'internal' => false,
@@ -1210,7 +1212,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\OrderHistory\Index::class => [
+    Components\Customer\OrderHistory\Index::class => [
         'name' => 'customer.order-history.list',
         'reserved' => true,
         'internal' => false,
@@ -1221,7 +1223,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\Role\Partials\Permissions::class => [
+    Components\Customer\Role\Partials\Permissions::class => [
         'name' => 'customer.role.partials.permissions',
         'reserved' => true,
         'internal' => true,
@@ -1231,7 +1233,7 @@ return [
         '@nestedItems' => [],
         'description' => 'customer role partials permissions widget',
     ],
-    Amplify\Frontend\Components\Customer\QuickList\Index::class => [
+    Components\Customer\QuickList\Index::class => [
         'name' => 'customer.quicklist.index',
         'reserved' => true,
         'internal' => false,
@@ -1263,7 +1265,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\QuickList\Details::class => [
+    Components\Customer\QuickList\Details::class => [
         'name' => 'customer.quicklist.details',
         'reserved' => true,
         'internal' => false,
@@ -1274,7 +1276,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\QuickList\Form::class => [
+    Components\Customer\QuickList\Form::class => [
         'name' => 'customer.quick-list.form',
         'reserved' => true,
         'internal' => false,
@@ -1285,7 +1287,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Customer quick list form widget',
     ],
-    Amplify\Frontend\Components\Customer\Order\Rules\Index::class => [
+    Components\Customer\Order\Rules\Index::class => [
         'name' => 'customer.order.rules.index',
         'reserved' => true,
         'internal' => false,
@@ -1296,7 +1298,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Customer order rules index widget',
     ],
-    Amplify\Frontend\Components\Customer\Order\Rules\Form::class => [
+    Components\Customer\Order\Rules\Form::class => [
         'name' => 'customer.order.rules.form',
         'reserved' => true,
         'internal' => false,
@@ -1307,7 +1309,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Customer order rules form widget',
     ],
-    Amplify\Frontend\Components\Customer\Order\AwaitingApprovals\Index::class => [
+    Components\Customer\Order\AwaitingApprovals\Index::class => [
         'name' => 'customer.order.awaiting-approvals.index',
         'reserved' => true,
         'internal' => false,
@@ -1318,7 +1320,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Customer order awaiting approvals index widget',
     ],
-    Amplify\Frontend\Components\Customer\Order\Approvals\Index::class => [
+    Components\Customer\Order\Approvals\Index::class => [
         'name' => 'customer.order.approvals.index',
         'reserved' => true,
         'internal' => false,
@@ -1329,7 +1331,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Customer order approvals index widget',
     ],
-    Amplify\Frontend\Components\Customer\Order\Rejected\Index::class => [
+    Components\Customer\Order\Rejected\Index::class => [
         'name' => 'customer.order.rejected.index',
         'reserved' => true,
         'internal' => false,
@@ -1340,7 +1342,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Customer order approvals index widget',
     ],
-    Amplify\Frontend\Components\Customer\Order\AwaitingApprovals\Form::class => [
+    Components\Customer\Order\AwaitingApprovals\Form::class => [
         'name' => 'customer.order.awaiting-approvals.form',
         'reserved' => true,
         'internal' => false,
@@ -1351,7 +1353,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Customer order awaiting approvals form widget',
     ],
-    Amplify\Frontend\Components\Customer\Order\Approvals\Form::class => [
+    Components\Customer\Order\Approvals\Form::class => [
         'name' => 'customer.order.approvals.form',
         'reserved' => true,
         'internal' => false,
@@ -1362,7 +1364,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Customer order approvals form widget',
     ],
-    Amplify\Frontend\Components\Customer\Order\Rejected\Form::class => [
+    Components\Customer\Order\Rejected\Form::class => [
         'name' => 'customer.order.rejected.form',
         'reserved' => true,
         'internal' => false,
@@ -1373,7 +1375,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Customer order reject form widget',
     ],
-    Amplify\Frontend\Components\Customer\Contact\Login\Index::class => [
+    Components\Customer\Contact\Login\Index::class => [
         'name' => 'customer.contact-login.index',
         'reserved' => true,
         'internal' => false,
@@ -1415,7 +1417,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Customer contact login index widget',
     ],
-    Amplify\Frontend\Components\Customer\Contact\Login\Form::class => [
+    Components\Customer\Contact\Login\Form::class => [
         'name' => 'customer.contact-login.form',
         'reserved' => true,
         'internal' => false,
@@ -1426,7 +1428,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Customer contact login form widget',
     ],
-    Amplify\Frontend\Components\Customer\Dashboard\OpenOrder::class => [
+    Components\Customer\Dashboard\OpenOrder::class => [
         'name' => 'customer.dashboard.open-order',
         'reserved' => true,
         'internal' => false,
@@ -1443,7 +1445,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Dashboard open order widget',
     ],
-    Amplify\Frontend\Components\Customer\Dashboard\PendingOrder::class => [
+    Components\Customer\Dashboard\PendingOrder::class => [
         'name' => 'customer.dashboard.pending-order',
         'reserved' => true,
         'internal' => false,
@@ -1460,7 +1462,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Dashboard pending order widget',
     ],
-    Amplify\Frontend\Components\Customer\Dashboard\MonthlyOrderAmount::class => [
+    Components\Customer\Dashboard\MonthlyOrderAmount::class => [
         'name' => 'customer.dashboard.monthly-order-amount',
         'reserved' => true,
         'internal' => false,
@@ -1477,7 +1479,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Dashboard monthly order amount widget',
     ],
-    Amplify\Frontend\Components\Customer\Cylinders::class => [
+    Components\Customer\Cylinders::class => [
         'name' => 'customer.cylinders',
         'reserved' => true,
         'internal' => false,
@@ -1488,7 +1490,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Customer cylinders widget',
     ],
-    Amplify\Frontend\Components\Customer\PastSales\Index::class => [
+    Components\Customer\PastSales\Index::class => [
         'name' => 'customer.past-sales.list',
         'reserved' => true,
         'internal' => false,
@@ -1499,7 +1501,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\PastSales\History::class => [
+    Components\Customer\PastSales\History::class => [
         'name' => 'customer.past-sales.history',
         'reserved' => true,
         'internal' => false,
@@ -1510,7 +1512,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Customer\Invoice\CenposPay::class => [
+    Components\Customer\Invoice\CenposPay::class => [
         'name' => 'customer.invoice.cenpos.pay',
         'reserved' => true,
         'internal' => false,
@@ -1521,7 +1523,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Cenpos invoice pay widget',
     ],
-    Amplify\Frontend\Components\HeaderMessage::class => [
+    Components\HeaderMessage::class => [
         'name' => 'site.header-message',
         'reserved' => true,
         'internal' => false,
@@ -1532,7 +1534,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Public alert message on site header configured from Setting > System Configuration > CMS',
     ],
-    Amplify\Frontend\Components\Google\MapFrame::class => [
+    Components\Google\MapFrame::class => [
         'name' => 'google-map',
         'reserved' => true,
         'internal' => false,
@@ -1543,7 +1545,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\ShopByBrand::class => [
+    Components\ShopByBrand::class => [
         'name' => 'shop-by-brand',
         'reserved' => true,
         'internal' => false,
@@ -1576,7 +1578,7 @@ return [
         '@nestedItems' => null,
         'description' => '',
     ],
-    Amplify\Frontend\Components\QuickOrder::class => [
+    Components\QuickOrder::class => [
         'name' => 'quick-order',
         'reserved' => true,
         'internal' => false,
@@ -1605,7 +1607,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\ShopByCatalog::class => [
+    Components\ShopByCatalog::class => [
         'name' => 'shop-by-catalog',
         'reserved' => true,
         'internal' => false,
@@ -1630,7 +1632,7 @@ return [
         'description' => '',
     ],
     // @deprecated
-    Amplify\Frontend\Components\CustomerOrder::class => [
+    Components\CustomerOrder::class => [
         'name' => 'customer-order',
         'reserved' => true,
         'internal' => false,
@@ -1641,7 +1643,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Faq::class => [
+    Components\Faq::class => [
         'name' => 'faq',
         'reserved' => true,
         'internal' => false,
@@ -1652,7 +1654,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Poster::class => [
+    Components\Poster::class => [
         'name' => 'poster',
         'reserved' => true,
         'internal' => false,
@@ -1666,7 +1668,7 @@ return [
         '@nestedItems' => null,
         'description' => '',
     ],
-    Amplify\Frontend\Components\Product\ProductSlider::class => [
+    Components\Product\ProductSlider::class => [
         'name' => 'product-slider',
         'reserved' => true,
         'internal' => false,
@@ -1755,7 +1757,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Product\FeaturedProduct::class => [
+    Components\Product\FeaturedProduct::class => [
         'name' => 'featured-product',
         'reserved' => true,
         'internal' => false,
@@ -1794,7 +1796,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Product\FavoriteList::class => [
+    Components\Product\FavoriteList::class => [
         'name' => 'product-favorite-list',
         'reserved' => true,
         'internal' => true,
@@ -1805,7 +1807,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Login widget',
     ],
-    Amplify\Frontend\Components\Product\HiddenFields::class => [
+    Components\Product\HiddenFields::class => [
         'name' => 'product-hidden-fields',
         'reserved' => true,
         'internal' => true,
@@ -1816,7 +1818,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Login widget',
     ],
-    Amplify\Frontend\Components\Product\ProductGallery::class => [
+    Components\Product\ProductGallery::class => [
         'name' => 'product.product-gallery',
         'reserved' => true,
         'internal' => true,
@@ -1827,7 +1829,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Login widget',
     ],
-    Amplify\Frontend\Components\Product\FavouriteManage::class => [
+    Components\Product\FavouriteManage::class => [
         'name' => 'favourite-manage',
         'reserved' => true,
         'internal' => true,
@@ -1838,7 +1840,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Product favourite manage button widget',
     ],
-    Amplify\Frontend\Components\Product\SkuQuickToCart::class => [
+    Components\Product\SkuQuickToCart::class => [
         'name' => 'product.sku-quick-to-cart',
         'reserved' => true,
         'internal' => true,
@@ -1849,7 +1851,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Product sku quick to cart widget',
     ],
-    Amplify\Frontend\Components\Product\DefaultDocumentLink::class => [
+    Components\Product\DefaultDocumentLink::class => [
         'name' => 'product.default-document-link',
         'reserved' => true,
         'internal' => true,
@@ -1862,7 +1864,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Product link to download Default Document',
     ],
-    Amplify\Frontend\Components\Product\InformationTabs::class => [
+    Components\Product\InformationTabs::class => [
         'name' => 'product.information-tabs',
         'reserved' => true,
         'internal' => true,
@@ -1890,7 +1892,7 @@ return [
         ],
         'description' => 'Display all meta information related to a single product',
     ],
-    Amplify\Frontend\Components\Product\ExtraTab::class => [
+    Components\Product\ExtraTab::class => [
         'name' => 'product.extra-tab',
         'reserved' => true,
         'internal' => true,
@@ -1912,7 +1914,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Display all meta information related to a single product',
     ],
-    Amplify\Frontend\Components\Product\NcnrItemFlag::class => [
+    Components\Product\NcnrItemFlag::class => [
         'name' => 'product.ncnr-item-flag',
         'reserved' => true,
         'internal' => true,
@@ -1923,7 +1925,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Product\InStockFlag::class => [
+    Components\Product\InStockFlag::class => [
         'name' => 'product.in-stock-flag',
         'reserved' => true,
         'internal' => true,
@@ -1934,7 +1936,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Product\OrderListManage::class => [
+    Components\Product\OrderListManage::class => [
         'name' => 'product-shopping-list',
         'reserved' => true,
         'internal' => true,
@@ -1945,7 +1947,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Customer shopping list widget',
     ],
-    Amplify\Frontend\Components\Product\CustomerPartNumber::class => [
+    Components\Product\CustomerPartNumber::class => [
         'name' => 'product-customer-part-number',
         'reserved' => true,
         'internal' => true,
@@ -1956,7 +1958,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Customer shopping list widget',
     ],
-    Amplify\Frontend\Components\Product\Price::class => [
+    Components\Product\Price::class => [
         'name' => 'product.price',
         'reserved' => true,
         'internal' => true,
@@ -1970,7 +1972,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Give an a product display price with UOM',
     ],
-    Amplify\Frontend\Components\Product\Availability::class => [
+    Components\Product\Availability::class => [
         'name' => 'product.availability',
         'reserved' => true,
         'internal' => true,
@@ -1984,7 +1986,128 @@ return [
         '@nestedItems' => [],
         'description' => 'Give an a product display quantity with value',
     ],
-    Amplify\Frontend\Components\ManufactureSlider::class => [
+    Components\Product\ProductSkuTable::class => [
+        'name' => 'product-sku-table',
+        'reserved' => true,
+        'internal' => true,
+        'model' => ['single_product', 'shop'],
+        '@inside' => null,
+        '@client' => null,
+        '@attributes' => [
+            [
+                'name' => 'product',
+                'type' => 'text',
+                'value' => '',
+            ],
+            [
+                'name' => 'is-fav-button-show',
+                'type' => 'boolean',
+                'value' => false,
+            ],
+            [
+                'name' => 'display-product-code',
+                'type' => 'boolean',
+                'value' => false,
+            ],
+        ],
+        '@nestedItems' => [],
+        'description' => 'Product product sku table widget',
+    ],
+    Components\Product\QuickAction::class => [
+        'name' => 'product.quick-action',
+        'reserved' => true,
+        'internal' => false,
+        '@inside' => null,
+        '@client' => null,
+        'model' => [],
+        '@attributes' => [
+            ['name' => 'cart-button-label', 'type' => 'text', 'value' => 'Add To Cart'],
+            ['name' => 'detail-button-label', 'type' => 'text', 'value' => 'View Details'],
+            ['name' => ':product', 'type' => 'text', 'value' => '$product'],
+        ],
+        '@nestedItems' => [],
+        'description' => 'The widget display a button to add item to cart.',
+    ],
+    Components\Product\ItemNumber::class => [
+        'name' => 'product.item-number',
+        'reserved' => true,
+        'internal' => false,
+        '@inside' => null,
+        '@client' => null,
+        'model' => [],
+        '@attributes' => [
+            ['name' => 'product', 'type' => 'text', 'value' => '$product'],
+            ['name' => 'format', 'type' => 'text', 'value' => ''],
+        ],
+        '@nestedItems' => [],
+        'description' => 'The widget display product unique  code, sku id.',
+    ],
+    Components\Product\MainImage::class => [
+        'name' => 'product.main-image',
+        'reserved' => true,
+        'internal' => false,
+        '@inside' => null,
+        '@client' => null,
+        'model' => [],
+        '@attributes' => [
+            ['name' => 'product', 'type' => 'text', 'value' => '$product'],
+            ['name' => 'seo-path', 'type' => 'text', 'value' => ''],
+            ['name' => ':wrap-link', 'type' => 'boolean', 'value' => 'true'],
+        ],
+        '@nestedItems' => [],
+        'description' => 'The widget display product main image.',
+    ],
+    Components\Product\Name::class => [
+        'name' => 'product.name',
+        'reserved' => true,
+        'internal' => false,
+        '@inside' => null,
+        '@client' => null,
+        'model' => [],
+        '@attributes' => [
+            ['name' => 'max-line', 'type' => 'number', 'value' => 2],
+            ['name' => 'element', 'type' => 'text', 'value' => 'div'],
+        ],
+        '@nestedItems' => [],
+        'description' => 'The widget display product short description.',
+    ],
+    Components\Product\ShortDescription::class => [
+        'name' => 'product.short-description',
+        'reserved' => true,
+        'internal' => false,
+        '@inside' => null,
+        '@client' => null,
+        'model' => [],
+        '@attributes' => [
+            ['name' => 'max-line', 'type' => 'number', 'value' => 2],
+            ['name' => 'element', 'type' => 'text', 'value' => 'div'],
+        ],
+        '@nestedItems' => [],
+        'description' => 'The widget display product short description.',
+    ],
+    Components\Product\Comparison\Index::class => [
+        'name' => 'product-comparison-list',
+        'reserved' => true,
+        'internal' => false,
+        '@inside' => null,
+        '@client' => null,
+        'model' => [],
+        '@attributes' => [],
+        '@nestedItems' => [],
+        'description' => 'This widget compare attribute, price and other commonality values among selected products.',
+    ],
+    Components\Product\Comparison\Manage::class => [
+        'name' => 'product-comparison-manage',
+        'reserved' => true,
+        'internal' => false,
+        '@inside' => null,
+        '@client' => null,
+        'model' => [],
+        '@attributes' => [],
+        '@nestedItems' => [],
+        'description' => 'This widget allows you to add or remove products for comparison.',
+    ],
+    Components\ManufactureSlider::class => [
         'name' => 'manufacture-slider',
         'reserved' => true,
         'internal' => false,
@@ -2036,7 +2159,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Service::class => [
+    Components\Service::class => [
         'name' => 'service',
         'reserved' => true,
         'internal' => false,
@@ -2077,7 +2200,7 @@ return [
         ],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Breadcrumb::class => [
+    Components\Breadcrumb::class => [
         'name' => 'breadcrumb',
         'reserved' => true,
         'internal' => false,
@@ -2104,7 +2227,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Address::class => [
+    Components\Address::class => [
         'name' => 'address',
         'reserved' => true,
         'internal' => false,
@@ -2146,7 +2269,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Counter::class => [
+    Components\Counter::class => [
         'name' => 'site.counter',
         'reserved' => true,
         'internal' => false,
@@ -2184,7 +2307,7 @@ return [
         'description' => '',
 
     ],
-    Amplify\Frontend\Components\Subscriber::class => [
+    Components\Subscriber::class => [
         'name' => 'subscriber',
         'reserved' => true,
         'internal' => false,
@@ -2206,7 +2329,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\ServiceItem::class => [
+    Components\ServiceItem::class => [
         'name' => 'service-item',
         'reserved' => true,
         'internal' => false,
@@ -2238,7 +2361,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Google\AnalyticInit::class => [
+    Components\Google\AnalyticInit::class => [
         'name' => 'google-analytic',
         'reserved' => true,
         'internal' => false,
@@ -2249,7 +2372,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Login widget',
     ],
-    Amplify\Frontend\Components\Checkout::class => [
+    Components\Checkout::class => [
         'name' => 'checkout',
         'reserved' => true,
         'internal' => false,
@@ -2285,7 +2408,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Checkout widget',
     ],
-    Amplify\Frontend\Components\OrderCheckout::class => [
+    Components\OrderCheckout::class => [
         'name' => 'order-checkout',
         'reserved' => true,
         'internal' => false,
@@ -2296,7 +2419,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Checkout widget',
     ],
-    Amplify\Frontend\Components\Checkout\Customer::class => [
+    Components\Checkout\Customer::class => [
         'name' => 'checkout.customer',
         'reserved' => true,
         'internal' => true,
@@ -2307,7 +2430,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Login widget',
     ],
-    Amplify\Frontend\Components\Checkout\Address::class => [
+    Components\Checkout\Address::class => [
         'name' => 'checkout.address',
         'reserved' => true,
         'internal' => true,
@@ -2318,7 +2441,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Checkout address widget',
     ],
-    Amplify\Frontend\Components\Checkout\Shipping::class => [
+    Components\Checkout\Shipping::class => [
         'name' => 'checkout.shipping',
         'reserved' => true,
         'internal' => true,
@@ -2329,7 +2452,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Login widget',
     ],
-    Amplify\Frontend\Components\Checkout\Billing::class => [
+    Components\Checkout\Billing::class => [
         'name' => 'checkout.billing',
         'reserved' => true,
         'internal' => true,
@@ -2340,7 +2463,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Login widget',
     ],
-    Amplify\Frontend\Components\Checkout\Review::class => [
+    Components\Checkout\Review::class => [
         'name' => 'checkout.review',
         'reserved' => true,
         'internal' => true,
@@ -2351,7 +2474,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Login widget',
     ],
-    Amplify\Frontend\Components\Checkout\Completed::class => [
+    Components\Checkout\Completed::class => [
         'name' => 'checkout.completed',
         'reserved' => true,
         'internal' => false,
@@ -2373,7 +2496,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Order Completed widget',
     ],
-    Amplify\Frontend\Components\Checkout\Summary::class => [
+    Components\Checkout\Summary::class => [
         'name' => 'checkout.summary',
         'reserved' => false,
         'internal' => true,
@@ -2384,7 +2507,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Login widget',
     ],
-    Amplify\Frontend\Components\LanguageChange::class => [
+    Components\LanguageChange::class => [
         'name' => 'site.language-change',
         'reserved' => true,
         'internal' => true,
@@ -2395,7 +2518,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Login widget',
     ],
-    Amplify\Frontend\Components\DataTableWrapper::class => [
+    Components\DataTableWrapper::class => [
         'name' => 'site.data-table-wrapper',
         'reserved' => true,
         'internal' => true,
@@ -2406,7 +2529,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Login widget',
     ],
-    Amplify\Frontend\Components\NoImageSkeleton::class => [
+    Components\NoImageSkeleton::class => [
         'name' => 'no-image-skeleton',
         'reserved' => true,
         'internal' => true,
@@ -2417,7 +2540,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Login widget',
     ],
-    Amplify\Frontend\Components\Favicon::class => [
+    Components\Favicon::class => [
         'name' => 'site.favicon',
         'reserved' => true,
         'internal' => true,
@@ -2428,7 +2551,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Login widget',
     ],
-    Amplify\Frontend\Components\EasyAsk\CategoryLinkList::class => [
+    Components\EasyAsk\CategoryLinkList::class => [
         'name' => 'easy-ask.category-link-list',
         'reserved' => true,
         'internal' => true,
@@ -2439,7 +2562,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Login widget',
     ],
-    Amplify\Frontend\Components\Deprecate\Menu::class => [
+    Components\Deprecate\Menu::class => [
         'name' => 'deprecate.menu',
         'reserved' => true,
         'internal' => true,
@@ -2450,7 +2573,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Login widget',
     ],
-    Amplify\Frontend\Components\Amplify\Head::class => [
+    Components\Amplify\Head::class => [
         'name' => 'amplify.head',
         'reserved' => true,
         'internal' => true,
@@ -2461,7 +2584,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Login widget',
     ],
-    Amplify\Frontend\Components\Amplify\Foot::class => [
+    Components\Amplify\Foot::class => [
         'name' => 'amplify.foot',
         'reserved' => true,
         'internal' => true,
@@ -2472,7 +2595,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Login widget',
     ],
-    Amplify\Frontend\Components\ToastrNotification::class => [
+    Components\ToastrNotification::class => [
         'name' => 'site.toastr-notification',
         'reserved' => true,
         'internal' => true,
@@ -2483,7 +2606,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Login widget',
     ],
-    //    Amplify\Frontend\Components\Profile::class => [
+    //    Components\Profile::class => [
     //        'name' => 'customer.message.profile',
     //        'reserved' => true,
     //        'internal' => true,
@@ -2494,7 +2617,7 @@ return [
     //        '@nestedItems' => [],
     //        'description' => 'Login widget',
     //    ],
-    //    Amplify\Frontend\Components\History::class => [
+    //    Components\History::class => [
     //        'name' => 'customer.message.history',
     //        'reserved' => true,
     //        'internal' => true,
@@ -2505,7 +2628,7 @@ return [
     //        '@nestedItems' => [],
     //        'description' => 'Login widget',
     //    ],
-    Amplify\Frontend\Components\BrandLogo::class => [
+    Components\BrandLogo::class => [
         'name' => 'site.brand-logo',
         'reserved' => true,
         'internal' => true,
@@ -2516,7 +2639,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Login widget',
     ],
-    Amplify\Frontend\Components\Toolbar::class => [
+    Components\Toolbar::class => [
         'name' => 'site.toolbar',
         'reserved' => true,
         'internal' => true,
@@ -2527,7 +2650,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Login widget',
     ],
-    Amplify\Frontend\Components\Testimonial::class => [
+    Components\Testimonial::class => [
         'name' => 'testimonial',
         'reserved' => true,
         'internal' => false,
@@ -2538,7 +2661,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Login widget',
     ],
-    Amplify\Frontend\Components\Image::class => [
+    Components\Image::class => [
         'name' => 'image',
         'reserved' => true,
         'internal' => false,
@@ -2562,7 +2685,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Lets you put a image from file manager',
     ],
-    Amplify\Frontend\Components\Video::class => [
+    Components\Video::class => [
         'name' => 'video',
         'reserved' => true,
         'internal' => false,
@@ -2594,7 +2717,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Video widget',
     ],
-    Amplify\Frontend\Components\Shop\ProductList::class => [
+    Components\Shop\ProductList::class => [
         'name' => 'product-list',
         'reserved' => true,
         'internal' => false,
@@ -2670,7 +2793,7 @@ return [
         'description' => 'Display all the products in a grid or list view.',
         '@client' => null,
     ],
-    Amplify\Frontend\Components\Shop\ProductDetail::class => [
+    Components\Shop\ProductDetail::class => [
         'name' => 'product-details',
         'reserved' => true,
         'internal' => false,
@@ -2701,34 +2824,7 @@ return [
         ],
         'description' => 'Product details widget',
     ],
-    Amplify\Frontend\Components\Product\ProductSkuTable::class => [
-        'name' => 'product-sku-table',
-        'reserved' => true,
-        'internal' => true,
-        'model' => ['single_product', 'shop'],
-        '@inside' => null,
-        '@client' => null,
-        '@attributes' => [
-            [
-                'name' => 'product',
-                'type' => 'text',
-                'value' => '',
-            ],
-            [
-                'name' => 'is-fav-button-show',
-                'type' => 'boolean',
-                'value' => false,
-            ],
-            [
-                'name' => 'display-product-code',
-                'type' => 'boolean',
-                'value' => false,
-            ],
-        ],
-        '@nestedItems' => [],
-        'description' => 'Product product sku table widget',
-    ],
-    Amplify\Frontend\Components\Client\Rhsparts\SerialNumberResearch::class => [
+    Components\Client\Rhsparts\SerialNumberResearch::class => [
         'name' => 'serial-number-research',
         'reserved' => true,
         'internal' => false,
@@ -2739,7 +2835,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Serial Number Research',
     ],
-    Amplify\Frontend\Components\Client\Rhsparts\RequestCatalog::class => [
+    Components\Client\Rhsparts\RequestCatalog::class => [
         'name' => 'request-catalog',
         'reserved' => true,
         'internal' => false,
@@ -2750,7 +2846,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Request RHS Print Catalog',
     ],
-    Amplify\Frontend\Components\Client\Rhsparts\OrderTracking::class => [
+    Components\Client\Rhsparts\OrderTracking::class => [
         'name' => 'order-tracking',
         'reserved' => true,
         'internal' => false,
@@ -2762,7 +2858,7 @@ return [
         'description' => 'Order Tracking',
     ],
     // Common Widgets
-    Amplify\Frontend\Components\RecentOrderItem::class => [
+    Components\RecentOrderItem::class => [
         'name' => 'recent-order-item',
         'reserved' => true,
         'internal' => true,
@@ -2773,7 +2869,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Recent order item widget',
     ],
-    Amplify\Frontend\Components\Campaign\CampaignList::class => [
+    Components\Campaign\CampaignList::class => [
         'name' => 'campaign-list',
         'reserved' => true,
         'internal' => false,
@@ -2784,7 +2880,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Campaign list widget',
     ],
-    Amplify\Frontend\Components\Campaign\CampaignFilter::class => [
+    Components\Campaign\CampaignFilter::class => [
         'name' => 'campaign-filter',
         'reserved' => true,
         'internal' => false,
@@ -2795,7 +2891,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Campaign Filter',
     ],
-    Amplify\Frontend\Components\Campaign\CampaignTitle::class => [
+    Components\Campaign\CampaignTitle::class => [
         'name' => 'campaign-title',
         'reserved' => true,
         'internal' => false,
@@ -2806,7 +2902,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Campaign Title',
     ],
-    Amplify\Frontend\Components\Campaign\CampaignDescription::class => [
+    Components\Campaign\CampaignDescription::class => [
         'name' => 'campaign-description',
         'reserved' => true,
         'internal' => false,
@@ -2817,7 +2913,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Campaign Description',
     ],
-    Amplify\Frontend\Components\Campaign\CampaignBanner::class => [
+    Components\Campaign\CampaignBanner::class => [
         'name' => 'campaign-banner',
         'reserved' => true,
         'internal' => false,
@@ -2834,7 +2930,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Campaign Banner',
     ],
-    Amplify\Frontend\Components\Campaign\CampaignStartDate::class => [
+    Components\Campaign\CampaignStartDate::class => [
         'name' => 'campaign-start-date',
         'reserved' => true,
         'internal' => false,
@@ -2845,7 +2941,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Campaign Start Date',
     ],
-    Amplify\Frontend\Components\Campaign\CampaignEndDate::class => [
+    Components\Campaign\CampaignEndDate::class => [
         'name' => 'campaign-end-date',
         'reserved' => true,
         'internal' => false,
@@ -2856,7 +2952,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Campaign End Date',
     ],
-    Amplify\Frontend\Components\Campaign\CampaignProductList::class => [
+    Components\Campaign\CampaignProductList::class => [
         'name' => 'campaign-product-list',
         'reserved' => true,
         'internal' => false,
@@ -2878,7 +2974,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Campaign Product List',
     ],
-    Amplify\Frontend\Components\Link::class => [
+    Components\Link::class => [
         'name' => 'link',
         'reserved' => true,
         'internal' => false,
@@ -2924,7 +3020,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Url widget',
     ],
-    Amplify\Frontend\Components\Event\Filter::class => [
+    Components\Event\Filter::class => [
         'name' => 'event.filter',
         'reserved' => true,
         'internal' => false,
@@ -2935,7 +3031,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Event filter widget',
     ],
-    Amplify\Frontend\Components\Event\Index::class => [
+    Components\Event\Index::class => [
         'name' => 'event.index',
         'reserved' => true,
         'internal' => false,
@@ -2946,7 +3042,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Event index widget',
     ],
-    Amplify\Frontend\Components\Event\Calendar::class => [
+    Components\Event\Calendar::class => [
         'name' => 'event.calendar',
         'reserved' => true,
         'internal' => false,
@@ -2957,7 +3053,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Event calendar widget',
     ],
-    Amplify\Frontend\Components\Event\EventBookingLink::class => [
+    Components\Event\EventBookingLink::class => [
         'name' => 'event.event-booking-link',
         'reserved' => true,
         'internal' => false,
@@ -2968,7 +3064,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Event event booking link widget',
     ],
-    Amplify\Frontend\Components\Event\EventContent::class => [
+    Components\Event\EventContent::class => [
         'name' => 'event.event-content',
         'reserved' => true,
         'internal' => false,
@@ -2985,7 +3081,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Event event content widget',
     ],
-    Amplify\Frontend\Components\Event\EventStartDate::class => [
+    Components\Event\EventStartDate::class => [
         'name' => 'event.event-start-date',
         'reserved' => true,
         'internal' => false,
@@ -2996,7 +3092,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Event event start date widget',
     ],
-    Amplify\Frontend\Components\Event\EventEndDate::class => [
+    Components\Event\EventEndDate::class => [
         'name' => 'event.event-end-date',
         'reserved' => true,
         'internal' => false,
@@ -3007,7 +3103,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Event event end date widget',
     ],
-    Amplify\Frontend\Components\Event\EventLocation::class => [
+    Components\Event\EventLocation::class => [
         'name' => 'event.event-location',
         'reserved' => true,
         'internal' => false,
@@ -3028,7 +3124,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Event event location widget',
     ],
-    Amplify\Frontend\Components\Event\EventBanner::class => [
+    Components\Event\EventBanner::class => [
         'name' => 'event.event-banner',
         'reserved' => true,
         'internal' => false,
@@ -3039,7 +3135,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Event event banner widget',
     ],
-    Amplify\Frontend\Components\Event\EventQrCode::class => [
+    Components\Event\EventQrCode::class => [
         'name' => 'event.event-qr-code',
         'reserved' => true,
         'internal' => false,
@@ -3056,7 +3152,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Event event qr code widget',
     ],
-    Amplify\Frontend\Components\Event\EventTitle::class => [
+    Components\Event\EventTitle::class => [
         'name' => 'event.event-title',
         'reserved' => true,
         'internal' => false,
@@ -3073,7 +3169,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Event event title widget',
     ],
-    Amplify\Frontend\Components\Spacer::class => [
+    Components\Spacer::class => [
         'name' => 'spacer',
         'reserved' => true,
         'internal' => false,
@@ -3091,7 +3187,7 @@ return [
         '@nestedItems' => [],
         'description' => 'This widget allow user to create a blank space with given height.',
     ],
-    Amplify\Frontend\Components\NotLoggedAlert::class => [
+    Components\NotLoggedAlert::class => [
         'name' => 'not-logged-alert',
         'reserved' => true,
         'internal' => false,
@@ -3153,7 +3249,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Not logged alert widget',
     ],
-    Amplify\Frontend\Components\CategorySlider::class => [
+    Components\CategorySlider::class => [
         'name' => 'category-slider',
         'reserved' => true,
         'internal' => false,
@@ -3216,7 +3312,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Category slider widget',
     ],
-    Amplify\Frontend\Components\Campaign\CampaignProductFilter::class => [
+    Components\Campaign\CampaignProductFilter::class => [
         'name' => 'campaign.campaign-product-filter',
         'reserved' => true,
         'internal' => false,
@@ -3227,7 +3323,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Campaign campaign product filter widget',
     ],
-    Amplify\Frontend\Components\HasPermission::class => [
+    Components\HasPermission::class => [
         'name' => 'has-permission',
         'reserved' => true,
         'internal' => false,
@@ -3244,7 +3340,7 @@ return [
         '@nestedItems' => [],
         'description' => "This widget let's user to put customer permission control to any block.",
     ],
-    Amplify\Frontend\Components\Shop\Product\ManufacturerImage::class => [
+    Components\Shop\Product\ManufacturerImage::class => [
         'name' => 'product-manufacture-image',
         'reserved' => true,
         'internal' => true,
@@ -3261,7 +3357,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Shop product manufacture image widget',
     ],
-    Amplify\Frontend\Components\Shop\Product\SocialMediaLink::class => [
+    Components\Shop\Product\SocialMediaLink::class => [
         'name' => 'product-social-media-link',
         'reserved' => true,
         'internal' => true,
@@ -3277,27 +3373,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Shop product social media link widget',
     ],
-    Amplify\Frontend\Components\OrderStatus::class => [
-        'name' => 'order-status',
-        'reserved' => true,
-        'internal' => true,
-        'model' => ['order_status'],
-        '@inside' => null,
-        '@client' => null,
-        '@attributes' => [
-            [
-                'name' => 'success-message',
-                'type' => 'text',
-            ],
-            [
-                'name' => 'approval-message',
-                'type' => 'text',
-            ],
-        ],
-        '@nestedItems' => [],
-        'description' => 'Order status widget',
-    ],
-    Amplify\Frontend\Components\Shop\Product\DiscountBadge::class => [
+    Components\Shop\Product\DiscountBadge::class => [
         'name' => 'product.discount-badge',
         'reserved' => true,
         'internal' => true,
@@ -3319,7 +3395,27 @@ return [
         '@nestedItems' => [],
         'description' => 'Shop product discount badge widget',
     ],
-    Amplify\Frontend\Components\FlipperCard::class => [
+    Components\OrderStatus::class => [
+        'name' => 'order-status',
+        'reserved' => true,
+        'internal' => true,
+        'model' => ['order_status'],
+        '@inside' => null,
+        '@client' => null,
+        '@attributes' => [
+            [
+                'name' => 'success-message',
+                'type' => 'text',
+            ],
+            [
+                'name' => 'approval-message',
+                'type' => 'text',
+            ],
+        ],
+        '@nestedItems' => [],
+        'description' => 'Order status widget',
+    ],
+    Components\FlipperCard::class => [
         'name' => 'flipper-card',
         'reserved' => true,
         'internal' => false,
@@ -3351,7 +3447,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Flipper card widget',
     ],
-    Amplify\Frontend\Components\WarehouseSelection::class => [
+    Components\WarehouseSelection::class => [
         'name' => 'warehouse-selection',
         'reserved' => true,
         'internal' => true,
@@ -3362,7 +3458,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\ExchangeRewards\Index::class => [
+    Components\ExchangeRewards\Index::class => [
         'name' => 'exchange-rewards',
         'reserved' => true,
         'internal' => false,
@@ -3373,7 +3469,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\InsiderDeal::class => [
+    Components\InsiderDeal::class => [
         'name' => 'insider-deal',
         'reserved' => true,
         'internal' => false,
@@ -3420,7 +3516,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Insider deal widget',
     ],
-    Amplify\Frontend\Components\HighlightedProduct::class => [
+    Components\HighlightedProduct::class => [
         'name' => 'highlighted-product',
         'reserved' => true,
         'internal' => false,
@@ -3467,7 +3563,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Highlighted Product Widget',
     ],
-    Amplify\Frontend\Components\Captcha::class => [
+    Components\Captcha::class => [
         'name' => 'captcha',
         'reserved' => true,
         'internal' => true,
@@ -3478,7 +3574,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Captcha widget',
     ],
-    Amplify\Frontend\Components\CookieConsent::class => [
+    Components\CookieConsent::class => [
         'name' => 'cookie-consent',
         'reserved' => true,
         'internal' => true,
@@ -3489,7 +3585,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Cookie consent widget',
     ],
-    Amplify\Frontend\Components\Amplify\RightSidePanel::class => [
+    Components\Amplify\RightSidePanel::class => [
         'name' => 'amplify.right-side-panel',
         'reserved' => true,
         'internal' => true,
@@ -3500,7 +3596,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Cookie consent widget',
     ],
-    Amplify\Frontend\Components\Drawer::class => [
+    Components\Drawer::class => [
         'name' => 'drawer',
         'reserved' => false,
         'internal' => false,
@@ -3545,7 +3641,7 @@ return [
         ],
         'description' => 'Mobile Responsive drawer.',
     ],
-    Amplify\Frontend\Components\Customer\CurrentSession::class => [
+    Components\Customer\CurrentSession::class => [
         'name' => 'customer.current-session',
         'reserved' => true,
         'internal' => false,
@@ -3556,7 +3652,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Cart\ItemActions::class => [
+    Components\Cart\ItemActions::class => [
         'name' => 'cart.item-actions',
         'reserved' => true,
         'internal' => false,
@@ -3578,7 +3674,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Cart\QuantityUpdate::class => [
+    Components\Cart\QuantityUpdate::class => [
         'name' => 'cart.quantity-update',
         'reserved' => true,
         'internal' => false,
@@ -3589,7 +3685,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Cart\ItemInfo::class => [
+    Components\Cart\ItemInfo::class => [
         'name' => 'cart.item-info',
         'reserved' => true,
         'internal' => false,
@@ -3611,7 +3707,7 @@ return [
         ],
         'description' => '',
     ],
-    Amplify\Frontend\Components\QuickAddToCart::class => [
+    Components\QuickAddToCart::class => [
         'name' => 'quick-add-to-cart',
         'reserved' => true,
         'internal' => false,
@@ -3624,7 +3720,7 @@ return [
         '@nestedItems' => [],
         'description' => 'This widget will add item search and add to cart directly.',
     ],
-    Amplify\Frontend\Components\Test::class => [
+    Components\Test::class => [
         'name' => 'test',
         'reserved' => true,
         'internal' => true,
@@ -3635,7 +3731,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Test widget',
     ],
-    Amplify\Frontend\Components\Amplify\Layout\WebPage::class => [
+    Components\Amplify\Layout\WebPage::class => [
         'name' => 'amplify.web-page',
         'reserved' => true,
         'internal' => true,
@@ -3646,7 +3742,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Amplify layout web page layout widget',
     ],
-    Amplify\Frontend\Components\Amplify\Layout\ErrorPage::class => [
+    Components\Amplify\Layout\ErrorPage::class => [
         'name' => 'amplify.error-page',
         'reserved' => true,
         'internal' => true,
@@ -3657,7 +3753,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Amplify layout error page layout widget',
     ],
-    Amplify\Frontend\Components\ScrollToTop::class => [
+    Components\ScrollToTop::class => [
         'name' => 'scroll-to-top',
         'reserved' => true,
         'internal' => true,
@@ -3668,7 +3764,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Scroll to top widget',
     ],
-    Amplify\Frontend\Components\Shop\FeatureBrand::class => [
+    Components\Shop\FeatureBrand::class => [
         'name' => 'feature-brand',
         'reserved' => true,
         'internal' => false,
@@ -3679,7 +3775,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Feature brand',
     ],
-    Amplify\Frontend\Components\Shop\CategoryRightSideBar::class => [
+    Components\Shop\CategoryRightSideBar::class => [
         'name' => 'category-right-side-bar',
         'reserved' => true,
         'internal' => false,
@@ -3690,7 +3786,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Category Right Side Bar',
     ],
-    Amplify\Frontend\Components\Customer\Address\ShipToAddress::class => [
+    Components\Customer\Address\ShipToAddress::class => [
         'name' => 'customer-address-ship-to-address',
         'reserved' => true,
         'internal' => false,
@@ -3701,7 +3797,7 @@ return [
         '@nestedItems' => [],
         'description' => 'Customer ship to address widget',
     ],
-    Amplify\Frontend\Components\Customer\Order\Search::class => [
+    Components\Customer\Order\Search::class => [
         'name' => 'customer.order.search',
         'reserved' => true,
         'internal' => false,
@@ -3712,79 +3808,7 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
-    Amplify\Frontend\Components\Product\QuickAction::class => [
-        'name' => 'product.quick-action',
-        'reserved' => true,
-        'internal' => false,
-        '@inside' => null,
-        '@client' => null,
-        'model' => [],
-        '@attributes' => [
-            ['name' => 'cart-button-label', 'type' => 'text', 'value' => 'Add To Cart'],
-            ['name' => 'detail-button-label', 'type' => 'text', 'value' => 'View Details'],
-            ['name' => ':product', 'type' => 'text', 'value' => '$product'],
-        ],
-        '@nestedItems' => [],
-        'description' => 'The widget display a button to add item to cart.',
-    ],
-    Amplify\Frontend\Components\Product\ItemNumber::class => [
-        'name' => 'product.item-number',
-        'reserved' => true,
-        'internal' => false,
-        '@inside' => null,
-        '@client' => null,
-        'model' => [],
-        '@attributes' => [
-            ['name' => 'product', 'type' => 'text', 'value' => '$product'],
-            ['name' => 'format', 'type' => 'text', 'value' => ''],
-        ],
-        '@nestedItems' => [],
-        'description' => 'The widget display product unique  code, sku id.',
-    ],
-    Amplify\Frontend\Components\Product\MainImage::class => [
-        'name' => 'product.main-image',
-        'reserved' => true,
-        'internal' => false,
-        '@inside' => null,
-        '@client' => null,
-        'model' => [],
-        '@attributes' => [
-            ['name' => 'product', 'type' => 'text', 'value' => '$product'],
-            ['name' => 'seo-path', 'type' => 'text', 'value' => ''],
-            ['name' => ':wrap-link', 'type' => 'boolean', 'value' => 'true'],
-        ],
-        '@nestedItems' => [],
-        'description' => 'The widget display product main image.',
-    ],
-    Amplify\Frontend\Components\Product\Name::class => [
-        'name' => 'product.name',
-        'reserved' => true,
-        'internal' => false,
-        '@inside' => null,
-        '@client' => null,
-        'model' => [],
-        '@attributes' => [
-            ['name' => 'max-line', 'type' => 'number', 'value' => 2],
-            ['name' => 'element', 'type' => 'text', 'value' => 'div'],
-        ],
-        '@nestedItems' => [],
-        'description' => 'The widget display product short description.',
-    ],
-    Amplify\Frontend\Components\Product\ShortDescription::class => [
-        'name' => 'product.short-description',
-        'reserved' => true,
-        'internal' => false,
-        '@inside' => null,
-        '@client' => null,
-        'model' => [],
-        '@attributes' => [
-            ['name' => 'max-line', 'type' => 'number', 'value' => 2],
-            ['name' => 'element', 'type' => 'text', 'value' => 'div'],
-        ],
-        '@nestedItems' => [],
-        'description' => 'The widget display product short description.',
-    ],
-    Amplify\Frontend\Components\ShopByManufacturer::class => [
+    Components\ShopByManufacturer::class => [
         'name' => 'shop-by-manufacturer',
         'reserved' => true,
         'internal' => false,
@@ -3817,7 +3841,7 @@ return [
         '@nestedItems' => null,
         'description' => '',
     ],
-    Amplify\Frontend\Components\Notice\Index::class => [
+    Components\Notice\Index::class => [
         'name' => 'notice-list',
         'reserved' => true,
         'internal' => false,
@@ -3830,7 +3854,7 @@ return [
         '@nestedItems' => [],
         'description' => 'The widget display list of all latest notice description.',
     ],
-    Amplify\Frontend\Components\Notice\Slider::class => [
+    Components\Notice\Slider::class => [
         'name' => 'notice-slider',
         'reserved' => true,
         'internal' => false,
