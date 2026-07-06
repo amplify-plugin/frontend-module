@@ -5,7 +5,6 @@ namespace Amplify\Frontend\Http\Controllers\Auth;
 use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\ErpApi\Jobs\ContactProfileSyncJob;
 use Amplify\Frontend\Events\NewCustomerRegistered;
-use Amplify\Frontend\Http\Requests\Auth\ContactAccountRequest;
 use Amplify\Frontend\Http\Requests\Auth\RegistrationRequest;
 use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\System\Backend\Models\Contact;
@@ -16,118 +15,23 @@ use Amplify\System\Backend\Models\IndustryClassification;
 use Amplify\System\Factories\NotificationFactory;
 use Amplify\System\Marketing\Models\Subscriber;
 use App\Http\Controllers\Controller;
-use ErrorException;
 use Exception;
-use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
-class RegisteredUserController extends Controller
+class NewCustomerRegisterController extends Controller
 {
     use HasDynamicPage;
-
-    /**
-     * Display the registration view.
-     *
-     * @throws ErrorException|BindingResolutionException
-     */
-    public function __invoke(): string
-    {
-        $this->loadPageByType('registration');
-
-        return $this->render();
-    }
-
-    /**
-     * @return RedirectResponse
-     *
-     * @throws \Throwable
-     */
-    public function requestAccount(ContactAccountRequest $request)
-    {
-        DB::beginTransaction();
-
-        try {
-
-            [$customer, $address] = $this->getExistingCustomer($request);
-
-            // Create Contact
-            $contact = $customer->contacts()->create([
-                'account_title_id' => $request->input('contact_account_title'),
-                'name' => $request->input('contact_name'),
-                'phone' => $request->input('contact_phone_number', $erpData['CustomerPhone'] ?? null),
-                'phone_ext' => $request->input('contact_phone_extension'),
-                'password' => $request->input('contact_password'),
-                'email' => $request->input('contact_email'),
-                'login_id' => $request->input('contact_email'),
-                'is_admin' => $customer->wasRecentlyCreated,
-                'enabled' => config('amplify.security.skip_contact_approval', false),
-                'customer_address_id' => $address?->id ?? null,
-                'warehouse_id' => $customer->warehouse_id ?? null,
-                'active_customer_id' => $customer->getKey(),
-                'order_limit' => 0,
-                'daily_budget_limit' => 0,
-                'monthly_budget_limit' => 0,
-            ]);
-
-            // Create Contact Login
-            $contact->contactLogins()->create([
-                'contact_id' => $contact->id,
-                'customer_id' => $customer->id,
-                'warehouse_id' => $customer->warehouse_id ?? null,
-                'customer_address_id' => $address?->id ?? null,
-                'ship_to_name' => $address?->address_name ?? null,
-            ]);
-
-            DB::commit();
-
-            $request->session()->flash('contactSignedUp', true);
-
-            // Newsletter + Notification
-            $this->handlePostRegistrationForRequestAccount($request, $contact);
-
-            return redirect()->to('/')
-                ->with([
-                    'alert' => true,
-                    'success' => __(config('amplify.messages.registration_success')),
-                ]);
-
-        } catch (Exception $exception) {
-            DB::rollBack();
-
-            Log::error($exception);
-
-            $code = (int) $exception->getCode();
-            $message = $exception->getMessage();
-
-            // Handle specific 400 validation-like errors
-            if ($code === 400) {
-                $fields = ['customer_account_number', 'contact_company_name'];
-                foreach ($fields as $field) {
-                    if (! empty($request->get($field))) {
-                        return redirect()->back()
-                            ->withErrors([$field => $message])
-                            ->withInput();
-                    }
-                }
-            }
-
-            return redirect()->back()
-                ->with([
-                    'alert' => true,
-                    'error' => $code === 400 ? $message : 'Request for online account has failed. Please try again later.',
-                ]);
-        }
-    }
 
     /**
      * Handle an incoming registration request.
      *
      * @throws Exception|\Throwable
      */
-    public function newRetailCustomer(RegistrationRequest $request): RedirectResponse
+    public function __invoke(RegistrationRequest $request): RedirectResponse
     {
         $industry = IndustryClassification::find($request->input('industry_classification_id'));
 
@@ -181,7 +85,7 @@ class RegisteredUserController extends Controller
             return redirect()->to('/')
                 ->with([
                     'alert' => true,
-                    'success' => __(config('amplify.messages.registration_success')),
+                    'success' => __(config('amplify.messages.customer_registration_success')),
                 ]);
 
         } catch (Exception $exception) {
@@ -201,70 +105,6 @@ class RegisteredUserController extends Controller
         }
     }
 
-    /**
-     * @return mixed
-     *
-     * @throws Exception
-     */
-    private function getExistingCustomer(ContactAccountRequest $request)
-    {
-        $customerCode = trim($request->input('customer_account_number'));
-        $customerName = trim($request->input('contact_company_name'));
-
-        // Must have at least one identifier
-        if ($customerCode === '' && $customerName === '') {
-            throw new Exception(
-                'Please enter Account Number or Company Name',
-                Response::HTTP_BAD_REQUEST
-            );
-        }
-
-        $customer = null;
-
-        // 1️⃣ Lookup by company name if code is not provided
-        if ($customerCode === '') {
-            $customer = Customer::select('id', 'customer_code', 'customer_name')
-                ->where(DB::raw('TRIM(customer_name)'), $customerName)
-                ->first();
-
-            if (! $customer) {
-                throw new Exception(
-                    'We could not find your company name in our system.',
-                    Response::HTTP_BAD_REQUEST
-                );
-            }
-
-            $customerCode = trim($customer->customer_code);
-        }
-
-        // 2️⃣ Always verify existence in ERP
-        $customerInERP = ErpApi::getCustomerDetail(['customer_number' => $customerCode]);
-
-        if (empty($customerInERP->CustomerNumber)) {
-            throw new Exception(
-                'Customer with the provided account number does not exist.',
-                Response::HTTP_BAD_REQUEST
-            );
-        }
-
-        // 3️⃣ If customer is still not found locally, try finding by code
-        if (! $customer) {
-            $customer = Customer::where(DB::raw('TRIM(customer_code)'), $customerCode)->first();
-        }
-
-        // 4️⃣ Create if missing, otherwise fetch address
-        if (! $customer) {
-            return [$this->createCustomer($customerInERP->toArray()), null];
-        }
-
-        $address = $customer->addresses->first();
-
-        return [$customer, $address];
-    }
-
-    /**
-     * @throws Exception
-     */
     private function createCustomer(array $attributes): Customer
     {
         $industryName = $attributes['WrittenIndustry'] ?? null;
@@ -330,47 +170,6 @@ class RegisteredUserController extends Controller
         return $customer;
     }
 
-    private function handlePostRegistrationForRequestAccount($request, $contact): void
-    {
-        if ($request->filled('contact_newsletter') && $request->input('contact_newsletter') == 'yes') {
-            if ($alreadySubscriber = Subscriber::whereEmail($request->input('contact_email'))->first()) {
-                $alreadySubscriber->increment('attempts');
-            } else {
-                Subscriber::create(['email' => $request->input('contact_email')]);
-            }
-        }
-
-        NotificationFactory::call(Event::CONTACT_ACCOUNT_REQUEST_RECEIVED, [
-            'contact_id' => $contact->id,
-        ]);
-
-        if (config('amplify.security.skip_contact_approval', false)) {
-            NotificationFactory::call(Event::REGISTRATION_REQUEST_ACCEPTED, [
-                'contact_id' => $contact->id,
-                'customer_id' => $contact->customer_id,
-            ]);
-        } else {
-            NotificationFactory::call(Event::CONTACT_ACCOUNT_REQUEST_VERIFICATION, [
-                'contact_id' => $contact->id,
-            ]);
-        }
-
-        if(config('amplify.basic.is_permission_system_enabled')){
-            $defaultRole =CustomerRole::where('is_default', true)
-            ->where('guard_name', Contact::AUTH_GUARD)
-            ->when(config('permission.teams'), fn($q) => $q->where('team_id', $contact->customer_id))->first();
-
-            if($defaultRole){
-                $contact->assignRole($defaultRole);
-            }
-        }
-
-
-        if (config('amplify.erp.auto_create_contact')) {
-            ContactProfileSyncJob::dispatch($contact->toArray());
-        }
-    }
-
     private function handlePostRegistrationForNewRetailCustomer($request, $customer, $contact): void
     {
         if ($request->filled('newsletter') && $request->input('newsletter') == 'yes') {
@@ -395,6 +194,7 @@ class RegisteredUserController extends Controller
         } else {
             NotificationFactory::call(Event::CONTACT_ACCOUNT_REQUEST_VERIFICATION, [
                 'contact_id' => $contact->id,
+                'type' => Contact::NEW_RETAIL_CUSTOMER_VERIFICATION,
             ]);
         }
 
@@ -412,5 +212,23 @@ class RegisteredUserController extends Controller
         if (config('amplify.erp.auto_create_contact')) {
             ContactProfileSyncJob::dispatch($contact->toArray());
         }
+    }
+
+    public function verifyEmail(string $id, string $hash, Request $request): RedirectResponse
+    {
+        $contact = Contact::findOrFail($id);
+
+        abort_if(! Hash::check($contact->otp, base64_decode($hash)), 404, 'The verification link is invalid or expired. Please contact system administrator.');
+
+        abort_if(! $contact->update(['enabled' => true, 'enabled_at' => now(), 'otp' => null]), 500, 'Email verification failed. Please try again later or contact System Administrator.');
+
+        $contact->customer->update(['approved' => true]);
+
+        NotificationFactory::call(Event::REGISTRATION_REQUEST_ACCEPTED,
+            ['customer_id' => $contact->customer_id, 'contact_id' => $contact->id]);
+
+        return redirect()->to(frontendHomeURL().'/login?verified=1')
+            ->with('success', __('Email verification successful. Please sign in with your credentials.'))
+            ->with('alert', true);
     }
 }

@@ -16,7 +16,9 @@ use Amplify\Frontend\Http\Controllers\AddressController;
 use Amplify\Frontend\Http\Controllers\Auth\AuthenticatedSessionController;
 use Amplify\Frontend\Http\Controllers\Auth\CustomerVerificationController;
 use Amplify\Frontend\Http\Controllers\Auth\ForceResetPasswordController;
-use Amplify\Frontend\Http\Controllers\Auth\RegisteredUserController;
+use Amplify\Frontend\Http\Controllers\Auth\NewCustomerRegisterController;
+use Amplify\Frontend\Http\Controllers\Auth\RegisterIndexController;
+use Amplify\Frontend\Http\Controllers\Auth\RequestOnlineAccessController;
 use Amplify\Frontend\Http\Controllers\Auth\VerifyEmailController;
 use Amplify\Frontend\Http\Controllers\BrandIndexController;
 use Amplify\Frontend\Http\Controllers\CampaignController;
@@ -40,11 +42,13 @@ use Amplify\Frontend\Http\Controllers\OrderController;
 use Amplify\Frontend\Http\Controllers\OrderListController;
 use Amplify\Frontend\Http\Controllers\OrderStatusController;
 use Amplify\Frontend\Http\Controllers\PastItemsController;
+use Amplify\Frontend\Http\Controllers\ProductCompareController;
 use Amplify\Frontend\Http\Controllers\ProductDetailController;
 use Amplify\Frontend\Http\Controllers\ProductSearchController;
 use Amplify\Frontend\Http\Controllers\QuickListController;
 use Amplify\Frontend\Http\Controllers\QuotationController;
 use Amplify\Frontend\Http\Controllers\ShippingController;
+use Amplify\Frontend\Http\Controllers\ShopSearchController;
 use Amplify\Frontend\Http\Middlewares\CustomerDefaultValues;
 use Amplify\System\Backend\Http\Controllers\CartController;
 use Amplify\System\Backend\Http\Controllers\CenPosPaymentController;
@@ -79,7 +83,9 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
         ->where(['identifier' => '([a-zA-Z0-9\-\_\[\]\(\)\+\#\.\"\~\: ]+)', 'slug' => '(.+)'])
         ->name('shop.show');
 
-    Route::name('shop.')->prefix(config('amplify.frontend.shop_page_prefix'))->controller(\Amplify\Frontend\Http\Controllers\ShopSearchController::class)->group(function () {
+    Route::name('shop.')->prefix(config('amplify.frontend.shop_page_prefix'))
+        ->controller(ShopSearchController::class)
+        ->group(function () {
         Route::get('/{query?}', '__invoke')->where(['query' => '(.*)'])->name('index');
         Route::get('/quick-view/{id}/{seo_path?}', 'getQuickView')->name('quickView');
         Route::get('/warehouse-selection-view/{code}', 'getWarehouseSelectionView')->name('warehouseSelectionView');
@@ -167,11 +173,13 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
         Route::post('customer-verification', CustomerVerificationController::class)
             ->name('contact-validation');
 
-        Route::controller(RegisteredUserController::class)->prefix('registration')->group(function () {
-            Route::get('/', '__invoke')->name('registration');
-            Route::post('request-account', 'requestAccount')
+        Route::prefix('registration')->group(function () {
+            Route::get('/', RegisterIndexController::class)->name('registration');
+
+            Route::post('request-account', RequestOnlineAccessController::class)
                 ->name('registration.request-account');
-            Route::post('create-cash-customer', 'newRetailCustomer')
+
+            Route::post('create-cash-customer', NewCustomerRegisterController::class)
                 ->name('registration.create-cash-customer');
         });
 
@@ -336,4 +344,6 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
         [CustomerOrderController::class, 'deleteSavedOrderItem'])->name('order-list-item.delete');
     Route::delete('/customer-profile-quotation-list-item/delete/{item}/item',
         [CustomerOrderController::class, 'deleteQuotationItem'])->name('customer-profile-quotation-list-item.delete');
+
+    Route::post('product-compare', ProductCompareController::class)->name('product-compare');
 });
