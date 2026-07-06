@@ -7,6 +7,7 @@ use Amplify\ErpApi\Jobs\ContactProfileSyncJob;
 use Amplify\Frontend\Http\Requests\Auth\ContactAccountRequest;
 use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\System\Backend\Models\Contact;
+use Amplify\System\Backend\Models\ContactLogin;
 use Amplify\System\Backend\Models\Customer;
 use Amplify\System\Backend\Models\CustomerRole;
 use Amplify\System\Backend\Models\Event;
@@ -58,6 +59,7 @@ class RequestOnlineAccessController extends Controller
 
             // Create Contact Login
             $contact->contactLogins()->create([
+                'row_type' => ContactLogin::ROW_TYPE_ASSIGNMENT,
                 'contact_id' => $contact->id,
                 'customer_id' => $customer->id,
                 'warehouse_id' => $customer->warehouse_id ?? null,

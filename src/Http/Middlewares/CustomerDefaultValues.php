@@ -25,7 +25,10 @@ class CustomerDefaultValues
 
             $customer = $contact->customer;
 
-            $contactLogin = ContactLogin::firstOrCreate(['customer_id' => $customer->getkey(), 'contact_id' => $contact->getKey(), 'active' => true]);
+            $contactLogin = ContactLogin::findOrCreateAssignment([
+                'customer_id' => $customer->getkey(),
+                'contact_id' => $contact->getKey(),
+            ]);
 
             if (! empty($customer->shipto_address_code)) {
                 $defaultAddress = CustomerAddress::where('customer_id', $customer->getKey())->where(function ($query) use ($customer) {

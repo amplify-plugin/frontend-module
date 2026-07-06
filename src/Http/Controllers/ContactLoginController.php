@@ -54,11 +54,15 @@ class ContactLoginController extends Controller
     {
         $contact = Contact::with([
             'addresses',
-            'contactLogins',
-            'contactLogins.contact',
-            'contactLogins.customer',
-            'contactLogins.customerAddress',
+            'assignmentLogins',
+            'assignmentLogins.contact',
+            'assignmentLogins.customer',
+            'assignmentLogins.customerAddress',
         ])->find($id);
+
+        abort_if($contact === null, 404, 'Invalid Contact ID Passed');
+
+        $contact->setRelation('contactLogins', $contact->assignmentLogins);
 
         $contact->contactLogins->map(function ($contactLogin) {
             $contactLogin->role_list = Role::where([
@@ -66,8 +70,6 @@ class ContactLoginController extends Controller
                 'guard_name' => 'customer',
             ])->get();
         });
-
-        abort_if($contact === null, 404, 'Invalid Contact ID Passed');
 
         store()->contactModel = $contact;
 
@@ -96,9 +98,10 @@ class ContactLoginController extends Controller
             DB::beginTransaction();
             $roles = [];
             $permissions = [];
-            $contact->contactLogins()->delete();
+            $contact->assignmentLogins()->delete();
             foreach ($request->login_customers ?? [] as $login_customer) {
                 ContactLogin::create([
+                    'row_type' => ContactLogin::ROW_TYPE_ASSIGNMENT,
                     'contact_id' => $login_customer['contact_id'],
                     'customer_id' => $login_customer['customer_id'],
                     'warehouse_id' => $login_customer['warehouse_id'] ?? null,
@@ -162,13 +165,15 @@ class ContactLoginController extends Controller
      */
     public function impersonate(Contact $contact, Request $request): RedirectResponse
     {
+        $initiatedBy = Auth::guard(Contact::AUTH_GUARD)->user();
+
         Auth::guard(Contact::AUTH_GUARD)->logout();
 
         $request->session()->invalidate();
 
         Auth::guard(Contact::AUTH_GUARD)->login($contact);
 
-        ContactLoggedIn::dispatch($contact, null);
+        ContactLoggedIn::dispatch($contact, null, $initiatedBy);
 
         return redirect()->intended(CustomerHelper::afterLoggedRedirectTo());
     }

@@ -123,13 +123,15 @@ class ContactController extends Controller
     {
         hasAccessOrFail('contact.impersonate');
 
+        $initiatedBy = Auth::guard(Contact::AUTH_GUARD)->user();
+
         Auth::guard(Contact::AUTH_GUARD)->logout();
 
         $request->session()->invalidate();
 
         Auth::guard(Contact::AUTH_GUARD)->login($contact);
 
-        event(new ContactLoggedIn($contact));
+        event(new ContactLoggedIn($contact, null, $initiatedBy));
 
         return redirect()->intended(CustomerHelper::afterLoggedRedirectTo());
     }
