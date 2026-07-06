@@ -3,7 +3,7 @@
 namespace Amplify\Frontend\Http\Controllers;
 
 use Amplify\Frontend\Traits\HasDynamicPage;
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller

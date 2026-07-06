@@ -7,7 +7,7 @@ use Amplify\System\Backend\Models\Contact;
 use Amplify\System\Backend\Models\Event;
 use Amplify\System\Factories\NotificationFactory;
 use Amplify\System\Helpers\SecurityHelper;
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;

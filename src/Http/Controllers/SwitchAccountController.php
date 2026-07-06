@@ -5,7 +5,7 @@ namespace Amplify\Frontend\Http\Controllers;
 use Amplify\Frontend\Events\ContactLoggedIn;
 use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\System\Backend\Models\Contact;
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 

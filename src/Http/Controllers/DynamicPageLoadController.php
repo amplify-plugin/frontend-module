@@ -4,7 +4,7 @@ namespace Amplify\Frontend\Http\Controllers;
 
 use Amplify\System\Backend\Models\Site;
 use Amplify\System\Cms\Models\Page;
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;

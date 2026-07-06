@@ -4,9 +4,7 @@ namespace Amplify\Frontend\Http\Controllers\Auth;
 
 use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\ErpApi\Jobs\ContactProfileSyncJob;
-use Amplify\Frontend\Events\NewCustomerRegistered;
 use Amplify\Frontend\Http\Requests\Auth\ContactAccountRequest;
-use Amplify\Frontend\Http\Requests\Auth\RegistrationRequest;
 use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\System\Backend\Models\Contact;
 use Amplify\System\Backend\Models\ContactLogin;
@@ -16,37 +14,23 @@ use Amplify\System\Backend\Models\Event;
 use Amplify\System\Backend\Models\IndustryClassification;
 use Amplify\System\Factories\NotificationFactory;
 use Amplify\System\Marketing\Models\Subscriber;
-use App\Http\Controllers\Controller;
-use ErrorException;
+use Illuminate\Routing\Controller;
 use Exception;
-use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class RegisteredUserController extends Controller
+class RequestOnlineAccessController extends Controller
 {
     use HasDynamicPage;
-
-    /**
-     * Display the registration view.
-     *
-     * @throws ErrorException|BindingResolutionException
-     */
-    public function __invoke(): string
-    {
-        $this->loadPageByType('registration');
-
-        return $this->render();
-    }
 
     /**
      * @return RedirectResponse
      *
      * @throws \Throwable
      */
-    public function requestAccount(ContactAccountRequest $request)
+    public function __invoke(ContactAccountRequest $request)
     {
         DB::beginTransaction();
 
@@ -64,7 +48,7 @@ class RegisteredUserController extends Controller
                 'email' => $request->input('contact_email'),
                 'login_id' => $request->input('contact_email'),
                 'is_admin' => $customer->wasRecentlyCreated,
-                'enabled' => config('amplify.security.skip_contact_approval', false),
+                'enabled' => config('amplify.security.skip_request_account_approval', false),
                 'customer_address_id' => $address?->id ?? null,
                 'warehouse_id' => $customer->warehouse_id ?? null,
                 'active_customer_id' => $customer->getKey(),
@@ -93,7 +77,7 @@ class RegisteredUserController extends Controller
             return redirect()->to('/')
                 ->with([
                     'alert' => true,
-                    'success' => __(config('amplify.messages.registration_success')),
+                    'success' => __(config('amplify.messages.request_online_access_success')),
                 ]);
 
         } catch (Exception $exception) {
@@ -101,14 +85,14 @@ class RegisteredUserController extends Controller
 
             Log::error($exception);
 
-            $code = (int) $exception->getCode();
+            $code = (int)$exception->getCode();
             $message = $exception->getMessage();
 
             // Handle specific 400 validation-like errors
             if ($code === 400) {
                 $fields = ['customer_account_number', 'contact_company_name'];
                 foreach ($fields as $field) {
-                    if (! empty($request->get($field))) {
+                    if (!empty($request->get($field))) {
                         return redirect()->back()
                             ->withErrors([$field => $message])
                             ->withInput();
@@ -124,91 +108,7 @@ class RegisteredUserController extends Controller
         }
     }
 
-    /**
-     * Handle an incoming registration request.
-     *
-     * @throws Exception|\Throwable
-     */
-    public function newRetailCustomer(RegistrationRequest $request): RedirectResponse
-    {
-        $industry = IndustryClassification::find($request->input('industry_classification_id'));
-
-        $customerAddressPayload = [
-            'CustomerName' => $request->input('company_name'),
-            'CustomerEmail' => $request->input('email'),
-            'CustomerPhone' => $request->input('phone_number'),
-            'CustomerPhoneExt' => $request->input('phone_extension'),
-            'WrittenIndustry' => $industry ? $industry->name : null,
-            'DefaultShipTo' => $request->input('address_name'),
-            'CustomerAddress1' => $request->input('address_1'),
-            'CustomerAddress2' => $request->input('address_2'),
-            'CustomerAddress3' => $request->input('address_3'),
-            'CustomerZipCode' => $request->input('zip_code'),
-            'CustomerCity' => $request->input('city'),
-            'CustomerState' => $request->input('state'),
-            'CustomerCountry' => $request->input('country_code'),
-        ];
-
-        DB::beginTransaction();
-        try {
-
-            // Create Customer & Address
-            $customer = $this->createCustomer($customerAddressPayload);
-
-            // Create Contact
-            $contact = $customer->contacts()->create([
-                'account_title_id' => $request->input('contact_account_title'),
-                'name' => $request->input('name'),
-                'phone' => $request->input('phone_number', $erpData['CustomerPhone'] ?? null),
-                'phone_ext' => $request->input('phone_extension', $erpData['CustomerPhoneExt'] ?? null),
-                'password' => $request->input('password'),
-                'email' => $request->input('email'),
-                'login_id' => $request->input('email'),
-                'is_admin' => $customer->wasRecentlyCreated,
-                'enabled' => config('amplify.security.skip_contact_approval', false),
-                'customer_address_id' => null,
-                'warehouse_id' => $customer->warehouse_id ?? null,
-                'active_customer_id' => $customer->getKey(),
-                'order_limit' => 0,
-                'daily_budget_limit' => 0,
-                'monthly_budget_limit' => 0,
-            ]);
-
-            DB::commit();
-
-            $this->handlePostRegistrationForNewRetailCustomer($request, $customer, $contact);
-
-            $request->session()->flash('customerSignedUp', true);
-
-            return redirect()->to('/')
-                ->with([
-                    'alert' => true,
-                    'success' => __(config('amplify.messages.registration_success')),
-                ]);
-
-        } catch (Exception $exception) {
-
-            Log::error($exception);
-
-            DB::rollBack();
-
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with([
-                    'alert' => true,
-                    'message' => $exception->getMessage(),
-                    'error' => __('Registration request failed. Please try again later.'),
-                ]);
-        }
-    }
-
-    /**
-     * @return mixed
-     *
-     * @throws Exception
-     */
-    private function getExistingCustomer(ContactAccountRequest $request)
+    private function getExistingCustomer(ContactAccountRequest $request): array
     {
         $customerCode = trim($request->input('customer_account_number'));
         $customerName = trim($request->input('contact_company_name'));
@@ -229,7 +129,7 @@ class RegisteredUserController extends Controller
                 ->where(DB::raw('TRIM(customer_name)'), $customerName)
                 ->first();
 
-            if (! $customer) {
+            if (!$customer) {
                 throw new Exception(
                     'We could not find your company name in our system.',
                     Response::HTTP_BAD_REQUEST
@@ -250,12 +150,12 @@ class RegisteredUserController extends Controller
         }
 
         // 3️⃣ If customer is still not found locally, try finding by code
-        if (! $customer) {
+        if (!$customer) {
             $customer = Customer::where(DB::raw('TRIM(customer_code)'), $customerCode)->first();
         }
 
         // 4️⃣ Create if missing, otherwise fetch address
-        if (! $customer) {
+        if (!$customer) {
             return [$this->createCustomer($customerInERP->toArray()), null];
         }
 
@@ -281,7 +181,7 @@ class RegisteredUserController extends Controller
             'email' => $attributes['CustomerEmail'] ?? null,
             'phone' => $attributes['CustomerPhone'] ?? null,
             'phone_ext' => $attributes['CustomerPhoneExt'] ?? null,
-            'approved' => config('amplify.security.skip_contact_approval', false),
+            'approved' => config('amplify.security.skip_request_account_approval', false),
             'customer_type' => 'Retail',
             'industry_classification_id' => $industryClassification->id ?? null,
             'address_1' => $attributes['CustomerAddress1'] ?? null,
@@ -316,12 +216,12 @@ class RegisteredUserController extends Controller
             ]);
 
             // Handle ERP response
-            if (! empty($erpCustomer->Message)) {
+            if (!empty($erpCustomer->Message)) {
                 throw new Exception($erpCustomer->Message);
             }
 
             if ($erpCustomer->CustomerNumber == null) {
-                throw new Exception('ERP customer creation failed for customer ID: '.$customer->id);
+                throw new Exception('ERP customer creation failed for customer ID: ' . $customer->id);
             }
 
             // Update customer code with ERP Customer Number
@@ -346,66 +246,24 @@ class RegisteredUserController extends Controller
             'contact_id' => $contact->id,
         ]);
 
-        if (config('amplify.security.skip_contact_approval', false)) {
-            NotificationFactory::call(Event::REGISTRATION_REQUEST_ACCEPTED, [
+        if (config('amplify.security.skip_request_account_approval', false)) {
+            NotificationFactory::call(Event::CONTACT_ACCOUNT_REQUEST_ACCEPTED, [
                 'contact_id' => $contact->id,
                 'customer_id' => $contact->customer_id,
             ]);
         } else {
             NotificationFactory::call(Event::CONTACT_ACCOUNT_REQUEST_VERIFICATION, [
                 'contact_id' => $contact->id,
+                'type' => Contact::REQUEST_ACCOUNT_VERIFICATION
             ]);
         }
 
-        if(config('amplify.basic.is_permission_system_enabled')){
-            $defaultRole =CustomerRole::where('is_default', true)
-            ->where('guard_name', Contact::AUTH_GUARD)
-            ->when(config('permission.teams'), fn($q) => $q->where('team_id', $contact->customer_id))->first();
+        if (config('amplify.basic.is_permission_system_enabled')) {
+            $defaultRole = CustomerRole::where('is_default', true)
+                ->where('guard_name', Contact::AUTH_GUARD)
+                ->when(config('permission.teams'), fn($q) => $q->where('team_id', $contact->customer_id))->first();
 
-            if($defaultRole){
-                $contact->assignRole($defaultRole);
-            }
-        }
-
-
-        if (config('amplify.erp.auto_create_contact')) {
-            ContactProfileSyncJob::dispatch($contact->toArray());
-        }
-    }
-
-    private function handlePostRegistrationForNewRetailCustomer($request, $customer, $contact): void
-    {
-        if ($request->filled('newsletter') && $request->input('newsletter') == 'yes') {
-            if ($alreadySubscriber = Subscriber::whereEmail($request->input('email'))->first()) {
-                $alreadySubscriber->increment('attempts');
-            } else {
-                Subscriber::create(['email' => $request->input('email')]);
-            }
-        }
-
-        NotificationFactory::call(Event::REGISTRATION_REQUEST_RECEIVED, [
-            'customer_id' => $customer->id,
-            'contact_id' => $contact->id,
-        ]);
-
-        event(new NewCustomerRegistered($customer));
-
-        if (config('amplify.security.skip_contact_approval', false)) {
-            NotificationFactory::call(Event::REGISTRATION_REQUEST_ACCEPTED,
-                ['contact_id' => $contact->id, 'customer_id' => $customer->id]);
-
-        } else {
-            NotificationFactory::call(Event::CONTACT_ACCOUNT_REQUEST_VERIFICATION, [
-                'contact_id' => $contact->id,
-            ]);
-        }
-
-         if(config('amplify.basic.is_permission_system_enabled')){
-            $defaultRole =CustomerRole::where('is_default', true)
-            ->where('guard_name', Contact::AUTH_GUARD)
-            ->when(config('permission.teams'), fn($q) => $q->where('team_id', $contact->customer_id))->first();
-
-            if($defaultRole){
+            if ($defaultRole) {
                 $contact->assignRole($defaultRole);
             }
         }

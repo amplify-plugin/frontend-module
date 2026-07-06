@@ -6,7 +6,7 @@ use Amplify\Frontend\Http\Requests\RoleStoreUpdateRequest;
 use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\System\Backend\Models\CustomerRole;
 use Amplify\System\Backend\Models\Role;
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Illuminate\Http\JsonResponse;
 
 class RoleController extends Controller

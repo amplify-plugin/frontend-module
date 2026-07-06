@@ -41,6 +41,7 @@ if (!function_exists('frontend_permissions')) {
 //            'switch-account' => 'switch-account',
 //            'ticket' => 'tickets',
             'cart' => 'add,v,remove,checkout,submit-quote',
+            'product-compare' => 'manage,dt',
         ];
     }
 }

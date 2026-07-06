@@ -4,7 +4,7 @@ namespace Amplify\Frontend\Http\Controllers;
 
 use Amplify\ErpApi\ErpApiService;
 use Amplify\Frontend\Traits\HasDynamicPage;
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller

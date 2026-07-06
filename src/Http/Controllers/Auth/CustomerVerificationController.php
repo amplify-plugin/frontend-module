@@ -5,7 +5,7 @@ namespace Amplify\Frontend\Http\Controllers\Auth;
 use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\System\Backend\Models\Country;
 use Amplify\System\Backend\Models\State;
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 

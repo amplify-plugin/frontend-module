@@ -8,7 +8,7 @@ use Amplify\System\Backend\Models\CustomPartNumber;
 use Amplify\System\Backend\Models\Event;
 use Amplify\System\Backend\Models\Product;
 use Amplify\System\Factories\NotificationFactory;
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 
 class CustomerPartNumberController extends Controller

@@ -13,7 +13,7 @@ use Amplify\System\Backend\Http\Requests\OrderFileRequest;
 use Amplify\System\Backend\Models\Cart;
 use Amplify\System\Backend\Models\CartItem;
 use Amplify\System\Backend\Models\Product;
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pipeline\Pipeline;

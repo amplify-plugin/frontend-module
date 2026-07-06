@@ -3,7 +3,7 @@
 namespace Amplify\Frontend\Http\Controllers;
 
 use Amplify\System\Support\Language;
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Response;
