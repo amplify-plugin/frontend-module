@@ -43,7 +43,9 @@ class SwitchAccount extends BaseComponent
         $assignableCustomers = [];
         $account = customer(true);
 
-        $customers = ContactLogin::select('customers.customer_name', 'contact_logins.customer_id')
+        $customers = ContactLogin::query()
+            ->assignment()
+            ->select('customers.customer_name', 'contact_logins.customer_id')
             ->where('contact_logins.contact_id', $account->getKey())
             ->join('customers', 'contact_logins.customer_id', '=', 'customers.id')
             ->get();

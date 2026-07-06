@@ -2,7 +2,9 @@
 
 namespace Amplify\Frontend\Http\Controllers;
 
+use Amplify\Frontend\Events\ContactLoggedIn;
 use Amplify\Frontend\Traits\HasDynamicPage;
+use Amplify\System\Backend\Models\Contact;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,10 +31,13 @@ class SwitchAccountController extends Controller
         $contact->update([
             'active_customer_id' => $request->input('active_customer_id'),
         ]);
+        $contact->refresh();
 
-        Auth::guard('customer')->logout();
+        Auth::guard(Contact::AUTH_GUARD)->logout();
 
-        if (Auth::guard('customer')->login($contact)) {
+        if (Auth::guard(Contact::AUTH_GUARD)->login($contact)) {
+            event(new ContactLoggedIn($contact));
+
             return redirect()->route('frontend.dashboard');
         }
 
