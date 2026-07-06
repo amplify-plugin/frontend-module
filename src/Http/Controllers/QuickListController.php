@@ -5,7 +5,7 @@ namespace Amplify\Frontend\Http\Controllers;
 use Amplify\Frontend\Http\Requests\QuickListRequest;
 use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\System\Backend\Models\OrderList;
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;

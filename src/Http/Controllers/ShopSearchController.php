@@ -6,7 +6,7 @@ use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\System\Backend\Models\Product;
 use Amplify\System\Traits\ProductDetailTrait;
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use ErrorException;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\JsonResponse;

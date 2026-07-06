@@ -13,7 +13,7 @@ use Amplify\System\Backend\Models\Event;
 use Amplify\System\Backend\Models\IndustryClassification;
 use Amplify\System\Factories\NotificationFactory;
 use Amplify\System\Marketing\Models\Subscriber;
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;

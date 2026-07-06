@@ -10,7 +10,7 @@ use Amplify\System\Backend\Models\ProductRelationshipType;
 use Amplify\System\Helpers\UtilityHelper;
 use Amplify\System\Sayt\Classes\ItemRow;
 use Amplify\System\Sayt\Facade\Sayt;
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use ErrorException;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;

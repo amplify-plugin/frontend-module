@@ -3,7 +3,8 @@
 namespace Amplify\Frontend\Http\Controllers\Auth;
 
 use Amplify\Frontend\Traits\HasDynamicPage;
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
+
 
 class RegisterIndexController extends Controller
 {

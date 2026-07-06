@@ -7,7 +7,7 @@ use Amplify\Frontend\Http\Requests\ShipToAddressRequest;
 use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\System\Backend\Models\Contact;
 use Amplify\System\Backend\Models\CustomerAddress;
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;

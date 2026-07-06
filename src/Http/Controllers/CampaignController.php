@@ -4,7 +4,7 @@ namespace Amplify\Frontend\Http\Controllers;
 
 use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\System\Marketing\Models\Campaign;
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 
 class CampaignController extends Controller
 {

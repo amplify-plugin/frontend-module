@@ -6,7 +6,7 @@ use Amplify\Frontend\Http\Requests\ProfilePhotoUpdateRequest;
 use Amplify\Frontend\Http\Requests\ProfileUpdateRequest;
 use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\System\Marketing\Models\Subscriber;
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
