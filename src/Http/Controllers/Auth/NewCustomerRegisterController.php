@@ -187,15 +187,17 @@ class NewCustomerRegisterController extends Controller
 
         event(new NewCustomerRegistered($customer));
 
-        if (config('amplify.security.skip_contact_approval', false)) {
+        if (config('amplify.security.skip_new_retail_customer_approval', false)) {
             NotificationFactory::call(Event::REGISTRATION_REQUEST_ACCEPTED,
                 ['contact_id' => $contact->id, 'customer_id' => $customer->id]);
 
         } else {
-            NotificationFactory::call(Event::CONTACT_ACCOUNT_REQUEST_VERIFICATION, [
-                'contact_id' => $contact->id,
-                'type' => Contact::NEW_RETAIL_CUSTOMER_VERIFICATION,
-            ]);
+            if(config('amplify.security.new_retail_customer_verification_method', 'backend') == 'email') {
+                NotificationFactory::call(Event::CONTACT_ACCOUNT_REQUEST_VERIFICATION, [
+                    'contact_id' => $contact->id,
+                    'type' => Contact::NEW_RETAIL_CUSTOMER_VERIFICATION,
+                ]);
+            }
         }
 
          if(config('amplify.basic.is_permission_system_enabled')){
