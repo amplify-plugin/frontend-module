@@ -252,10 +252,12 @@ class RequestOnlineAccessController extends Controller
                 'customer_id' => $contact->customer_id,
             ]);
         } else {
-            NotificationFactory::call(Event::CONTACT_ACCOUNT_REQUEST_VERIFICATION, [
-                'contact_id' => $contact->id,
-                'type' => Contact::REQUEST_ACCOUNT_VERIFICATION
-            ]);
+            if(config('amplify.security.request_account_verification_method', 'backend') == 'email') {
+                NotificationFactory::call(Event::CONTACT_ACCOUNT_REQUEST_VERIFICATION, [
+                    'contact_id' => $contact->id,
+                    'type' => Contact::REQUEST_ACCOUNT_VERIFICATION
+                ]);
+            }
         }
 
         if (config('amplify.basic.is_permission_system_enabled')) {
