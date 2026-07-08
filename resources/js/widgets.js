@@ -36,6 +36,10 @@ window.Amplify = {
         window.dispatchEvent(new InitEvent(this.config));
     },
 
+    clientCode() {
+        return atob(this.config.client.split('').reverse().join(''));
+    },
+
     cartUrl(append = '') {
         return this.config.url.carts + append;
     },
@@ -582,7 +586,7 @@ window.Amplify = {
                 Accept: 'application/json'
             },
             success: function (res) {
-                Amplify.cart = res;
+                this.cart = res;
                 $('.cart-dropdown').empty();
                 if (res.data.products.length > 0) {
                     $("#cart-menu-subtotal").show();
@@ -604,18 +608,22 @@ window.Amplify = {
                             <a class="dropdown-product-title" href="${product.url}">
                                 ${product.product_name}
                             </a>
-                            <span class="dropdown-product-details" style="font-size: 90%">${product.qty} @ ${product.price}/${product.uom} = ${product.subtotal}</span>
+                            <span class="dropdown-product-details" style="font-size: 90%; font-weight: bold">${
+                            this.clientCode() === 'STV'
+                                ? `${product.qty} @ ${product.price}/${product.uom} = ${product.subtotal}`
+                                : `${product.qty} x ${product.price} = ${product.subtotal}`
+                        }</span>
                         </div>
                     </div>`);
                     });
                     $('.total_cart_amount').text(res.data.sub_total);
                 } else {
-                    Amplify.renderEmptyCart();
+                    this.renderEmptyCart();
                 }
-            },
-            error: function (xhr, status) {
-                Amplify.cart = null;
-                Amplify.renderEmptyCart();
+            }.bind(Amplify),
+            error: (xhr, status) => {
+                this.cart = null;
+                this.renderEmptyCart();
             }
         });
     },
