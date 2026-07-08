@@ -225,6 +225,7 @@ trait HasDynamicPage
             'env' => config('app.env', 'local'),
             'name' => config('app.name', 'Amplify'),
             'debug' => config('app.debug', false),
+            'client' => strrev(base64_encode(config('amplify.client_code', 'ACP'))),
             'currency' => config('amplify.basic.global_currency', 'USD'),
             'language' => config('amplify.basic.default_language', 'en'),
             'dateTimeFormat' => config('amplify.basic.date_time_format', 'Y-m-d H:i:s'),
@@ -232,7 +233,8 @@ trait HasDynamicPage
             'allowGuestPrice' => config('amplify.basic.enable_guest_pricing', false),
             'cart' => [
                 'maxQuantity' => config('amplify.basic.max_cart_item_quantity', 9999999999),
-                'notAvailableMsg' => __('Part number :code is not available on our website. Please contact your representative, email us at <a href="mailto::email">:email</a> , or call us at <a href="tel::phone">:phone.', [
+                'notAvailableMsg' => __(config('amplify.messages.product_unavailable',
+                    'Product is not available on our website.'), [
                     'code' => "__product_code__",
                     'email' => config('amplify.cms.email'),
                     'phone' => config('amplify.cms.phone'),
