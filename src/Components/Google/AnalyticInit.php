@@ -3,6 +3,8 @@
 namespace Amplify\Frontend\Components\Google;
 
 use Amplify\Frontend\Abstracts\BaseComponent;
+use Amplify\System\Backend\Models\Category;
+use Amplify\System\Backend\Models\Product;
 use Amplify\System\Sayt\Classes\RemoteResults;
 use Illuminate\Contracts\View\View;
 
@@ -89,12 +91,27 @@ class AnalyticInit extends BaseComponent
 
         if ($type == 'Product') {
 
+            if ($categoryId = store()->eaProductDetail?->getCategories()?->getSuggestedCategoryID()) {
+                $categories = Category::categoryTree($categoryId);
+                if (!empty($categories)) {
+                    $data['category'] = $categories->pluck('category_name')->implode(' > ');
+                }
+            }
+
+            /**
+             * @var Product $product
+             */
             $product = \store('productModel');
 
+            $data['keywords'] = $product->meta_keywords ?? '';
             $data['name'] = $product->product_name ?? 'Not Found';
             $data['description'] = $product->short_description ?? 'Not Found';
             $data['sku'] = $product->product_code ?? 'Not Found';
             $data['mpn'] = $product->manufacturer ?? '';
+
+            if (!empty($product->gtin_number)) {
+                $data['gtin'] = $product->gtin_number ?? '';
+            }
 
             if ($product?->brand()?->exists()) {
                 $data['brand']['@type'] = 'Brand';
@@ -109,9 +126,37 @@ class AnalyticInit extends BaseComponent
                 $data['manufacturer']['name'] = $product->manufacturerRelation->name ?? '';
             }
 
+            if ($product?->productImage()?->exists()) {
+                $data['image'] = [];
+
+                $productImage = $product?->productImage;
+
+                $data['image'][] = $productImage->main ?? null;
+                $data['image'][] = $productImage->thumbnail ?? null;
+                $data['image'] = array_merge($data['image'], $productImage->additional ?? []);
+
+                $data['image'] = array_unique($data['image']);
+
+                $data['image'] = array_filter($data['image'], fn($item) => !empty($item));
+
+            }
+
+            if ($product?->default_document_type) {
+
+                $defaultDocument = $product?->default_document_type;
+
+                $data['subjectOf']['@type'] = 'CreativeWork';
+                $data['subjectOf']['name'] = $defaultDocument->name ?? 'Specifications';
+                $data['subjectOf']['description'] = $defaultDocument->description ?? 'Product Specifications';
+                $data['subjectOf']['url'] = $defaultDocument->file_path ?? '#';
+                $data['subjectOf']['encodingFormat'] = 'application/' . $defaultDocument->media_type ?? 'pdf';
+
+            }
+
             $data['offers']['@type'] = 'Offer';
             $data['offers']['url'] = request()->url();
             $data['offers']['priceCurrency'] = config('amplify.basic.global_currency', 'USD');
+            $data['offers']['price'] = (string)$product->selling_price;
             $data['offers']['availability'] = 'https://schema.org/InStock';
             $data['offers']['seller']['@type'] = 'Organization';
             $data['offers']['seller']['@id'] = $this->determineGooglePageId('Organization');
@@ -202,14 +247,28 @@ class AnalyticInit extends BaseComponent
             $resultPerPage = $eaResponse->getResultsPerPage();
 
             if (!$eaResponse->noResultFound()) {
+
+                $categoryArray = [];
+
+                if ($currentCategory = $eaResponse->getCategories()->getDetailedSuggestedIDs()) {
+                    if (!empty($currentCategory)) {
+                        $categories = Category::categoryTree($currentCategory);
+                        foreach ($categories as $index => $category) {
+                            $suffix = $index == 0 ? '' : $index;
+                            $categoryArray["item_category{$suffix}"] = $category->category_name;
+                        }
+                    }
+                }
+
+
                 foreach ($eaResponse->getProducts() as $index => $product) {
-                    $event['ecommerce']['items'][] = [
+                    $item = [
                         'index' => (($currentPage - 1) * $resultPerPage) + $index + 1,
                         'item_id' => $product->Sku_ProductCode ?? $product->Product_Code,
                         'item_name' => $product->Product_Name,
                         'item_brand' => $product->Manufacturer,
-                        'item_category' => null,
                     ];
+                    $event['ecommerce']['items'][] = array_merge($item, $categoryArray);
                 }
             }
         }
@@ -230,22 +289,32 @@ class AnalyticInit extends BaseComponent
         /**
          * @var RemoteResults $eaResponse
          */
-        if ($eaResponse = store('eaProductsData')) {
+        if ($eaResponse = store('eaProductDetail')) {
 
-            if (!$eaResponse->noResultFound()) {
-                foreach ($eaResponse->getProducts() as $product) {
+            if (!$eaResponse->noResultFound() && $product = $eaResponse->getFirstProduct()) {
 
-                    $price = $product->Price?->toFloat() ?? $product->Msrp?->toFloat() ?? null;
+                $price = $product->Price?->toFloat() ?? $product->Msrp?->toFloat() ?? null;
 
-                    $event['ecommerce']['value'] = !empty($price) ? round($price, 2) : null;
+                $event['ecommerce']['value'] = !empty($price) ? round($price, 2) : null;
 
-                    $event['ecommerce']['items'][] = [
-                        'item_id' => $product->Sku_ProductCode ?? $product->Product_Code,
-                        'item_name' => $product->Product_Name,
-                        'item_brand' => $product->Manufacturer,
-                        'item_category' => null,
-                    ];
+                $categoryArray = [];
+
+                if ($currentCategory = $eaResponse->getCategories()->getDetailedSuggestedIDs()) {
+                    if (!empty($currentCategory)) {
+                        $categories = Category::categoryTree($currentCategory);
+                        foreach ($categories as $index => $category) {
+                            $suffix = $index == 0 ? '' : $index;
+                            $categoryArray["item_category{$suffix}"] = $category->category_name;
+                        }
+                    }
                 }
+
+                $event['ecommerce']['items'][] = [
+                    'item_id' => $product->Sku_ProductCode ?? $product->Product_Code,
+                    'item_name' => $product->Product_Name,
+                    'item_brand' => $product->Manufacturer,
+                    ...$categoryArray,
+                ];
             }
         }
 
