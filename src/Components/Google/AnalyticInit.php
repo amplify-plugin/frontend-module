@@ -254,7 +254,7 @@ class AnalyticInit extends BaseComponent
                     if (!empty($currentCategory)) {
                         $categories = Category::categoryTree($currentCategory);
                         foreach ($categories as $index => $category) {
-                            $suffix = $index == 0 ? '' : $index;
+                            $suffix = $index == 0 ? '' : $index+1;
                             $categoryArray["item_category{$suffix}"] = $category->category_name;
                         }
                     }
@@ -303,7 +303,7 @@ class AnalyticInit extends BaseComponent
                     if (!empty($currentCategory)) {
                         $categories = Category::categoryTree($currentCategory);
                         foreach ($categories as $index => $category) {
-                            $suffix = $index == 0 ? '' : $index;
+                            $suffix = $index == 0 ? '' : $index+1;
                             $categoryArray["item_category{$suffix}"] = $category->category_name;
                         }
                     }
