@@ -6,6 +6,11 @@
 
 window.addEventListener('add_to_cart', function (event) {
     if (window.hasOwnProperty('dataLayer')) {
+
+        window.dataLayer.push({
+            ecommerce: null
+        });
+
         let addToCartTotal = 0;
         let items = [];
 
@@ -33,6 +38,11 @@ window.addEventListener('add_to_cart', function (event) {
 
 window.addEventListener('remove_from_cart', function (event) {
     if (window.hasOwnProperty('dataLayer')) {
+
+        window.dataLayer.push({
+            ecommerce: null
+        });
+
         let deletedCartTotal = 0;
         let items = [];
 
@@ -69,6 +79,12 @@ window.addEventListener('search', function (event) {
 window.addEventListener('add_shipping_info', function (event) {
 
     if (window.hasOwnProperty('dataLayer')) {
+
+        window.dataLayer.push({
+            ecommerce: null
+        });
+
+
         let shippingCartTotal = 0;
         let items = [];
 
@@ -97,6 +113,12 @@ window.addEventListener('add_shipping_info', function (event) {
 window.addEventListener('add_payment_info', function (event) {
 
     if (window.hasOwnProperty('dataLayer')) {
+
+        window.dataLayer.push({
+            ecommerce: null
+        });
+
+
         let paidCartTotal = 0;
         let items = [];
 
@@ -125,6 +147,12 @@ window.addEventListener('add_payment_info', function (event) {
 window.addEventListener('request_quote', function (event) {
 
     if (window.hasOwnProperty('dataLayer')) {
+
+        window.dataLayer.push({
+            ecommerce: null
+        });
+
+
         let quotedCartTotal = 0;
         let items = [];
 
@@ -153,6 +181,12 @@ window.addEventListener('request_quote', function (event) {
 window.addEventListener('purchase', function (event) {
 
     if (window.hasOwnProperty('dataLayer')) {
+
+        window.dataLayer.push({
+            ecommerce: null
+        });
+
+
         let purchasedCartTotal = 0;
         let items = [];
 
