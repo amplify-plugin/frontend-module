@@ -1893,5 +1893,10 @@ window.Amplify = {
         }).always(() => {
             target.innerHTML = defaultContent;
         });
+    },
+
+    acceptCookie() {
+        window.localStorage.setItem('consented', 'true');
+        $('#cookie-consent-modal').modal('hide');
     }
 }
