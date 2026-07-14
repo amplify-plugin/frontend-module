@@ -110,6 +110,8 @@ class AnalyticInit extends BaseComponent
              */
             $product = \store('productModel');
 
+            $productErp = collect(store('productPaginate', []))->first();
+
             $data['keywords'] = $product->meta_keywords ?? '';
             $data['name'] = $product->product_name ?? 'Not Found';
             $data['description'] = $product->short_description ?? 'Not Found';
@@ -163,7 +165,7 @@ class AnalyticInit extends BaseComponent
             $data['offers']['@type'] = 'Offer';
             $data['offers']['url'] = request()->url();
             $data['offers']['priceCurrency'] = config('amplify.basic.global_currency', 'USD');
-            $data['offers']['price'] = (string)$product->selling_price;
+            $data['offers']['price'] = number_format($productErp->ERP?->Price ?? $product->selling_price, 2);
             $data['offers']['availability'] = 'https://schema.org/InStock';
             $data['offers']['seller']['@type'] = 'Organization';
             $data['offers']['seller']['@id'] = $this->determineGooglePageId('Organization');
