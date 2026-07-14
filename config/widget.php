@@ -1195,6 +1195,38 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
+    Components\Customer\Order\CombinedIndex::class => [
+        'name' => 'customer.order.combined-list',
+        'reserved' => true,
+        'internal' => false,
+        '@inside' => null,
+        '@client' => null,
+        'model' => ['order'],
+        '@attributes' => [
+            [
+                'name' => ':allow-export',
+                'type' => 'bool',
+                'value' => false,
+            ],
+            [
+                'name' => ':export-threshold',
+                'type' => 'number',
+                'value' => 10,
+            ],
+            [
+                'name' => ':export-type',
+                'type' => 'select',
+                'value' => 'Xlsx',
+                'options' => [
+                    'xlsx' => 'Xlsx',
+                    'csv' => 'Csv',
+                ]
+            ],
+
+        ],
+        '@nestedItems' => [],
+        'description' => 'Open orders and date-range orders combined (two ERP lookups, sorted by date desc).',
+    ],
     Components\Customer\Order\Details::class => [
         'name' => 'customer.order.details',
         'reserved' => true,
