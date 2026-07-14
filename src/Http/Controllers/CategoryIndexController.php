@@ -3,8 +3,8 @@
 namespace Amplify\Frontend\Http\Controllers;
 
 use Amplify\Frontend\Traits\HasDynamicPage;
-use Illuminate\Routing\Controller;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Routing\Controller;
 
 class CategoryIndexController extends Controller
 {

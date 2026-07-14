@@ -24,6 +24,8 @@ class Foot extends BaseComponent
      */
     public function render(): View|Closure|string
     {
-        return view('widget::amplify.foot');
+        $tag_manager_id = config('amplify.google.google_tag_manager_id');
+
+        return view('widget::amplify.foot', compact('tag_manager_id'));
     }
 }

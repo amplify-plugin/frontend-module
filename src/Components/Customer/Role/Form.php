@@ -4,7 +4,6 @@ namespace Amplify\Frontend\Components\Customer\Role;
 
 use Amplify\Frontend\Abstracts\BaseComponent;
 use Amplify\System\Backend\Models\CustomerRole;
-use Amplify\System\Helpers\UtilityHelper;
 use Closure;
 use Illuminate\Contracts\View\View;
 

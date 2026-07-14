@@ -3,8 +3,8 @@
 namespace Amplify\Frontend\Http\Controllers;
 
 use Amplify\System\Marketing\Models\Subscriber;
-use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Session;
 
 class NewsletterSubscriptionController extends Controller

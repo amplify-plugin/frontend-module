@@ -126,7 +126,9 @@ class StoreDataBus
         'eaCategory' => [
             Sayt::class, 'getCategory',
         ],
-
+        'productPaginate' => [
+            Product::class, 'guessProductPaginate',
+        ]
     ];
 
     public function __get($name)

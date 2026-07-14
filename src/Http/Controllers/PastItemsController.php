@@ -3,8 +3,8 @@
 namespace Amplify\Frontend\Http\Controllers;
 
 use Amplify\Frontend\Traits\HasDynamicPage;
-use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class PastItemsController extends Controller
 {

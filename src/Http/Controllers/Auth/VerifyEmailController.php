@@ -5,9 +5,9 @@ namespace Amplify\Frontend\Http\Controllers\Auth;
 use Amplify\System\Backend\Models\Contact;
 use Amplify\System\Backend\Models\Event;
 use Amplify\System\Factories\NotificationFactory;
-use Illuminate\Routing\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
 
 class VerifyEmailController extends Controller

@@ -3,7 +3,6 @@
 namespace Amplify\Frontend\Components;
 
 use Amplify\Frontend\Abstracts\BaseComponent;
-use Illuminate\Contracts\View\View;
 
 /**
  * @class ServiceItem

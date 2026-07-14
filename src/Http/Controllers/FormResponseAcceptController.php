@@ -7,8 +7,8 @@ use Amplify\System\Backend\Models\Event;
 use Amplify\System\Cms\Models\Form;
 use Amplify\System\Cms\Models\FormResponse;
 use Amplify\System\Factories\NotificationFactory;
-use Illuminate\Routing\Controller;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Storage;
 
 class FormResponseAcceptController extends Controller

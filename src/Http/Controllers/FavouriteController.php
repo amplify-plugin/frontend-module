@@ -8,10 +8,10 @@ use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\System\Backend\Models\CartItem;
 use Amplify\System\Backend\Models\OrderList;
 use Amplify\System\Backend\Models\OrderListItem;
-use Illuminate\Routing\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
 
 class FavouriteController extends Controller

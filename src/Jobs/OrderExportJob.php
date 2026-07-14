@@ -3,16 +3,13 @@
 namespace Amplify\Frontend\Jobs;
 
 use Amplify\ErpApi\Facades\ErpApi;
-use Amplify\ErpApi\Wrappers\ShippingLocation;
 use Amplify\Frontend\Exports\OrderExport;
-use Amplify\System\Backend\Models\Cart;
 use Amplify\System\Backend\Models\Contact;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Facades\Excel;
 
 class OrderExportJob implements ShouldQueue

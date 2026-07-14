@@ -2,9 +2,7 @@
 
 namespace Amplify\Frontend\Events;
 
-use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\ErpApi\Wrappers\OrderTotal;
-use Amplify\Frontend\Jobs\CartPricingSyncJob;
 use Amplify\System\Backend\Models\Cart;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;

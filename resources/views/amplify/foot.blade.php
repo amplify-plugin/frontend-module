@@ -34,3 +34,10 @@
 @stack('footer-script')
 <x-no-image-skeleton />
 <x-site.toastr-notification />
+@if(!empty($tag_manager_id))
+    <script>
+        @foreach(app('analytics') as $payload)
+            window.dataLayer.push(@json($payload));
+        @endforeach
+    </script>
+@endif

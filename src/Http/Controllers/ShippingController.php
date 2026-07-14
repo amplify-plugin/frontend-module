@@ -8,8 +8,8 @@ use Amplify\Frontend\Http\Requests\ShippingOptionRequest;
 use Amplify\Frontend\Http\Rules\PhoneNumberRule;
 use Amplify\System\Backend\Models\CustomerAddress;
 use Amplify\System\Backend\Models\Warehouse;
-use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\ValidationException;
 
