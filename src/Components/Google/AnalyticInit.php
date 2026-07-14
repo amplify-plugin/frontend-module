@@ -46,7 +46,6 @@ class AnalyticInit extends BaseComponent
 
         if (!empty($tag_manager_id)) {
             $this->pageAnalyticDataForGA();
-            logger()->debug("analytics processed");
         }
 
         return view('widget::google.google-analytic', [
@@ -165,7 +164,7 @@ class AnalyticInit extends BaseComponent
             $data['offers']['@type'] = 'Offer';
             $data['offers']['url'] = request()->url();
             $data['offers']['priceCurrency'] = config('amplify.basic.global_currency', 'USD');
-            $data['offers']['price'] = number_format($productErp->ERP?->Price ?? $product->selling_price, 2);
+            $data['offers']['price'] = round($productErp->ERP?->Price ?? $product->selling_price, 2);
             $data['offers']['availability'] = 'https://schema.org/InStock';
             $data['offers']['seller']['@type'] = 'Organization';
             $data['offers']['seller']['@id'] = $this->determineGooglePageId('Organization');
@@ -316,10 +315,10 @@ class AnalyticInit extends BaseComponent
                         'manufacturer' => $product->Manufacturer,
                         'manufacturer_part_number' => $product->MPN,
                         'uom' => $product->ERP?->UnitOfMeasure ?? $product->UoM,
-                        'price' => floatval(number_format($product->ERP?->ListPrice ?? $product->Msrp?->toFloat(), 2)),
-                        'customer_price' => floatval(number_format($product->ERP?->Price ?? $product->Price?->toFloat(), 2)),
+                        'price' => round($product->ERP?->ListPrice ?? $product->Msrp?->toFloat(), 2),
+                        'customer_price' => round($product->ERP?->Price ?? $product->Price?->toFloat(), 2),
                         'lead_time' => $product->ERP?->AverageLeadTime ?? null,
-                        'pack_size' => floatval($product->ERP?->QuantityInterval ?? $product->qty_interval ?? 1),
+                        'pack_size' => round($product->ERP?->QuantityInterval ?? $product->qty_interval ?? 1),
                         'availability' => ($product->InStock ?? false) ? 'In Stock' : 'Out of Stock',
                         'quantity' => $product->min_order_qty ?? 1,
                     ];
@@ -372,10 +371,10 @@ class AnalyticInit extends BaseComponent
                     'manufacturer' => $product->Manufacturer,
                     'manufacturer_part_number' => $product->MPN,
                     'uom' => $product->ERP?->UnitOfMeasure ?? $product->UoM,
-                    'price' => floatval(number_format($product->ERP?->ListPrice ?? $product->Msrp?->toFloat(), 2)),
-                    'customer_price' => floatval(number_format($product->ERP?->Price ?? $product->Price?->toFloat(), 2)),
+                    'price' => round($product->ERP?->ListPrice ?? $product->Msrp?->toFloat(), 2),
+                    'customer_price' => round($product->ERP?->Price ?? $product->Price?->toFloat(), 2),
                     'lead_time' => $product->ERP?->AverageLeadTime ?? null,
-                    'pack_size' => floatval($product->ERP?->QuantityInterval ?? $product->qty_interval ?? 1),
+                    'pack_size' => round($product->ERP?->QuantityInterval ?? $product->qty_interval ?? 1),
                     'availability' => ($product->InStock ?? false) ? 'In Stock' : 'Out of Stock',
                     'quantity' => $product->min_order_qty ?? 1,
                     ...$categoryArray,
