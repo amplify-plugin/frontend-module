@@ -4,8 +4,8 @@ namespace Amplify\Frontend\Http\Controllers;
 
 use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\System\Backend\Models\Webinar;
-use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class EventController extends Controller
 {

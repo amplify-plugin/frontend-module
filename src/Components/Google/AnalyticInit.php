@@ -3,6 +3,7 @@
 namespace Amplify\Frontend\Components\Google;
 
 use Amplify\Frontend\Abstracts\BaseComponent;
+use Amplify\Frontend\Store\AnalyticsBus;
 use Amplify\System\Backend\Models\Category;
 use Amplify\System\Backend\Models\Product;
 use Amplify\System\Sayt\Classes\RemoteResults;
@@ -23,6 +24,7 @@ class AnalyticInit extends BaseComponent
 
     /**
      * Get the view / contents that represent the component.
+     * @throws \ErrorException
      */
     public function render(): View|\Closure|string
     {
@@ -41,6 +43,11 @@ class AnalyticInit extends BaseComponent
         $analytics_url = str_replace("?id={$analytics_id}", '', $analytics_url);
 
         $tag_manager_id = config('amplify.google.google_tag_manager_id');
+
+        if (!empty($tag_manager_id)) {
+            $this->pageAnalyticDataForGA();
+            logger()->debug("analytics processed");
+        }
 
         return view('widget::google.google-analytic', [
             'analytics_id' => $analytics_id,
@@ -194,45 +201,45 @@ class AnalyticInit extends BaseComponent
      */
     public function pageAnalyticDataForGA()
     {
-        $data = [];
+        /**
+         * @var AnalyticsBus $analytics
+         */
+        $analytics = app('analytics');
 
-        $data[] = customer_check()
+        $analytics->put(payload: customer_check()
             ? ['sei_user_type' => 'logged_in', 'sei_user_id' => customer(true)->getKey(), 'sei_user_name' => customer(true)->name ?? 'Guest']
-            : ['sei_user_type' => 'guest', 'sei_user_id' => 'public', 'sei_user_name' => 'Guest'];
+            : ['sei_user_type' => 'guest', 'sei_user_id' => 'public', 'sei_user_name' => 'Guest']);
+
 
         if (session()->has('loggedIn')) {
-            $data[] = ['event' => 'login', 'method' => 'password', 'ecommerce' => null];
+            $analytics->put('login', ['event' => 'login', 'method' => 'password', 'ecommerce' => null]);
         }
 
         if (session()->has('customerSignedUp')) {
-            $data[] = ['event' => 'sign_up', 'method' => 'registration', 'type' => 'new_retail_customer', 'ecommerce' => null];
+            $analytics->put('sign_up', ['event' => 'sign_up', 'method' => 'registration', 'type' => 'new_retail_customer', 'ecommerce' => null]);
         }
 
         if (session()->has('contactSignedUp')) {
-            $data[] = ['event' => 'sign_up', 'method' => 'registration', 'type' => 'request_account', 'ecommerce' => null];
+            $analytics->put('sign_up', ['event' => 'sign_up', 'method' => 'registration', 'type' => 'request_account', 'ecommerce' => null]);
         }
 
         if ($page = store('dynamicPageModel')) {
 
-            $data[] = match ($page->page_type) {
-                'shop' => $this->shopAnalytics(),
-                'single_product' => $this->productAnalytics(),
-                'cart' => $this->cartAnalytics(),
-                'checkout' => $this->cartAnalytics('begin_checkout'),
+            match ($page->page_type) {
+                'shop' => $this->shopAnalytics($analytics),
+                'single_product' => $this->productAnalytics($analytics),
+                'cart' => $this->cartAnalytics('view_cart', $analytics),
+                'checkout' => $this->cartAnalytics('begin_checkout', $analytics),
                 default => [],
             };
         }
-
-        return array_filter($data, fn($item) => !empty($item));
     }
 
-    private function shopAnalytics(): array
+    private function shopAnalytics(&$analytics)
     {
         $event = [
             'event' => 'view_item_list',
             'ecommerce' => [
-                'item_list_name' => 'Search Results',
-                'item_list_id' => 'search_results',
                 'currency' => config('amplify.basic.global_currency', 'USD'),
                 'items' => [],
             ]
@@ -243,6 +250,44 @@ class AnalyticInit extends BaseComponent
          */
         if ($eaResponse = store('eaProductsData')) {
 
+            $searchStates = $eaResponse->getStateInfo();
+
+            $currentState = end($searchStates);
+
+            switch ($currentState->getType()) {
+                //category
+                case 1:
+                    $cts = collect($searchStates)->filter(fn($item) => $item->getType() == 1);
+                    $name = [];
+                    foreach ($cts as $cs) {
+                        $name[] = $cs->getValue();
+                    }
+
+                    $event['ecommerce']['item_list_name'] = 'Category: ' . implode(' > ', $name);
+                    $event['ecommerce']['item_list_id'] = 'category_' . $eaResponse->getSuggestedCategoryID();
+                    break;
+
+                //attribute
+                case 2:
+                    $ats = collect($searchStates)->filter(fn($item) => $item->getType() == 2);
+                    $name = [];
+                    foreach ($ats as $at) {
+                        $name[] = $at->getName() . ': ' . $at->getValue();
+                    }
+
+                    $event['ecommerce']['item_list_name'] = 'Category: ' . $eaResponse->getSuggestedCategoryTitle() . ' | ' . implode(' | ', $name);
+                    $event['ecommerce']['item_list_id'] = 'category_' . $eaResponse->getSuggestedCategoryID() . '_filtered';
+                    break;
+
+                //search
+                default:
+                    if (request()->filled('q')) {
+                        $event['search_term'] = request('q');
+                        $event['ecommerce']['item_list_name'] = 'Search Results: ' . $event['search_term'];
+                        $event['ecommerce']['item_list_id'] = 'search_results';
+                    }
+            }
+
             $currentPage = $eaResponse->getCurrentPage();
             $resultPerPage = $eaResponse->getResultsPerPage();
 
@@ -250,33 +295,44 @@ class AnalyticInit extends BaseComponent
 
                 $categoryArray = [];
 
-                if ($currentCategory = $eaResponse->getCategories()->getDetailedSuggestedIDs()) {
-                    if (!empty($currentCategory)) {
-                        $categories = Category::categoryTree($currentCategory);
-                        foreach ($categories as $index => $category) {
-                            $suffix = $index == 0 ? '' : $index+1;
-                            $categoryArray["item_category{$suffix}"] = $category->category_name;
-                        }
-                    }
+                $categories = explode('////', $eaResponse->getBreadCrumbTrail()->getPureCategoryPath());
+
+                array_shift($categories);
+
+                foreach ($categories as $index => $category) {
+                    $suffix = $index == 0 ? '' : $index + 1;
+                    $categoryArray["item_category{$suffix}"] = $category;
                 }
 
+                foreach (store('productPaginate', []) as $index => $product) {
 
-                foreach ($eaResponse->getProducts() as $index => $product) {
                     $item = [
                         'index' => (($currentPage - 1) * $resultPerPage) + $index + 1,
                         'item_id' => $product->Sku_ProductCode ?? $product->Product_Code,
                         'item_name' => $product->Product_Name,
                         'item_brand' => $product->Manufacturer,
+                        'manufacturer' => $product->Manufacturer,
+                        'manufacturer_part_number' => $product->MPN,
+                        'uom' => $product->ERP?->UnitOfMeasure ?? $product->UoM,
+                        'price' => floatval(number_format($product->ERP?->ListPrice ?? $product->Msrp?->toFloat(), 2)),
+                        'customer_price' => floatval(number_format($product->ERP?->Price ?? $product->Price?->toFloat(), 2)),
+                        'lead_time' => $product->ERP?->AverageLeadTime ?? null,
+                        'pack_size' => floatval($product->ERP?->QuantityInterval ?? $product->qty_interval ?? 1),
+                        'availability' => ($product->InStock ?? false) ? 'In Stock' : 'Out of Stock',
+                        'quantity' => $product->min_order_qty ?? 1,
                     ];
+
+                    $item['discount'] = abs($item['price'] - $item['customer_price']);
+
                     $event['ecommerce']['items'][] = array_merge($item, $categoryArray);
                 }
             }
         }
 
-        return $event;
+        $analytics->put('view_item_list', $event);
     }
 
-    private function productAnalytics(): array
+    private function productAnalytics(&$analytics): void
     {
         $event = [
             'event' => 'view_item',
@@ -291,11 +347,9 @@ class AnalyticInit extends BaseComponent
          */
         if ($eaResponse = store('eaProductDetail')) {
 
-            if (!$eaResponse->noResultFound() && $product = $eaResponse->getFirstProduct()) {
+            if (!$eaResponse->noResultFound()) {
 
-                $price = $product->Price?->toFloat() ?? $product->Msrp?->toFloat() ?? null;
-
-                $event['ecommerce']['value'] = !empty($price) ? round($price, 2) : null;
+                $product = collect(store('productPaginate', $eaResponse->getProducts()))->first();
 
                 $categoryArray = [];
 
@@ -303,29 +357,44 @@ class AnalyticInit extends BaseComponent
                     if (!empty($currentCategory)) {
                         $categories = Category::categoryTree($currentCategory);
                         foreach ($categories as $index => $category) {
-                            $suffix = $index == 0 ? '' : $index+1;
+                            $suffix = $index == 0 ? '' : $index + 1;
                             $categoryArray["item_category{$suffix}"] = $category->category_name;
                         }
                     }
                 }
 
-                $event['ecommerce']['items'][] = [
+                $item = [
                     'item_id' => $product->Sku_ProductCode ?? $product->Product_Code,
                     'item_name' => $product->Product_Name,
                     'item_brand' => $product->Manufacturer,
+                    'manufacturer' => $product->Manufacturer,
+                    'manufacturer_part_number' => $product->MPN,
+                    'uom' => $product->ERP?->UnitOfMeasure ?? $product->UoM,
+                    'price' => floatval(number_format($product->ERP?->ListPrice ?? $product->Msrp?->toFloat(), 2)),
+                    'customer_price' => floatval(number_format($product->ERP?->Price ?? $product->Price?->toFloat(), 2)),
+                    'lead_time' => $product->ERP?->AverageLeadTime ?? null,
+                    'pack_size' => floatval($product->ERP?->QuantityInterval ?? $product->qty_interval ?? 1),
+                    'availability' => ($product->InStock ?? false) ? 'In Stock' : 'Out of Stock',
+                    'quantity' => $product->min_order_qty ?? 1,
                     ...$categoryArray,
                 ];
+
+                $item['discount'] = abs($item['price'] - $item['customer_price']);
+
+                $event['ecommerce']['value'] = !empty($item['price']) ? round($item['price'], 2) : null;
+
+                $event['ecommerce']['items'][] = $item;
             }
         }
 
-        return $event;
+        $analytics->put('view_item', $event);
     }
 
-    private function cartAnalytics($event = 'view_cart'): array
+    private function cartAnalytics($event, &$analytics): void
     {
         $cart = getCart();
 
-        return [
+        $analytics->put($event, [
             'event' => $event,
             'ecommerce' => [
                 'currency' => config('amplify.basic.global_currency', 'USD'),
@@ -339,6 +408,6 @@ class AnalyticInit extends BaseComponent
                     ];
                 })->toArray(),
             ]
-        ];
+        ]);
     }
 }

@@ -8,9 +8,9 @@ use Amplify\Frontend\Helpers\CustomerHelper;
 use Amplify\Frontend\Http\Requests\Auth\LoginRequest;
 use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\System\Backend\Models\Contact;
-use Illuminate\Routing\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 

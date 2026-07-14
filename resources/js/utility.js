@@ -381,4 +381,10 @@ $(document).ready(function () {
 
     //Select2 Defaults
     $.fn.select2.defaults.set("theme", "bootstrap4");
+
+    //initial Consent Modal
+    let consent = window.localStorage.getItem('consented');
+    if (consent == null || consent === 'false') {
+        $('#cookie-consent-modal').modal('toggle');
+    }
 });

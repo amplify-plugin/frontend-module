@@ -5,8 +5,8 @@ namespace Amplify\Frontend\Http\Controllers\Order;
 use Amplify\Frontend\Jobs\OrderExportJob;
 use Amplify\Frontend\Traits\DynamicPageLoad\OrderTrait;
 use Amplify\Frontend\Traits\HasDynamicPage;
-use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class ExportController extends Controller
 {

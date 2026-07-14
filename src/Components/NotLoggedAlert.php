@@ -5,7 +5,6 @@ namespace Amplify\Frontend\Components;
 use Amplify\Frontend\Abstracts\BaseComponent;
 use Closure;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Config;
 
 /**
  * @class NotLoggedAlert

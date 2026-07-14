@@ -2,10 +2,9 @@
 
 namespace Amplify\Frontend\Components\Product\Comparison;
 
-use Closure;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Contracts\View\View;
 use Amplify\Frontend\Abstracts\BaseComponent;
+use Closure;
+use Illuminate\Contracts\View\View;
 
 /**
  * @class Index

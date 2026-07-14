@@ -13,7 +13,7 @@
                 @endempty
                 <div class="modal-actions">
                     <button type="button" class="btn btn-consent"
-                            onclick="acceptCookie();">
+                            onclick="Amplify.acceptCookie();">
                         {{ __('I understand') }}
                     </button>
                 </div>
@@ -21,19 +21,3 @@
         </div>
     </div>
 </div>
-
-@pushonce('footer-script')
-    <script>
-        function acceptCookie() {
-            window.localStorage.setItem('consented', 'true');
-            $('#cookie-consent-modal').modal('hide');
-        }
-
-        $(function () {
-            let consent = window.localStorage.getItem('consented');
-            if (consent == null || consent === 'false') {
-                $('#cookie-consent-modal').modal('toggle');
-            }
-        });
-    </script>
-@endpushonce

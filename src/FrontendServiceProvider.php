@@ -8,6 +8,7 @@ use Amplify\Frontend\Http\Middlewares\FrontendDisabled;
 use Amplify\Frontend\Providers\EventServiceProvider;
 use Amplify\Frontend\Providers\ValidationServiceProvider;
 use Amplify\Frontend\Providers\WidgetServiceProvider;
+use Amplify\Frontend\Store\AnalyticsBus;
 use Amplify\System\Cms\Models\Form;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
@@ -35,6 +36,7 @@ class FrontendServiceProvider extends ServiceProvider
         $this->app->register(EventServiceProvider::class);
         $this->app->register(ValidationServiceProvider::class);
         $this->app->register(WidgetServiceProvider::class);
+        $this->app->singleton('analytics', fn() => AnalyticsBus::init());
     }
 
     /**

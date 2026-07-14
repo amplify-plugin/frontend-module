@@ -7,10 +7,10 @@ use Amplify\Frontend\Helpers\CustomerHelper;
 use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\System\Backend\Http\Requests\FrontendContactRequest;
 use Amplify\System\Backend\Models\Contact;
-use Illuminate\Routing\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class ContactController extends Controller

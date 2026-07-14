@@ -3,9 +3,9 @@
 namespace Amplify\Frontend\Http\Controllers;
 
 use Amplify\System\Support\Language;
-use Illuminate\Routing\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 

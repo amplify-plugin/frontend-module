@@ -4,9 +4,9 @@ namespace Amplify\Frontend\Http\Controllers\Auth;
 
 use Amplify\Frontend\Http\Requests\Auth\ForceResetPasswordRequest;
 use Amplify\Frontend\Traits\HasDynamicPage;
-use Illuminate\Routing\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Session;
 
 class ForceResetPasswordController extends Controller

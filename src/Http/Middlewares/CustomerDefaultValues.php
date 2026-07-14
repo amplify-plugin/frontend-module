@@ -2,7 +2,6 @@
 
 namespace Amplify\Frontend\Http\Middlewares;
 
-use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\System\Backend\Models\ContactLogin;
 use Amplify\System\Backend\Models\CustomerAddress;
 use Closure;

@@ -10,10 +10,10 @@ use Amplify\System\Backend\Models\ProductRelationshipType;
 use Amplify\System\Helpers\UtilityHelper;
 use Amplify\System\Sayt\Classes\ItemRow;
 use Amplify\System\Sayt\Facade\Sayt;
-use Illuminate\Routing\Controller;
 use ErrorException;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 

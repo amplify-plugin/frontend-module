@@ -2,10 +2,10 @@
 
 namespace Amplify\Frontend\Components\Product\Comparison;
 
+use Amplify\Frontend\Abstracts\BaseComponent;
 use Amplify\System\Sayt\Classes\ItemRow;
 use Closure;
 use Illuminate\Contracts\View\View;
-use Amplify\Frontend\Abstracts\BaseComponent;
 
 /**
  * @class Button
