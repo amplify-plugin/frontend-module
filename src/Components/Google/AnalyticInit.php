@@ -341,8 +341,6 @@ class AnalyticInit extends BaseComponent
             }
         }
 
-        dump($event);
-
         $analytics->put('view_item_list', $event);
     }
 
