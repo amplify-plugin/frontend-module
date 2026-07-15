@@ -6,7 +6,10 @@ use Amplify\Frontend\Abstracts\BaseComponent;
 use Amplify\Frontend\Store\AnalyticsBus;
 use Amplify\System\Backend\Models\Category;
 use Amplify\System\Backend\Models\Product;
+use Amplify\System\Sayt\Classes\BreadCrumbTrail;
+use Amplify\System\Sayt\Classes\NavigateNode;
 use Amplify\System\Sayt\Classes\RemoteResults;
+use Amplify\System\Sayt\Classes\StateInfo;
 use Illuminate\Contracts\View\View;
 
 /**
@@ -251,17 +254,25 @@ class AnalyticInit extends BaseComponent
          */
         if ($eaResponse = store('eaProductsData')) {
 
-            $searchStates = $eaResponse->getStateInfo();
+            /**
+             * @var BreadCrumbTrail $breadCrumbTrail
+             */
+            $breadCrumbTrail = $eaResponse->getBreadCrumbTrail()?->getSearchPath() ?? [];
 
-            $currentState = end($searchStates);
+            /**
+             * @var NavigateNode $currentState
+             */
+            $currentState = collect($breadCrumbTrail)->last();
 
             switch ($currentState->getType()) {
                 //category
                 case 1:
-                    $cts = collect($searchStates)->filter(fn($item) => $item->getType() == 1);
+                    $cts = collect($breadCrumbTrail)->filter(fn($item) => $item->getType() == 1);
+                    $cts->offsetUnset(0);
                     $name = [];
+
                     foreach ($cts as $cs) {
-                        $name[] = $cs->getValue();
+                        $name[] = $cs->getEnglishName();
                     }
 
                     $event['ecommerce']['item_list_name'] = 'Category: ' . implode(' > ', $name);
@@ -270,10 +281,10 @@ class AnalyticInit extends BaseComponent
 
                 //attribute
                 case 2:
-                    $ats = collect($searchStates)->filter(fn($item) => $item->getType() == 2);
+                    $ats = collect($breadCrumbTrail)->filter(fn($item) => $item->getType() == 2);
                     $name = [];
                     foreach ($ats as $at) {
-                        $name[] = $at->getName() . ': ' . $at->getValue();
+                        $name[] = $at->getEnglishName();
                     }
 
                     $event['ecommerce']['item_list_name'] = 'Category: ' . $eaResponse->getSuggestedCategoryTitle() . ' | ' . implode(' | ', $name);
@@ -329,6 +340,8 @@ class AnalyticInit extends BaseComponent
                 }
             }
         }
+
+        dump($event);
 
         $analytics->put('view_item_list', $event);
     }
