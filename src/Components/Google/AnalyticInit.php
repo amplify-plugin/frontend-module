@@ -326,15 +326,12 @@ class AnalyticInit extends BaseComponent
                         'manufacturer' => $product->Manufacturer,
                         'manufacturer_part_number' => $product->MPN,
                         'uom' => $product->ERP?->UnitOfMeasure ?? $product->UoM,
-                        'price' => round($product->ERP?->ListPrice ?? $product->Msrp?->toFloat(), 2),
-                        'customer_price' => round($product->ERP?->Price ?? $product->Price?->toFloat(), 2),
+                        'price' => round($product->ERP?->Price ?? $product->Price?->toFloat(), 2),
                         'lead_time' => $product->ERP?->AverageLeadTime ?? null,
                         'pack_size' => round($product->ERP?->QuantityInterval ?? $product->qty_interval ?? 1),
                         'availability' => ($product->InStock ?? false) ? 'In Stock' : 'Out of Stock',
                         'quantity' => $product->min_order_qty ?? 1,
                     ];
-
-                    $item['discount'] = abs($item['price'] - $item['customer_price']);
 
                     $event['ecommerce']['items'][] = array_merge($item, $categoryArray);
                 }
@@ -382,16 +379,13 @@ class AnalyticInit extends BaseComponent
                     'manufacturer' => $product->Manufacturer,
                     'manufacturer_part_number' => $product->MPN,
                     'uom' => $product->ERP?->UnitOfMeasure ?? $product->UoM,
-                    'price' => round($product->ERP?->ListPrice ?? $product->Msrp?->toFloat(), 2),
-                    'customer_price' => round($product->ERP?->Price ?? $product->Price?->toFloat(), 2),
+                    'price' => round($product->ERP?->Price ?? $product->Price?->toFloat(), 2),
                     'lead_time' => $product->ERP?->AverageLeadTime ?? null,
                     'pack_size' => round($product->ERP?->QuantityInterval ?? $product->qty_interval ?? 1),
                     'availability' => ($product->InStock ?? false) ? 'In Stock' : 'Out of Stock',
                     'quantity' => $product->min_order_qty ?? 1,
                     ...$categoryArray,
                 ];
-
-                $item['discount'] = abs($item['price'] - $item['customer_price']);
 
                 $event['ecommerce']['value'] = !empty($item['price']) ? round($item['price'], 2) : null;
 
