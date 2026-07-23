@@ -143,7 +143,7 @@
                                                 style="width: 65px; background-position: 85%;">
                                             @foreach (getPaginationLengths() as $length)
                                                 <option value="{{ $length }}"
-                                                        @if ($length == request('par_page')) selected @endif>
+                                                        @if ($length == request('per_page')) selected @endif>
                                                     {{ $length }}
                                                 </option>
                                             @endforeach
