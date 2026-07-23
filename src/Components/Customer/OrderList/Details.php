@@ -27,14 +27,20 @@ class Details extends BaseComponent
             abort(404, 'Not Found');
         }
 
-        $search = request('search', '');
+        $search = trim((string) request('search', ''));
 
         $orderList = OrderList::find($param);
 
         $orderListItems = $orderList->orderListItems()
             ->with('product')
-            ->whereHas('product', function ($q) use ($search) {
-                return $q->where('product_name', 'like', "%{$search}%");
+            ->when(filled($search), function ($query) use ($search) {
+                $query->whereHas('product', function ($productQuery) use ($search) {
+                    $productQuery->where(function ($filterQuery) use ($search) {
+                        $filterQuery
+                            ->where('product_name', 'like', "%{$search}%")
+                            ->orWhere('product_code', 'like', "%{$search}%");
+                    });
+                });
             })
             ->paginate(request('per_page', getPaginationLengths()[0]))
             ->withQueryString();

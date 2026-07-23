@@ -15,11 +15,11 @@
                 <div class="row">
                     <div class="col-md-6 my-2 mb-md-0">
                         <div class="d-flex justify-content-center justify-content-md-start">
-                            <label aria-label="search">
-                                <input type="search" aria-label="search" name="search"
-                                       class="form-control form-control-sm"
+                            <div class="input-group input-group-sm" style="max-width: 320px;">
+                                <input type="search" aria-label="search" name="search" id="search"
+                                       class="form-control form-control-sm p-2"
                                        placeholder="Search...." value="{{ request('search') }}">
-                            </label>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-6 mb-2 mb-md-0">
@@ -143,7 +143,7 @@
                                                 style="width: 65px; background-position: 85%;">
                                             @foreach (getPaginationLengths() as $length)
                                                 <option value="{{ $length }}"
-                                                        @if ($length == request('par_page')) selected @endif>
+                                                        @if ($length == request('per_page')) selected @endif>
                                                     {{ $length }}
                                                 </option>
                                             @endforeach
@@ -191,4 +191,23 @@
             top: -1px;
         }
     </style>
+@endpush
+
+@push('footer-script')
+    <script>
+        function debounce(callback, ms) {
+            var timer = 0;
+            return function () {
+                var context = this, args = arguments;
+                clearTimeout(timer);
+                timer = setTimeout(function () {
+                    callback.apply(context, args);
+                }, ms || 0);
+            };
+        }
+
+        $(document).on("keyup change", "#search", debounce(function () {
+            $("#customer-item-list-search-form").submit();
+        }, 500));
+    </script>
 @endpush
