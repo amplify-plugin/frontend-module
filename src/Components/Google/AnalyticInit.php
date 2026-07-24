@@ -180,7 +180,7 @@ class AnalyticInit extends BaseComponent
 
     private function determineGooglePageType(): string
     {
-        return match (request()->route()->getName()) {
+        return match ((request()->route()?->getName() ?? null)) {
             'frontend.index' => 'Organization',
             'frontend.shop.index' => 'WebSite',
             'frontend.shop.show' => 'Product',
@@ -264,7 +264,7 @@ class AnalyticInit extends BaseComponent
              */
             $currentState = collect($breadCrumbTrail)->last();
 
-            switch ($currentState->getType()) {
+            switch (($currentState?->getType() ?? null)) {
                 //category
                 case 1:
                     $cts = collect($breadCrumbTrail)->filter(fn($item) => $item->getType() == 1);
