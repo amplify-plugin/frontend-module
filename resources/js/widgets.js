@@ -1178,7 +1178,7 @@ window.Amplify = {
                     Amplify.renderCartItemBadge(res.data?.total ?? '');
                 },
                 error: function (xhr) {
-                    Amplify.alert(xhr.responseJSON?.message ?? 'Something Went Wrong. PLease try again later.', 'Cart');
+                    Amplify.alert(xhr.responseJSON?.message ?? 'Something went wrong. Please try again later.', 'Cart');
                 }
             }).always(function () {
                 cartElement.innerHTML = defaultContent;
@@ -1884,7 +1884,7 @@ window.Amplify = {
             },
             error: (xhr) => {
                 this.alert(
-                    xhr.responseJSON?.message ?? 'Something Went Wrong. PLease try again later.',
+                    xhr.responseJSON?.message ?? 'Something went wrong. Please try again later.',
                     'Product Comparison', {
                         timer: 2500,
                         timerProgressBar: true,
