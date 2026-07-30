@@ -1172,60 +1172,38 @@ return [
         'model' => ['order'],
         '@attributes' => [
             [
-                'name' => ':allow-export',
+                'name' => 'allow-export',
                 'type' => 'bool',
                 'value' => false,
             ],
             [
-                'name' => ':export-threshold',
+                'name' => 'export-threshold',
                 'type' => 'number',
                 'value' => 10,
             ],
             [
-                'name' => ':export-type',
+                'name' => 'export-type',
                 'type' => 'select',
-                'value' => 'Xlsx',
+                'value' => 'xlsx',
                 'options' => [
                     'xlsx' => 'Xlsx',
                     'csv' => 'Csv',
                 ]
+            ],
+            [
+                'name' => 'order-scope',
+                'type' => 'select',
+                'value' => 'open',
+                'options' => [
+                    'open' => 'Open Orders',
+                    'all' => 'All Orders (Open & Invoiced)',
+                ],
+                'hint' => 'Open Orders = in-process only. All Orders = open plus invoiced/processed in the date range.',
             ],
 
         ],
         '@nestedItems' => [],
         'description' => '',
-    ],
-    Components\Customer\Order\CombinedIndex::class => [
-        'name' => 'customer.order.combined-list',
-        'reserved' => true,
-        'internal' => false,
-        '@inside' => null,
-        '@client' => null,
-        'model' => ['order'],
-        '@attributes' => [
-            [
-                'name' => ':allow-export',
-                'type' => 'bool',
-                'value' => false,
-            ],
-            [
-                'name' => ':export-threshold',
-                'type' => 'number',
-                'value' => 10,
-            ],
-            [
-                'name' => ':export-type',
-                'type' => 'select',
-                'value' => 'Xlsx',
-                'options' => [
-                    'xlsx' => 'Xlsx',
-                    'csv' => 'Csv',
-                ]
-            ],
-
-        ],
-        '@nestedItems' => [],
-        'description' => 'Open orders and date-range orders combined (two ERP lookups, sorted by date desc).',
     ],
     Components\Customer\Order\Details::class => [
         'name' => 'customer.order.details',

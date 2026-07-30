@@ -13,8 +13,16 @@ use Illuminate\Contracts\View\View;
  */
 class Index extends BaseComponent
 {
-    public function __construct(public bool $allowExport = false, public int $exportThreshold = 10, public string $exportType = 'Xlsx')
-    {
+    public bool $allowExport;
+
+    public function __construct(
+        bool|string $allowExport = false,
+        public int|string $exportThreshold = 10,
+        public string $exportType = 'xlsx',
+        public string $orderScope = 'open',
+    ) {
+        $this->allowExport = filter_var($allowExport, FILTER_VALIDATE_BOOLEAN);
+        $this->exportThreshold = (int) $exportThreshold;
         parent::__construct();
     }
 
