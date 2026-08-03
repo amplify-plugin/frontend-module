@@ -17,45 +17,43 @@ use Illuminate\Contracts\View\View;
  */
 class AnalyticInit extends BaseComponent
 {
+
+    public ?string $analytics_id;
+    public ?string $analytics_url;
+    public ?string $tag_manager_id;
+
+    public function __construct()
+    {
+        $this->analytics_id = config('amplify.google.google_analytics_id', '') ?? '';
+
+        $this->analytics_url = config('amplify.google.google_analytics_url', '') ?? '';
+
+        $this->analytics_url = str_replace("?id={$this->analytics_id}", '', $this->analytics_url);
+
+        $this->tag_manager_id = config('amplify.google.google_tag_manager_id');
+
+        parent::__construct();
+    }
+
     /**
      * Whether the component should be rendered
      */
     public function shouldRender(): bool
     {
-        return true;
+        return (!empty($this->analytics_id) || !empty($this->analytics_url) || !empty($this->tag_manager_id));
     }
 
     /**
      * Get the view / contents that represent the component.
-     * @throws \ErrorException
      */
     public function render(): View|\Closure|string
     {
-        $analytics_id = config('amplify.google.google_analytics_id', '');
-
-        if ($analytics_id == null) {
-            $analytics_id = '';
-        }
-
-        $analytics_url = config('amplify.google.google_analytics_url', '');
-
-        if ($analytics_url == null) {
-            $analytics_url = '';
-        }
-
-        $analytics_url = str_replace("?id={$analytics_id}", '', $analytics_url);
-
-        $tag_manager_id = config('amplify.google.google_tag_manager_id');
 
         if (!empty($tag_manager_id)) {
             $this->pageAnalyticDataForGA();
         }
 
-        return view('widget::google.google-analytic', [
-            'analytics_id' => $analytics_id,
-            'analytics_url' => $analytics_url,
-            'tag_manager_id' => $tag_manager_id,
-        ]);
+        return view('widget::google.google-analytic');
     }
 
     public function pageSchemaForGA()

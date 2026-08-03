@@ -28,6 +28,7 @@ use Amplify\Frontend\Http\Controllers\ContactLoginController;
 use Amplify\Frontend\Http\Controllers\CustomerPartNumberController;
 use Amplify\Frontend\Http\Controllers\DashboardController;
 use Amplify\Frontend\Http\Controllers\DraftController;
+use Amplify\Frontend\Http\Controllers\DynamicPageLoadController;
 use Amplify\Frontend\Http\Controllers\EventController;
 use Amplify\Frontend\Http\Controllers\FaqController;
 use Amplify\Frontend\Http\Controllers\FavouriteController;
@@ -346,4 +347,8 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
         [CustomerOrderController::class, 'deleteQuotationItem'])->name('customer-profile-quotation-list-item.delete');
 
     Route::post('product-compare', ProductCompareController::class)->name('product-compare');
+
+    Route::get('/{slug}', DynamicPageLoadController::class)
+        ->name('dynamic-route')
+        ->where('slug', '^(?!admin(?:/|$)).*');
 });

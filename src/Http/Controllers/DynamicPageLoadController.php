@@ -29,7 +29,7 @@ class DynamicPageLoadController extends Controller
      * @throws BindingResolutionException
      * @throws \ErrorException
      */
-    public function __invoke(?string $slug = null, Request $request): string
+    public function __invoke(?string $slug = null): string
     {
         if (! $this->page) {
             abort(404, 'Page Not Found');
@@ -50,8 +50,8 @@ class DynamicPageLoadController extends Controller
 
     private function handleDynamicMiddleware(Request $request): void
     {
-        if (optional($request->route())->getName() === 'dynamic-page') {
-            $siteUrl = "{$request->getSchemeAndHttpHost()}/{$request->route()->slug}";
+        if (optional($request->route())->getName() === 'frontend.dynamic-route') {
+            $siteUrl = "{$request->getSchemeAndHttpHost()}/{$request->route('slug')}";
             $this->site = Site::where([['url', '=', $siteUrl]])->first();
 
             if ($this->site) {
@@ -85,7 +85,7 @@ class DynamicPageLoadController extends Controller
                     $this->page = Page::published()->find($this->site->product_page_id);
                 }
             } else {
-                $this->page = Page::published()->where('slug', $request->route()->slug)->first();
+                $this->page = Page::published()->where('slug', $request->route('slug'))->first();
             }
         } else {
             try {
