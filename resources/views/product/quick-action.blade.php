@@ -14,13 +14,13 @@
         </div>
     @else
         @if($addToCart)
-            <div @class(['gap-2', 'd-grid d-md-flex' => $productView == 'list', 'd-grid' => $productView == 'grid'])>
+            <div @class(['gap-2', 'd-grid d-md-flex justify-content-md-between' => $productView == 'list', 'd-grid' => $productView == 'grid'])>
                 <x-cart.quantity-update :product="$product" :index="$index"/>
                 <button
                         data-warehouse="{{ $defaultWarehouse }}"
                         onclick="Amplify.addSingleItemToCart(this, '#cart-item-{{$index}}', {{ json_encode($extras) }})"
                         data-options="{{ json_encode($cartData) }}"
-                        class="btn btn-block btn-sm btn-primary m-0">
+                        class="btn btn-block btn-sm btn-primary m-0 btn-cart">
                     {{ __($cartLabel) }}
                 </button>
             </div>
