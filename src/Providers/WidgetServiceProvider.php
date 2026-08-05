@@ -3,6 +3,8 @@
 namespace Amplify\Frontend\Providers;
 
 use Amplify\Frontend\Abstracts\Widget;
+use Amplify\Frontend\Commands\CleanCartCommand;
+use Amplify\Frontend\Commands\WidgetMakeCommand;
 use Illuminate\Support\ServiceProvider;
 
 class WidgetServiceProvider extends ServiceProvider
@@ -43,7 +45,8 @@ class WidgetServiceProvider extends ServiceProvider
             });
         } else {
             $this->commands([
-                \Amplify\Frontend\Commands\WidgetMakeCommand::class,
+                WidgetMakeCommand::class,
+                CleanCartCommand::class
             ]);
         }
     }
