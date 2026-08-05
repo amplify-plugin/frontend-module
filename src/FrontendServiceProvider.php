@@ -2,6 +2,10 @@
 
 namespace Amplify\Frontend;
 
+use Amplify\ErpApi\Commands\Apprise\TokenRefreshCommand as AppriseTokenRefreshCommand;
+use Amplify\ErpApi\Commands\Csd\TokenRefreshCommand as CsdTokenRefreshCommand;
+use Amplify\ErpApi\Commands\PriceSyncCommand;
+use Amplify\Frontend\Commands\CleanCartCommand;
 use Amplify\Frontend\Http\Middlewares\CaptureIntendedUrl;
 use Amplify\Frontend\Http\Middlewares\ContactForceShippingAddressSelection;
 use Amplify\Frontend\Http\Middlewares\FrontendDisabled;
@@ -68,5 +72,23 @@ class FrontendServiceProvider extends ServiceProvider
                 FrontendDisabled::class
             ]);
         }
+
+        $this->registerScheduler();
+    }
+
+
+    private function registerScheduler()
+    {
+        $this->app->booted(function () {
+            /**
+             * @var \Illuminate\Console\Scheduling\Schedule $schedule
+             */
+            $schedule = app(\Illuminate\Console\Scheduling\Schedule::class);
+
+                $schedule->command(CleanCartCommand::class)
+                    ->dailyAt('03:00')
+                    ->withoutOverlapping()
+                    ->onOneServer();
+        });
     }
 }
