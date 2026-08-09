@@ -2,7 +2,7 @@
     @if($isMasterProduct($product))
         <div class="d-flex gap-2">
             <a href="{{ frontendSingleProductURL($product, $seoPath) }}?has_sku=1"
-               class="btn m-0 btn-primary btn-sm btn-block">
+               class="btn m-0 btn-primary btn-sm">
                 {{ __($detailLabel) }}
             </a>
             {{--            <button class="btn btn-sm btn-outline-info m-0 p-0"--}}
@@ -14,19 +14,19 @@
         </div>
     @else
         @if($addToCart)
-            <div @class(['gap-2', 'd-grid d-md-flex justify-content-md-between' => $productView == 'list', 'd-grid' => $productView == 'grid'])>
+            <div @class(["gap-2 {$productView}", 'd-grid d-sm-flex justify-content-sm-between' => $productView == 'list', 'd-grid' => $productView == 'grid'])>
                 <x-cart.quantity-update :product="$product" :index="$index"/>
                 <button
                         data-warehouse="{{ $defaultWarehouse }}"
                         onclick="Amplify.addSingleItemToCart(this, '#cart-item-{{$index}}', {{ json_encode($extras) }})"
                         data-options="{{ json_encode($cartData) }}"
-                        class="btn btn-block btn-sm btn-primary m-0 btn-cart">
+                        class="btn btn-sm btn-primary m-0 btn-cart">
                     {{ __($cartLabel) }}
                 </button>
             </div>
         @else
             <a href="{{ frontendSingleProductURL($product, $seoPath) }}"
-               class="btn m-0 btn-primary btn-sm btn-block">
+               class="btn m-0 btn-primary btn-sm">
                 {{ __($detailLabel) }}
             </a>
         @endif

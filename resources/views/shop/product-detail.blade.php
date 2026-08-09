@@ -22,6 +22,7 @@
             <x-product.short-description :content="$product->short_description ?? ''" :lines="2"/>
 
             <div class="row margin-top-1x">
+                @dump(store()->eaProductDetail->getAttributes())
                 <div class="col-sm-4">
                     <div class="form-group">
                         <label for="size">Men's size</label>
@@ -63,7 +64,7 @@
 
             <hr class="mb-3">
 
-            <div class="d-flex justify-content-between gap-2 product-card border-0 p-0">
+            <div class="d-grid d-md-flex justify-content-between gap-2 product-card border-0 p-0">
                 <x-product-social-media-link :product="$product"/>
                 <div class="product-buttons">
                     <x-product.quick-action :product="$product"/>
