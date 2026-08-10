@@ -496,8 +496,12 @@ class CartController extends Controller
     public function removeCarts()
     {
         $cart = getCart();
+
         if ($cart instanceof Cart) {
+
             $cart->cartItems()->delete();
+
+            $cart->delete();
 
             return $this->apiResponse(true, __('Cart removed successfully.'));
         }

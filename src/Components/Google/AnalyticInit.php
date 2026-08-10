@@ -109,7 +109,6 @@ class AnalyticInit extends BaseComponent
              * @var Product $product
              */
             $product = \store('productModel');
-
             $productErp = collect(store('productPaginate', []))->first();
 
             $data['keywords'] = $product->meta_keywords ?? '';
