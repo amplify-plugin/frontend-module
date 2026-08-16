@@ -150,9 +150,9 @@ class ProductSlider extends BaseComponent
         $item->detail_link = $this->productDetailLink($product);
         $item->name = $this->productTitle($product);
         $item->image = $this->productImage($product);
-        $item->price = floatval($this->productPrice($product));
+        $item->price = $this->productPrice($product);
         $item->uom = $item->UoM ?? 'EA';
-        $item->old_price = ($product->Msrp ?? $product->Price)?->toFloat();
+        $item->old_price = $this->normalizePrice($product->Msrp ?? $product->Price);
         $item->exists_in_favorite = false;
         $item->favorite_list_id = null;
         $item->pricing = true;
@@ -225,30 +225,37 @@ class ProductSlider extends BaseComponent
 
     /**
      * @param ItemRow $product
-     * @return string
      */
-    public function productPrice($product): string
+    public function productPrice($product): float
     {
-        $price = $product->Msrp ?? $product->Price ?? 0.00;
+        $price = $this->normalizePrice($product->Msrp ?? $product->Price);
 
         if (ErpApi::enabled()) {
             $erpProduct = $this->productPriceAvailability
                 ->firstWhere('ItemNumber', '=', $product->Sku_ProductCode ?? $product->Product_Code);
-            if ($erpProduct) {
-                $price = $erpProduct->Price ?? $erpProduct->ListPrice;
+
+            $erpPrice = $this->normalizePrice($erpProduct?->Price ?? $erpProduct?->ListPrice);
+            if ($erpPrice !== null) {
+                $price = $erpPrice;
             }
         }
 
-        return $price instanceof Money ? $price->toFloat() : (float)$price;
+        return $price ?? 0.0;
     }
 
-    // private function productExistOnFavorite($id, &$product): void
-    // {
-    //     foreach ($this->orderList as $orderList) {
-    //         if ($item = $orderList->orderListItems->firstWhere('product_id', $id)) {
-    //             $product->exists_in_favorite = true;
-    //             $product->favorite_list_id = $item->id;
-    //         }
-    //     }
-    // }
+    /**
+     * Normalize catalog/ERP price values to a float, or null when unset.
+     */
+    private function normalizePrice(mixed $price): ?float
+    {
+        if ($price instanceof Money) {
+            return $price->toFloat();
+        }
+
+        if ($price === null || $price === '') {
+            return null;
+        }
+
+        return (float) $price;
+    }
 }
