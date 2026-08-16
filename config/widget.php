@@ -1205,6 +1205,107 @@ return [
         '@nestedItems' => [],
         'description' => '',
     ],
+    Components\Customer\RecentlyViewed\Index::class => [
+        'name' => 'customer.recently-viewed.list',
+        'reserved' => true,
+        'internal' => false,
+        '@inside' => null,
+        '@client' => null,
+        'model' => [],
+        '@attributes' => [
+            [
+                'name' => ':show-title',
+                'type' => 'boolean',
+                'value' => true,
+            ],
+            [
+                'name' => 'title',
+                'type' => 'text',
+                'value' => 'Recently Viewed Products',
+            ],
+            [
+                'name' => 'layout',
+                'type' => 'select',
+                'options' => [
+                    'card' => 'Card (default)',
+                    'minimal' => 'Minimal (inline)',
+                ],
+                'value' => 'card',
+            ],
+            [
+                'name' => ':products-limit',
+                'type' => 'number',
+                'value' => 20,
+            ],
+            [
+                'name' => ':show-cart-btn',
+                'type' => 'boolean',
+                'value' => true,
+            ],
+            [
+                'name' => 'cart-button-label',
+                'type' => 'text',
+                'value' => 'Add To Cart',
+            ],
+            [
+                'name' => 'detail-button-label',
+                'type' => 'text',
+                'value' => 'View Details',
+            ],
+            [
+                'name' => ':show-price',
+                'type' => 'boolean',
+                'value' => true,
+            ],
+            [
+                'name' => ':show-guest-price',
+                'type' => 'boolean',
+                'value' => false,
+            ],
+            [
+                'name' => ':show-top-discount-badge',
+                'type' => 'boolean',
+                'value' => false,
+            ],
+            [
+                'name' => ':show-order-list',
+                'type' => 'boolean',
+                'value' => false,
+            ],
+            [
+                'name' => 'order-list-label',
+                'type' => 'text',
+                'value' => 'Order List',
+            ],
+            [
+                'name' => ':display-product-code',
+                'type' => 'boolean',
+                'value' => true,
+            ],
+            [
+                'name' => ':display-short-description',
+                'type' => 'boolean',
+                'value' => false,
+            ],
+            [
+                'name' => ':display-manufacturer',
+                'type' => 'boolean',
+                'value' => false,
+            ],
+            [
+                'name' => ':allow-remove',
+                'type' => 'boolean',
+                'value' => true,
+            ],
+            [
+                'name' => ':allow-clear',
+                'type' => 'boolean',
+                'value' => true,
+            ],
+        ],
+        '@nestedItems' => [],
+        'description' => 'Displays the customer recently viewed products page with remove and clear actions.',
+    ],
     Components\Customer\Order\Details::class => [
         'name' => 'customer.order.details',
         'reserved' => true,
@@ -1874,6 +1975,114 @@ return [
         ],
         '@nestedItems' => [],
         'description' => 'Displays frequently purchased together product suggestions in a carousel.',
+    ],
+    Components\Product\RecentlyViewed::class => [
+        'name' => 'recently-viewed',
+        'reserved' => true,
+        'internal' => false,
+        '@inside' => null,
+        '@client' => null,
+        'model' => ['static_page', 'single_product', 'shop', 'cart', 'cart_page', 'checkout'],
+        '@attributes' => [
+            [
+                'name' => ':show-title',
+                'type' => 'boolean',
+                'value' => true,
+            ],
+            [
+                'name' => 'title',
+                'type' => 'text',
+                'value' => 'Recently Viewed',
+            ],
+            [
+                'name' => 'layout',
+                'type' => 'select',
+                'options' => [
+                    'card' => 'Card (default)',
+                    'minimal' => 'Minimal (inline)',
+                ],
+                'value' => 'card',
+                'hint' => 'Card shows stacked image and details. Minimal shows inline thumbnail, info, and actions.',
+            ],
+            [
+                'name' => ':products-limit',
+                'type' => 'number',
+                'value' => 20,
+            ],
+            [
+                'name' => ':exclude-product-id',
+                'type' => 'number',
+                'value' => '',
+                'hint' => 'Optional product ID to exclude from the carousel. On product detail pages, the current product is excluded automatically when left empty.',
+            ],
+            [
+                'name' => ':show-cart-btn',
+                'type' => 'boolean',
+                'value' => true,
+            ],
+            [
+                'name' => 'cart-button-label',
+                'type' => 'text',
+                'value' => 'Add To Cart',
+            ],
+            [
+                'name' => 'detail-button-label',
+                'type' => 'text',
+                'value' => 'View Details',
+            ],
+            [
+                'name' => ':show-price',
+                'type' => 'boolean',
+                'value' => true,
+            ],
+            [
+                'name' => ':show-guest-price',
+                'type' => 'boolean',
+                'value' => false,
+            ],
+            [
+                'name' => ':show-top-discount-badge',
+                'type' => 'boolean',
+                'value' => false,
+            ],
+            [
+                'name' => ':show-order-list',
+                'type' => 'boolean',
+                'value' => false,
+            ],
+            [
+                'name' => 'order-list-label',
+                'type' => 'text',
+                'value' => 'Order List',
+            ],
+            [
+                'name' => ':show-navigation',
+                'type' => 'boolean',
+                'value' => true,
+            ],
+            [
+                'name' => ':slider-item-gap',
+                'type' => 'number',
+                'value' => 15,
+            ],
+            [
+                'name' => ':display-product-code',
+                'type' => 'boolean',
+                'value' => true,
+            ],
+            [
+                'name' => ':display-short-description',
+                'type' => 'boolean',
+                'value' => false,
+            ],
+            [
+                'name' => ':display-manufacturer',
+                'type' => 'boolean',
+                'value' => false,
+            ],
+        ],
+        '@nestedItems' => [],
+        'description' => 'Displays recently viewed products in a responsive carousel.',
     ],
     Components\Product\FrequentlyPurchasedTogether::class => [
         'name' => 'product.frequently-purchased-together',

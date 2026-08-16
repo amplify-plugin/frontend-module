@@ -3,6 +3,7 @@
 namespace Amplify\Frontend\Http\Controllers;
 
 use Amplify\ErpApi\Facades\ErpApi;
+use Amplify\Frontend\Services\RecentlyViewedProductService;
 use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\System\Backend\Models\Product;
 use Amplify\System\Backend\Models\ProductRelation;
@@ -36,11 +37,19 @@ class ProductDetailController extends Controller
             abort(404, 'Product Unavailable');
         }
 
+        if (customer_check() && config('amplify.recently_viewed.enabled', true) && $product->exists) {
+            app(RecentlyViewedProductService::class)->record($product, customer(true));
+        }
+
         try {
 
             $eaKey = $product instanceof ItemRow ? $product->Amplify_Id : $product->id;
 
-            store()->eaProductDetail = Sayt::storeProductDetail($eaKey, \request('ref'), ['return_skus' => request('return_skus', false)]);
+            store()->eaProductDetail = Sayt::storeProductDetail(
+                $eaKey,
+                $this->resolveProductDetailSeoPath(),
+                ['return_skus' => request('return_skus', false)]
+            );
 
             $this->setProductPreviewPage($product);
 
@@ -50,6 +59,24 @@ class ProductDetailController extends Controller
         } catch (\Exception $exception) {
             abort(500, $exception->getMessage());
         }
+    }
+
+    /**
+     * Merchandising refs are valid for list links but break EasyAsk single-product lookup.
+     */
+    private function resolveProductDetailSeoPath(): ?string
+    {
+        $ref = request('ref');
+
+        if (empty($ref)) {
+            return null;
+        }
+
+        if (preg_match('/^merchandising\s*:/i', (string) $ref)) {
+            return null;
+        }
+
+        return $ref;
     }
 
     /**
