@@ -1773,7 +1773,7 @@ return [
         'internal' => false,
         '@inside' => null,
         '@client' => null,
-        'model' => ['single_product', 'cart_page'],
+        'model' => ['single_product', 'cart'],
         '@attributes' => [
             [
                 'name' => ':show-title',
