@@ -47,48 +47,42 @@
             @endif
         </div>
 
-        <ul class="product-thumbnails thumbnails-carousel owl-carousel">
-            <li class="item active">
-                <a class="product-thumbnail" href="#item-one">
-                    <img src="{{ $productImage->main ?? ' ' }}" alt="Product" class="img-fluid"/>
-                </a>
-            </li>
+        {{-- Flex row, not Owl: hash + autoWidth Owl was collapsing thumbs into one image after clicks. --}}
+        <div class="product-thumbnails thumbnails-carousel">
+            @php $galleryIndex = 0; @endphp
+            <a class="product-thumbnail item active" href="#" data-gallery-index="{{ $galleryIndex++ }}">
+                <img src="{{ $productImage->main ?? ' ' }}" alt="Product" class="img-fluid"/>
+            </a>
 
             @if (!empty($productImage->additional))
-                @foreach ($productImage->additional as $key => $image)
+                @foreach ($productImage->additional as $image)
                     @if (str_contains($image, 'youtube.com') !== false)
                         @php
                             preg_match('/\/embed\/([a-zA-Z0-9_-]+)/', $image, $matches);
-                            $videoId = $matches[1];
+                            $videoId = $matches[1] ?? '';
                         @endphp
-                        <li class="item">
-                            <a class="product-thumbnail video-thumbnail" href="#{{ 'item-' . $key }}">
-                                <img src="https://img.youtube.com/vi/{{ $videoId }}/hqdefault.jpg" alt="Product">
-                            </a>
-                        </li>
+                        <a class="product-thumbnail item video-thumbnail" href="#" data-gallery-index="{{ $galleryIndex++ }}">
+                            <img src="https://img.youtube.com/vi/{{ $videoId }}/hqdefault.jpg" alt="Product">
+                        </a>
                     @else
-                        <li class="item">
-                            <a class="product-thumbnail" href="#{{ 'item-' . $key }}">
-                                <img src="{{ assets_image($image ?? '') }}" alt="Product"/>
-                            </a>
-                        </li>
+                        <a class="product-thumbnail item" href="#" data-gallery-index="{{ $galleryIndex++ }}">
+                            <img src="{{ assets_image($image ?? '') }}" alt="Product"/>
+                        </a>
                     @endif
                 @endforeach
             @endif
 
             @if (!empty($erpAdditionalImages))
-                @foreach ($erpAdditionalImages as $key => $additionalImage)
-                    <li class="item">
-                        <a class="product-thumbnail" href="#{{ 'erp-item-' . $key }}">
-                            <img
-                                src="{{ 'https://www.spisafety.com/images/products/thumb/' . $additionalImage['value'] }}"
-                                alt="Product"
-                            />
-                        </a>
-                    </li>
+                @foreach ($erpAdditionalImages as $additionalImage)
+                    <a class="product-thumbnail item" href="#" data-gallery-index="{{ $galleryIndex++ }}">
+                        <img
+                            src="{{ 'https://www.spisafety.com/images/products/thumb/' . $additionalImage['value'] }}"
+                            alt="Product"
+                        />
+                    </a>
                 @endforeach
             @endif
-        </ul>
+        </div>
     </div>
 </div>
 
@@ -135,7 +129,7 @@
             Amplify.initPhotoSwipeFromDOM('.gallery-wrapper');
 
             Amplify.productSlider('.product-carousel');
-            Amplify.thumbnailCarousel('.thumbnails-carousel');
+            Amplify.thumbnailCarousel('.product-thumbnails');
         });
     </script>
 @endpushonce
