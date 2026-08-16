@@ -42,6 +42,27 @@
                 height: 100%;
                 object-fit: contain;
             }
+
+            &.active {
+                border-color: #000;
+            }
+        }
+
+        .product-thumbnails {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            margin-top: 24px;
+        }
+
+        .product-carousel.owl-carousel .owl-stage {
+            display: block !important;
+        }
+
+        .product-carousel.owl-carousel .owl-item {
+            flex-shrink: 0;
         }
     }
 }
