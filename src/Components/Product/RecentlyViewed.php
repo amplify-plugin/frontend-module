@@ -73,6 +73,7 @@ class RecentlyViewed extends BaseComponent
 
     public function render(): View|Closure|string
     {
+        //store()->offsetSet('productPaginate', $this->products);
         return view('widget::product.recently-viewed');
     }
 

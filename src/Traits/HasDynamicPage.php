@@ -109,7 +109,9 @@ trait HasDynamicPage
 
         push_css($page->styles ?? '', 'internal-style');
 
-        $component = new class($this->wrapPageContent($page->content ?? '')) extends \Illuminate\View\Component {
+        $safeContent = $this->sanitizeBoundAttributes($page->content ?? '');
+
+        $component = new class($this->wrapPageContent($safeContent)) extends \Illuminate\View\Component {
             protected $template;
 
             public function __construct($template)
@@ -241,6 +243,9 @@ trait HasDynamicPage
                     'phone' => config('amplify.cms.phone'),
                 ]),
             ],
+            'recentlyViewedStorageKey' => config('amplify.recently_viewed.local_storage_key', 'amplify-rv'),
+            'recentlyViewedMaxItems' => (int) config('amplify.recently_viewed.max_items', 20),
+            'recentlyViewedEnabled' => (bool) config('amplify.recently_viewed.enabled', true),
             'url' => [
                 'carts' => url()->route('frontend.carts.index'),
                 'favourites' => url()->route('frontend.favourites.store'),
@@ -255,10 +260,7 @@ trait HasDynamicPage
                     'clear' => url()->route('frontend.recently-viewed.clear'),
                     'destroy' => url('/recently-viewed'),
                 ],
-                'recentlyViewedStorageKey' => config('amplify.recently_viewed.local_storage_key', 'amplify-rv'),
-                'recentlyViewedMaxItems' => (int) config('amplify.recently_viewed.max_items', 20),
-                'recentlyViewedEnabled' => (bool) config('amplify.recently_viewed.enabled', true),
-            ]
+            ],
         ];
 
 
@@ -281,6 +283,18 @@ trait HasDynamicPage
 @endsection
 HTML;
 
+    }
+
+    private function sanitizeBoundAttributes(string $content): string
+    {
+        return preg_replace(
+            [
+                "/(:[\\w\\-]+)\\s*=\\s*''/",
+                '/(:[\\w\\-]+)\\s*=\\s*""/',
+            ],
+            '$1="null"',
+            $content,
+        ) ?? $content;
     }
 
     /**

@@ -2012,7 +2012,7 @@ return [
             [
                 'name' => ':exclude-product-id',
                 'type' => 'number',
-                'value' => '',
+                'value' => 0,
                 'hint' => 'Optional product ID to exclude from the carousel. On product detail pages, the current product is excluded automatically when left empty.',
             ],
             [

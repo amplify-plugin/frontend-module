@@ -38,6 +38,8 @@ window.Amplify = {
         if (this.RecentlyViewed?.isEnabled()) {
             this.RecentlyViewed.mergeGuestHistory();
             this.RecentlyViewed.initProductDetailTracking();
+            this.RecentlyViewed.initCarouselWidgets();
+            this.RecentlyViewed.initPageWidgets();
         }
     },
 
@@ -1907,15 +1909,24 @@ window.Amplify = {
 
     RecentlyViewed: {
         storageKey() {
-            return Amplify.config.recentlyViewedStorageKey || 'amplify-rv';
+            return Amplify.config.recentlyViewedStorageKey
+                || Amplify.config.url?.recentlyViewedStorageKey
+                || 'amplify-rv';
         },
 
         maxItems() {
-            return parseInt(Amplify.config.recentlyViewedMaxItems || 20, 10);
+            return parseInt(
+                Amplify.config.recentlyViewedMaxItems
+                || Amplify.config.url?.recentlyViewedMaxItems
+                || 20,
+                10,
+            );
         },
 
         isEnabled() {
-            return Amplify.config.recentlyViewedEnabled !== false;
+            const enabled = Amplify.config.recentlyViewedEnabled ?? Amplify.config.url?.recentlyViewedEnabled;
+
+            return enabled !== false;
         },
 
         isAuthenticated() {
