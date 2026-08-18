@@ -1907,6 +1907,10 @@ window.Amplify = {
         $('#cookie-consent-modal').modal('hide');
     },
 
+    /**
+     * Recently Viewed Products
+     */
+
     RecentlyViewed: {
         storageKey() {
             return Amplify.config.recentlyViewedStorageKey
