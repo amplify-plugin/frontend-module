@@ -2,6 +2,7 @@
 
 namespace Amplify\Frontend\Http\Controllers;
 
+use Amplify\Frontend\Http\Requests\RecentProductRequest;
 use Amplify\Frontend\Services\RecentlyViewedProductService;
 use Amplify\Frontend\Traits\HasDynamicPage;
 use Illuminate\Http\JsonResponse;
@@ -55,38 +56,11 @@ class RecentlyViewedController extends Controller
         }
     }
 
-    public function products(Request $request): JsonResponse
+    public function products(RecentProductRequest $request): JsonResponse
     {
         abort_unless($this->service->isEnabled(), 404);
 
         try {
-            $validator = Validator::make($request->all(), [
-                'product_ids' => 'required|array|max:'.$this->service->maxItems(),
-                'product_ids.*' => 'integer',
-                'layout' => 'nullable|string|in:card,minimal',
-                'show_title' => 'nullable|boolean',
-                'title' => 'nullable|string|max:255',
-                'products_limit' => 'nullable|integer|min:1|max:'.$this->service->maxItems(),
-                'show_cart_btn' => 'nullable|boolean',
-                'cart_button_label' => 'nullable|string|max:255',
-                'detail_button_label' => 'nullable|string|max:255',
-                'show_price' => 'nullable|boolean',
-                'show_guest_price' => 'nullable|boolean',
-                'show_top_discount_badge' => 'nullable|boolean',
-                'show_order_list' => 'nullable|boolean',
-                'order_list_label' => 'nullable|string|max:255',
-                'show_navigation' => 'nullable|boolean',
-                'slider_item_gap' => 'nullable|integer|min:0|max:100',
-                'display_product_code' => 'nullable|boolean',
-                'display_short_description' => 'nullable|boolean',
-                'display_manufacturer' => 'nullable|boolean',
-                'allow_remove' => 'nullable|boolean',
-            ]);
-
-            if ($validator->fails()) {
-                return $this->apiResponse(false, $validator->errors()->first(), 422);
-            }
-
             $productIds = customer_check()
                 ? $this->service->getProductIds(customer(true), (int) ($request->input('products_limit') ?: $this->service->maxItems()))
                 : $this->service->sanitizeProductIds($request->input('product_ids', []));
@@ -135,7 +109,7 @@ class RecentlyViewedController extends Controller
 
         try {
             $validator = Validator::make($request->all(), [
-                'product_ids' => 'required|array|max:'.$this->service->maxItems(),
+                'product_ids' => 'required|array|max:' . $this->service->maxItems(),
                 'product_ids.*' => 'integer',
             ]);
 

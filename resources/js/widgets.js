@@ -2014,6 +2014,7 @@ window.Amplify = {
                 dataType: 'json',
                 data: {
                     product_ids: productIds,
+                    _token: this.getCsrfTokenFromMeta(),
                 },
             }).done((response) => {
                 if (response?.success) {
@@ -2058,15 +2059,24 @@ window.Amplify = {
                 return $.Deferred().resolve({success: true, count: 0, html: ''}).promise();
             }
 
+            const data = {
+                product_ids: ids,
+                ...this.buildRequestSettings(settings),
+                _token: this.getCsrfTokenFromMeta(),
+            };
+
+            console.log(data);
+
             return $.ajax({
                 url: this.urls().products,
                 method: 'POST',
-                dataType: 'json',
-                data: {
-                    product_ids: ids,
-                    ...this.buildRequestSettings(settings),
-                },
+                dataType: 'application/json',
+                data: data,
             });
+        },
+
+        getCsrfTokenFromMeta() {
+            return $('meta[name="csrf-token"]').attr('content') || '';
         },
 
         mountCarousel($carousel, html) {
