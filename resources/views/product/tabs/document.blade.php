@@ -1,4 +1,4 @@
 @foreach($product->documents as $index => $document)
-    @php $id = Str::slug($document->documentType->name); @endphp
+    @php $id = Str::slug($document->documentType->name) . '-' . $document->id; @endphp
     @include("widget::product.tabs.documents.{$document->documentType->media_type}")
 @endforeach
