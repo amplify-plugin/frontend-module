@@ -335,11 +335,10 @@
                         <i class="icon-file"></i>&nbsp;{{ __('Submit Quote') }}
                     </button>
                 @endif
-                @if((customer_check() && customer(true)->can('cart.checkout')) || config('amplify.frontend.guest_checkout'))
-                    <a class="btn btn-success align-items-center" href="{{ route('frontend.checkout') }}">
-                        {{ __('Checkout') }}&nbsp;<i class="icon-arrow-right"></i>
-                    </a>
-                @endif
+                <a @class(["btn btn-success align-items-center", 'd-none' => customer_check() && !customer(true)->can('cart.checkout')])
+                   href="{{ route('frontend.checkout') }}">
+                    {{ __('Checkout') }}&nbsp;<i class="icon-arrow-right"></i>
+                </a>
             </div>
             @if($updateStyle == 'bulk')
                 <div id="quantity-update-actions" class="gap-2 d-none">
