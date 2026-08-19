@@ -2932,12 +2932,6 @@ return [
                 'type' => 'boolean',
                 'value' => false,
             ],
-            [
-                'name' => 'document-layout',
-                'type' => 'text',
-                'value' => 'flat',
-                'hint' => 'Document tabs: flat (one top tab per file) or grouped (one tab per type with file subtabs)',
-            ],
         ],
         '@nestedItems' => [
             ['name' => 'x-slot:before'],
