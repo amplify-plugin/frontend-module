@@ -1,4 +1,8 @@
-<div {!! $htmlAttributes !!}>
+<div {!! $htmlAttributes !!}
+    @if(config('amplify.recently_viewed.enabled', true) && store()->productModel?->exists)
+        data-recently-viewed-product-id="{{ store()->productModel->id }}"
+    @endif
+>
     <div class="row">
         <div class="col-md-4 col-10 mx-auto">
             <x-product.product-gallery :image="$product?->product_image"/>
