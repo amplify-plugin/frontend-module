@@ -181,7 +181,7 @@ class RequestOnlineAccessController extends Controller
             'email' => $attributes['CustomerEmail'] ?? null,
             'phone' => $attributes['CustomerPhone'] ?? null,
             'phone_ext' => $attributes['CustomerPhoneExt'] ?? null,
-            'approved' => config('amplify.security.skip_request_account_approval', false),
+            'approved' => true,
             'customer_type' => 'Retail',
             'industry_classification_id' => $industryClassification->id ?? null,
             'address_1' => $attributes['CustomerAddress1'] ?? null,
