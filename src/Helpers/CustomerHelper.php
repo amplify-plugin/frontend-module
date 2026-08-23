@@ -11,15 +11,16 @@ class CustomerHelper
     {
         $contact = customer(true);
 
-        if (! empty($data['previous_url']) && ! str_contains($data['previous_url'], 'admin')) {
-            return $data['previous_url'];
-        }
+        return match (true) {
+            !empty($data['previous_url']) && ! str_contains($data['previous_url'], 'admin')
+                => $data['previous_url'],
 
-        if (! empty($contact->redirect_route)) {
-            return url($contact->redirect_route);
-        }
+            ! empty($contact->redirect_route)
+                =>  url($contact->redirect_route),
 
-        return route('frontend.dashboard');
+            default
+                => route('frontend.dashboard')
+        };
     }
 
     public static function redirecteableUrls()
