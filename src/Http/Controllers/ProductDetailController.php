@@ -52,6 +52,7 @@ class ProductDetailController extends Controller
             );
 
             $this->setProductPreviewPage($product);
+            $this->pushGuestRecentlyViewedTracking($product);
 
             return $this->render();
         } catch (NotFoundHttpException $exception) {
@@ -77,6 +78,33 @@ class ProductDetailController extends Controller
         }
 
         return $ref;
+    }
+
+    /**
+     * Persist guest recently-viewed IDs in localStorage when Amplify boots.
+     */
+    private function pushGuestRecentlyViewedTracking(mixed $product): void
+    {
+        if (customer_check() || ! config('amplify.recently_viewed.enabled', true)) {
+            return;
+        }
+
+        $productId = (int) ($product instanceof ItemRow
+            ? ($product->Amplify_Id ?? 0)
+            : ($product->getKey() ?: 0));
+
+        if ($productId <= 0) {
+            return;
+        }
+
+        // Register before Amplify.init (pushed in render()) so the listener is ready.
+        push_js(<<<JS
+window.addEventListener('amplify.init', function () {
+    if (window.Amplify?.RecentlyViewed) {
+        Amplify.RecentlyViewed.record({$productId});
+    }
+});
+JS, 'template-script');
     }
 
     /**

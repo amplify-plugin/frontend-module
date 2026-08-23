@@ -1,4 +1,62 @@
 <style>
+    .x-recently-viewed .recently-viewed-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem 1.25rem;
+        flex-wrap: wrap;
+    }
+
+    .x-recently-viewed .recently-viewed-title {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .x-recently-viewed .recently-viewed-title-spacer {
+        flex: 1 1 auto;
+    }
+
+    .x-recently-viewed .recently-viewed-see-all {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        flex: 0 0 auto;
+        margin-left: auto;
+        padding: 0.25rem 0;
+        color: #374250;
+        font-size: 0.875rem;
+        font-weight: 600;
+        line-height: 1.2;
+        text-decoration: none;
+        white-space: nowrap;
+        transition: color 0.2s ease;
+    }
+
+    .x-recently-viewed .recently-viewed-see-all:hover,
+    .x-recently-viewed .recently-viewed-see-all:focus {
+        color: #b5121b;
+        text-decoration: none;
+        outline: none;
+    }
+
+    .x-recently-viewed .recently-viewed-see-all:focus-visible {
+        outline: 2px solid rgba(181, 18, 27, 0.45);
+        outline-offset: 3px;
+        border-radius: 2px;
+    }
+
+    .x-recently-viewed .recently-viewed-see-all-icon {
+        display: inline-block;
+        font-size: 1rem;
+        line-height: 1;
+        transition: transform 0.2s ease;
+    }
+
+    .x-recently-viewed .recently-viewed-see-all:hover .recently-viewed-see-all-icon,
+    .x-recently-viewed .recently-viewed-see-all:focus .recently-viewed-see-all-icon {
+        transform: translateX(2px);
+    }
+
     .x-recently-viewed .recently-viewed-section,
     .x-customer-recently-viewed-list .recently-viewed-page-section {
         position: relative;

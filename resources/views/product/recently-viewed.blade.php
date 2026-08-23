@@ -2,10 +2,25 @@
     data-recently-viewed-widget="carousel"
     data-recently-viewed-settings="{{ $widgetSettings() }}"
     data-recently-viewed-authenticated="{{ customer_check() ? '1' : '0' }}">
-    @if ($showTitle)
-        <h3 class="product-slider-title mb-3">
-            {{ __($title) }}
-        </h3>
+    @if ($showTitle || $hasSeeAllLink())
+        <div class="recently-viewed-header mb-3">
+            @if ($showTitle)
+                <h3 class="product-slider-title recently-viewed-title mb-0">
+                    {{ __($title) }}
+                </h3>
+            @else
+                <span class="recently-viewed-title-spacer" aria-hidden="true"></span>
+            @endif
+
+            @if ($hasSeeAllLink())
+                <a class="recently-viewed-see-all"
+                   href="{{ $seeAllUrl() }}"
+                   title="{{ __($seeAllLabel) }}">
+                    <span>{{ __($seeAllLabel) }}</span>
+                    <span class="recently-viewed-see-all-icon" aria-hidden="true">&rarr;</span>
+                </a>
+            @endif
+        </div>
     @endif
 
     <div class="recently-viewed-section {{ customer_check() && $products->isEmpty() ? 'd-none' : '' }}">

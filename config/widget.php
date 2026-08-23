@@ -1325,6 +1325,18 @@ return [
                 'value' => 'Recently Viewed',
             ],
             [
+                'name' => 'see-all-link',
+                'type' => 'text',
+                'value' => 'recent-viewed-products',
+                'hint' => 'CMS page slug or URL for the full recently viewed page. Leave empty to hide the See All link.',
+            ],
+            [
+                'name' => 'see-all-label',
+                'type' => 'text',
+                'value' => 'See All',
+                'hint' => 'Label shown for the See All link. Only appears when see-all-link is set.',
+            ],
+            [
                 'name' => 'layout',
                 'type' => 'select',
                 'options' => [

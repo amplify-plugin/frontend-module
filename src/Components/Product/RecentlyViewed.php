@@ -18,6 +18,8 @@ class RecentlyViewed extends BaseComponent
     public function __construct(
         public bool $showTitle = true,
         public string $title = 'Recently Viewed',
+        public string $seeAllLink = 'recent-viewed-products',
+        public string $seeAllLabel = 'See All',
         public int $productsLimit = 20,
         public bool $showCartBtn = true,
         public string $cartButtonLabel = 'Add To Cart',
@@ -56,6 +58,26 @@ class RecentlyViewed extends BaseComponent
     public function isMinimalLayout(): bool
     {
         return $this->layout === 'minimal';
+    }
+
+    public function hasSeeAllLink(): bool
+    {
+        return trim($this->seeAllLink) !== '';
+    }
+
+    public function seeAllUrl(): string
+    {
+        $link = trim($this->seeAllLink);
+
+        if ($link === '') {
+            return '';
+        }
+
+        if (preg_match('/^(https?:)?\/\//i', $link) === 1) {
+            return $link;
+        }
+
+        return url(ltrim($link, '/'));
     }
 
     public function shouldRender(): bool

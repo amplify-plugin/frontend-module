@@ -2069,12 +2069,10 @@ window.Amplify = {
                 _token: this.getCsrfTokenFromMeta(),
             };
 
-            console.log(data);
-
             return $.ajax({
                 url: this.urls().products,
                 method: 'POST',
-                dataType: 'application/json',
+                dataType: 'json',
                 data: data,
             });
         },
