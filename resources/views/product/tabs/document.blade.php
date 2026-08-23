@@ -48,26 +48,12 @@
         @endpush
     @endforeach
 @else
+    {{-- Keep the original per-file include so vendor overrides of documents/{media_type} still work. --}}
     @foreach ($product->documents as $document)
         @php
-            $paneId = Str::slug($document->documentType->name ?? 'document').'-'.$document->id;
+            $id = Str::slug($document->documentType->name ?? 'document').'-'.$document->id;
+            $viewType = str_replace('-', '_', $document->documentType->media_type ?? '');
         @endphp
-
-        @push('title')
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#{{ $paneId }}" role="tab">
-                    {{ __($document->documentType->name ?? 'Document') }}
-                </a>
-            </li>
-        @endpush
-
-        @push('content')
-            <div class="tab-pane fade" id="{{ $paneId }}" role="tabpanel" aria-labelledby="{{ $paneId }}">
-                @include('widget::product.tabs.documents.accordion', [
-                    'documents' => collect([$document]),
-                    'paneId' => $paneId,
-                ])
-            </div>
-        @endpush
+        @include("widget::product.tabs.documents.{$viewType}")
     @endforeach
 @endif
