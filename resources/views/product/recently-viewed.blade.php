@@ -56,13 +56,3 @@
 @pushonce('internal-style')
     @include('widget::product.recently-viewed.styles')
 @endpushonce
-
-@pushonce('plugin-script')
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            if (window.Amplify?.RecentlyViewed?.initCarouselWidgets) {
-                window.Amplify.RecentlyViewed.initCarouselWidgets();
-            }
-        });
-    </script>
-@endpushonce

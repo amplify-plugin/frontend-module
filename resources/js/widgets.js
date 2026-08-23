@@ -2161,6 +2161,8 @@ window.Amplify = {
                 }
 
                 if (!isAuthenticated) {
+                    widget.dataset.recentlyViewedLoaded = '1';
+
                     const $carousel = $(widget).find('.recently-viewed-guest-carousel');
 
                     this.fetchProducts(settings).done((response) => {
@@ -2169,8 +2171,8 @@ window.Amplify = {
                         } else {
                             this.mountCarousel($carousel, '');
                         }
-
-                        widget.dataset.recentlyViewedLoaded = '1';
+                    }).fail(() => {
+                        widget.dataset.recentlyViewedLoaded = '0';
                     });
                 }
             });
@@ -2183,6 +2185,12 @@ window.Amplify = {
                 if (widget.dataset.recentlyViewedAuthenticated === '1') {
                     return;
                 }
+
+                if (widget.dataset.recentlyViewedLoaded === '1') {
+                    return;
+                }
+
+                widget.dataset.recentlyViewedLoaded = '1';
 
                 const settings = this.parseSettings(widget.dataset.recentlyViewedSettings || '{}');
                 const ids = this.getAll();
@@ -2211,6 +2219,8 @@ window.Amplify = {
                     emptyState?.classList.add('d-none');
                     clearButton?.classList.remove('d-none');
                     this.bindPageActions(widget);
+                }).fail(() => {
+                    widget.dataset.recentlyViewedLoaded = '0';
                 });
             });
         },

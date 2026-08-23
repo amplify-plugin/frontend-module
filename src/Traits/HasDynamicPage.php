@@ -109,9 +109,7 @@ trait HasDynamicPage
 
         push_css($page->styles ?? '', 'internal-style');
 
-        $safeContent = $this->sanitizeBoundAttributes($page->content ?? '');
-
-        $component = new class($this->wrapPageContent($safeContent)) extends \Illuminate\View\Component {
+        $component = new class($this->wrapPageContent($page->content ?? '')) extends \Illuminate\View\Component {
             protected $template;
 
             public function __construct($template)
@@ -283,18 +281,6 @@ trait HasDynamicPage
 @endsection
 HTML;
 
-    }
-
-    private function sanitizeBoundAttributes(string $content): string
-    {
-        return preg_replace(
-            [
-                "/(:[\\w\\-]+)\\s*=\\s*''/",
-                '/(:[\\w\\-]+)\\s*=\\s*""/',
-            ],
-            '$1="null"',
-            $content,
-        ) ?? $content;
     }
 
     /**

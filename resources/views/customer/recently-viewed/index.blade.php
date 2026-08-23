@@ -69,13 +69,3 @@
 @pushonce('internal-style')
     @include('widget::product.recently-viewed.styles')
 @endpushonce
-
-@pushonce('plugin-script')
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            if (window.Amplify?.RecentlyViewed?.initPageWidgets) {
-                window.Amplify.RecentlyViewed.initPageWidgets();
-            }
-        });
-    </script>
-@endpushonce

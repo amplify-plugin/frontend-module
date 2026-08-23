@@ -37,8 +37,10 @@ class ProductDetailController extends Controller
             abort(404, 'Product Unavailable');
         }
 
-        if (customer_check() && config('amplify.recently_viewed.enabled', true) && $product->exists) {
-            app(RecentlyViewedProductService::class)->record($product, customer(true));
+        $productId = $this->resolveRecentlyViewedProductId($product);
+
+        if (customer_check() && config('amplify.recently_viewed.enabled', true) && $productId > 0) {
+            app(RecentlyViewedProductService::class)->record($productId, customer(true));
         }
 
         try {
@@ -51,8 +53,8 @@ class ProductDetailController extends Controller
                 ['return_skus' => request('return_skus', false)]
             );
 
-            $this->setProductPreviewPage($product);
-            $this->pushGuestRecentlyViewedTracking($product);
+            $this->setProductPreviewPage($product instanceof Product ? $product : null);
+            $this->pushGuestRecentlyViewedTracking($productId);
 
             return $this->render();
         } catch (NotFoundHttpException $exception) {
@@ -81,19 +83,27 @@ class ProductDetailController extends Controller
     }
 
     /**
-     * Persist guest recently-viewed IDs in localStorage when Amplify boots.
+     * Resolve a numeric product ID from Product or Sayt ItemRow.
      */
-    private function pushGuestRecentlyViewedTracking(mixed $product): void
+    private function resolveRecentlyViewedProductId(mixed $product): int
     {
-        if (customer_check() || ! config('amplify.recently_viewed.enabled', true)) {
-            return;
+        if ($product instanceof ItemRow) {
+            return (int) ($product->Amplify_Id ?? 0);
         }
 
-        $productId = (int) ($product instanceof ItemRow
-            ? ($product->Amplify_Id ?? 0)
-            : ($product->getKey() ?: 0));
+        if ($product instanceof Product) {
+            return (int) ($product->getKey() ?: 0);
+        }
 
-        if ($productId <= 0) {
+        return (int) (data_get($product, 'id') ?: data_get($product, 'Amplify_Id') ?: 0);
+    }
+
+    /**
+     * Persist guest recently-viewed IDs in localStorage when Amplify boots.
+     */
+    private function pushGuestRecentlyViewedTracking(int $productId): void
+    {
+        if (customer_check() || ! config('amplify.recently_viewed.enabled', true) || $productId <= 0) {
             return;
         }
 
@@ -114,7 +124,7 @@ JS, 'template-script');
      */
     private function setProductPreviewPage(?Product $product = null): void
     {
-        if (($page = $product->singleProductPage) && config('amplify.pim.use_product_specific_detail_page', false)) {
+        if ($product && ($page = $product->singleProductPage) && config('amplify.pim.use_product_specific_detail_page', false)) {
             store()->dynamicPageModel = $page;
         } else {
             $this->loadPageByType('single_product');

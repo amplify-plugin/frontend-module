@@ -18,10 +18,15 @@ class RecentlyViewedController extends Controller
         protected RecentlyViewedProductService $service,
     ) {}
 
-    public function index(Request $request): string
+    public function callAction($method, $parameters)
     {
         abort_unless($this->service->isEnabled(), 404);
 
+        return parent::callAction($method, $parameters);
+    }
+
+    public function index(Request $request): string
+    {
         if (customer_check()) {
             abort_unless(customer(true)->can('shop.browse'), 403);
         }
@@ -33,8 +38,6 @@ class RecentlyViewedController extends Controller
 
     public function store(Request $request): JsonResponse
     {
-        abort_unless($this->service->isEnabled(), 404);
-
         try {
             if (customer_check()) {
                 $validator = Validator::make($request->all(), [
@@ -58,8 +61,6 @@ class RecentlyViewedController extends Controller
 
     public function products(RecentProductRequest $request): JsonResponse
     {
-        abort_unless($this->service->isEnabled(), 404);
-
         try {
             $productIds = customer_check()
                 ? $this->service->getProductIds(customer(true), (int) ($request->input('products_limit') ?: $this->service->maxItems()))
@@ -77,6 +78,7 @@ class RecentlyViewedController extends Controller
             }
 
             $layout = $request->input('layout', 'card');
+            $guestPricingEnabled = (bool) config('amplify.basic.enable_guest_pricing', false);
 
             return $this->apiResponse(true, '', 200, [
                 'count' => $products->count(),
@@ -86,8 +88,8 @@ class RecentlyViewedController extends Controller
                     'showCartBtn' => $request->boolean('show_cart_btn', true),
                     'cartButtonLabel' => $request->input('cart_button_label', 'Add To Cart'),
                     'detailButtonLabel' => $request->input('detail_button_label', 'View Details'),
-                    'showPrice' => $request->boolean('show_price', true),
-                    'showGuestPrice' => $request->boolean('show_guest_price', false),
+                    'showPrice' => $guestPricingEnabled || customer_check(),
+                    'showGuestPrice' => $guestPricingEnabled,
                     'showTopDiscountBadge' => $request->boolean('show_top_discount_badge', false),
                     'showOrderList' => $request->boolean('show_order_list', false),
                     'orderListLabel' => $request->input('order_list_label', 'Order List'),
@@ -104,7 +106,6 @@ class RecentlyViewedController extends Controller
 
     public function merge(Request $request): JsonResponse
     {
-        abort_unless($this->service->isEnabled(), 404);
         abort_unless(customer_check(), 401);
 
         try {
@@ -130,8 +131,6 @@ class RecentlyViewedController extends Controller
 
     public function destroy(int $product): JsonResponse
     {
-        abort_unless($this->service->isEnabled(), 404);
-
         try {
             if (customer_check()) {
                 $removed = $this->service->remove($product, customer(true));
@@ -151,8 +150,6 @@ class RecentlyViewedController extends Controller
 
     public function clear(Request $request): JsonResponse
     {
-        abort_unless($this->service->isEnabled(), 404);
-
         try {
             if (customer_check()) {
                 $this->service->clear(customer(true));

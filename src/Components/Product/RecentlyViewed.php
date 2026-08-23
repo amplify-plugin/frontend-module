@@ -110,10 +110,18 @@ class RecentlyViewed extends BaseComponent
         }
 
         $service = app(RecentlyViewedProductService::class);
-        $excludeProductId = $this->excludeProductId;
+        $excludeProductId = (int) ($this->excludeProductId ?: 0);
 
         if (! $excludeProductId && request()->route('identifier')) {
-            $excludeProductId = (int) store()->productModel->getKey();
+            $productModel = store()->productModel ?? null;
+
+            if ($productModel instanceof \Amplify\System\Backend\Models\Product) {
+                $excludeProductId = (int) ($productModel->getKey() ?: 0);
+            } elseif ($productModel instanceof \Amplify\System\Sayt\Classes\ItemRow) {
+                $excludeProductId = (int) ($productModel->Amplify_Id ?? 0);
+            } elseif (is_object($productModel)) {
+                $excludeProductId = (int) (data_get($productModel, 'id') ?: data_get($productModel, 'Amplify_Id') ?: 0);
+            }
         }
 
         $productIds = $service->getProductIds(customer(true), $this->productsLimit + ($excludeProductId ? 1 : 0));

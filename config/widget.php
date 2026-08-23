@@ -1355,7 +1355,7 @@ return [
                 'name' => ':exclude-product-id',
                 'type' => 'number',
                 'value' => 0,
-                'hint' => 'Optional product ID to exclude from the carousel. On product detail pages, the current product is excluded automatically when left empty.',
+                'hint' => 'Optional product ID to exclude from the carousel. Use 0 (default) to auto-exclude the current product on product detail pages.',
             ],
             [
                 'name' => ':show-cart-btn',
