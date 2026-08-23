@@ -6,7 +6,6 @@
         @include($view, [
             'tab' => $entry,
             'product' => $product,
-            'documentLayout' => $documentLayout ?? 'flat',
         ])
     @endforeach
 
@@ -22,44 +21,38 @@
 </div>
 
 <style>
-    .document-subtabs {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 6px;
-        margin: 0 0 10px;
+    .x-product-information-tabs .document-accordion .card-header {
         padding: 0;
     }
 
-    .document-subtab {
-        border: 1px solid #d0d0d0;
-        background: #fff;
-        color: #222;
-        padding: 4px 12px;
-        border-radius: 4px;
-        font-size: 13px;
-        line-height: 1.3;
+    .x-product-information-tabs .document-accordion .card,
+    .x-product-information-tabs .document-accordion .card:focus,
+    .x-product-information-tabs .document-accordion .card:focus-within {
+        outline: none;
+        box-shadow: none;
+    }
+
+    .x-product-information-tabs .document-accordion .btn-link {
+        color: inherit;
+        text-decoration: none;
+        white-space: normal;
+        box-shadow: none;
+        outline: none;
         cursor: pointer;
     }
 
-    .document-subtab.active,
-    .document-subtab:hover {
-        background: var(--brand-primary, #bc2127);
-        border-color: var(--brand-primary, #bc2127);
-        color: #fff;
+    .x-product-information-tabs .document-accordion .btn-link:hover,
+    .x-product-information-tabs .document-accordion .btn-link:focus,
+    .x-product-information-tabs .document-accordion .btn-link:active,
+    .x-product-information-tabs .document-accordion .btn-link:focus-visible {
+        color: inherit;
+        text-decoration: none;
+        box-shadow: none;
+        outline: none;
     }
 
-    .x-product-information-tabs .has-document-subtabs .document-subtab-content {
-        padding: 0;
-        border: 0;
-        border-radius: 0;
-        overflow: visible;
-    }
-
-    .x-product-information-tabs .has-document-subtabs .document-subtab-content > .tab-pane,
-    .x-product-information-tabs .has-document-subtabs .iframe-style {
+    .x-product-information-tabs .document-accordion .iframe-style {
         margin: 0;
-        padding: 0;
         width: 100%;
     }
 </style>
@@ -74,6 +67,35 @@
                     cancelable: true,
                     view: window
                 }));
+            }
+
+            if (window.jQuery) {
+                jQuery('.x-product-information-tabs .document-accordion').on('shown.bs.collapse hidden.bs.collapse', function (collapseEvent) {
+                    const button = this.querySelector('[data-target="#' + collapseEvent.target.id + '"]');
+                    if (button) {
+                        const isOpen = collapseEvent.type === 'shown';
+                        button.setAttribute(
+                            'title',
+                            isOpen
+                                ? (button.getAttribute('data-close-hint') || '')
+                                : (button.getAttribute('data-open-hint') || '')
+                        );
+                    }
+
+                    if (collapseEvent.type !== 'shown') {
+                        return;
+                    }
+
+                    const object = collapseEvent.target.querySelector('object.iframe-style');
+                    if (! object) {
+                        return;
+                    }
+
+                    const src = object.getAttribute('data');
+                    if (src) {
+                        object.setAttribute('data', src);
+                    }
+                });
             }
         });
     </script>

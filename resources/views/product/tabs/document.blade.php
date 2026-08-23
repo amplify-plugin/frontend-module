@@ -1,11 +1,20 @@
 @php
-    $documentLayout = $documentLayout ?? ($tab['document_layout'] ?? 'flat');
+    $documentLayout = $entry['layout'] ?? ($tab['layout'] ?? 'flat');
+    if (! in_array($documentLayout, ['flat', 'grouped'], true)) {
+        $documentLayout = 'flat';
+    }
 
     $documentFileLabel = static function ($document): string {
+        $customLabel = trim((string) ($document->label ?? ''));
+        if ($customLabel !== '') {
+            return $customLabel;
+        }
+
         if (! empty($document->file_path)) {
             $path = parse_url($document->file_path, PHP_URL_PATH) ?: $document->file_path;
+            $filename = rawurldecode(basename($path));
 
-            return rawurldecode(basename($path));
+            return pathinfo($filename, PATHINFO_FILENAME) ?: $filename;
         }
 
         $typeName = $document->documentType->name ?? 'Document';
@@ -19,7 +28,6 @@
         @php
             $documentType = $documents->first()->documentType;
             $paneId = Str::slug($documentType->name ?? 'document').'-'.$typeId;
-            $hasSubtabs = $documents->count() > 1;
         @endphp
 
         @push('title')
@@ -31,49 +39,35 @@
         @endpush
 
         @push('content')
-            <div class="tab-pane fade{{ $hasSubtabs ? ' has-document-subtabs' : '' }}" id="{{ $paneId }}" role="tabpanel" aria-labelledby="{{ $paneId }}">
-                @if ($hasSubtabs)
-                    <div class="nav document-subtabs" role="tablist">
-                        @foreach ($documents as $index => $document)
-                            @php $subId = $paneId.'-file-'.$document->id; @endphp
-                            <button
-                                type="button"
-                                class="document-subtab {{ $index === 0 ? 'active' : '' }}"
-                                data-toggle="tab"
-                                data-target="#{{ $subId }}"
-                                role="tab"
-                                aria-controls="{{ $subId }}"
-                                aria-selected="{{ $index === 0 ? 'true' : 'false' }}"
-                            >
-                                {{ $documentFileLabel($document) }}
-                            </button>
-                        @endforeach
-                    </div>
-                    <div class="tab-content document-subtab-content">
-                        @foreach ($documents as $index => $document)
-                            @php $subId = $paneId.'-file-'.$document->id; @endphp
-                            <div
-                                class="tab-pane fade {{ $index === 0 ? 'show active' : '' }}"
-                                id="{{ $subId }}"
-                                role="tabpanel"
-                            >
-                                @include('widget::product.tabs.documents.viewer')
-                            </div>
-                        @endforeach
-                    </div>
-                @else
-                    @php $document = $documents->first(); @endphp
-                    @include('widget::product.tabs.documents.viewer')
-                @endif
+            <div class="tab-pane fade" id="{{ $paneId }}" role="tabpanel" aria-labelledby="{{ $paneId }}">
+                @include('widget::product.tabs.documents.accordion', [
+                    'documents' => $documents,
+                    'paneId' => $paneId,
+                ])
             </div>
         @endpush
     @endforeach
 @else
     @foreach ($product->documents as $document)
         @php
-            $id = Str::slug($document->documentType->name).'-'.$document->id;
-            $viewType = str_replace('-', '_', $document->documentType->media_type);
+            $paneId = Str::slug($document->documentType->name ?? 'document').'-'.$document->id;
         @endphp
-        @include("widget::product.tabs.documents.{$viewType}")
+
+        @push('title')
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#{{ $paneId }}" role="tab">
+                    {{ __($document->documentType->name ?? 'Document') }}
+                </a>
+            </li>
+        @endpush
+
+        @push('content')
+            <div class="tab-pane fade" id="{{ $paneId }}" role="tabpanel" aria-labelledby="{{ $paneId }}">
+                @include('widget::product.tabs.documents.accordion', [
+                    'documents' => collect([$document]),
+                    'paneId' => $paneId,
+                ])
+            </div>
+        @endpush
     @endforeach
 @endif

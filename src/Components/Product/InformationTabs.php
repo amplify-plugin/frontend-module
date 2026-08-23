@@ -22,13 +22,8 @@ class InformationTabs extends BaseComponent
         public Product|ItemRow $product,
         public array $tabs = ['description', 'feature', 'specification', 'document', 'sku', 'related-products'],
         public string $headerClass = 'nav-justified',
-        public string $documentLayout = 'flat',
     ) {
         parent::__construct();
-
-        if (! in_array($this->documentLayout, ['flat', 'grouped'], true)) {
-            $this->documentLayout = 'flat';
-        }
     }
 
     private function configureTabs(): void

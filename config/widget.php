@@ -1982,10 +1982,20 @@ return [
         '@client' => null,
         '@attributes' => [
             [
-                'name' => 'document-layout',
+                'name' => ':product',
                 'type' => 'text',
-                'value' => 'flat',
-                'hint' => 'Document tabs: flat (one top tab per file) or grouped (one tab per type with file subtabs)',
+                'value' => '$product',
+            ],
+            [
+                'name' => ':tabs',
+                'type' => 'array',
+                'value' => ['description', 'feature', 'specification', 'document', 'sku', 'related-products'],
+                'hint' => 'Pass document as [layout => flat|grouped]. Flat is one tab per file with a label accordion; grouped is one tab per type with a label accordion when there are multiple files.',
+            ],
+            [
+                'name' => 'header-class',
+                'type' => 'text',
+                'value' => 'nav-justified',
             ],
         ],
         '@nestedItems' => [
