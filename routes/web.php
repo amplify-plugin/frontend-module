@@ -350,5 +350,5 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
 
     Route::get('/{slug}', DynamicPageLoadController::class)
         ->name('dynamic-route')
-        ->where('slug', '^(?!admin(?:/|$)).*');
+        ->where('slug', '^(?!admin(?:/|$)|sayt(?:/|$)).*');
 });
