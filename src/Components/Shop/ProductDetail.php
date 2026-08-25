@@ -152,6 +152,21 @@ class ProductDetail extends BaseComponent
     {
         $this->attributes = $this->attributes->class('single-product-details');
 
+        $productModel = store()->productModel ?? null;
+        $productId = 0;
+
+        if ($productModel instanceof \Amplify\System\Backend\Models\Product) {
+            $productId = (int) ($productModel->getKey() ?: 0);
+        } elseif ($productModel instanceof \Amplify\System\Sayt\Classes\ItemRow) {
+            $productId = (int) ($productModel->Amplify_Id ?? 0);
+        }
+
+        if ($productId > 0 && config('amplify.recently_viewed.enabled', true)) {
+            $this->attributes = $this->attributes->merge([
+                'data-recently-viewed-product-id' => $productId,
+            ]);
+        }
+
         return parent::htmlAttributes();
     }
 

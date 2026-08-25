@@ -74,6 +74,24 @@ class FrontendServiceProvider extends ServiceProvider
         }
 
         $this->registerScheduler();
+
+        $this->app->booted(function () {
+            $types = config('amplify.cms.page_types', []);
+            $types[] = [
+                'code' => 'recently_viewed',
+                'label' => 'Recently Viewed',
+                'description' => 'Recently viewed products page',
+                'middleware' => [],
+                'reserved' => true,
+                'url' => [
+                    'type' => 'route',
+                    'name' => 'frontend.recently-viewed.index',
+                    'params' => '',
+                ],
+            ];
+
+            config(['amplify.cms.page_types' => $types]);
+        });
     }
 
 

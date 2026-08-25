@@ -111,7 +111,7 @@ class AnalyticInit extends BaseComponent
              * @var Product $product
              */
             $product = \store('productModel');
-            $productErp = collect(store('productPaginate', []))->first();
+            $productErp = collect($this->productPaginate())->first();
 
             $data['keywords'] = $product->meta_keywords ?? '';
             $data['name'] = $product->product_name ?? 'Not Found';
@@ -166,7 +166,8 @@ class AnalyticInit extends BaseComponent
             $data['offers']['@type'] = 'Offer';
             $data['offers']['url'] = request()->url();
             $data['offers']['priceCurrency'] = config('amplify.basic.global_currency', 'USD');
-            $data['offers']['price'] = round($productErp->ERP?->Price ?? $product->selling_price, 2);
+            $price = $productErp->ERP?->Price ?? $product->selling_price ?? null;
+            $data['offers']['price'] = is_numeric($price) ? round((float) $price, 2) : 0;
             $data['offers']['availability'] = 'https://schema.org/InStock';
             $data['offers']['seller']['@type'] = 'Organization';
             $data['offers']['seller']['@id'] = $this->determineGooglePageId('Organization');
@@ -315,7 +316,7 @@ class AnalyticInit extends BaseComponent
                     $categoryArray["item_category{$suffix}"] = $category;
                 }
 
-                foreach (store('productPaginate', []) as $index => $product) {
+                foreach ($this->productPaginate() as $index => $product) {
 
                     $item = [
                         'index' => (($currentPage - 1) * $resultPerPage) + $index + 1,
@@ -357,7 +358,7 @@ class AnalyticInit extends BaseComponent
 
             if (!$eaResponse->noResultFound()) {
 
-                $product = collect(store('productPaginate', $eaResponse->getProducts()))->first();
+                $product = collect($this->productPaginate($eaResponse->getProducts()))->first();
 
                 $categoryArray = [];
 
@@ -414,5 +415,14 @@ class AnalyticInit extends BaseComponent
                 })->toArray(),
             ]
         ]);
+    }
+
+    private function productPaginate(array $default = []): array
+    {
+        $all = store()->all();
+
+        return isset($all['productPaginate']) && is_array($all['productPaginate'])
+            ? $all['productPaginate']
+            : $default;
     }
 }

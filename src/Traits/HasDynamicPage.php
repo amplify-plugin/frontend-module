@@ -231,6 +231,7 @@ trait HasDynamicPage
             'dateTimeFormat' => config('amplify.basic.date_time_format', 'Y-m-d H:i:s'),
             'dateFormat' => config('amplify.basic.date_format', 'Y-m-d'),
             'allowGuestPrice' => config('amplify.basic.enable_guest_pricing', false),
+            'isCustomerAuthenticated' => customer_check(),
             'cart' => [
                 'maxQuantity' => config('amplify.basic.max_cart_item_quantity', 9999999999),
                 'notAvailableMsg' => __(config('amplify.messages.product_unavailable',
@@ -240,13 +241,24 @@ trait HasDynamicPage
                     'phone' => config('amplify.cms.phone'),
                 ]),
             ],
+            'recentlyViewedStorageKey' => config('amplify.recently_viewed.local_storage_key', 'amplify-rv'),
+            'recentlyViewedMaxItems' => (int) config('amplify.recently_viewed.max_items', 20),
+            'recentlyViewedEnabled' => (bool) config('amplify.recently_viewed.enabled', true),
             'url' => [
                 'carts' => url()->route('frontend.carts.index'),
                 'favourites' => url()->route('frontend.favourites.store'),
                 'orderLists' => url()->route('frontend.order-lists.store'),
                 'orderExport' => url()->route('frontend.orders.export'),
-                'productCompare' => url()->route('frontend.product-compare')
-            ]
+                'productCompare' => url()->route('frontend.product-compare'),
+                'recentlyViewed' => [
+                    'index' => url()->route('frontend.recently-viewed.index'),
+                    'store' => url()->route('frontend.recently-viewed.store'),
+                    'products' => url()->route('frontend.recently-viewed.products'),
+                    'merge' => url()->route('frontend.recently-viewed.merge'),
+                    'clear' => url()->route('frontend.recently-viewed.clear'),
+                    'destroy' => url('/recently-viewed'),
+                ],
+            ],
         ];
 
 

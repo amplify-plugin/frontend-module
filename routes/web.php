@@ -47,6 +47,7 @@ use Amplify\Frontend\Http\Controllers\ProductDetailController;
 use Amplify\Frontend\Http\Controllers\ProductSearchController;
 use Amplify\Frontend\Http\Controllers\QuickListController;
 use Amplify\Frontend\Http\Controllers\QuotationController;
+use Amplify\Frontend\Http\Controllers\RecentlyViewedController;
 use Amplify\Frontend\Http\Controllers\ShippingController;
 use Amplify\Frontend\Http\Controllers\ShopSearchController;
 use Amplify\Frontend\Http\Middlewares\CustomerDefaultValues;
@@ -82,6 +83,15 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
     Route::get("{$productRoutePrefix}/{identifier}/{slug?}", ProductDetailController::class)
         ->where(['identifier' => '([a-zA-Z0-9\-\_\[\]\(\)\+\#\.\"\~\: ]+)', 'slug' => '(.+)'])
         ->name('shop.show');
+
+    Route::controller(RecentlyViewedController::class)->group(function () {
+        Route::get('recently-viewed', 'index')->name('recently-viewed.index');
+        Route::post('recently-viewed', 'store')->name('recently-viewed.store');
+        Route::post('recently-viewed/products', 'products')->name('recently-viewed.products');
+        Route::post('recently-viewed/merge', 'merge')->middleware('customers')->name('recently-viewed.merge');
+        Route::delete('recently-viewed', 'clear')->name('recently-viewed.clear');
+        Route::delete('recently-viewed/{product}', 'destroy')->where(['product' => '[0-9]+'])->name('recently-viewed.destroy');
+    });
 
     Route::name('shop.')->prefix(config('amplify.frontend.shop_page_prefix'))
         ->controller(ShopSearchController::class)
