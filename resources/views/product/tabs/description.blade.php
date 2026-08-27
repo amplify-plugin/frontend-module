@@ -10,7 +10,7 @@
     @push('content')
         <div class="tab-pane fade" id="{{ $entry['name'] }}" role="tabpanel"
              aria-labelledby="{{ $entry['name'] }}">
-            {!! $product->description !!}
+            {!! safe_rich_html($product->description) !!}
         </div>
     @endpush
 @endif
