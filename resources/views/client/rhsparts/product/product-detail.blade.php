@@ -262,7 +262,7 @@
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="description" role="tabpanel">
                         @if($product->description !='NULL')
-                            <p>{!! $product->description ?? 'No Description Found' !!}</p>
+                            <p>{!! safe_rich_html($product->description) ?: 'No Description Found' !!}</p>
                         @endif
                     </div>
                 </div>

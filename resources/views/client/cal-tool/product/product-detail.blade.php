@@ -286,9 +286,9 @@
                     <div class="tab-pane fade @if (!$isMasterProduct($product)) show active @endif" id="description"
                     >
                         @if (!empty($product->short_description))
-                            {!! $product->short_description !!}<br><br>
+                            {!! safe_rich_html($product->short_description) !!}<br><br>
                         @endif
-                        {!! $product->description !!}
+                        {!! safe_rich_html($product->description) !!}
                     </div>
                     {{-- @endif--}}
 
