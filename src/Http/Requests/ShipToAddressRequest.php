@@ -24,7 +24,6 @@ class ShipToAddressRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'customer_id' => 'integer|exists:customers,id',
             'address_name' => 'required|string|max:255|ascii',
             'address_code' => ['nullable', 'string', 'max:255', 'ascii'],
             'address_1' => 'required|string|max:255|ascii',
@@ -50,8 +49,4 @@ class ShipToAddressRequest extends FormRequest
         return $rules;
     }
 
-    protected function prepareForValidation(): void
-    {
-        $this->mergeIfMissing(['customer_id' => customer()->getKey()]);
-    }
 }
