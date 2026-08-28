@@ -63,7 +63,7 @@ class RecentlyViewedProductService
         return RecentlyViewedProduct::query()
             ->where('contact_id', $contact->id)
             ->where('customer_id', $contact->customer_id)
-            ->orderByDesc('last_viewed_at')
+            ->orderByDesc('viewed_at')
             ->limit($limit)
             ->pluck('product_id')
             ->map(fn ($id) => (int) $id)
