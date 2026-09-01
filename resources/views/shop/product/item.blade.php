@@ -12,31 +12,18 @@
 
 @if($productView =='list')
     <x-product.main-image :product="$product" :seo-path="$seoPath" :wrap-link="true">
-        @if(!$showDiscountBadge && is_numeric($diff))
-{{--            <div class="product-badge product-discount">--}}
-{{--                {{ \Illuminate\Support\Number::percentage($diff) }} Off--}}
-{{--            </div>--}}
+        @if(!$showDiscountBadge)
             @if(!$product->in_stock)
                 <div class="product-badge product-start text-white bg-success"
                      data-toggle="tooltip" title="Inventory Status">
-                   <i class="icon-circle-check" style="margin-top: -3px"></i> In Stock
+                    <i class="icon-circle-check" style="margin-top: -3px"></i> In Stock
                 </div>
             @endif
-        @endif
-
-        @if(!$showFavourite)
-            <div class="product-badge" style="right: 0">
-                {{--                @if(class_exists(\Amplify\Wishlist\Widgets\WishlistButton::class))--}}
-                {{--                    <x-wishlist-button :product="$product" class="btn-wishlist">--}}
-                {{--                        <x-slot:add-label>--}}
-                {{--                            <i title="Add to Favorites" class="icon-file-add text-primary"></i>--}}
-                {{--                        </x-slot>--}}
-                {{--                        <x-slot:remove-label>--}}
-                {{--                            <i title="Remove From Favorites" class="icon-file-subtract"></i>--}}
-                {{--                        </x-slot>--}}
-                {{--                    </x-wishlist-button>--}}
-                {{--                @endif--}}
-            </div>
+            @if(is_numeric($diff))
+                <div class="product-badge product-end">
+                    {{ \Illuminate\Support\Number::percentage($diff) }} Off
+                </div>
+            @endif
         @endif
     </x-product.main-image>
     <div class="product-info">
@@ -152,7 +139,17 @@
     @endif
     <x-product.main-image :product="$product" :seo-path="$seoPath" :wrap-link="true">
         @if(!$showDiscountBadge)
-            <div class="product-badge product-discount" style="left: 0">50% Off</div>
+            @if(!$product->in_stock)
+                <div class="product-badge product-start text-white bg-success"
+                     data-toggle="tooltip" title="Inventory Status">
+                    <i class="icon-circle-check" style="margin-top: -3px"></i> In Stock
+                </div>
+            @endif
+            @if(is_numeric($diff))
+                <div class="product-badge product-end">
+                    {{ \Illuminate\Support\Number::percentage($diff) }} Off
+                </div>
+            @endif
         @endif
 
         @if(!$showFavourite)
@@ -184,6 +181,41 @@
             :value="$product->ERP?->Price"
             :uom="$product->ERP?->UnitOfMeasure ?? 'EA'"
             :std-price="$product->Msrp->toFloat()"/>
+
+    <div class="d-flex w-100 justify-content-center justify-content-md-start">
+        @if($product->total_quantity_available > 1)
+            <x-product.availability
+                    :product="$product" :value="$product->total_quantity_available"
+                    data-toggle="tooltip" title="Stock Inventory"
+                    element="a" class="tag border-primary font-weight-bold">
+                <x-slot:prefix>
+                    <i class="icon-layers font-weight-bold"></i>
+                </x-slot:prefix>
+                <x-slot:suffix>
+                    <span>available</span>
+                </x-slot:suffix>
+            </x-product.availability>
+        @endif
+
+        @if(!empty($product->min_order_qty))
+            <a href="#" class="tag border-warning font-weight-bold"
+               data-toggle="tooltip" title="Minimum Order Quantity">
+                MOQ: {{ $product->min_order_qty }}
+                @if($product->min_order_qty > 1)
+                    pieces
+                @else
+                    piece
+                @endif
+            </a>
+        @endif
+    </div>
+    @if(!empty($product->ship_restriction))
+        <p class="mb-2">
+            {!! $product->ship_restriction ?? '' !!}
+        </p>
+    @endif
+
+    <hr class="my-2">
 
     <x-product.quick-action
             :cart-label="$cartButtonLabel"
