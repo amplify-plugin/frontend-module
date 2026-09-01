@@ -172,7 +172,7 @@ export const QuickOrder = {
 
         if ($('#product_code_hint_' + index).length === 0) {
             $('#product_code_' + index).after(
-                `<small class="form-text text-muted mb-0" id="product_code_hint_${index}">${this.config().pressEnterHint}</small>`
+                `<small class="quick-order-code-hint text-muted" id="product_code_hint_${index}">${this.config().pressEnterHint}</small>`
             );
         }
     },
@@ -182,7 +182,7 @@ export const QuickOrder = {
         const errorText = opts.error ? this.escapeHtml(opts.error) : '';
         const hintHtml = opts.alreadyAdded
             ? ''
-            : `<small class="form-text text-muted mb-0" id="product_code_hint_${index}">${this.config().pressEnterHint}</small>`;
+            : `<small class="quick-order-code-hint text-muted" id="product_code_hint_${index}">${this.config().pressEnterHint}</small>`;
 
         return `<input type="text" aria-label="Product code" autocomplete="off"
                     id="product_code_${index}" placeholder="Enter product code"

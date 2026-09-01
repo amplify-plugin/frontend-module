@@ -64,6 +64,12 @@
             min-width: 220px;
         }
 
+        .quick-order-code-hint {
+            display: block;
+            margin-top: 4px;
+            padding-left: 0;
+        }
+
         tr.quick-order-row-loading {
             opacity: 0.72;
         }
