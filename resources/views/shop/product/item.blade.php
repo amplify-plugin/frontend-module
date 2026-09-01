@@ -12,10 +12,16 @@
 
 @if($productView =='list')
     <x-product.main-image :product="$product" :seo-path="$seoPath" :wrap-link="true">
-        @if(!$showDiscountBadge && is_integer($diff))
-            <div class="product-badge product-discount" style="left: 0">
-                {{ \Illuminate\Support\Number::percentage($diff) }} Off
-            </div>
+        @if(!$showDiscountBadge && is_numeric($diff))
+{{--            <div class="product-badge product-discount">--}}
+{{--                {{ \Illuminate\Support\Number::percentage($diff) }} Off--}}
+{{--            </div>--}}
+            @if(!$product->in_stock)
+                <div class="product-badge product-start text-white bg-success"
+                     data-toggle="tooltip" title="Inventory Status">
+                   <i class="icon-circle-check" style="margin-top: -3px"></i> In Stock
+                </div>
+            @endif
         @endif
 
         @if(!$showFavourite)
@@ -42,8 +48,6 @@
         @endif
         <x-product.name element="span" :product="$product" class="product-title d-block"/>
 
-        <x-product.short-description :content="$product->short_description" :lines="2"/>
-
         <x-product.price
                 element="div"
                 class="w-100 d-flex justify-content-md-start justify-content-center product-price"
@@ -51,6 +55,41 @@
                 :value="$product->ERP?->Price"
                 :uom="$product->ERP?->UnitOfMeasure ?? 'EA'"
                 :std-price="$product->Msrp->toFloat()"/>
+
+        <div class="d-flex w-100 justify-content-center justify-content-md-start">
+            @if($product->total_quantity_available > 1)
+                <x-product.availability
+                        :product="$product" :value="$product->total_quantity_available"
+                        data-toggle="tooltip" title="Stock Inventory"
+                        element="a" class="tag border-primary font-weight-bold">
+                    <x-slot:prefix>
+                        <i class="icon-layers font-weight-bold"></i>
+                    </x-slot:prefix>
+                    <x-slot:suffix>
+                        <span>available</span>
+                    </x-slot:suffix>
+                </x-product.availability>
+            @endif
+
+            @if(!empty($product->min_order_qty))
+                <a href="#" class="tag border-warning font-weight-bold"
+                   data-toggle="tooltip" title="Minimum Order Quantity">
+                    MOQ: {{ $product->min_order_qty }}
+                    @if($product->min_order_qty > 1)
+                        pieces
+                    @else
+                        piece
+                    @endif
+                </a>
+            @endif
+        </div>
+        @if(!empty($product->ship_restriction))
+            <p class="mb-2">
+                {!! $product->ship_restriction ?? '' !!}
+            </p>
+        @endif
+        <x-product.short-description :content="$product->short_description" :lines="2"/>
+        <hr class="my-2">
         <x-product.quick-action :product="$product" :seo-path="$seoPath" :index="$loop->index"/>
     </div>
     {{--    <div class="row">--}}

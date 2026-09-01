@@ -54,7 +54,7 @@ class QuickAction extends BaseComponent
         ];
 
         if (isset($this->product->ERP?->WarehouseID)) {
-            $defaultWarehouse = $this->product->ERP?->Warehouse;
+            $defaultWarehouse = $this->product->ERP?->WarehouseID;
         } else {
             $defaultWarehouse = customer_check()
                 ? ErpApi::getCustomerDetail()->DefaultWarehouse

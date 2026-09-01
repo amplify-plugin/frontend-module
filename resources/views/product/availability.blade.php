@@ -1,4 +1,5 @@
-<span {!! $htmlAttributes !!}>
+<{{ $element }} {!! $htmlAttributes !!}>
+    {!! $prefix ?? '' !!}
         @switch($availability)
         @case('I')
             @if($value > 500)
@@ -27,4 +28,7 @@
         @default {{-- A --}}
         {{ number_format($value ?? 0) }}
     @endswitch
-</span>
+
+    {!! $suffix ?? '' !!}
+
+</{{ $element }}>

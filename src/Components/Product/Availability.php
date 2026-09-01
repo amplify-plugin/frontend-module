@@ -15,7 +15,7 @@ class Availability extends BaseComponent
 {
     public int $restrictLimit = 25;
 
-    public function __construct(public Product|ItemRow|\stdClass|null $product, public mixed $value = null)
+    public function __construct(public Product|ItemRow|\stdClass|null $product, public mixed $value = null, public string $element = 'span')
     {
         parent::__construct();
     }
