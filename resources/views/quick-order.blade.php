@@ -2,60 +2,148 @@
     <div class="card">
         <div class="card-body">
             <div class="form-group mb-0">
-                <div class="input-group mb-2">
-                    <div class="custom-file">
-                        <input class="custom-file-input form-control" type="file" id="quick_order_file" aria-label="file-label"
-                               accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                               onchange="readQuickOrderFile(this)" name="quick_order_file">
-                        <label class="custom-file-label" style="margin-bottom: 0;" for="file-input" id="quick_order_file_label">
-                            {{ __('Load from file...') }}
-                        </label>
-                    </div>
-                    <div class="quick-order-upload-btn input-group-prepend">
-                        <button type="button" id="upload_btn"
-                                class="btn btn-primary btn-sm my-0 btn-block rounded-right"
+                <div class="quick-order-import border rounded p-3 mb-3">
+                    <label class="font-weight-bold mb-1 d-block" for="quick_order_file">{{ __('Import from spreadsheet') }}</label>
+                    <p class="text-muted small mb-2 mb-md-3">
+                        {{ __('Add multiple products at once by uploading a CSV, XLS, or XLSX file.') }}
+                    </p>
+                    <div class="quick-order-import-controls">
+                        <div class="custom-file">
+                            <input class="custom-file-input" type="file" id="quick_order_file"
+                                   aria-describedby="quick_order_file_help"
+                                   accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                                   onchange="readQuickOrderFile(this)" name="quick_order_file">
+                            <label class="custom-file-label" for="quick_order_file" id="quick_order_file_label">
+                                {{ __('Choose a CSV, XLS, or XLSX file') }}
+                            </label>
+                        </div>
+                        <button type="button" id="upload_btn" class="btn btn-primary my-0"
                                 onclick="UploadQuickOrderFile()">
                             {{ __('Upload') }}
                         </button>
                     </div>
+                    <div class="mt-2">
+                        <a class="small" href="{{ asset('assets/samples/QUICK-ORDER-SAMPLE.csv') }}" download>
+                            {{ __('Download sample template') }}
+                        </a>
+                    </div>
+                    <span id="error_div" class="d-block text-danger mt-2" role="alert"></span>
+                    <div id="quick_order_file_help" class="small text-muted mt-2 mb-0">
+                        {{ __('Spreadsheet requirements:') }}
+                        <ul class="mb-0 pl-3">
+                            <li>{{ __('Supported file types: CSV, XLS, XLSX.') }}</li>
+                            <li>{{ __('Headings must be on row 1. Heading names are ignored.') }}</li>
+                            <li>{{ __('Column A = SKU / item number.') }}</li>
+                            <li>{{ __('Column B = quantity ordered.') }}</li>
+                            <li>{{ __('Maximum of 100 line items.') }}</li>
+                        </ul>
+                    </div>
                 </div>
-                <span id="error_div" class="d-block text-danger" role="alert"></span>
-                <span class="">
-                    Download the sample file from
-                    <a href="{{ asset('assets/samples/QUICK-ORDER-SAMPLE.csv') }}" download>
-                        Here</a>.
-                    <p class="mb-0">
-                        Spreadsheet Requirements:
-                        <ol class="text-danger">
-                        <li>{{ __('Supported file types CSV,XLS,XLSX') }}.</li>
-                        <li>{{ __('Headings must be included on row 1 of the spreadsheet. The names of the headings are irrelevant') }}.</li>
-                        <li>{{ __('Column A = SKU / Item Number') }}.</li>
-                        <li>{{ __('Column B = Quantity Ordered') }}.</li>
-                        <li>{{ __('A maximum of 100 line items can be listed.') }}.</li>
-                    </ol>
-                    </p>
-                </span>
             </div>
+            <style>
+                #quickOrderTable td {
+                    vertical-align: middle;
+                }
+                #quickOrderTable .quick-order-code-col {
+                    min-width: 260px;
+                    width: 30%;
+                }
+                #quickOrderTable input[name="product_code[]"] {
+                    width: 100%;
+                    min-width: 220px;
+                }
+                #quickOrderTable tr.quick-order-row-loading {
+                    opacity: 0.72;
+                }
+                .quick-order-import-controls {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                }
+                .quick-order-import-controls .custom-file {
+                    position: relative;
+                    flex: 1 1 auto;
+                    height: 44px;
+                    margin: 0;
+                }
+                .quick-order-import .custom-file-input,
+                .quick-order-import .custom-file-label {
+                    height: 44px;
+                    margin: 0;
+                }
+                .quick-order-import .custom-file-label {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    padding: 0 12px;
+                    padding-right: 108px;
+                    color: #6c757d;
+                    font-weight: 400;
+                    line-height: 42px;
+                    border-radius: 8px;
+                }
+                .quick-order-import .custom-file-label::after {
+                    content: "{{ __('Browse') }}";
+                    top: 1px;
+                    right: 1px;
+                    bottom: 1px;
+                    height: auto;
+                    padding: 0 16px;
+                    line-height: 40px;
+                    color: #212529;
+                    border-radius: 0 7px 7px 0 !important;
+                }
+                .quick-order-import-controls #upload_btn {
+                    flex: 0 0 auto;
+                    width: auto !important;
+                    min-width: 110px;
+                    margin: 0 !important;
+                    height: 44px !important;
+                    padding: 0 18px !important;
+                    line-height: 1 !important;
+                    display: inline-flex !important;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+                    border-radius: 6px;
+                    font-size: 14px;
+                }
+                @media (max-width: 768px) {
+                    .quick-order-import-controls {
+                        flex-wrap: wrap;
+                    }
+                    .quick-order-import-controls .custom-file,
+                    .quick-order-import #upload_btn {
+                        width: 100%;
+                    }
+                }
+            </style>
+            <p class="text-muted small mb-2" id="quick_order_code_help">
+                {{ __('Type or paste a product code, then press Enter to add it.') }}
+            </p>
             <div class="tableFixHead table-responsive pb-4 pb-md-0">
                 <table class="table table-striped table-hover" id="quickOrderTable">
                     <thead>
                     <tr>
-                        <th scope="col" class="text-center" style="min-width: 150px">{{ __('Product Code') }}</th>
-                        <th scope="col" class="text-center" style="min-width: 150px">{{ __('Product Name') }}</th>
+                        <th scope="col" class="quick-order-code-col">{{ __('Product Code') }}</th>
+                        <th scope="col" style="min-width: 180px">{{ __('Product Name') }}</th>
                         @erp
-                        <th scope="col" style="width: 440px" class="text-center">{{ __('Warehouse') }}</th>
-                        <th scope="col" style="width: 135px" class="text-center">{{ __('Qty') }}</th>
+                        <th scope="col" class="text-center" style="min-width: 140px">{{ __('Warehouse') }}</th>
+                        <th scope="col" class="text-center" style="width: 120px">{{ __('Quantity') }}</th>
                         @enderp
-                        <th scope="col" style="width: 55px">Remove</th>
+                        <th scope="col" class="text-center" style="width: 70px">{{ __('Remove') }}</th>
                     </tr>
                     </thead>
                     <tbody id="quick_order_tbody"></tbody>
                 </table>
             </div>
             <div class="d-flex justify-content-between align-items-center pb-md-0">
-                <div class="text-success text-bold" id="added_product_count"></div>
+                <div>
+                    <div class="text-success font-weight-bold" id="added_product_count"></div>
+                    <div class="text-muted small d-none" id="quick_order_status" role="status"></div>
+                </div>
                 <div class="text-center">
-                    <button id="add_to_order_btn" class="btn btn-primary btn-sm"
+                    <button type="button" id="add_to_order_btn" class="btn btn-primary btn-sm" disabled
                             onclick="addToOrder()">
                         {{ __('Add to Order') }}
                     </button>
@@ -65,49 +153,222 @@
     </div>
 </div>
 <script type="text/javascript">
-    var timeout;
-    var delay = 500;
     var limit = 0;
     var from = 0;
 
-    const MULTIPLE_WAREHOUSE_ENABLED = @selectwarehouse true @else false @endselectwarehouse;
-    const USER_ACTIVE_WAREHOUSE_CODE = "{{ $userActiveWarehouseCode }}";
-    const isMultiWarehouse = "{{ erp()->allowMultiWarehouse() }}";
-    var user_active_warehouse_name = null;
-    var user_active_warehouse = null;
+    const USER_ACTIVE_WAREHOUSE_CODE = @json($userActiveWarehouseCode);
+    const USER_ACTIVE_WAREHOUSE_NAME = @json($userActiveWarehouseName);
     const WAREHOUSE_QUANTITY_AVAILABILITY_CHECK = parseInt("{{ $checkWarehouseQtyAvailability }}")
+    const ADD_TO_ORDER_LABEL = @json(__('Add to Order'));
+    const UPLOAD_LABEL = @json(__('Upload'));
+    const FILE_INPUT_PLACEHOLDER = @json(__('Choose a CSV, XLS, or XLSX file'));
+    const PRESS_ENTER_HINT = @json(__('Press Enter to add'));
+    let pendingRequests = 0;
 
-    document.addEventListener('DOMContentLoaded', function(event) {
-        addProduct();
+    function spinnerHtml(label) {
+        return '<span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>' + label;
+    }
+
+    function refreshActionButtons() {
+        const isBusy = pendingRequests > 0;
+        const addedCount = $('#quick_order_tbody tr.added_products').filter(function() {
+            return $(this).find('input[name="product_code[]"]').val().trim() !== '';
+        }).length;
+
+        $('#add_to_order_btn').prop('disabled', isBusy || addedCount === 0);
+        $('#upload_btn').prop('disabled', isBusy);
+        $('#quick_order_file').prop('disabled', isBusy);
+    }
+
+    function setQuickOrderBusy(isStarting, message) {
+        pendingRequests += isStarting ? 1 : -1;
+        if (pendingRequests < 0) {
+            pendingRequests = 0;
+        }
+
+        if (pendingRequests > 0 && message) {
+            $('#quick_order_status').text(message).removeClass('d-none');
+        }
+
+        if (pendingRequests === 0) {
+            $('#quick_order_status').text('').addClass('d-none');
+        }
+
+        refreshActionButtons();
+    }
+
+    function setRowLoading(index, isLoading) {
+        const row = $('#added_products_' + index);
+        const codeInput = $('#product_code_' + index);
+
+        row.toggleClass('quick-order-row-loading', isLoading);
+        row.data('fetching', isLoading);
+        codeInput.prop('disabled', isLoading);
+
+        if (isLoading) {
+            $('#product_name_' + index).html(
+                '<span class="text-muted d-inline-flex align-items-center">' +
+                    spinnerHtml('Fetching product...') +
+                '</span>'
+            );
+            $('#product_code_error_' + index).text('');
+            $('#product_code_hint_' + index).addClass('d-none');
+        }
+    }
+
+    function escapeHtml(value) {
+        return String(value || '')
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+    }
+
+    function getRowIndexFromCodeInput(element) {
+        return String($(element).attr('id').replace('product_code_', ''));
+    }
+
+    function getResolvedCode(index) {
+        return normalizeProductCode($('#product_code_' + index).data('resolvedCode'));
+    }
+
+    function setResolvedCode(index, code) {
+        $('#product_code_' + index).data('resolvedCode', normalizeProductCode(code));
+        $('#product_code_hint_' + index).remove();
+    }
+
+    function clearResolvedCode(index) {
+        $('#product_code_' + index).removeData('resolvedCode');
+        const hasProduct = $('#product_id_' + index).val() !== '';
+        if (hasProduct) {
+            $('#product_code_hint_' + index).remove();
+            return;
+        }
+
+        if ($('#product_code_hint_' + index).length === 0) {
+            $('#product_code_' + index).after(
+                `<small class="form-text text-muted mb-0" id="product_code_hint_${index}">${PRESS_ENTER_HINT}</small>`
+            );
+        }
+    }
+
+    function productCodeFieldHtml(index, value, options) {
+        const opts = options || {};
+        const errorText = opts.error ? escapeHtml(opts.error) : '';
+        const hintHtml = opts.alreadyAdded
+            ? ''
+            : `<small class="form-text text-muted mb-0" id="product_code_hint_${index}">${PRESS_ENTER_HINT}</small>`;
+
+        return `<input type="text" aria-label="Product code" autocomplete="off"
+                    id="product_code_${index}" placeholder="Enter product code"
+                    name="product_code[]" class="form-control form-control-sm"
+                    value="${escapeHtml(value)}">
+                ${hintHtml}
+                <small class="text-danger" id="product_code_error_${index}">${errorText}</small>`;
+    }
+
+    function productRowHtml(index, product) {
+        const qty = product['qty'] !== undefined && product['qty'] !== '' ? product['qty'] : 1;
+
+        return `<tr class="added_products" id="added_products_${index}">
+            <td class="quick-order-code-col">
+                <input type="hidden" id="product_id_${index}" value="${escapeHtml(product['product_id'])}" name="product_id[]" />
+                <input type="hidden" id="product_back_order_${index}" value="${escapeHtml(product['product_back_order'])}" name="product_back_order[]" />
+                ${productCodeFieldHtml(index, product['product_code'], {
+                    alreadyAdded: true,
+                    error: product['error'],
+                })}
+            </td>
+            <td>
+                <span id="product_name_${index}">${escapeHtml(product['product_name'] || '-')}</span>
+            </td>
+            <td class="warehouse text-center align-middle">
+                ${createWarehouse(product.ERP, index)}
+            </td>
+            <td class="text-center align-middle">
+                <input type="number" aria-label="Quantity" placeholder="Quantity" name="qty[]" value="${escapeHtml(qty)}" min="1" max="" id="qty_${index}" class="form-control form-control-sm mx-auto" style="width: 110px;">
+                <small class="text-danger" id="qty_error_${index}"></small>
+            </td>
+            ${removeButtonCell(false)}
+        </tr>`;
+    }
+
+    function handleProductCodeInput(element) {
+        const index = getRowIndexFromCodeInput(element);
+        const current = normalizeProductCode($(element).val());
+        const resolved = getResolvedCode(index);
+
+        $('#product_code_error_' + index).text('');
+
+        if (resolved === '' || current === resolved) {
+            return;
+        }
+
+        $('#product_id_' + index).val('');
+        $('#product_back_order_' + index).val('');
+        $('#product_name_' + index).text('-');
+        $('#qty_error_' + index).text('');
+        $(`#added_products_${index} .warehouse`).html(createWarehouse([], index));
+        clearResolvedCode(index);
+    }
+
+    function focusProductCode(index) {
+        const input = $('#product_code_' + index);
+        if (input.length) {
+            input.trigger('focus');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        addProduct(true);
+        bindProductCodeEvents();
     });
 
+    function bindProductCodeEvents() {
+        const tbody = document.getElementById('quick_order_tbody');
+        tbody.addEventListener('keydown', function(event) {
+            if (!event.target.matches('input[name="product_code[]"]')) {
+                return;
+            }
+            if (event.key === 'Enter' || event.keyCode === 13) {
+                event.preventDefault();
+                lookupProductByCode(event.target);
+            }
+        });
+        tbody.addEventListener('input', function(event) {
+            if (event.target.matches('input[name="product_code[]"]')) {
+                handleProductCodeInput(event.target);
+            }
+        });
+    }
+
     function readQuickOrderFile(file) {
-        let data = file.value;
-        let file_name = data.split('\\')[2];
-        if (data.length != 0) {
-            $('#quick_order_file_label').text('Selected file : ' + file_name);
-        } else {
-            $('#quick_order_file_label').text('Invalid File selection');
-        }
+        const selectedFile = file.files && file.files[0];
+        $('#quick_order_file_label').text(selectedFile ? selectedFile.name : FILE_INPUT_PLACEHOLDER);
     }
 
     function UploadQuickOrderFile() {
         $('#error_div').empty();
-        $('#upload_btn').attr('disabled', 'disabled');
-        let html = `<div class="spinner-border spinner-border-sm text-white mr-2" role="status"></div>Uploading`;
-        $('#upload_btn').html(html);
-        var formData = new FormData();
         var file = $('#quick_order_file')[0].files[0];
-        if (file !== undefined) {
-            formData.append('file', file);
-            formData.append('_token', '{{ csrf_token() }}');
-            $.ajax({
-                url: '{{ route('frontend.order.quick-order-file-upload') }}',
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
+        if (file === undefined) {
+            ShowNotification('error', 'Quick Order', 'Please select a file to upload');
+            return;
+        }
+
+        var formData = new FormData();
+        formData.append('file', file);
+        formData.append('_token', '{{ csrf_token() }}');
+        $.ajax({
+            url: '{{ route('frontend.order.quick-order-file-upload') }}',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend: function() {
+                $('#upload_btn').html(spinnerHtml('Uploading file...'));
+                setQuickOrderBusy(true, 'Uploading spreadsheet and fetching products...');
+            },
+            success: function(response) {
                     if (response.success) {
                         let products = response.data;
                         // let products = items.filter(i => !i.error);
@@ -123,126 +384,204 @@
                             $('#error_div').html('');
                         }
                         if (products_array.length > 0) {
-                            let html = '';
-                            products_array.forEach(function(product, index) {
-                                html += `<tr class="added_products" id="added_products_${index}">
-                                            <td>
-                                                <input type="hidden" id="product_id_${index}" value="${product['product_id']}" name="product_id[]" />
-                                                <input type="hidden" id="product_back_order_${index}" value="${product['product_back_order']}" name="product_back_order[]" />
-                                                <input type="text" onblur="debounceSearch(this)" id="product_code_${index}" placeholder="Enter product code" name="product_code[]" class="form-control form-control-sm" value="${product['product_code']}">
-                                                <small class="text-danger" id="product_code_error_${index}">${product['error']}</small>
-                                            </td>
-                                             <td>
-                                                <span class="text-center" id="product_name_${index}">${product['product_name']}</span>
-                                            </td>
-                                            <td class="warehouse text-center">
-                                                ${createWarehouse(product.ERP, index)}
-                                            </td>
-                                            <td>
-                                                <input type="number"   placeholder="Quantity" name="qty[]" value="${product['qty']}" min="1" max=""  id="qty_${index}" class="form-control form-control-sm">
-                                            </td>
-                                            <td class="p-2" style="width: 55px">
-                                                <button class="btn btn-sm m-0 px-2" data-toggle="tooltip" title="Remove" onclick="removeProduct(this)">
-                                                   <i class="icon-cross text-danger font-weight-bold"></i>
-                                                </button>
-                                            </td>
-                                        </tr>`;
+                            const lastRow = $('#quick_order_tbody tr.added_products').last();
+                            const lastIsEntryRow = lastRow.length > 0
+                                && lastRow.find('input[name="product_id[]"]').val() === '';
+                            let addedCount = 0;
+                            let skippedCount = 0;
+
+                            products_array.forEach(function(product) {
+                                if (findExistingProductRow(product['product_code'])) {
+                                    skippedCount += 1;
+                                    return;
+                                }
+
+                                const index = limit;
+                                limit += 1;
+                                from = index;
+                                const rowHtml = productRowHtml(index, product);
+
+                                if (lastIsEntryRow) {
+                                    lastRow.before(rowHtml);
+                                } else {
+                                    $('#quick_order_tbody').append(rowHtml);
+                                }
+
+                                setMaxQty(index);
+                                if (product['product_id']) {
+                                    setResolvedCode(index, product['product_code']);
+                                }
+                                addedCount += 1;
                             });
-                            $('#upload_btn').removeAttr('disabled');
-                            $('#upload_btn').html('Upload');
-                            $('#quick_order_tbody').html(html);
-                            ShowNotification('success', 'Quick Order', 'File uploaded successfully');
+
+                            if (!lastIsEntryRow) {
+                                addProduct();
+                            }
+
+                            updateAddedProductCount();
                             $('#quick_order_file').val('');
-                            $('#quick_order_file_label').text('Load from file...');
-                            let added_product_count = $('#quick_order_tbody tr').length - 1;
-                            $('#added_product_count').text(added_product_count + ' Products added');
-                            from = 0;
-                            limit = products_array.length;
-                            addProduct();
-                        } else {
-                            showNoProductsFound();
+                            $('#quick_order_file_label').text(FILE_INPUT_PLACEHOLDER);
+
+                            if (addedCount > 0) {
+                                ShowNotification('success', 'Quick Order', 'File uploaded successfully');
+                            }
+                            if (skippedCount > 0) {
+                                ShowNotification(
+                                    'info',
+                                    'Quick Order',
+                                    skippedCount === 1
+                                        ? '1 product from the file was already in the list and was skipped.'
+                                        : skippedCount + ' products from the file were already in the list and were skipped.'
+                                );
+                            }
+                            if (addedCount === 0 && skippedCount === 0) {
+                                ShowNotification('info', 'Quick Order', 'No new products were added from the file.');
+                            }
                         }
                     } else {
-                        $('#upload_btn').removeAttr('disabled');
-                        $('#upload_btn').html('Upload');
                         ShowNotification('error', 'Quick Order', response.message);
                     }
                 },
-                error: function(xhr, status, error) {
-                    let response = JSON.parse(xhr.responseText);
-                    if (xhr.status == 422) {
-                        $('#error_div').html(response.message);
+                error: function(xhr) {
+                    let message = 'Something went wrong while uploading the file.';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        message = xhr.responseJSON.message;
                     }
-                    ShowNotification('error', 'Quick Order', 'Something Went Wrong');
-                    $('#upload_btn').removeAttr('disabled');
-                    $('#upload_btn').html('Upload');
+                    if (xhr.status == 422 && xhr.responseJSON && xhr.responseJSON.message) {
+                        $('#error_div').html(xhr.responseJSON.message);
+                    }
+                    ShowNotification('error', 'Quick Order', message);
+                },
+                complete: function() {
+                    $('#upload_btn').html(UPLOAD_LABEL);
+                    setQuickOrderBusy(false);
                 },
             });
-        } else {
-            $('#upload_btn').removeAttr('disabled');
-            $('#upload_btn').html('Upload');
-            ShowNotification('error', 'Quick Order', 'Please select a file to upload');
+    }
+
+    function getCustomerWarehouse(warehouses) {
+        const warehouseList = warehouses || [];
+        const customerWarehouse = warehouseList.find(function (warehouse) {
+            return String(warehouse.WarehouseID) === String(USER_ACTIVE_WAREHOUSE_CODE);
+        });
+
+        return customerWarehouse || {
+            WarehouseID: USER_ACTIVE_WAREHOUSE_CODE,
+            WarehouseName: USER_ACTIVE_WAREHOUSE_NAME,
+            QuantityAvailable: '',
+        };
+    }
+
+    function setMaxQty(index) {
+        const quantity = $('#warehouse_' + index).data('quantity');
+        const qtyInput = $('#qty_' + index);
+        const available = parseFloat(quantity);
+        const allowsBackorder = $('#product_back_order_' + index).val() === 'Y';
+
+        if (!allowsBackorder && Number.isFinite(available) && available > 0) {
+            qtyInput.attr('max', available);
+            return;
         }
-    }
 
-    function changeUserInputsERP(warehouseID, quantity, index) {
-        document.querySelector(`#added_products_${index} select[name="product_warehouse_code[]"]`).value = warehouseID;
-        document.querySelector(`#added_products_${index} input[name="qty[]"]`).value = quantity;
-    }
-
-    function setMaxQty(selectElement, inputField) {
-
-        $('#' + inputField).attr('max', $('#' + selectElement).find(':selected').data('quantity'));
+        qtyInput.removeAttr('max');
     }
 
     function createWarehouse(warehouses, index) {
-        let html = '';
-        let inventory = [];
-
-        if (!MULTIPLE_WAREHOUSE_ENABLED) {
-            html +=
-                `<div class="d-block mx-auto py-1 text-center font-weight-bold">{{ $userActiveWarehouseName }}</div>`;
-        }
-
-        html += `<select
-        class="form-control form-control-sm"
-        name="product_warehouse_code[]"
-        id="warehouse_${index}"
-        onchange="changeWarehouse(this, 'added_products_${index}'); setMaxQty('warehouse_${index}', 'qty_${index}');"
-        `;
-
-        html += (!MULTIPLE_WAREHOUSE_ENABLED) ?
-            ` style="display:none;">` :
-            `>`;
-
-        html += ` <option value="">Select Warehouse</option>`;
-
-        if (warehouses) {
-            for (const warehouse of warehouses) {
-                html += `<option value="${warehouse.WarehouseID}" data-quantity="${warehouse.QuantityAvailable}"
-                    ${(warehouse.WarehouseID == USER_ACTIVE_WAREHOUSE_CODE) ? 'selected' : ''} >
-                                    ${warehouse.WarehouseName}
-                                </option>`;
-
-                inventory.push(`${warehouse.WarehouseName}-${warehouse.QuantityAvailable}`);
+        const warehouse = getCustomerWarehouse(warehouses);
+        const quantityAvailable = warehouse.QuantityAvailable;
+        const available = parseFloat(quantityAvailable);
+        let availabilityHtml = '';
+        if (quantityAvailable !== '' && quantityAvailable !== undefined && quantityAvailable !== null) {
+            if (Number.isFinite(available) && available > 0) {
+                availabilityHtml = `<div class="text-muted small">${quantityAvailable} available</div>`;
+            } else {
+                availabilityHtml = `<div class="text-danger small">0 available · Backorder</div>`;
             }
         }
 
-        html += `</select>`;
-
-        //show validation error
-        html += `<small class="text-danger d-block" id="warehouse_error_${index}"></small>`;
-        return (html + '<small>' + inventory.join(', ') + '</small>');
+        return `<input type="hidden" name="product_warehouse_code[]" id="warehouse_${index}" value="${warehouse.WarehouseID || ''}" data-quantity="${quantityAvailable}">
+            <div class="font-weight-bold">${warehouse.WarehouseName || '—'}</div>
+            ${availabilityHtml}
+            <small class="text-danger" id="warehouse_error_${index}"></small>`;
     }
 
-    function changeWarehouse(e, product_div_id) {
-        const warehouseInfo = e.selectedOptions[0].dataset;
+    function removeButtonCell(hidden) {
+        const hiddenClass = hidden ? ' d-none' : '';
 
-        $(`#${product_div_id} input[name="qty[]"]`).val(1);
-        $(`#${product_div_id} input[name="qty[]"]`).attr('max', warehouseInfo.quantity);
+        return `<td class="text-center align-middle" style="width: 70px">
+            <button type="button" class="btn btn-sm m-0 px-2${hiddenClass}" data-toggle="tooltip" title="Remove" onclick="removeProduct(this)">
+                <i class="icon-cross text-danger font-weight-bold"></i>
+            </button>
+        </td>`;
     }
 
-    function addProduct() {
+    function normalizeProductCode(code) {
+        return String(code || '').trim().toUpperCase();
+    }
+
+    function findExistingProductRow(productCode, excludeIndex) {
+        const normalizedCode = normalizeProductCode(productCode);
+        let existingRow = null;
+
+        $('#quick_order_tbody tr.added_products').each(function() {
+            const row = $(this);
+            const rowIndex = String(row.attr('id').split('_').pop());
+            if (rowIndex === String(excludeIndex)) {
+                return;
+            }
+
+            const rowId = row.find('input[name="product_id[]"]').val();
+            const rowCode = normalizeProductCode(row.find('input[name="product_code[]"]').val());
+            if (rowId && rowCode !== '' && rowCode === normalizedCode) {
+                existingRow = row;
+                return false;
+            }
+        });
+
+        return existingRow;
+    }
+
+    function resetProductRow(index) {
+        $('#product_id_' + index).val('');
+        $('#product_back_order_' + index).val('');
+        $('#product_code_' + index).val('');
+        $('#product_name_' + index).text('-');
+        $('#product_code_error_' + index).text('');
+        $('#qty_' + index).val('');
+        $('#qty_error_' + index).text('');
+        $(`#added_products_${index} .warehouse`).html(createWarehouse([], index));
+        $(`#added_products_${index} td button`).addClass('d-none');
+        clearResolvedCode(index);
+    }
+
+    function notifyProductAlreadyAdded(currentIndex, productCode) {
+        const currentRow = $('#added_products_' + currentIndex);
+        const isLastRow = currentRow.is($('#quick_order_tbody tr.added_products').last());
+        if (isLastRow) {
+            resetProductRow(currentIndex);
+            focusProductCode(currentIndex);
+        } else {
+            currentRow.remove();
+        }
+
+        updateAddedProductCount();
+        ShowNotification(
+            'info',
+            'Quick Order',
+            productCode + ' is already added to the list.'
+        );
+    }
+
+    function updateAddedProductCount() {
+        const addedCount = $('#quick_order_tbody tr.added_products').filter(function() {
+            return $(this).find('input[name="product_code[]"]').val().trim() !== '';
+        }).length;
+
+        $('#added_product_count').text(addedCount > 0 ? addedCount + ' Products added' : '');
+        refreshActionButtons();
+    }
+
+    function addProduct(shouldFocus) {
         if ($('#no_product_tr').length > 0) {
             $('#no_product_tr').remove();
         }
@@ -251,35 +590,33 @@
         let html = '';
         for (var i = from; i < limit; i++) {
             html += ` <tr class="added_products" id="added_products_${i}">
-                        <td width="15%">
+                        <td class="quick-order-code-col">
                             <input type="hidden" id="product_id_${i}" value="" name="product_id[]" />
                             <input type="hidden" id="product_back_order_${i}" value="" name="product_back_order[]" />
-                            <input type="text" aria-label="Product code" autofocus onblur="debounceSearch(this)" id="product_code_${i}" placeholder="Enter product code" name="product_code[]" class="form-control form-control-sm" value="">
-                            <small class="text-danger" id="product_code_error_${i}"></small>
+                            ${productCodeFieldHtml(i, '', { alreadyAdded: false })}
                         </td>
                         <td>
-                            <span class="text-center" id="product_name_${i}">-</span>
+                            <span id="product_name_${i}">-</span>
                         </td>
-                        <td class="warehouse text-center">
+                        <td class="warehouse text-center align-middle">
+                            ${createWarehouse([], i)}
                         </td>
-                        <td>
+                        <td class="text-center align-middle">
                             <input type="number" aria-label="Quantity" placeholder="Quantity" name="qty[]" value="" min="0" max=""
                                     onkeypress="return event.charCode >= 48"
                                     id="qty_${i}"
-                                    class="form-control form-control-sm" style="width: 110px;">
-                            <!-- <small class="text-danger" id="qty_error_${i}"></small> -->
+                                    class="form-control form-control-sm mx-auto" style="width: 110px;">
+                            <small class="text-danger" id="qty_error_${i}"></small>
                         </td>
-                        <td>
-                            <button class="btn btn-sm m-0 px-2 d-none" onclick="removeProduct(this)">
-                                <i class="icon-cross text-danger font-weight-bold"></i>
-                            </button>
-                        </td>
+                        ${removeButtonCell(true)}
                     </tr>`;
         }
 
         $('#quick_order_tbody').append(html);
-        let added_product_count = $('#quick_order_tbody tr').length - 1;
-        $('#added_product_count').text(added_product_count + ' Products added');
+        updateAddedProductCount();
+        if (shouldFocus) {
+            focusProductCode(from);
+        }
     }
 
     function promptRemoveButton(index) {
@@ -289,113 +626,96 @@
     function removeProduct(element) {
         $(element).closest('tr').remove();
         ShowNotification('success', 'Quick Order', 'Product removed successfully');
-        if ($('#no_product_tr').length > 0) {
-            $('#added_product_count').text('');
-        } else {
-            let added_product_count = $('#quick_order_tbody tr').length - 1;
-            $('#added_product_count').text(added_product_count + ' Products added');
-        }
+        updateAddedProductCount();
         if ($('#quick_order_tbody tr').length === 0) {
             showNoProductsFound();
         }
     }
 
-    function debounceSearch(element) {
-        if (timeout) clearTimeout(timeout);
-        timeout = setTimeout(function() {
-            getProductNameByCode(element);
-        }, delay);
-    }
+    function lookupProductByCode(element) {
+        const product_code = $(element).val();
+        const index = getRowIndexFromCodeInput(element);
+        const normalized = normalizeProductCode(product_code);
 
-    function getProductNameByCode(element) {
-        let product_code = $(element).val();
-        if (product_code.trim() !== '' && product_code.length >= 3) {
-            let index = $(element).attr('id').split('_')[2];
-            $.ajax({
-                url: '{{ route('frontend.order.get-product-name-by-code') }}',
-                type: 'POST',
-                data: {
-                    product_code: product_code,
-                    _token: '{{ csrf_token() }}',
-                },
-                success: function(response) {
-                    if (response.success == true) {
-
-                        $('#product_id_' + index).val(response.data.product_id);
-                        $('#product_back_order_' + index).val(response.data.product_back_order);
-                        $('#product_name_' + index).text(response.data.product_name);
-                        $('#product_code_error_' + index).text('');
-
-                        user_active_warehouse = response.data.ERP.find(function(element) {
-                            return USER_ACTIVE_WAREHOUSE_CODE == element.WarehouseID;
-                        });
-                        user_active_warehouse_name = user_active_warehouse?.WarehouseName ?? '';
-                        if (response.data.ERP.length)
-                            $(`#added_products_${index} .warehouse`).html(createWarehouse(response.data.ERP,
-                                index));
-                        else
-                            $(`#added_products_${index} .warehouse`).html('');
-
-                        selectWarehouseForSingleProduct(response.data, index);
-
-                        if ($('#quick_order_tbody tr').last().find('input[type="text"]').val() != '') {
-                            addProduct();
-                            promptRemoveButton(index);
-                        }
-
-                    } else {
-                        $('#product_name_' + index).text(response.data.product_name);
-                        $('#product_code_error_' + index).text(response.data.error);
-                        $(`#added_products_${index} .warehouse`).html('');
-                    }
-                },
-            });
+        if (normalized === '') {
+            return;
         }
+
+        if (normalized.length < 3) {
+            $('#product_code_error_' + index).text('Enter at least 3 characters, then press Enter');
+            return;
+        }
+
+        if ($('#added_products_' + index).data('fetching')) {
+            return;
+        }
+
+        if (getResolvedCode(index) === normalized && $('#product_id_' + index).val() !== '') {
+            return;
+        }
+
+        const existingRow = findExistingProductRow(product_code, index);
+        if (existingRow) {
+            notifyProductAlreadyAdded(index, product_code);
+            return;
+        }
+
+        $.ajax({
+            url: '{{ route('frontend.order.get-product-name-by-code') }}',
+            type: 'POST',
+            data: {
+                product_code: product_code,
+                _token: '{{ csrf_token() }}',
+            },
+            beforeSend: function() {
+                setRowLoading(index, true);
+                setQuickOrderBusy(true);
+            },
+            success: function(response) {
+                if (response.success == true) {
+                    const duplicateRow = findExistingProductRow(product_code, index);
+                    if (duplicateRow) {
+                        notifyProductAlreadyAdded(index, product_code);
+                        return;
+                    }
+
+                    $('#product_id_' + index).val(response.data.product_id);
+                    $('#product_back_order_' + index).val(response.data.product_back_order);
+                    $('#product_name_' + index).text(response.data.product_name);
+                    $('#product_code_error_' + index).text('');
+                    setResolvedCode(index, product_code);
+                    if (!$('#qty_' + index).val()) {
+                        $('#qty_' + index).val(1);
+                    }
+
+                    selectWarehouseForSingleProduct(response.data, index);
+
+                    if ($('#quick_order_tbody tr').last().find('input[name="product_code[]"]').val() != '') {
+                        addProduct();
+                        promptRemoveButton(index);
+                    }
+
+                } else {
+                    $('#product_name_' + index).text(response.data.product_name || 'N/A');
+                    $('#product_code_error_' + index).text(response.data.error);
+                    $(`#added_products_${index} .warehouse`).html(createWarehouse([], index));
+                }
+            },
+            error: function() {
+                $('#product_name_' + index).text('-');
+                $('#product_code_error_' + index).text('Unable to fetch this product. Please try again.');
+                ShowNotification('error', 'Quick Order', 'Unable to fetch product details.');
+            },
+            complete: function() {
+                setRowLoading(index, false);
+                setQuickOrderBusy(false);
+            },
+        });
     }
 
     function selectWarehouseForSingleProduct(product, index) {
-        if (!product) return false;
-
-        let selectedWarehouse = null;
-        let isWarehouseSelected = false;
-
-        for (const i in product.ERP) {
-            const warehouse = product.ERP[i];
-
-            if (!isMultiWarehouse) {
-                if (warehouse.WarehouseID == USER_ACTIVE_WAREHOUSE_CODE) {
-                    selectedWarehouse = warehouse;
-                    break;
-                }
-                continue;
-            }
-
-            if (!(selectedWarehouse && parseInt(selectedWarehouse.QuantityAvailable) > 0) && parseInt(warehouse
-                .QuantityAvailable) > 0) {
-                if (isWarehouseSelected) {
-                    selectedWarehouse = warehouse;
-                    break;
-                }
-                selectedWarehouse = warehouse;
-            }
-
-            if (warehouse.WarehouseID == USER_ACTIVE_WAREHOUSE_CODE) {
-                if (parseInt(warehouse.QuantityAvailable) > 0) {
-                    selectedWarehouse = warehouse;
-                    break;
-                }
-
-                if (selectedWarehouse) break;
-
-                selectedWarehouse = warehouse;
-                isWarehouseSelected = true;
-            }
-        }
-
-        let availableQuantity = selectedWarehouse.QuantityAvailable > 0 ? 1 : 0;
-        if (selectedWarehouse) {
-            changeUserInputsERP(selectedWarehouse.WarehouseID, availableQuantity, index);
-        }
+        $(`#added_products_${index} .warehouse`).html(createWarehouse(product?.ERP || [], index));
+        setMaxQty(index);
     }
 
     function showNoProductsFound() {
@@ -414,10 +734,9 @@
                 let product_code = $(element).find('input[name="product_code[]"]').val();
                 let product_id = $(element).find('input[name="product_id[]"]').val();
                 let qty = $(element).find('input[name="qty[]"]').val();
-                let warehouse = $(element).find('select[name="product_warehouse_code[]"]').val();
+                let warehouse = $(element).find('input[name="product_warehouse_code[]"]').val();
                 let id = $(element).attr('id').split('_')[2];
-                let maxQty = $(element).find('select[name="product_warehouse_code[]"]').find('option:selected')
-                    .data('quantity');
+                let maxQty = $(element).find('input[name="product_warehouse_code[]"]').data('quantity');
 
                 if (product_code.trim() !== '' && qty.trim() !== '') {
                     $('#product_code_error_' + id).text('');
@@ -429,8 +748,18 @@
                         qty: qty,
                         product_warehouse_code: warehouse,
                     });
-                    if (WAREHOUSE_QUANTITY_AVAILABILITY_CHECK && (qty > maxQty)) {
-                        $('#qty_error_' + id).text('Check quantity limit');
+                    const allowsBackorder = $(element).find('input[name="product_back_order[]"]').val() === 'Y';
+                    const availableQty = parseFloat(maxQty);
+                    const orderedQty = parseFloat(qty);
+                    const shouldEnforceLimit = WAREHOUSE_QUANTITY_AVAILABILITY_CHECK
+                        && !allowsBackorder
+                        && Number.isFinite(availableQty)
+                        && availableQty > 0
+                        && Number.isFinite(orderedQty)
+                        && orderedQty > availableQty;
+
+                    if (shouldEnforceLimit) {
+                        $('#qty_error_' + id).text('Quantity exceeds available inventory');
                         validation_error = true;
                     }
                 } else {
@@ -447,6 +776,16 @@
                 }
             });
 
+            if (validation_error) {
+                ShowNotification('error', 'Quick Order', 'Please fix the highlighted rows before adding to order.');
+                return;
+            }
+
+            if (products.length === 0) {
+                ShowNotification('error', 'Quick Order', 'Please add at least one product');
+                return;
+            }
+
             $.ajax({
                 url: quick_order_link,
                 type: 'POST',
@@ -454,34 +793,32 @@
                     products: products,
                     _token: '{{ csrf_token() }}',
                 },
+                beforeSend: function() {
+                    $('#add_to_order_btn').html(spinnerHtml('Adding to order...'));
+                    setQuickOrderBusy(true, 'Adding products to your order...');
+                },
                 success: function(response) {
                     if (response.success) {
-                        $('#add_to_order_btn').removeAttr('disabled');
-                        $('#add_to_order_btn').html('Add to Order');
-                        $('#quick_order_tbody tr').each(function(index, element) {
-                            if ($(element).hasClass('added_protducts')) {
-                                $(element).remove();
-                            }
-                        });
                         showNoProductsFound();
-                        $('#added_product_count').text('');
+                        updateAddedProductCount();
                         ShowNotification('success', 'Quick Order', response.message);
                         setTimeout(function() {
                             Amplify.loadCartDropdown();
                         }, 1000);
                     } else {
                         ShowNotification('error', 'Quick Order', response.message);
-                        $('#add_to_order_btn').removeAttr('disabled');
-                        $('#add_to_order_btn').html('Add to Order');
                     }
                 },
-                error: function(xhr, status, err) {
-                    console.log({xhr, status, err});
-                    ShowNotification('error', 'Quick Order', err.responseJSON.message);
-                    $('#add_to_order_btn').removeAttr('disabled');
-                    $('#add_to_order_btn').html('Add to Order');
+                error: function(xhr) {
+                    const message = xhr.responseJSON && xhr.responseJSON.message
+                        ? xhr.responseJSON.message
+                        : 'Unable to add products to your order. Please try again.';
+                    ShowNotification('error', 'Quick Order', message);
                 },
-
+                complete: function() {
+                    $('#add_to_order_btn').html(ADD_TO_ORDER_LABEL);
+                    setQuickOrderBusy(false);
+                },
             });
         } else {
             ShowNotification('error', 'Quick Order', 'Please add at least one product');
