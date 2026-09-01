@@ -1,5 +1,6 @@
 import Swal from 'sweetalert2';
 import {AddToCartEvent, InitEvent, RemoveFromCartEvent, RequestQuoteEvent} from './events.js';
+import {QuickOrder} from './quick-order.js';
 
 window.swal = Swal.mixin({
     theme: 'bootstrap-4-light',
@@ -41,6 +42,8 @@ window.Amplify = {
             this.RecentlyViewed.initCarouselWidgets();
             this.RecentlyViewed.initPageWidgets();
         }
+
+        this.QuickOrder.init();
     },
 
     clientCode() {
@@ -1950,6 +1953,8 @@ window.Amplify = {
         window.localStorage.setItem('consented', 'true');
         $('#cookie-consent-modal').modal('hide');
     },
+
+    QuickOrder,
 
     /**
      * Recently Viewed Products
