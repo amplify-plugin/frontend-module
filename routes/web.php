@@ -348,7 +348,7 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
 
     Route::post('product-compare', ProductCompareController::class)->name('product-compare');
 
-    Route::get('/{slug}', DynamicPageLoadController::class)
+    Route::get('/slug', DynamicPageLoadController::class)
         ->name('dynamic-route')
         ->where('slug', '^(?!admin(?:/|$)|sayt(?:/|$)).*');
 });

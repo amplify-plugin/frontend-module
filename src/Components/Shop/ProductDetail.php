@@ -72,18 +72,8 @@ class ProductDetail extends BaseComponent
         $Product->product_image = $dbProduct->productImage;
         $Product->allow_back_order = $dbProduct->allow_back_order;
         $Product->manufacturer = $dbProduct?->manufacturerRelation ?? null;
-        $specifications = new \stdClass;
-        $specifications->group_name = 'Specifications';
-        $specifications->group_items = $dbProduct->attributes->map(function ($item) {
-            $value = $item->pivot->attribute_value;
-            $value = UtilityHelper::isJson($value) ? json_decode($value, true)[config('app.locale')] ?? null : $value;
-
-            return (object) [
-                'name' => $item->name,
-                'value' => $value,
-            ];
-        })->toArray();
-        $Product->specifications = [$specifications];
+        $Product->specifications = $dbProduct?->specifications ?? [];
+        $Product->features = $dbProduct?->features ?? [];
 
         $priceAvailability = collect();
 
@@ -98,7 +88,7 @@ class ProductDetail extends BaseComponent
             $priceAvailability = ErpApi::getProductPriceAvailability([
                 'items' => [[
                     'item' => $Product->Product_Code,
-                    'uom' => $Product->UoM,
+                    'uom' => $Product->UoM ?? $dbProduct->uom,
                     'qty' => $dbProduct?->min_order_qty ?? 1,
                 ]],
                 'warehouse' => $warehouseString,
@@ -145,6 +135,7 @@ class ProductDetail extends BaseComponent
             'product' => $Product,
             'customer' => $erpCustomer,
             'productImage' => $dbProduct->productImage,
+            'eaAttributes' => $easSearchData->hasAttributes() ? $easSearchData->getAttributes() : [],
         ]);
     }
 

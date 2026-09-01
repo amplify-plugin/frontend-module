@@ -1,7 +1,21 @@
+@php
+
+    $diff = null;
+    $msrp =  $product?->Msrp?->toFloat() ?? null;
+    $price =  $product?->ERP?->Price ?? null;
+
+    if ($price != null && $msrp != null) {
+        $diff = (abs($msrp - $price) * 100)/$msrp;
+    }
+
+@endphp
+
 @if($productView =='list')
     <x-product.main-image :product="$product" :seo-path="$seoPath" :wrap-link="true">
-        @if(!$showDiscountBadge)
-            <div class="product-badge product-discount" style="left: 0">50% Off</div>
+        @if(!$showDiscountBadge && is_integer($diff))
+            <div class="product-badge product-discount" style="left: 0">
+                {{ \Illuminate\Support\Number::percentage($diff) }} Off
+            </div>
         @endif
 
         @if(!$showFavourite)
@@ -42,7 +56,7 @@
     {{--    <div class="row">--}}
     {{--        <div class="col-md-3 col-12">--}}
     {{--            @if($showDiscountBadge)--}}
-    {{--                <div class="product-badge text-danger">50% Off</div>--}}
+    {{--                <div class="product-badge text-danger">{{ \Illuminate\Support\Number::percentage($diff) }} Off</div>--}}
     {{--            @endif--}}
     {{--            @if ($showFavourite && !$isMasterProduct($product))--}}
     {{--                --}}{{--                <x-product.favourite-manage-button--}}
@@ -53,7 +67,7 @@
     {{--            @endif--}}
     {{--            <x-product.main-image :product="$product" :seo-path="$seoPath" :wrap-link="true">--}}
     {{--                @if(!$showDiscountBadge)--}}
-    {{--                    <div class="product-badge product-discount" style="left: 0">50% Off</div>--}}
+    {{--                    <div class="product-badge product-discount" style="left: 0">{{ \Illuminate\Support\Number::percentage($diff) }} Off</div>--}}
     {{--                @endif--}}
 
     {{--                @if(!$showFavourite)--}}

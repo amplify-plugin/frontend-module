@@ -1,8 +1,11 @@
 <div {!! $htmlAttributes !!}>
     <div class="product-gallery">
+
+        {!! $before ?? '' !!}
+
         <div class="product-carousel owl-carousel gallery-wrapper">
             <div class="gallery-item" data-hash="item-one">
-                <a  href="{{ $productImage->main ?? ' ' }}">
+                <a href="{{ $productImage->main ?? ' ' }}">
                     <img src="{{ $productImage->main ?? ' ' }}" alt="Product">
                 </a>
                 @if(!empty($product))
@@ -38,7 +41,7 @@
                 @foreach ($erpAdditionalImages as $key => $additionalImage)
                     <div class="gallery-item" data-hash="{{ 'erp-item-' . $key }}">
                         <a
-                           href="{{ 'https://www.spisafety.com/images/products/' . $additionalImage['value'] }}">
+                                href="{{ 'https://www.spisafety.com/images/products/' . $additionalImage['value'] }}">
                             <img src="{{ 'https://www.spisafety.com/images/products/' . $additionalImage['value'] }}"
                                  alt="Product">
                         </a>
@@ -81,14 +84,17 @@
                     <li class="item">
                         <a class="product-thumbnail" href="#{{ 'erp-item-' . $key }}">
                             <img
-                                src="{{ 'https://www.spisafety.com/images/products/thumb/' . $additionalImage['value'] }}"
-                                alt="Product"
+                                    src="{{ 'https://www.spisafety.com/images/products/thumb/' . $additionalImage['value'] }}"
+                                    alt="Product"
                             />
                         </a>
                     </li>
                 @endforeach
             @endif
         </ul>
+
+        {!! $after ?? '' !!}
+
     </div>
 </div>
 
