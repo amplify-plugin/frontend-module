@@ -74,13 +74,14 @@ class NewCustomerRegisterController extends Controller
                 'order_limit' => 0,
                 'daily_budget_limit' => 0,
                 'monthly_budget_limit' => 0,
+                'source' => 'retail_customer',
             ]);
 
             DB::commit();
 
             $this->handlePostRegistrationForNewRetailCustomer($request, $customer, $contact);
 
-            $request->session()->flash('customerSignedUp', true);
+            $request->session()->flash('customerSignedUp', $contact->getKey());
 
             return redirect()->to('/')
                 ->with([
@@ -105,6 +106,9 @@ class NewCustomerRegisterController extends Controller
         }
     }
 
+    /**
+     * @throws Exception
+     */
     private function createCustomer(array $attributes): Customer
     {
         $industryName = $attributes['WrittenIndustry'] ?? null;
@@ -121,6 +125,7 @@ class NewCustomerRegisterController extends Controller
             'phone_ext' => $attributes['CustomerPhoneExt'] ?? null,
             'approved' => config('amplify.security.skip_contact_approval', false),
             'customer_type' => 'Retail',
+            'source' => 'retail_customer',
             'industry_classification_id' => $industryClassification->id ?? null,
             'address_1' => $attributes['CustomerAddress1'] ?? null,
             'address_2' => $attributes['CustomerAddress2'] ?? null,

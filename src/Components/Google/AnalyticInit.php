@@ -5,6 +5,7 @@ namespace Amplify\Frontend\Components\Google;
 use Amplify\Frontend\Abstracts\BaseComponent;
 use Amplify\Frontend\Store\AnalyticsBus;
 use Amplify\System\Backend\Models\Category;
+use Amplify\System\Backend\Models\Contact;
 use Amplify\System\Backend\Models\Product;
 use Amplify\System\Sayt\Classes\BreadCrumbTrail;
 use Amplify\System\Sayt\Classes\NavigateNode;
@@ -167,7 +168,7 @@ class AnalyticInit extends BaseComponent
             $data['offers']['url'] = request()->url();
             $data['offers']['priceCurrency'] = config('amplify.basic.global_currency', 'USD');
             $price = $productErp->ERP?->Price ?? $product->selling_price ?? null;
-            $data['offers']['price'] = is_numeric($price) ? round((float) $price, 2) : 0;
+            $data['offers']['price'] = is_numeric($price) ? round((float)$price, 2) : 0;
             $data['offers']['availability'] = 'https://schema.org/InStock';
             $data['offers']['seller']['@type'] = 'Organization';
             $data['offers']['seller']['@id'] = $this->determineGooglePageId('Organization');
@@ -210,20 +211,26 @@ class AnalyticInit extends BaseComponent
          */
         $analytics = app('analytics');
 
-        $analytics->put(payload: customer_check()
-            ? ['sei_user_type' => 'logged_in', 'sei_user_id' => customer(true)->getKey(), 'sei_user_name' => customer(true)->name ?? 'Guest']
-            : ['sei_user_type' => 'guest', 'sei_user_id' => 'public', 'sei_user_name' => 'Guest']);
 
+        if (!session()->has('customerSignedUp') && !session()->has('contactSignedUp')) {
+            $analytics->put(payload: customer_check()
+                ? ['sei_user_type' => 'logged_in', 'sei_user_id' => customer(true)->getKey(), 'sei_user_name' => customer(true)->name ?? 'Guest']
+                : ['sei_user_type' => 'guest', 'sei_user_id' => 'public', 'sei_user_name' => 'Guest']);
+        }
 
         if (session()->has('loggedIn')) {
             $analytics->put('login', ['event' => 'login', 'method' => 'password', 'ecommerce' => null]);
         }
 
         if (session()->has('customerSignedUp')) {
+            $contact = Contact::find(session()->get('customerSignedUp'));
+            $analytics->put(payload: ['sei_user_type' => 'guest', 'sei_user_id' => $contact->id ?? 'public', 'sei_user_name' => $contact->name ?? 'Guest']);
             $analytics->put('sign_up', ['event' => 'sign_up', 'method' => 'registration', 'type' => 'new_retail_customer', 'ecommerce' => null]);
         }
 
         if (session()->has('contactSignedUp')) {
+            $contact = Contact::find(session()->get('contactSignedUp'));
+            $analytics->put(payload: ['sei_user_type' => 'guest', 'sei_user_id' => $contact->id ?? 'public', 'sei_user_name' => $contact->name ?? 'Guest']);
             $analytics->put('sign_up', ['event' => 'sign_up', 'method' => 'registration', 'type' => 'request_account', 'ecommerce' => null]);
         }
 
