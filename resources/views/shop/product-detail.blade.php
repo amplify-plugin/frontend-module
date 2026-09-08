@@ -11,25 +11,25 @@
 @endphp
 <div {!! $htmlAttributes !!}>
     <div class="row">
-        <div class="col-md-4 col-10 mx-auto">
-            <x-product.product-gallery :image="$product?->product_image">
-                <x-slot:before>
-                    {{--                    @if(!$showDiscountBadge)--}}
-                    @if(!$product->in_stock)
-                        <div class="product-badge product-start text-white bg-success"
-                             data-toggle="tooltip" title="Inventory Status">
-                            <i class="icon-circle-check" style="margin-top: -3px"></i> In Stock
-                        </div>
-                    @endif
-                    @if(is_numeric($diff))
-                        <div class="product-badge product-end text-danger">
-                            {{ \Illuminate\Support\Number::percentage($diff) }} Off
-                        </div>
-                    @endif
-                    {{--                    @endif--}}
-                </x-slot:before>
-            </x-product.product-gallery>
-        </div>
+
+        <x-product.product-gallery class="col-md-4 col-12" :image="$product?->product_image">
+            <x-slot:before>
+                {{--                    @if(!$showDiscountBadge)--}}
+                @if(!$product->in_stock)
+                    <div class="product-badge product-start text-white bg-success"
+                         data-toggle="tooltip" title="Inventory Status">
+                        <i class="icon-circle-check" style="margin-top: -3px"></i> In Stock
+                    </div>
+                @endif
+                @if(is_numeric($diff))
+                    <div class="product-badge product-end text-danger">
+                        {{ \Illuminate\Support\Number::percentage($diff) }} Off
+                    </div>
+                @endif
+                {{--                    @endif--}}
+            </x-slot:before>
+        </x-product.product-gallery>
+
         <div class="col-md-8">
             <div class="d-flex gap-3 justify-content-between align-items-center mt-2">
                 <x-product.item-number :product="$product" format="{product_code}" element="h4"
@@ -117,9 +117,9 @@
                 </div>
             @endif
 
-            <hr class="mb-2">
+            <hr class="mb-3">
 
-            <div class="d-grid d-md-flex justify-content-between gap-2 product-card border-0 p-0">
+            <div class="d-grid d-md-flex justify-content-end gap-2 product-card border-0 p-0">
                 @if(!empty($product->ERP->FutureReceiptDetails))
 
                     <table class="table table-bordered table-hover table-sm">
@@ -148,40 +148,19 @@
             </div>
         </div>
     </div>
-
-    <x-product.information-tabs
-            :product="$product"
-            :header-class="''"
-            :tabs="[
+    <div class="row mt-3">
+        <div class="col-12">
+            <x-product.information-tabs
+                    :product="$product"
+                    :header-class="''"
+                    :tabs="[
                 'description',
                  'sku' => ['label' => 'Products'],
                 'feature' => ['label' => 'Features', 'style' => 'list'],
                 'specification' => ['label' => 'Specifications', 'style' => 'list'],
                 'document',
                 'related-products' => ['label' => 'Related'],
-            ]">
-        <x-slot:before>
-            <svg width="0" height="0">
-                <defs>
-                    <clipPath id="tabClip" clipPathUnits="objectBoundingBox">
-                        <path d="
-                            M-0.01,1
-                            C0.08,0.9 0.08,0 0.17,0
-                            H0.83
-                            C0.92,0 0.92,0.9 1.01,1
-                        "/>
-                    </clipPath>
-                    <clipPath id="tabClip2" clipPathUnits="objectBoundingBox">
-                        <path d="
-                            M0,1
-                            C0.08,0.9 0.08,0 0.17,0
-                            H0.83
-                            C0.92,0 0.92,0.9 1,1
-            "/>
-
-                    </clipPath>
-                </defs>
-            </svg>
-        </x-slot:before>
-    </x-product.information-tabs>
+            ]"/>
+        </div>
+    </div>
 </div>
