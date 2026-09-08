@@ -31,6 +31,7 @@
         </x-product.product-gallery>
 
         <div class="col-md-8">
+            {!! $before ?? null !!}
             <div class="d-flex gap-3 justify-content-between align-items-center mt-2">
                 <x-product.item-number :product="$product" format="{product_code}" element="h4"
                                        class="text-primary font-weight-bold mb-0"/>
@@ -117,6 +118,8 @@
                 </div>
             @endif
 
+            {!! $middle ?? null !!}
+
             <hr class="mb-3">
 
             <div class="d-grid d-md-flex justify-content-end gap-2 product-card border-0 p-0">
@@ -146,6 +149,8 @@
                     <x-product.quick-action :product="$product"/>
                 </div>
             </div>
+
+            {!! $after ?? null !!}
         </div>
     </div>
     <div class="row mt-3">
