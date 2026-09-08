@@ -121,7 +121,7 @@ class ProductDetail extends BaseComponent
         $Product->min_order_qty = $Product->ERP->MinOrderQuantity ?? $dbProduct->min_order_qty;
         $Product->qty_interval = $Product->ERP->QuantityInterval ?? $dbProduct->qty_interval;
         $Product->allow_back_order = $Product->ERP->AllowBackOrder ?? $dbProduct->allow_back_order ?? false;
-        $Product->default_document = $dbProduct->default_document_type ?? null;
+//        $Product->default_document = $dbProduct->default_document_type ?? null;
         $Product->assembled = $dbProduct->vendornum == 3160;
         $Product->in_stock = $dbProduct->vendornum == 3160 ? true : $dbProduct->in_stock ?? false;
         $Product->total_quantity_available = $priceAvailability->where('ItemNumber', $dbProduct->product_code)->sum('QuantityAvailable');
