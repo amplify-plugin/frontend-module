@@ -118,7 +118,7 @@ class ProductList extends BaseComponent
             $product->min_order_qty = $dbProduct->min_order_qty;
             $product->qty_interval = $dbProduct->qty_interval;
             $product->allow_back_order = $dbProduct->allow_back_order ?? false;
-            $product->short_description = $ownProduct->short_description ?? null;
+            $product->short_description = $dbProduct->short_description ?? null;
 
             $products[$index] = $product;
         }

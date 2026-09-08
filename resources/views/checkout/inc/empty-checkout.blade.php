@@ -237,7 +237,7 @@
     </div>
     <div class="col-12 text-center">
         <h3 class="text-center">{{ __('You currently have no items in your cart.') }}</h3>
-        <a class="btn btn-outline-secondary align-items-center" href="{{ frontendHomeURL() }}">
+        <a class="btn btn-outline-secondary align-items-center" href="{{ $backToShoppingUrl() }}">
             <i class="icon-arrow-left"></i>&nbsp;Back to Shopping
         </a>
     </div>

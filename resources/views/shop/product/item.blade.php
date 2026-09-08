@@ -44,6 +44,7 @@
                 :std-price="$product->Msrp->toFloat()"/>
 
         <div class="d-flex w-100 justify-content-center justify-content-md-start">
+
             @if($product->total_quantity_available > 1)
                 <x-product.availability
                         :product="$product" :value="$product->total_quantity_available"
@@ -69,13 +70,23 @@
                     @endif
                 </a>
             @endif
+
+            @if($product->is_ncnr)
+                <a href="#" class="tag border-danger font-weight-bold"
+                   data-toggle="tooltip" title="Non-Cancellable, Non-Returnable">
+                    <i class="icon-bell font-weight-bold text-danger" style="margin-top: -3px"></i>
+                    NCNR
+                </a>
+            @endif
         </div>
         @if(!empty($product->ship_restriction))
             <p class="mb-2">
                 {!! $product->ship_restriction ?? '' !!}
             </p>
         @endif
-        <x-product.short-description :content="$product->short_description" :lines="2"/>
+
+        <x-product.short-description :content="$product->short_description" :lines="2" class="py-2 w-100"/>
+
         <hr class="my-2">
         <x-product.quick-action :product="$product" :seo-path="$seoPath" :index="$loop->index"/>
     </div>

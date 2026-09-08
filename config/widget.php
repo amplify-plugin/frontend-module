@@ -2602,7 +2602,7 @@ return [
         'name' => 'checkout',
         'reserved' => true,
         'internal' => false,
-        'model' => [],
+        'model' => ['checkout'],
         '@inside' => null,
         '@client' => null,
         '@attributes' => [
@@ -2631,14 +2631,41 @@ return [
                 ],
             ],
         ],
-        '@nestedItems' => [],
+        '@nestedItems' => [
+            [
+                'name' => 'x-slot:item-row',
+                'type' => 'text',
+                'value' =>
+                    '<tr class="cart-summary-item">
+       <td>
+          <x-cart.item-info>
+             <span><b>Product Code: </b>{code}</span>
+             <span>{note}</span>
+             {ncnr_msg}
+             {ship_restriction}
+          </x-cart.item-info>
+       </td>
+       <td class="text-center px-0" width="200">
+          {quantity}
+       </td>
+       <td class="text-lg text-medium text-right">
+         <div class=\'d-flex justify-content-end gap-3\'>
+           <span>{unit_price}/{uom}</span>
+         </div>
+       </td>
+       <td class="text-lg text-medium text-right">{subtotal}</td>
+    </tr>',
+                '@attributes' => [],
+                '@nestedItems' => []
+            ]
+        ],
         'description' => 'Checkout widget',
     ],
     Components\OrderCheckout::class => [
         'name' => 'order-checkout',
         'reserved' => true,
         'internal' => false,
-        'model' => [],
+        'model' => ['checkout'],
         '@inside' => null,
         '@client' => null,
         '@attributes' => [],
@@ -3838,7 +3865,7 @@ return [
             [
                 'name' => 'id',
                 'type' => 'text',
-                'value' => 'drawer_'.mt_rand(1000, 9000),
+                'value' => 'drawer_' . mt_rand(1000, 9000),
                 'hint' => 'Unique ID the control drawer behavior.',
             ],
             [

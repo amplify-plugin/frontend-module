@@ -44,7 +44,9 @@ class SocialMediaLink extends BaseComponent
 
     public function htmlAttributes(): string
     {
-        $this->attributes = $this->attributes->class(['d-flex flex-wrap justify-content-between']);
+        $this->attributes = $this->attributes->merge([
+            'onclick' => 'openPopUp()'
+        ]);
 
         return parent::htmlAttributes();
     }

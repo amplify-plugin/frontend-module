@@ -1,7 +1,8 @@
 const mix = require('laravel-mix');
-const { exec } = require('child_process');
+const {exec} = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const webpack = require('webpack');
 
 /*
  |--------------------------------------------------------------------------
@@ -64,6 +65,7 @@ mix.setResourceRoot('resources')
     ], 'public/js/vendor.js')
     .options({
         processCssUrls: false,
+        legacyNodePolyfills: true,
         terser: {
             extractComments: false,
             terserOptions: {
@@ -74,8 +76,18 @@ mix.setResourceRoot('resources')
         },
     })
     .webpackConfig({
+        output: {
+            publicPath: 'vendor/widget/'
+        },
         plugins: [
             new PublishWidgetAssets(),
+            new webpack.DefinePlugin({
+                __VUE_OPTIONS_API__: JSON.stringify(true),
+                __VUE_PROD_DEVTOOLS__: JSON.stringify(false),
+                __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: JSON.stringify(false),
+            })
         ]
     })
+    .js('resources/vue/main.js', 'public/js')
+    .vue({version: 3})
     .version();

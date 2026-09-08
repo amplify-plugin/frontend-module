@@ -14,7 +14,8 @@ class ManufacturerImage extends BaseComponent
     /**
      * Create a new component instance.
      */
-    public function __construct(public mixed $product)
+    public function __construct(public mixed  $product,
+                                public string $attribute = 'Manufacturer')
     {
         parent::__construct();
     }
@@ -37,7 +38,11 @@ class ManufacturerImage extends BaseComponent
 
     public function htmlAttributes(): string
     {
-        $this->attributes = $this->attributes->class(['product-manufacturer-image']);
+        $this->attributes = $this->attributes->merge([
+            'href' => frontendShopURL("{$this->attribute}:{$this->product?->manufacturer?->code}"),
+            'title' => $this->product->manufacturer->name,
+            'class' => 'text-decoration-none'
+        ]);
 
         return parent::htmlAttributes();
     }
