@@ -4,11 +4,13 @@ namespace Amplify\Frontend\Services;
 
 use Amplify\System\Backend\Models\CustomerOrder;
 use Amplify\System\Backend\Models\CustomerOrderLine;
+use Amplify\System\Backend\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
-class SellingProductsService
+class TopSellingProductsService
 {
     public const DATE_RANGE_LABELS = [
         'last_7_days' => 'Last 7 Days',
@@ -18,6 +20,10 @@ class SellingProductsService
         'this_year' => 'This Year',
         'custom' => 'Custom Date Range',
     ];
+
+    public function __construct(
+        protected PurchasedTogetherProductService $productLoader,
+    ) {}
 
     public function isEnabled(): bool
     {
@@ -61,33 +67,55 @@ class SellingProductsService
     }
 
     /**
-     * Top-selling products for a customer within the configured window.
+     * Ranked product IDs for the selling-products carousel (site-wide sales).
      *
-     * Returns an empty collection when the widget is disabled so callers
-     * do not execute unnecessary queries.
+     * Query results are cached. Default TTL is 1 hour (3600 seconds).
+     * Pass $cacheTtl to override; use 0 to bypass the cache.
      *
-     * @return Collection<int, object{
-     *     product_code: string,
-     *     unit_code: string|null,
-     *     product_name: string|null,
-     *     product_id: int|null,
-     *     product_slug: string|null,
-     *     units_sold: float|int,
-     *     revenue: float,
-     *     order_count: int
-     * }>
+     * @return array<int>
      */
-    public function getTopSellingProducts(?int $customerId, ?int $limit = null): Collection
+    public function getTopSellingProductIds(?int $limit = null, ?int $excludeProductId = null, ?int $cacheTtl = null): array
     {
         if (! $this->isEnabled()) {
-            return collect();
-        }
-
-        if (! $customerId) {
-            return collect();
+            return [];
         }
 
         $limit ??= $this->productsLimit();
+        $cacheTtl ??= $this->cacheTtl();
+
+        $cacheKey = $this->buildCacheKey($limit);
+
+        $resolver = fn () => $this->queryTopSellingProductIds($limit);
+
+        $productIds = $cacheTtl > 0
+            ? Cache::remember($cacheKey, $cacheTtl, $resolver)
+            : $resolver();
+
+        $productIds = array_values(array_map('intval', (array) $productIds));
+
+        if ($excludeProductId) {
+            $productIds = array_values(array_filter(
+                $productIds,
+                fn (int $id) => $id !== (int) $excludeProductId,
+            ));
+        }
+
+        return array_slice($productIds, 0, $limit);
+    }
+
+    public function cacheTtl(): int
+    {
+        $ttl = (int) config('amplify.selling_products.cache_ttl', HOUR);
+
+        return max(0, $ttl);
+    }
+
+    /**
+     * @return array<int>
+     */
+    protected function queryTopSellingProductIds(int $limit): array
+    {
+        $fetchLimit = max($limit * 3, $limit);
         [$start, $end] = $this->resolveDateBounds();
 
         $statuses = array_values(array_filter((array) config('amplify.selling_products.eligible_order_statuses', [])));
@@ -95,10 +123,9 @@ class SellingProductsService
         $rankBy = $this->rankBy();
         $orderColumn = $rankBy === 'quantity' ? 'units_sold' : 'revenue';
 
-        $query = CustomerOrderLine::query()
+        $rows = CustomerOrderLine::query()
             ->from('customer_order_lines as lines')
             ->join('customer_orders as orders', 'orders.id', '=', 'lines.customer_order_id')
-            ->where('orders.customer_id', $customerId)
             ->where('orders.order_type', $orderType)
             ->when($statuses !== [], fn ($q) => $q->whereIn('orders.order_status', $statuses))
             ->when($start, fn ($q) => $q->where('orders.created_at', '>=', $start))
@@ -107,36 +134,72 @@ class SellingProductsService
             ->where('lines.product_code', '!=', '')
             ->select([
                 'lines.product_code',
-                'lines.unit_code',
+                DB::raw('MAX(lines.product_id) as product_id'),
                 DB::raw('SUM(lines.qty) as units_sold'),
                 DB::raw('ROUND(SUM(lines.qty * lines.customer_price), 2) as revenue'),
-                DB::raw('COUNT(DISTINCT lines.customer_order_id) as order_count'),
             ])
-            ->groupBy('lines.product_code', 'lines.unit_code')
+            ->groupBy('lines.product_code')
             ->orderByDesc($orderColumn)
-            ->orderBy('lines.product_code')
-            ->limit($limit);
+            ->limit($fetchLimit)
+            ->get();
 
-        $rows = $query->get();
+        if ($rows->isEmpty()) {
+            return [];
+        }
 
-        $products = \Amplify\System\Backend\Models\Product::query()
-            ->whereIn('product_code', $rows->pluck('product_code')->filter()->unique()->all())
+        $productsByCode = Product::query()
+            ->whereIn('product_code', $rows->pluck('product_code')->unique()->all())
+            ->whereNotIn('status', ['draft', 'archived'])
             ->get()
             ->keyBy('product_code');
 
-        return $rows->map(function ($row) use ($products) {
-            $product = $products->get($row->product_code);
+        $productIds = [];
 
-            $row->units_sold = (float) $row->units_sold;
-            $row->revenue = round((float) $row->revenue, 2);
-            $row->order_count = (int) $row->order_count;
-            $row->product = $product;
-            $row->product_id = $product?->id;
-            $row->product_name = $product?->product_name;
-            $row->product_slug = $product?->product_slug;
+        foreach ($rows as $row) {
+            $product = $productsByCode->get($row->product_code);
+            $productId = $product?->id ? (int) $product->id : (int) ($row->product_id ?: 0);
 
-            return $row;
-        });
+            if ($productId <= 0) {
+                continue;
+            }
+
+            if (in_array($productId, $productIds, true)) {
+                continue;
+            }
+
+            $productIds[] = $productId;
+
+            if (count($productIds) >= $limit) {
+                break;
+            }
+        }
+
+        return $productIds;
+    }
+
+    protected function buildCacheKey(int $limit): string
+    {
+        [$start, $end] = $this->resolveDateBounds();
+
+        $payload = [
+            'limit' => $limit,
+            'rank_by' => $this->rankBy(),
+            'date_range' => $this->dateRangeKey(),
+            'start' => $start?->toDateTimeString(),
+            'end' => $end?->toDateTimeString(),
+            'order_type' => config('amplify.selling_products.order_type', CustomerOrder::IS_ORDER_TYPE),
+            'statuses' => array_values(array_filter((array) config('amplify.selling_products.eligible_order_statuses', []))),
+        ];
+
+        return 'amplify.top_selling_products.'.md5(json_encode($payload));
+    }
+
+    /**
+     * @param  array<int>  $productIds
+     */
+    public function loadProducts(array $productIds): Collection
+    {
+        return $this->productLoader->loadProducts($productIds);
     }
 
     /**
