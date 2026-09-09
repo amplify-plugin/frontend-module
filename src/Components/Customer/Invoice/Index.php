@@ -15,31 +15,26 @@ use Illuminate\Contracts\View\View;
  */
 class Index extends BaseComponent
 {
-    public bool $showContactDetail;
-
-    public bool $showInvoiceSuffix;
-
     /**
      * Create a new component instance.
      */
     public function __construct(
-        string $showContactDetail = 'false',
-        string $showInvoiceSuffix = 'false',
-        public string $serialLabel = '',
-        public string $dateLabel = '',
-        public string $purchaseOrderLabel = '',
-        public string $amountLabel = '',
-        public string $balanceLabel = '',
-        public string $invoicePdfLabel = '',
-        public string $shipSignPdfLabel = '',
-        public string $statusLabel = '',
-        public string $typeLabel = '',
-        public string $dueDateLabel = '',
-        public string $daysOpenLabel = '',
+        public bool $showContactDetail = false,
+        public bool $showInvoiceSuffix = false,
+        public string $serialLabel = 'Invoice No.',
+        public string $dateLabel = 'Invoice Date',
+        public string $purchaseOrderLabel = 'Customer Ref.',
+        public string $amountLabel = 'Amount',
+        public string $balanceLabel = 'Balance',
+        public string $invoicePdfLabel = 'Download PDF',
+        public string $shipSignPdfLabel = 'Ship Sign PDF',
+        public string $statusLabel = 'Status',
+        public string $typeLabel = 'Type',
+        public string $dueDateLabel = 'Due Date',
+        public string $daysOpenLabel = 'Days Open',
+        public string $separator = '-',
 
     ) {
-        $this->showContactDetail = UtilityHelper::typeCast($showContactDetail, 'bool');
-        $this->showInvoiceSuffix = UtilityHelper::typeCast($showInvoiceSuffix, 'bool');
         parent::__construct();
     }
 
@@ -84,7 +79,6 @@ class Index extends BaseComponent
             'InvoiceType' => (strlen($this->typeLabel) != 0),
             'DueDate' => (strlen($this->dueDateLabel) != 0),
             'DaysOpen' => (strlen($this->daysOpenLabel) != 0),
-
         ];
 
         return view('widget::customer.invoice.index', compact('accountSummary', 'invoiceSummary', 'columns'));
@@ -92,13 +86,11 @@ class Index extends BaseComponent
 
     public function formatInvoiceNumber(Invoice $invoice): string
     {
-        $invoiceNumber = $invoice->InvoiceNumber;
-
         if (! $this->showInvoiceSuffix) {
-            return $invoiceNumber;
+            return $invoice->InvoiceNumber;
         }
 
-        return $invoiceNumber.'-'.$invoice->InvoiceSuffix;
+        return "{$invoice->InvoiceNumber}{$this->separator}{$invoice->InvoiceSuffix}";
 
     }
 }

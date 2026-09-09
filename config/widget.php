@@ -676,12 +676,12 @@ return [
         'model' => ['invoice'],
         '@attributes' => [
             [
-                'name' => 'show-contact-detail',
+                'name' => ':show-contact-detail',
                 'type' => 'boolean',
                 'value' => true,
             ],
             [
-                'name' => 'show-invoice-suffix',
+                'name' => ':show-invoice-suffix',
                 'type' => 'boolean',
                 'value' => false,
             ],
@@ -739,6 +739,11 @@ return [
                 'name' => 'days-open-label',
                 'type' => 'text',
                 'value' => 'Days Open',
+            ],
+            [
+                'name' => 'separator',
+                'type' => 'text',
+                'value' => '-',
             ],
         ],
         '@nestedItems' => [],
