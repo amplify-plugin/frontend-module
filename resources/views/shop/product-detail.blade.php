@@ -153,12 +153,11 @@
             {!! $after ?? null !!}
         </div>
     </div>
-    <div class="row mt-3">
-        <div class="col-12">
-            <x-product.information-tabs
-                    :product="$product"
-                    :header-class="''"
-                    :tabs="[
+    <x-product.information-tabs
+            class="w-100 mt-3"
+            :product="$product"
+            :header-class="''"
+            :tabs="[
                 'description',
                  'sku' => ['label' => 'Products'],
                 'feature' => ['label' => 'Features', 'style' => 'list'],
@@ -166,6 +165,4 @@
                 'document',
                 'related-products' => ['label' => 'Related'],
             ]"/>
-        </div>
-    </div>
 </div>
