@@ -177,11 +177,12 @@ class TopSellingProductsService
         return $productIds;
     }
 
-    protected function buildCacheKey(int $limit): string
+    protected function buildCacheKey(int $limit, string $suffix = 'ids'): string
     {
         [$start, $end] = $this->resolveDateBounds();
 
         $payload = [
+            'suffix' => $suffix,
             'limit' => $limit,
             'rank_by' => $this->rankBy(),
             'date_range' => $this->dateRangeKey(),
@@ -192,6 +193,110 @@ class TopSellingProductsService
         ];
 
         return 'amplify.top_selling_products.'.md5(json_encode($payload));
+    }
+
+
+    /**
+     * Detailed top-selling product stats for admin dashboard tables.
+     *
+     * Returns an empty collection when disabled so callers skip querying.
+     * Results are cached (default 1 hour).
+     *
+     * @return Collection<int, object{
+     *     product_id: int|null,
+     *     product_code: string,
+     *     product_name: string|null,
+     *     unit_code: string|null,
+     *     units_sold: float,
+     *     revenue: float,
+     *     order_count: int
+     * }>
+     */
+    public function getTopSellingProductStats(?int $limit = null, ?int $cacheTtl = null): Collection
+    {
+        if (! $this->isEnabled()) {
+            return collect();
+        }
+
+        $limit ??= $this->productsLimit();
+        $cacheTtl ??= $this->cacheTtl();
+        $cacheKey = $this->buildCacheKey($limit, 'stats');
+
+        $resolver = fn () => $this->queryTopSellingProductStats($limit);
+
+        $rows = $cacheTtl > 0
+            ? Cache::remember($cacheKey, $cacheTtl, $resolver)
+            : $resolver();
+
+        return collect($rows)->map(function ($row) {
+            $row = (object) $row;
+            $row->product_id = $row->product_id !== null ? (int) $row->product_id : null;
+            $row->units_sold = (float) $row->units_sold;
+            $row->revenue = round((float) $row->revenue, 2);
+            $row->order_count = (int) $row->order_count;
+
+            return $row;
+        });
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    protected function queryTopSellingProductStats(int $limit): array
+    {
+        [$start, $end] = $this->resolveDateBounds();
+
+        $statuses = array_values(array_filter((array) config('amplify.selling_products.eligible_order_statuses', [])));
+        $orderType = config('amplify.selling_products.order_type', CustomerOrder::IS_ORDER_TYPE);
+        $rankBy = $this->rankBy();
+        $orderColumn = $rankBy === 'quantity' ? 'units_sold' : 'revenue';
+
+        $rows = CustomerOrderLine::query()
+            ->from('customer_order_lines as lines')
+            ->join('customer_orders as orders', 'orders.id', '=', 'lines.customer_order_id')
+            ->where('orders.order_type', $orderType)
+            ->when($statuses !== [], fn ($q) => $q->whereIn('orders.order_status', $statuses))
+            ->when($start, fn ($q) => $q->where('orders.created_at', '>=', $start))
+            ->when($end, fn ($q) => $q->where('orders.created_at', '<=', $end))
+            ->whereNotNull('lines.product_code')
+            ->where('lines.product_code', '!=', '')
+            ->select([
+                'lines.product_code',
+                'lines.unit_code',
+                DB::raw('MAX(lines.product_id) as product_id'),
+                DB::raw('SUM(lines.qty) as units_sold'),
+                DB::raw('ROUND(SUM(lines.qty * lines.customer_price), 2) as revenue'),
+                DB::raw('COUNT(DISTINCT lines.customer_order_id) as order_count'),
+            ])
+            ->groupBy('lines.product_code', 'lines.unit_code')
+            ->orderByDesc($orderColumn)
+            ->orderBy('lines.product_code')
+            ->limit($limit)
+            ->get();
+
+        if ($rows->isEmpty()) {
+            return [];
+        }
+
+        $productsByCode = Product::query()
+            ->whereIn('product_code', $rows->pluck('product_code')->unique()->all())
+            ->whereNotIn('status', ['draft', 'archived'])
+            ->get(['id', 'product_code', 'product_name'])
+            ->keyBy('product_code');
+
+        return $rows->map(function ($row) use ($productsByCode) {
+            $product = $productsByCode->get($row->product_code);
+
+            return [
+                'product_id' => $product?->id ? (int) $product->id : ($row->product_id ? (int) $row->product_id : null),
+                'product_code' => (string) $row->product_code,
+                'product_name' => $product?->product_name,
+                'unit_code' => $row->unit_code,
+                'units_sold' => (float) $row->units_sold,
+                'revenue' => round((float) $row->revenue, 2),
+                'order_count' => (int) $row->order_count,
+            ];
+        })->all();
     }
 
     /**
