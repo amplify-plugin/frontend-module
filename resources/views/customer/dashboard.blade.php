@@ -9,6 +9,9 @@
         <div class="col-lg-6">
             <x-customer.dashboard.monthly-order-amount :monthly-total="$monthly_total"/>
         </div>
+        <div class="col-12">
+            <x-customer.dashboard.selling-products/>
+        </div>
     </div>
 </div>
 

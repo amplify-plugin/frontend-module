@@ -1710,6 +1710,29 @@ return [
         '@nestedItems' => [],
         'description' => 'Dashboard monthly order amount widget',
     ],
+    Components\Customer\Dashboard\SellingProducts::class => [
+        'name' => 'customer.dashboard.selling-products',
+        'reserved' => true,
+        'internal' => false,
+        'model' => ['dashboard'],
+        '@inside' => null,
+        '@client' => null,
+        '@attributes' => [
+            [
+                'name' => 'title',
+                'type' => 'text',
+                'value' => 'Selling Products',
+            ],
+            [
+                'name' => ':products-limit',
+                'type' => 'number',
+                'value' => 10,
+                'hint' => 'Optional override for the configured products limit (5, 10, or 20).',
+            ],
+        ],
+        '@nestedItems' => [],
+        'description' => 'Dashboard top selling products widget',
+    ],
     Components\Customer\Cylinders::class => [
         'name' => 'customer.cylinders',
         'reserved' => true,
