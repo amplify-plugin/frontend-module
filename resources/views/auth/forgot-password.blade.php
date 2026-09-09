@@ -1,5 +1,5 @@
 <div {!! $htmlAttributes !!}>
-    <form id="forgot-password-form" class="login-box">
+    <form id="forgot-password-form">
         <h4 class="login-box-title">{{ $displayableTitle() }}</h4>
         {!! $subtitle ?? '' !!}
         <div class="form-group">
@@ -12,9 +12,9 @@
             <span class="invalid-feedback d-block" id="email-error"></span>
         </div>
         <div class="d-flex justify-content-center justify-content-sm-end">
-            <button class="btn btn-primary margin-bottom-none" id="submit-btn" type="submit">
-                <span id="submit-text"><i
-                            class="icon-location font-weight-bold mr-2"></i>{{ $submitButtonTitle() }}</span>
+            <button class="btn btn-primary mx-0 my-0" id="submit-btn" type="submit">
+                <span id="submit-text">
+                    <i class="icon-location font-weight-bold mr-2"></i>{{ $submitButtonTitle() }}</span>
             </button>
         </div>
     </form>

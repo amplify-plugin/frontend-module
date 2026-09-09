@@ -13,8 +13,8 @@ use Illuminate\Contracts\View\View;
 class ForgotPassword extends BaseComponent
 {
     public function __construct(public string $title = 'Forgot Your Password?',
-        public string $buttonTitle = 'Submit',
-        public bool $togglePassword = false)
+                                public string $buttonTitle = 'Submit',
+                                public bool   $togglePassword = false)
     {
         parent::__construct();
 
@@ -58,5 +58,12 @@ class ForgotPassword extends BaseComponent
         }
 
         return trans($this->buttonTitle);
+    }
+
+    public function htmlAttributes(): string
+    {
+        $this->attributes = $this->attributes->class('login-box');
+
+        return parent::htmlAttributes();
     }
 }
