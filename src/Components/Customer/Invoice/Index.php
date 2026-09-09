@@ -19,8 +19,8 @@ class Index extends BaseComponent
      * Create a new component instance.
      */
     public function __construct(
-        public bool $showContactDetail = false,
-        public bool $showInvoiceSuffix = false,
+        public bool   $showContactDetail = false,
+        public bool   $showInvoiceSuffix = false,
         public string $serialLabel = 'Invoice No.',
         public string $dateLabel = 'Invoice Date',
         public string $purchaseOrderLabel = 'Customer Ref.',
@@ -34,7 +34,8 @@ class Index extends BaseComponent
         public string $daysOpenLabel = 'Days Open',
         public string $separator = '-',
 
-    ) {
+    )
+    {
         parent::__construct();
     }
 
@@ -51,7 +52,11 @@ class Index extends BaseComponent
      */
     public function render(): View|Closure|string
     {
-        $accountSummary = ErpApi::getCustomerARSummary();
+        $accountSummary = [];
+
+        if ($this->showContactDetail) {
+            $accountSummary = ErpApi::getCustomerARSummary();
+        }
 
         $to = request()->has('created_end_date') ? request('created_end_date') : now(config('app.timezone'))->format('Y-m-d');
         $from = request()->has('created_start_date') ? request('created_start_date') : now(config('app.timezone'))->subDays(7)->format('Y-m-d');
@@ -86,7 +91,7 @@ class Index extends BaseComponent
 
     public function formatInvoiceNumber(Invoice $invoice): string
     {
-        if (! $this->showInvoiceSuffix) {
+        if (!$this->showInvoiceSuffix) {
             return $invoice->InvoiceNumber;
         }
 
