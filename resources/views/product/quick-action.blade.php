@@ -48,9 +48,9 @@
 
                 @if($orderList)
                     <x-product-shopping-list
-                            :product-id="$product->Amplify_Id"
+                            :product-id="$product->Amplify_Id ?? $product->id"
                             class="w-100 m-0"
-                            :index="$product->Amplify_Id"
+                            :index="$product->Amplify_Id ?? $product->id"
                             :add-label="'Add to ' . $orderListLabel"
                             :widget-title="$orderListLabel"/>
                 @endif

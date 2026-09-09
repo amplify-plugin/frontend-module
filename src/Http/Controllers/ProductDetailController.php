@@ -115,7 +115,8 @@ class ProductDetailController extends Controller
             ->map(function (Product $p) {
                 return [
                     'item' => $p->product_code,
-                    'uom' => $p->uom ?? 'EA',
+                    'uom' => $p->uom ?? null,
+                    'qty' => $p->min_order_qty ?? 1,
                 ];
             })
             ->toArray();
@@ -152,7 +153,7 @@ class ProductDetailController extends Controller
             $rp->min_order_qty = $rp->min_order_qty ?? 1;
             $rp->qty_interval = $rp->qty_interval ?? 1;
             $rp->allow_back_order = $rp->allow_back_order ?? 0;
-            $rp->default_document = $rp->default_document_type ?? null;
+//            $rp->default_document = $rp->default_document_type ?? null;
             $rp->assembled = $rp->vendornum == 3160;
             $rp->in_stock = $rp->vendornum == 3160 ? true : $rp->in_stock ?? false;
             $rp->is_ncnr = $rp->is_ncnr ?? false;
