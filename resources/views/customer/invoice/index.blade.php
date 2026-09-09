@@ -53,7 +53,7 @@
                 <div class="col-md-12">
                     <x-site.data-table-wrapper id="invoice-table">
                         <x-slot name="rightside">
-                            <form method="get" action="{{ url()->current() }}" id="order-search-form">
+                            <form method="get" action="{{ url()->current() }}" id="invoice-search-form">
                                 <input type="hidden" name="created_start_date"
                                        value="{{ request('created_start_date', now(config('app.timezone'))->subDays(7)->format('Y-m-d')) }}"
                                        id="created_start_date">
@@ -65,7 +65,7 @@
                                 <div class="d-md-flex d-block justify-content-around justify-content-md-end gap-2">
                                     <select class="form-control-inline form-control-sm border rounded"
                                             name="invoice_status"
-                                            onchange="$('#order-search-form').submit()">
+                                            onchange="$('#invoice-search-form').submit()">
                                         <option value="ALL">ALL TYPE</option>
                                         <option
                                             value="PAST" {{ request('invoice_status') == 'PAST'? "selected" : "" }} >
