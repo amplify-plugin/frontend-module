@@ -7,6 +7,7 @@ use Amplify\ErpApi\Wrappers\ProductPriceAvailability;
 use Amplify\Frontend\Events\CartUpdated;
 use Amplify\Frontend\Http\Requests\AddToCartRequest;
 use Amplify\Frontend\Http\Resources\CartResource;
+use Amplify\Frontend\Services\RecentlyViewedProductService;
 use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\System\Backend\Enums\ProductAvailabilityEnum;
 use Amplify\System\Backend\Http\Requests\OrderFileRequest;
@@ -103,6 +104,11 @@ class CartController extends Controller
             $cart->cartItems()->createMany($data['items']);
 
             \event(new CartUpdated($cart));
+
+            if (customer_check()) {
+                $productIds = collect($data['items'])->pluck('product_id')->filter()->all();
+                app(RecentlyViewedProductService::class)->markAddedToCart(customer(true), $productIds);
+            }
 
             return $this->apiResponse(true, __('Product(s) added to cart successfully.'), 200, [
                 'data' => [
