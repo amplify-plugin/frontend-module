@@ -31,7 +31,7 @@ export default {
 </script>
 
 <template>
-  <h4><i class="icon-head" style="margin-top: -10px"></i> Account Information</h4>
+  <h4>Account Information</h4>
   <hr class="padding-bottom-1x">
   <div class="row">
     <div class="col-sm-6">
@@ -166,7 +166,7 @@ export default {
         >
       </div>
     </div>
-    <div class="col-sm-6">
+    <div class="col-sm-6 padding-bottom-1x">
       <div class="form-group">
         <label for="billing-zip">ZIP Code</label>
         <input class="form-control"
@@ -182,7 +182,7 @@ export default {
       </div>
     </div>
   </div>
-  <h4 class="padding-top-1x"><i class="icon-circle-check" style="margin-top: -5px"></i> Shipping Address</h4>
+  <h4>Shipping Address</h4>
   <hr class="padding-bottom-1x">
   <div class="row">
     <div class="col-sm-12">
@@ -285,7 +285,7 @@ export default {
         >
       </div>
     </div>
-    <div class="col-sm-6">
+    <div class="col-sm-6 padding-bottom-1x">
       <div class="form-group">
         <label for="billing-zip">ZIP Code</label>
         <input class="form-control"
