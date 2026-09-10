@@ -68,3 +68,49 @@ if (!function_exists('hasAccessOrFail')) {
             __('Unauthorized access - you do not have the necessary permissions to see this page.'));
     }
 }
+
+if (!function_exists('safe_rich_html')) {
+    /**
+     * Repair truncated / unclosed HTML so it cannot leak into the rest of the page.
+     */
+    function safe_rich_html(?string $html): string
+    {
+        if ($html === null || trim($html) === '') {
+            return '';
+        }
+
+        // Drop a truncated opening tag at the end (no closing '>'), e.g. <a href="https://...
+        $html = preg_replace('/<[^>]*$/s', '', $html) ?? $html;
+        $html = trim($html);
+
+        if ($html === '') {
+            return '';
+        }
+
+        $previous = libxml_use_internal_errors(true);
+        $document = new DOMDocument();
+        $wrapped = '<div id="safe-rich-html-root">'.$html.'</div>';
+        $loaded = $document->loadHTML(
+            '<?xml encoding="UTF-8">'.$wrapped,
+            LIBXML_HTML_NODEFDTD
+        );
+        libxml_clear_errors();
+        libxml_use_internal_errors($previous);
+
+        if (! $loaded) {
+            return $html;
+        }
+
+        $root = $document->getElementById('safe-rich-html-root');
+        if (! $root instanceof DOMElement) {
+            return $html;
+        }
+
+        $output = '';
+        foreach ($root->childNodes as $child) {
+            $output .= $document->saveHTML($child);
+        }
+
+        return $output;
+    }
+}

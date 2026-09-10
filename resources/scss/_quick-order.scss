@@ -9,7 +9,7 @@
 
 .x-quick-order {
     #upload_btn {
-        height: 34px !important;
+        height: 44px !important;
     }
 
     .product-card.product-list {
@@ -17,7 +17,7 @@
     }
 
     .table {
-        margin-bottom: 0px;
+        margin-bottom: 0;
     }
 
     .table td.fit,
@@ -47,5 +47,106 @@
     .tableFixHead table th,
     .tableFixHead table td {
         padding: 8px 16px;
+    }
+
+    #quickOrderTable {
+        td {
+            vertical-align: middle;
+        }
+
+        .quick-order-code-col {
+            min-width: 260px;
+            width: 30%;
+        }
+
+        input[name="product_code[]"] {
+            width: 100%;
+            min-width: 220px;
+        }
+
+        .quick-order-code-hint {
+            display: block;
+            margin-top: 4px;
+            padding-left: 0;
+        }
+
+        tr.quick-order-row-loading {
+            opacity: 0.72;
+        }
+    }
+
+    .quick-order-import-controls {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        .custom-file {
+            position: relative;
+            flex: 1 1 auto;
+            height: 44px;
+            margin: 0;
+        }
+
+        #upload_btn {
+            flex: 0 0 auto;
+            width: auto !important;
+            min-width: 110px;
+            margin: 0 !important;
+            height: 44px !important;
+            padding: 0 18px !important;
+            line-height: 1 !important;
+            display: inline-flex !important;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+    }
+
+    .quick-order-import {
+        .custom-file-input,
+        .custom-file-label {
+            height: 44px;
+            margin: 0;
+        }
+
+        .custom-file-label {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            padding: 0 12px;
+            padding-right: 108px;
+            color: #6c757d;
+            font-weight: 400;
+            line-height: 42px;
+            border-radius: 8px;
+
+            &::after {
+                top: 1px;
+                right: 1px;
+                bottom: 1px;
+                height: auto;
+                padding: 0 16px;
+                line-height: 40px;
+                color: #212529;
+                border-radius: 0 7px 7px 0 !important;
+            }
+
+            &[data-browse]::after {
+                content: attr(data-browse);
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        .quick-order-import-controls {
+            flex-wrap: wrap;
+
+            .custom-file,
+            #upload_btn {
+                width: 100% !important;
+            }
+        }
     }
 }

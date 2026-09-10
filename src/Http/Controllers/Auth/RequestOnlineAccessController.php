@@ -55,6 +55,7 @@ class RequestOnlineAccessController extends Controller
                 'order_limit' => 0,
                 'daily_budget_limit' => 0,
                 'monthly_budget_limit' => 0,
+                'source' => 'request_account',
             ]);
 
             // Create Contact Login
@@ -69,7 +70,7 @@ class RequestOnlineAccessController extends Controller
 
             DB::commit();
 
-            $request->session()->flash('contactSignedUp', true);
+            $request->session()->flash('contactSignedUp', $contact->getKey());
 
             // Newsletter + Notification
             $this->handlePostRegistrationForRequestAccount($request, $contact);
@@ -183,6 +184,7 @@ class RequestOnlineAccessController extends Controller
             'phone_ext' => $attributes['CustomerPhoneExt'] ?? null,
             'approved' => true,
             'customer_type' => 'Retail',
+            'source' => 'request_account',
             'industry_classification_id' => $industryClassification->id ?? null,
             'address_1' => $attributes['CustomerAddress1'] ?? null,
             'address_2' => $attributes['CustomerAddress2'] ?? null,

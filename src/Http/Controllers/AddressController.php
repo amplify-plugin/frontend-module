@@ -150,7 +150,7 @@ class AddressController extends Controller
 
             if (config('amplify.client_code') != 'ACP' && ! empty($erpAddress->ShipToNumber)) {
                 CustomerAddress::create([
-                    'customer_id' => $request->input('customer_id', customer()->getKey()),
+                    'customer_id' => customer()->getKey(),
                     'address_code' => $erpAddress->ShipToNumber,
                     'address_name' => $erpAddress->ShipToName,
                     'address_1' => $erpAddress->ShipToAddress1,
@@ -186,6 +186,10 @@ class AddressController extends Controller
      */
     public function show(CustomerAddress $address)
     {
+        if ($address->customer_id !== customer()->getKey()) {
+            abort(403);
+        }
+
         hasAccessOrFail('address.view');
 
         store()->addressModel = $address;
@@ -200,6 +204,10 @@ class AddressController extends Controller
      */
     public function edit(CustomerAddress $address)
     {
+        if ($address->customer_id !== customer()->getKey()) {
+            abort(403);
+        }
+        
         hasAccessOrFail('address.update');
 
         store()->addressModel = $address;
@@ -215,6 +223,10 @@ class AddressController extends Controller
      */
     public function update(CustomerAddress $address, ShipToAddressRequest $request)
     {
+        if ($address->customer_id !== customer()->getKey()) {
+            abort(403);
+        }
+
         try {
             $address->update($request->validated());
             Session::flash('success', 'You have successfully updated the address!');
@@ -232,6 +244,10 @@ class AddressController extends Controller
      */
     public function destroy(CustomerAddress $address)
     {
+        if ($address->customer_id !== customer()->getKey()) {
+            abort(403);
+        }
+
         hasAccessOrFail('address.delete');
 
         try {
