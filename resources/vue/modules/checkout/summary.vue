@@ -1,7 +1,7 @@
-<script>
-export default {
-  name: "summary"
-}
+<script setup>
+import { useCheckoutStore } from './composables/useCheckoutStore';
+
+const store = useCheckoutStore();
 </script>
 
 <template>
@@ -14,71 +14,72 @@ export default {
         <tbody>
         <tr>
           <td>Cart Subtotal:</td>
-          <td class="text-medium">$289.68</td>
+          <td class="text-medium">{{ store.priceFormatter(store.orderSubtotal) }}</td>
         </tr>
         <tr>
           <td>Shipping:</td>
-          <td class="text-medium">$22.50</td>
+          <td class="text-medium">{{ store.priceFormatter(store.shippingAmount) }}</td>
         </tr>
         <tr>
           <td>Estimated tax:</td>
-          <td class="text-medium">$3.42</td>
+          <td class="text-medium">{{ store.priceFormatter(store.salesTax) }}</td>
         </tr>
         <tr>
           <td></td>
-          <td class="text-lg text-medium">$315.60</td>
+          <td class="text-lg text-medium">{{ store.priceFormatter(store.orderTotal) }}</td>
         </tr>
         </tbody>
       </table>
-    </section>
-    <!-- Featured Products Widget-->
-    <section class="widget widget-featured-products">
-      <h3 class="widget-title">Recently Viewed</h3>
-      <!-- Entry-->
-      <div class="entry">
-        <div class="entry-thumb"><a href="shop-single.html"><img src="img/shop/widget/01.jpg" alt="Product"></a>
-        </div>
-        <div class="entry-content">
-          <h4 class="entry-title"><a href="shop-single.html">Oakley Kickback</a></h4><span class="entry-meta">$155.00</span>
-        </div>
-      </div>
-      <!-- Entry-->
-      <div class="entry">
-        <div class="entry-thumb"><a href="shop-single.html"><img src="img/shop/widget/02.jpg" alt="Product"></a>
-        </div>
-        <div class="entry-content">
-          <h4 class="entry-title"><a href="shop-single.html">Top-Sider Fathom</a></h4><span class="entry-meta">$90.00</span>
-        </div>
-      </div>
-      <!-- Entry-->
-      <div class="entry">
-        <div class="entry-thumb"><a href="shop-single.html"><img src="img/shop/widget/03.jpg" alt="Product"></a>
-        </div>
-        <div class="entry-content">
-          <h4 class="entry-title"><a href="shop-single.html">Vented Straw Fedora</a></h4><span class="entry-meta">$49.50</span>
-        </div>
-      </div>
-      <!-- Entry-->
-      <div class="entry">
-        <div class="entry-thumb"><a href="shop-single.html"><img src="img/shop/widget/04.jpg" alt="Product"></a>
-        </div>
-        <div class="entry-content">
-          <h4 class="entry-title"><a href="shop-single.html">Big Wordmark Tote</a></h4><span class="entry-meta">$29.99</span>
-        </div>
-      </div>
-    </section>
-    <!-- Promo Banner-->
-    <section class="promo-box" style="background-image: url(img/banners/02.jpg);"><span class="overlay-dark"
-                                                                                        style="opacity: .4;"></span>
-      <div class="promo-box-content text-center padding-top-2x padding-bottom-2x">
-        <h4 class="text-light text-thin text-shadow">New Collection of</h4>
-        <h3 class="text-bold text-light text-shadow">Sunglasses</h3><a class="btn btn-outline-white btn-sm"
-                                                                       href="shop-grid-ls.html">Shop Now</a>
-      </div>
     </section>
   </aside>
 </template>
 
 <style scoped>
+/*
+ * Original amp-theme Order Summary widget styling (verbatim from the
+ * reference pages' styles.min.css), overriding the host widget box variant.
+ */
+.widget-order-summary {
+  background: #f6f7f8;
+  border: 1px solid #e1e7ec;
+  border-radius: 7px;
+  padding: 20px;
+  box-shadow: 0 1px 4px rgba(45, 62, 80, .10);
+}
 
+.widget-order-summary .widget-title {
+  border-bottom: 1px solid #e1e7ec;
+  color: #9da9b9;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.widget-order-summary .table {
+  background: transparent;
+}
+
+.widget-order-summary .table td {
+  border: 0;
+  padding: 6px 0;
+}
+
+.widget-order-summary .table td:last-child {
+  text-align: right;
+}
+
+.widget-order-summary .table tr:first-child > td {
+  padding-top: 0;
+}
+
+.widget-order-summary .table tr:last-child > td {
+  border-top: 1px solid #e1e7ec;
+  padding-top: 12px;
+}
+
+.widget-order-summary .table tr:nth-last-child(2) > td {
+  padding-bottom: 12px;
+}
 </style>
