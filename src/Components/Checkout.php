@@ -6,6 +6,7 @@ use Amplify\ErpApi\Collections\ShippingLocationCollection;
 use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\Frontend\Abstracts\BaseComponent;
 use Amplify\System\Backend\Models\Cart;
+use Amplify\System\Backend\Models\Contact;
 use Amplify\System\Backend\Models\Country;
 use Amplify\System\Backend\Models\State;
 use Closure;
@@ -36,13 +37,16 @@ class Checkout extends BaseComponent
 
         $customer = ErpApi::getCustomerDetail();
 
+        $contact = customer_check() ? customer(true) : new Contact([]);
+
+
         $cartItemCount = $cart instanceof Cart ? $cart->cartItems()->count() : 0;
 
         $steps = [
-            ['index' => 0, 'id' => 'customer', 'label' => 'Address', 'active' => false, 'component' => 'address'],
             ['index' => 1, 'id' => 'customer', 'label' => 'Account', 'active' => false, 'component' => 'account'],
             ['index' => 2, 'id' => 'shipping', 'label' => 'Shipping', 'active' => false, 'component' => 'shipping'],
             ['index' => 3, 'id' => 'review', 'label' => 'Review', 'active' => true, 'component' => 'review'],
+            ['index' => 4, 'id' => 'review', 'label' => 'Payment', 'active' => true, 'component' => 'payment'],
         ];
 
         if ($customer->CreditCardOnly == 'Y' && havePermissions(['checkout.allow-credit-card-payment'])) {
@@ -81,7 +85,8 @@ class Checkout extends BaseComponent
             'countries',
             'states',
             'shipOptions',
-            'hasChooseShipPermission'
+            'hasChooseShipPermission',
+            'contact'
         ));
     }
 

@@ -2,7 +2,6 @@
 import steps from "./steps.vue";
 import navigation from "./navigation.vue";
 import account from "./steps/account.vue";
-import address from "./steps/address.vue";
 import shipping from "./steps/shipping.vue";
 import payment from "./steps/payment.vue";
 import review from "./steps/review.vue";
@@ -10,7 +9,7 @@ import summary from "./summary.vue";
 
 export default {
   name: 'Checkout',
-  components: {steps, navigation, account, address, shipping, payment, review, summary},
+  components: {steps, navigation, account, shipping, payment, review, summary},
   props: {
     cart: {
       type: Object,
@@ -65,6 +64,14 @@ export default {
       default: () => {
         return window.location.origin;
       }
+    },
+    contact: {
+      type: Object,
+      default: {
+        name : null,
+        email : null,
+        phone : null,
+      }
     }
   },
   data() {
@@ -74,7 +81,7 @@ export default {
   },
   computed: {
     currentStep() {
-      return address
+      return account
     }
   }
 }
@@ -84,9 +91,9 @@ export default {
   <div class="row">
     <!-- Checkout Address-->
     <div class="col-xl-9 col-lg-8">
-      <steps :items="steps" :active/>
-      <component :is="currentStep"/>
-      <navigation/>
+      <steps :items="steps" :active="active"/>
+      <component :is="currentStep" v-bind="$props"/>
+      <navigation :active="active"/>
     </div>
     <!-- Sidebar          -->
     <div class="col-xl-3 col-lg-4">
