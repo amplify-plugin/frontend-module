@@ -1704,6 +1704,7 @@ window.Amplify = {
                 cancelButtonText: 'Cancel',
                 customClass: {
                     confirmButton: 'btn btn-primary',
+                    cancelButton: 'btn btn-outline-secondary',
                 },
                 preConfirm: () => {
                     const orderNotes = document.getElementById('quote-order-notes')?.value ?? '';
