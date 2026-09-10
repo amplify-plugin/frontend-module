@@ -17,7 +17,19 @@ class CaptureIntendedUrl
         'verify-email/*',
         'login',
         'registration',
-
+        '*.css',
+        '*.js',
+        '*.jpg',
+        '*.jpeg',
+        '*.png',
+        '*.gif',
+        '*.svg',
+        '*.webp',
+        '*.ico',
+        '*.woff',
+        '*.woff2',
+        '*.ttf',
+        '*.map'
     ];
 
     /**
