@@ -39,6 +39,8 @@ class Checkout extends BaseComponent
 
         $contact = customer_check() ? customer(true) : new Contact([]);
 
+        $isGuestCheckout = config('amplify.frontend.guest_checkout');
+
 
         $cartItemCount = $cart instanceof Cart ? $cart->cartItems()->count() : 0;
 
@@ -76,6 +78,7 @@ class Checkout extends BaseComponent
         $hasChooseShipPermission = havePermissions(['checkout.choose-shipto']);
 
         return view('widget::checkout', compact(
+            'isGuestCheckout',
             'cart',
             'cartItemCount',
             'templateBrandColor',
