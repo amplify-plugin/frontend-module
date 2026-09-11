@@ -4,13 +4,13 @@
     </template>
     @if ($cartItemCount > 0)
         <div id="app">
-            <checkout
+            <{{ $componentName }}
                     @foreach($props(get_defined_vars()) as $name => $value)
                         :{{ \Illuminate\Support\Str::kebab($name) }}='@json($value)'
                     @endforeach
             >
                 {!! $slot !!}
-            </checkout>
+            </{{ $componentName }}>
         </div>
     @else
         @include('widget::checkout.inc.empty-checkout')
@@ -18,5 +18,9 @@
 </div>
 
 @pushonce('footer-script')
-    <script src="{{ mix("js/main.js", 'vendor/widget') }}"></script>
+    @empty($assetUrl)
+        <script src="{{ mix("js/main.js", 'vendor/widget') }}"></script>
+    @else
+        <script src="{{ mix($assetUrl) }}"></script>
+    @endempty
 @endpushonce

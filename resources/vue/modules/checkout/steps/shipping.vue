@@ -26,8 +26,7 @@ function select(method, group) {
 </script>
 
 <template>
-  <h4>Choose Shipping Method</h4>
-  <hr class="padding-bottom-1x">
+  <h4 class="border-bottom pb-2 mb-4">Choose Shipping Method</h4>
   <div class="table-responsive">
     <table class="table table-hover">
       <thead class="thead-default">
@@ -67,7 +66,3 @@ function select(method, group) {
     {{ store.validationError }}
   </div>
 </template>
-
-<style scoped>
-
-</style>

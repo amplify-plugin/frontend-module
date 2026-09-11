@@ -15,6 +15,7 @@ export default {
         // Canonical order always starts at the first step; the incoming
         // `active` flags are inconsistent (multiple steps marked active).
         this.activeStep = this.orderedSteps[0]?.component ?? 'account';
+        this.cartId = props.cart ?? null;
         this.cart = props.cart ?? mockCart;
         this.customer = props.customer ?? mockCustomer;
         this.contact = props.contact ?? mockContact;
@@ -31,6 +32,10 @@ export default {
             ? props.shipOptions : mockShipOptions;
         this.guestCheckout = props.guestCheckout ?? false;
         this.editable = props.editable ?? false;
+        this.allowCreateShipping = props.allowCreateShipping ?? false;
+        this.allowChooseShipping = props.allowChooseShipping ?? false;
+        this.allowRequestQuote = props.allowRequestQuote ?? false;
+        this.allowCreateOrderList = props.createFavouriteFromCart ?? false;
         this.backUrl = props.backToShoppingUrl ?? null;
 
         if (this.shippingGroups.length > 0) {

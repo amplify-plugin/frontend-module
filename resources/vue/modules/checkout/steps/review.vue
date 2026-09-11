@@ -1,7 +1,7 @@
 <script setup>
 import {onMounted} from 'vue';
 import {useCheckoutStore} from '../composables/useCheckoutStore';
-import SummarySidebar from "../summary.vue";
+import SummarySidebar from "./components/summary.vue";
 
 const store = useCheckoutStore();
 
@@ -12,18 +12,6 @@ const paymentLabels = {
   on_account: 'On Account',
   ach: 'ACH',
 };
-
-function formatAddress(customer) {
-  return [
-    customer?.ShipToAddress1 ?? '',
-    customer?.ShipToAddress2 ?? '',
-    customer?.ShipToAddress3 ?? '',
-    customer?.ShipToCity ?? '',
-    customer?.ShipToState ?? '',
-    customer?.ShipToZipCode ?? '',
-    customer?.ShipToCountryCode ?? '',
-  ].filter((part) => part && part !== '').join(', ');
-}
 
 onMounted(() => {
   window.Amplify.loadCartSummary();
@@ -108,22 +96,10 @@ onMounted(() => {
             Additional Information
           </h4>
           <div class="form-group">
-            <label for="po-number">PO Number
-              <span data-toggle="popover" data-placement="top"
-                    data-trigger="hover" data-orginal-title="Purchase Order Number"
-                    data-content="PO numbers are an unique number given to customer beforehand."
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                     class="feather feather-info">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <line x1="12" y1="16" x2="12" y2="12"></line>
-                  <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                </svg>
-              </span>
+            <label for="po-number">
+              PO Number
             </label>
             <input class="form-control"
-                   :readonly="readOnly"
                    type="text"
                    size="255"
                    min="2"
@@ -138,22 +114,6 @@ onMounted(() => {
     </div>
     <div class="col-sm-3">
       <summary-sidebar/>
-    </div>
-  </div>
-  <div class="row padding-top-1x mt-3">
-    <div class="col-sm-6">
-      <h5>Shipping to:</h5>
-      <ul class="list-unstyled">
-        <li><span class="text-muted">Namw: </span>{{ store.shipping.ShipToName ?? 'N/A' }}</li>
-        <li><span class="text-muted">Address: </span>{{ formatAddress(store.shipping) }}</li>
-        <li><span class="text-muted">Phone: </span>{{ store.shipping.ShipToPhoneNumber ?? 'N/A' }}</li>
-      </ul>
-    </div>
-    <div class="col-sm-6">
-      <h5>Payment method:</h5>
-      <ul class="list-unstyled">
-        <li><span class="text-muted">Method:</span>{{ paymentLabels[store.paymentMethod] || 'On Account' }}</li>
-      </ul>
     </div>
   </div>
 </template>

@@ -13,6 +13,10 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  cartId: {
+    type: Number,
+    required: true,
+  },
   cartItemCount: {
     type: Number,
     default: 0,
@@ -74,7 +78,16 @@ const props = defineProps({
   editable: {
     type: Boolean,
     default: false,
-  }
+  },
+  allowCreateShipping: {
+    type: Boolean,
+    default: false,
+  },
+  allowChooseShipping: {
+    type: Boolean,
+    default: false,
+  },
+
 });
 
 const store = useCheckoutStore();

@@ -9,6 +9,7 @@ export const useCheckoutStore = defineStore('checkout', {
             staticMode: true,
             steps: [],
             activeStep: '',
+            cartId: null,
             cart: {},
             customer: {},
             contact: {},
@@ -30,6 +31,10 @@ export const useCheckoutStore = defineStore('checkout', {
             validationError: '',
             guestCheckout: false,
             editable: false,
+            allowCreateShipping: false,
+            allowChooseShipping: false,
+            allowRequestQuote : false,
+            allowCreateOrderList : false,
             backUrl : window.location.origin,
         }
     },

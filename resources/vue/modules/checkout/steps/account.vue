@@ -94,7 +94,7 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <div class="col-sm-6">
+    <div class="col-md-6">
       <h4 class="border-bottom pb-2 my-4">
         <i class="icon-briefcase" style="margin-top: -10px"></i>
         Billing Information
@@ -213,7 +213,7 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <div class="col-sm-6">
+    <div class="col-md-6">
       <h4 class="border-bottom pb-2 my-4">
         <i class="icon-book" style="margin-top: -10px"></i>
         Shipping Address
@@ -222,12 +222,14 @@ onMounted(() => {
         <div class="col-sm-12">
           <div class="form-group">
             <label for="shipping-address">Select Address</label>
-            <div class="input-group input-append">
+            <div :class="{'input-group input-append' : store.allowCreateShipping}">
               <select class="form-control custom-select"
                       @change="addressChanged($event.target.value)"
                       v-model="store.shipping.ShipToNumber"
-                      id="shipping-address">
-                <option value="" selected>Choose Address</option>
+                      id="shipping-address"
+                      :disabled="!store.allowChooseShipping"
+              >
+                <option value="">Choose Address</option>
                 <option v-for="address of addresses"
                         :key="address.ShipToNumber"
                         :selected="address.ShipToNumber === store.customer.DefaultShipTo"
@@ -238,7 +240,7 @@ onMounted(() => {
                   }}
                 </option>
               </select>
-              <div class="input-group-append">
+              <div v-if="store.allowCreateShipping" class="input-group-append">
                 <button type="submit" class="btn btn-primary mx-0 my-0">
                   <i class="icon-plus font-weight-bolder"></i>
                   <span class="d-none d-md-inline-block ml-1">New Ship To</span>

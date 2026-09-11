@@ -22,7 +22,8 @@ class Checkout extends BaseComponent
     public function __construct(public bool   $createFavouriteFromCart = true,
                                 public bool   $allowRequestQuote = true,
                                 public bool   $allowDraftOrder = false,
-                                public string $backToUrl = 'home'
+                                public string $backToUrl = 'home',
+                                public string $assetUrl = ''
     )
     {
         parent::__construct();
@@ -34,18 +35,16 @@ class Checkout extends BaseComponent
     public function render(): View|Closure|string
     {
         $cart = getCart();
-
-        $customer = customer_check() ? ErpApi::getCustomerDetail() : ErpApi::adapter()->getCustomerDetail();
-
-        $addresses = customer_check() ? ErpApi::getCustomerShippingLocationList() : ErpApi::adapter()->getCustomerShippingLocationList();
-
-        $contact = customer_check() ? customer(true) : new Contact([]);
-
-        $guestCheckout = config('amplify.frontend.guest_checkout');
-
-        $editable = true;
-
+        $cartId = $cart->getKey();
         $cartItemCount = $cart instanceof Cart ? $cart->cartItems()->count() : 0;
+        $customer = customer_check() ? ErpApi::getCustomerDetail() : ErpApi::adapter()->getCustomerDetail();
+        $addresses = customer_check() ? ErpApi::getCustomerShippingLocationList() : ErpApi::adapter()->getCustomerShippingLocationList();
+        $contact = customer_check() ? customer(true) : new Contact([]);
+        $guestCheckout = config('amplify.frontend.guest_checkout');
+        $templateBrandColor = theme_option('primary_color');
+        $allowChooseShipping = havePermissions(['checkout.choose-ship-to']);
+        $editable = true;
+        $allowCreateShipping = config('amplify.erp.auto_create_ship_to');
 
         $steps = [
             ['index' => 1, 'id' => 'customer', 'label' => 'Account', 'active' => false, 'component' => 'account'],
@@ -62,27 +61,24 @@ class Checkout extends BaseComponent
             };
         }
 
-
-        $steps = array_reverse($steps);
-
 //        $addresses->push($this->loadEmptyShippingLocation());
 
-        $country_codes = array_map(fn($country) => $country['id'], config('amplify.basic.countries'));
+        $countryIds = array_map(fn($country) => $country['id'], config('amplify.basic.countries'));
 
-        $countries = Country::enabled()->select('id', 'name', 'iso2')->whereIn('id', $country_codes)->get();
+        $countries = Country::enabled()->select('id', 'name', 'iso2')->whereIn('id', $countryIds)->get();
 
-        $states = State::select('iso2', 'country_id', 'name')->whereIn('country_id', $country_codes)->get();
+        $states = State::select('iso2', 'country_id', 'name')->whereIn('country_id', $countryIds)->get();
 
         $shipOptions = ErpApi::getShippingOption();
 
-        $templateBrandColor = theme_option('primary_color');
-
-        $hasChooseShipPermission = havePermissions(['checkout.choose-shipto']);
+        $steps = array_reverse($steps);
 
         return view('widget::checkout', compact(
+            'allowCreateShipping',
             'editable',
             'guestCheckout',
             'cart',
+            'cartId',
             'cartItemCount',
             'templateBrandColor',
             'steps',
@@ -91,8 +87,8 @@ class Checkout extends BaseComponent
             'countries',
             'states',
             'shipOptions',
-            'hasChooseShipPermission',
-            'contact'
+            'allowChooseShipping',
+            'contact',
         ));
     }
 
@@ -164,7 +160,7 @@ class Checkout extends BaseComponent
         $reserved = ['__path', '__data', 'app', 'errors', '__env',
             '__laravel_slots', 'props', 'slot', 'ignoredParameterNames',
             'htmlAttributes', 'options', 'componentName', 'attributes',
-            'itemRow', 'backToUrl'
+            'itemRow', 'backToUrl', 'assetUrl'
         ];
 
         foreach ($variables as $key => $value) {
