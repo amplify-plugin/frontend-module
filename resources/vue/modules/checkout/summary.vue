@@ -1,13 +1,16 @@
 <script setup>
-import { useCheckoutStore } from './composables/useCheckoutStore';
+import {useCheckoutStore} from './composables/useCheckoutStore';
 
 const store = useCheckoutStore();
 </script>
 
 <template>
+  <h4 class="border-bottom pb-2 mb-4">
+    <i class="icon-pie-graph" style="margin-top: -10px"></i>
+    Order Summary
+  </h4>
   <aside class="sidebar">
     <div class="padding-top-2x hidden-lg-up"></div>
-    <!-- Order Summary Widget-->
     <section class="widget widget-order-summary">
       <h3 class="widget-title">Order Summary</h3>
       <table class="table">

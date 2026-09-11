@@ -1,6 +1,6 @@
 <script setup>
-import { computed } from 'vue';
-import { useCheckoutStore } from './composables/useCheckoutStore';
+import {computed} from 'vue';
+import {useCheckoutStore} from './composables/useCheckoutStore';
 
 defineProps({
   active: {

@@ -35,12 +35,15 @@ class Checkout extends BaseComponent
     {
         $cart = getCart();
 
-        $customer = ErpApi::getCustomerDetail();
+        $customer = customer_check() ? ErpApi::getCustomerDetail() : ErpApi::adapter()->getCustomerDetail();
+
+        $addresses = customer_check() ? ErpApi::getCustomerShippingLocationList() : ErpApi::adapter()->getCustomerShippingLocationList();
 
         $contact = customer_check() ? customer(true) : new Contact([]);
 
-        $isGuestCheckout = config('amplify.frontend.guest_checkout');
+        $guestCheckout = config('amplify.frontend.guest_checkout');
 
+        $editable = true;
 
         $cartItemCount = $cart instanceof Cart ? $cart->cartItems()->count() : 0;
 
@@ -59,11 +62,10 @@ class Checkout extends BaseComponent
             };
         }
 
-        $addresses = customer_check() ? ErpApi::getCustomerShippingLocationList() : new ShippingLocationCollection;
 
         $steps = array_reverse($steps);
 
-        $addresses->push($this->loadEmptyShippingLocation());
+//        $addresses->push($this->loadEmptyShippingLocation());
 
         $country_codes = array_map(fn($country) => $country['id'], config('amplify.basic.countries'));
 
@@ -78,7 +80,8 @@ class Checkout extends BaseComponent
         $hasChooseShipPermission = havePermissions(['checkout.choose-shipto']);
 
         return view('widget::checkout', compact(
-            'isGuestCheckout',
+            'editable',
+            'guestCheckout',
             'cart',
             'cartItemCount',
             'templateBrandColor',
@@ -162,7 +165,7 @@ class Checkout extends BaseComponent
             '__laravel_slots', 'props', 'slot', 'ignoredParameterNames',
             'htmlAttributes', 'options', 'componentName', 'attributes',
             'itemRow', 'backToUrl'
-            ];
+        ];
 
         foreach ($variables as $key => $value) {
             if ($value instanceof InvokableComponentVariable) {

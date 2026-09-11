@@ -102,7 +102,7 @@ __webpack_require__.r(__webpack_exports__);
     __expose();
     var props = __props;
     var store = (0,_composables_useCheckoutStore__WEBPACK_IMPORTED_MODULE_1__.useCheckoutStore)();
-    store.initFromProps(props);
+    store.init(props);
     var stepComponents = {
       account: _steps_account_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
       shipping: _steps_shipping_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
@@ -1603,7 +1603,7 @@ var useCheckoutStore = (0,pinia__WEBPACK_IMPORTED_MODULE_1__.defineStore)('check
     }
   },
   actions: {
-    initFromProps: function initFromProps(props) {
+    init: function initFromProps(props) {
       var _props$steps, _this$orderedSteps$0$, _this$orderedSteps$, _props$cart, _props$customer, _props$contact, _props$shipOptions$Fr, _props$shipOptions;
       this.staticMode = props.cart == null;
       this.steps = (_props$steps = props.steps) !== null && _props$steps !== void 0 ? _props$steps : _mock__WEBPACK_IMPORTED_MODULE_0__.mockSteps;
