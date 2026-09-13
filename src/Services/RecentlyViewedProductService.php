@@ -5,12 +5,14 @@ namespace Amplify\Frontend\Services;
 use Amplify\System\Backend\Models\Contact;
 use Amplify\System\Backend\Models\Product;
 use Amplify\System\Backend\Models\RecentlyViewedProduct;
+use Amplify\System\Backend\Services\RecentlyViewedAnalyticsService;
 use Illuminate\Support\Collection;
 
 class RecentlyViewedProductService
 {
     public function __construct(
         protected PurchasedTogetherProductService $productLoader,
+        protected RecentlyViewedAnalyticsService $analytics,
     ) {}
 
     public function isEnabled(): bool
@@ -35,18 +37,45 @@ class RecentlyViewedProductService
             return;
         }
 
-        RecentlyViewedProduct::query()->updateOrCreate(
-            [
-                'contact_id' => $contact->id,
-                'product_id' => $productId,
-            ],
-            [
-                'customer_id' => $contact->customer_id,
-                'last_viewed_at' => now(),
-            ],
-        );
+        $this->analytics->recordView($contact, $productId);
 
         $this->trimHistory($contact);
+    }
+
+    /**
+     * @param  array<int|string|null>  $productIds
+     */
+    public function markAddedToCart(Contact $contact, array $productIds): void
+    {
+        if (! $this->isEnabled()) {
+            return;
+        }
+
+        $this->analytics->markAddedToCart($contact, $this->sanitizeProductIds($productIds));
+    }
+
+    /**
+     * @param  array<int|string|null>  $productIds
+     */
+    public function markQuoted(Contact $contact, array $productIds): void
+    {
+        if (! $this->isEnabled()) {
+            return;
+        }
+
+        $this->analytics->markQuoted($contact, $this->sanitizeProductIds($productIds));
+    }
+
+    /**
+     * @param  array<int|string|null>  $productIds
+     */
+    public function markOrdered(Contact $contact, array $productIds): void
+    {
+        if (! $this->isEnabled()) {
+            return;
+        }
+
+        $this->analytics->markOrdered($contact, $this->sanitizeProductIds($productIds));
     }
 
     /**
@@ -128,18 +157,32 @@ class RecentlyViewedProductService
 
         $merged = array_slice($merged, 0, $this->maxItems());
         $timestamp = now();
+        $sessionId = (string) session()->getId();
 
         foreach ($merged as $index => $productId) {
-            RecentlyViewedProduct::query()->updateOrCreate(
-                [
+            $existing = RecentlyViewedProduct::query()
+                ->where('contact_id', $contact->id)
+                ->where('product_id', $productId)
+                ->first();
+
+            if ($existing === null) {
+                RecentlyViewedProduct::query()->create([
+                    'customer_id' => $contact->customer_id,
                     'contact_id' => $contact->id,
                     'product_id' => $productId,
-                ],
-                [
-                    'customer_id' => $contact->customer_id,
-                    'last_viewed_at' => $timestamp->copy()->subSeconds($index),
-                ],
-            );
+                    'session' => $sessionId,
+                    'repeat' => 1,
+                    'viewed_at' => $timestamp->copy()->subSeconds($index),
+                ]);
+
+                continue;
+            }
+
+            $existing->update([
+                'customer_id' => $contact->customer_id,
+                'viewed_at' => $timestamp->copy()->subSeconds($index),
+                'session' => $sessionId,
+            ]);
         }
 
         RecentlyViewedProduct::query()
