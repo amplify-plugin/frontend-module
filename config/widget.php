@@ -2097,6 +2097,122 @@ return [
         'description' => 'Displays frequently purchased together product suggestions in a carousel.',
     ],
 
+    Components\Product\TopSellingProducts::class => [
+        'name' => 'top-selling-products',
+        'reserved' => true,
+        'internal' => false,
+        '@inside' => null,
+        '@client' => null,
+        'model' => ['static_page', 'single_product', 'shop', 'cart', 'cart_page', 'checkout'],
+        '@attributes' => [
+            [
+                'name' => ':show-title',
+                'type' => 'boolean',
+                'value' => true,
+            ],
+            [
+                'name' => 'title',
+                'type' => 'text',
+                'value' => 'Top Selling Products',
+            ],
+            [
+                'name' => 'layout',
+                'type' => 'select',
+                'options' => [
+                    'card' => 'Card (default)',
+                    'minimal' => 'Minimal (inline)',
+                ],
+                'value' => 'card',
+                'hint' => 'Card shows stacked image and details. Minimal shows inline thumbnail, info, and actions.',
+            ],
+            [
+                'name' => ':products-limit',
+                'type' => 'number',
+                'value' => 10,
+                'hint' => 'Number of top selling products to display (5, 10, or 20). Also configurable in System Configuration.',
+            ],
+            [
+                'name' => ':exclude-product-id',
+                'type' => 'number',
+                'value' => 0,
+                'hint' => 'Optional product ID to exclude from the carousel. Use 0 (default) to auto-exclude the current product on product detail pages.',
+            ],
+            [
+                'name' => ':cache-ttl',
+                'type' => 'number',
+                'value' => 3600,
+                'hint' => 'Cache duration in seconds for the top-selling products query. Default is 3600 (1 hour). Use 0 to disable caching.',
+            ],
+            [
+                'name' => ':show-cart-btn',
+                'type' => 'boolean',
+                'value' => true,
+            ],
+            [
+                'name' => 'cart-button-label',
+                'type' => 'text',
+                'value' => 'Add To Cart',
+            ],
+            [
+                'name' => 'detail-button-label',
+                'type' => 'text',
+                'value' => 'View Details',
+            ],
+            [
+                'name' => ':show-price',
+                'type' => 'boolean',
+                'value' => true,
+            ],
+            [
+                'name' => ':show-guest-price',
+                'type' => 'boolean',
+                'value' => false,
+            ],
+            [
+                'name' => ':show-top-discount-badge',
+                'type' => 'boolean',
+                'value' => false,
+            ],
+            [
+                'name' => ':show-order-list',
+                'type' => 'boolean',
+                'value' => false,
+            ],
+            [
+                'name' => 'order-list-label',
+                'type' => 'text',
+                'value' => 'Order List',
+            ],
+            [
+                'name' => ':show-navigation',
+                'type' => 'boolean',
+                'value' => true,
+            ],
+            [
+                'name' => ':slider-item-gap',
+                'type' => 'number',
+                'value' => 15,
+            ],
+            [
+                'name' => ':display-product-code',
+                'type' => 'boolean',
+                'value' => true,
+            ],
+            [
+                'name' => ':display-short-description',
+                'type' => 'boolean',
+                'value' => false,
+            ],
+            [
+                'name' => ':display-manufacturer',
+                'type' => 'boolean',
+                'value' => false,
+            ],
+        ],
+        '@nestedItems' => [],
+        'description' => 'Displays top selling products in a responsive carousel with add-to-cart actions.',
+    ],
+
     Components\Product\FeaturedProduct::class => [
         'name' => 'featured-product',
         'reserved' => true,
