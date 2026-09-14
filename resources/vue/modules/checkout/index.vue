@@ -1,5 +1,5 @@
 ﻿<script setup>
-import {computed, onMounted} from 'vue';
+import {computed, onMounted, ref} from 'vue';
 import {useCheckoutStore} from './composables/useCheckoutStore';
 import steps from './steps.vue';
 import navigation from './navigation.vue';
@@ -87,7 +87,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-
+  orderListTitle: {
+    type: String,
+    default: 'Order List',
+  }
 });
 
 const store = useCheckoutStore();
@@ -100,12 +103,22 @@ const currentStep = computed(
     () => stepComponents[store.currentStep?.component] ?? account
 );
 
+const element = ref(null);
+
+onMounted(() => {
+  element.value.style.setProperty(
+      '--checkout-step-width',
+      `${100 / props.steps.length}%`
+  );
+})
+
 </script>
 
 <template>
-  <div class="w-100">
+  <div class="w-100" ref="element">
     <steps :active="store.activeStep"/>
     <component :is="currentStep"/>
     <navigation :active="store.activeStep"/>
   </div>
 </template>
+

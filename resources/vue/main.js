@@ -4,5 +4,8 @@ import modules from './modules.js';
 
 const app = createApp({})
     .use(createPinia())
-    .use(modules)
-    .mount('#app');
+    .use(modules);
+
+app.config.globalProperties.Amplify = window.Amplify;
+
+app.mount('#app');

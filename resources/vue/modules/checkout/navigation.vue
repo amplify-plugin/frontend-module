@@ -4,14 +4,11 @@ import {useCheckoutStore} from './composables/useCheckoutStore';
 const store = useCheckoutStore();
 
 function handleRequestForQuote(element) {
-  window.Amplify.submitCartAsQuote(element);
+  Amplify.submitCartAsQuote(element);
 }
-
-function handleCreateOrderListFromCart(element) {
-  window.Amplify.addToNewOrderList(store.cartId, 'cart');
+function handleCreateOrderList() {
+  Amplify.addToNewOrderList(store.cartId, 'cart', store.orderListTitle);
 }
-
-function handleSaveOrderAsDraft() {}
 
 </script>
 
@@ -23,7 +20,7 @@ function handleSaveOrderAsDraft() {}
         <span class="hidden-xs-down">&nbsp;{{ store.isFirstStep ? 'Back To Cart' : 'Back' }}</span>
       </a>
     </div>
-    <div class="column d-flex justify-content-center" v-if="store.activeStep === 'review'">
+    <div class="column d-flex justify-content-center gap-3" v-if="store.activeStep === 'review'">
       <button v-if="store.allowRequestQuote"
               class="btn btn-primary"
               data-submitting="false"
@@ -32,10 +29,10 @@ function handleSaveOrderAsDraft() {}
         <span class="hidden-xs-down">&nbsp;{{ 'Request For Quote' }}</span>
       </button>
       <button class="btn btn-primary"
-              v-if="!store.allowCreateOrderList"
-              @click.prevent="handleCreateOrderListFromCart($event.target)">
+              v-if="store.allowCreateOrderList"
+              @click.prevent="handleCreateOrderList">
         <i class="icon-file-add"></i>
-        <span class="hidden-xs-down">&nbsp;{{ 'Create' }}</span>
+        <span class="hidden-xs-down">&nbsp;{{ `Create ${store.orderListTitle}` }}</span>
       </button>
     </div>
     <div class="column">

@@ -36,6 +36,7 @@ export const useCheckoutStore = defineStore('checkout', {
             allowRequestQuote : false,
             allowCreateOrderList : false,
             backUrl : window.location.origin,
+            orderListTitle: 'Order List'
         }
     },
     getters,

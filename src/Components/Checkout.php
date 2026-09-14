@@ -23,7 +23,8 @@ class Checkout extends BaseComponent
                                 public bool   $allowRequestQuote = true,
                                 public bool   $allowDraftOrder = false,
                                 public string $backToUrl = 'home',
-                                public string $assetUrl = ''
+                                public string $orderListTitle = 'Shopping List',
+                                public string $assetUrl = '',
     )
     {
         parent::__construct();
@@ -50,18 +51,13 @@ class Checkout extends BaseComponent
             ['index' => 1, 'id' => 'customer', 'label' => 'Account', 'active' => false, 'component' => 'account'],
             ['index' => 2, 'id' => 'shipping', 'label' => 'Shipping', 'active' => false, 'component' => 'shipping'],
             ['index' => 3, 'id' => 'review', 'label' => 'Review', 'active' => true, 'component' => 'review'],
-            ['index' => 4, 'id' => 'review', 'label' => 'Payment', 'active' => true, 'component' => 'payment'],
         ];
 
         if ($customer->CreditCardOnly == 'Y' && havePermissions(['checkout.allow-credit-card-payment'])) {
-
-            $steps[] = match (config('amplify.payment.default')) {
-                'cenpos' => ['index' => 4, 'id' => 'billing', 'label' => 'Payment', 'active' => false, 'component' => 'payment'],
-                default => ['index' => 4, 'id' => 'billing', 'label' => 'Payment', 'active' => false, 'component' => 'payment']
-            };
+            if (config('amplify.payment.default') != 'default') {
+                $steps[] = ['index' => 4, 'id' => 'payment', 'label' => 'Payment', 'active' => false, 'component' => 'payment'];
+            }
         }
-
-//        $addresses->push($this->loadEmptyShippingLocation());
 
         $countryIds = array_map(fn($country) => $country['id'], config('amplify.basic.countries'));
 

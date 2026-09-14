@@ -1,18 +1,135 @@
 .x-checkout, .x-order-checkout {
-    .checkout {
-        display: none;
+  $color_1: #606975;
+  $primary-color: #0da9ef;
+  $white-color: #fff;
+  $success-color: #43d9a3;
+  $background-color_1: #fff;
+  $background-color_2: #0da9ef;
+  $border-color_1: transparent transparent transparent #fff;
+  $border-color_2: transparent transparent transparent #d8e0e6;
+  $border-left-color_1: #0da9ef;
+
+  .checkout-steps {
+    > a {
+      background-color: $background-color_1;
+      border-bottom: 1px solid #e1e7ec;
+      border-top: 1px solid #e1e7ec;
+      color: $color_1;
+      display: block;
+      float: right;
+      font-size: 14px;
+      font-weight: 500;
+      height: 55px;
+      line-height: 53px;
+      position: relative;
+      text-align: center;
+      text-decoration: none;
+      transition: color .3s;
+
+      > .angle {
+        background-color: $background-color_1;
+        display: block;
+        height: 53px;
+        position: absolute;
+        right: -13px;
+        top: 0;
+        width: 27px;
+
+        &:after {
+          content: "";
+          height: 0;
+          left: 0;
+          pointer-events: none;
+          position: absolute;
+          top: 0;
+          width: 0;
+          border-color: $border-color_1;
+          border-width: 26px;
+        }
+
+        &:before {
+          content: "";
+          height: 0;
+          left: 0;
+          pointer-events: none;
+          position: absolute;
+          top: 0;
+          width: 0;
+          border-color: $border-color_2;
+          border-width: 27px;
+          margin-top: -1px;
+        }
+      }
+
+      &:hover {
+        color: $primary-color;
+      }
+
+      &:first-child {
+        border-bottom-right-radius: 7px;
+        border-right: 1px solid #e1e7ec;
+        border-top-right-radius: 7px;
+      }
+
+      &:last-child {
+        border-bottom-left-radius: 7px;
+        border-left: 1px solid #e1e7ec;
+        border-top-left-radius: 7px;
+      }
+
     }
 
-    .active {
-        display: inline !important;
+    > a.active {
+      background-color: $background-color_2;
+      color: $white-color;
+      cursor: default;
+      pointer-events: none;
+
+      > .angle {
+        &:after {
+          border-left-color: $border-left-color_1;
+        }
+      }
+
+      + {
+        a {
+          > .angle {
+            background-color: $background-color_2;
+          }
+        }
+      }
     }
 
-    .tab-content {
-        padding: 10px 0 !important;
+    > a.completed {
+      > .step-indicator {
+        border-radius: 50%;
+        color: $success-color;
+        display: inline-block;
+        font-size: 18px;
+        line-height: 20px;
+        margin-right: 7px;
+        margin-top: -5px;
+        text-align: center;
+        vertical-align: middle;
+      }
+
+      &:hover {
+        color: $color_1;
+      }
     }
 
+    @media (max-width: 576px) {
+      display: grid;
 
-    .form-group {
-        margin-bottom: 10px !important;
+      > a {
+        border: 1px solid #e1e7ec;
+        border-radius: 7px;
+        width: 100%;
+
+        > .angle {
+          display: none !important;
+        }
+      }
     }
+  }
 }

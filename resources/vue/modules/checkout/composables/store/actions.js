@@ -36,6 +36,7 @@ export default {
         this.allowChooseShipping = props.allowChooseShipping ?? false;
         this.allowRequestQuote = props.allowRequestQuote ?? false;
         this.allowCreateOrderList = props.createFavouriteFromCart ?? false;
+        this.orderListTitle = props.orderListTitle ?? 'Order List';
         this.backUrl = props.backToShoppingUrl ?? null;
 
         if (this.shippingGroups.length > 0) {
