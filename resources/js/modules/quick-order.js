@@ -4,8 +4,12 @@ export const QuickOrder = {
     from: 0,
     pendingRequests: 0,
     root: null,
+    Amplify: {},
 
-    init() {
+    init(amplify) {
+
+        this.Amplify = amplify;
+
         if (this.initialized) {
             return;
         }
@@ -21,6 +25,8 @@ export const QuickOrder = {
         this.pendingRequests = 0;
         this.addProduct(true);
         this.bindEvents();
+
+        return this;
     },
 
     config() {

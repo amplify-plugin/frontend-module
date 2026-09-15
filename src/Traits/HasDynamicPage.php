@@ -232,6 +232,7 @@ trait HasDynamicPage
             'dateFormat' => config('amplify.basic.date_format', 'Y-m-d'),
             'allowGuestPrice' => config('amplify.basic.enable_guest_pricing', false),
             'isCustomerAuthenticated' => customer_check(),
+            'authenticated' => customer_check(),
             'cart' => [
                 'maxQuantity' => config('amplify.basic.max_cart_item_quantity', 9999999999),
                 'notAvailableMsg' => __(config('amplify.messages.product_unavailable',
@@ -259,6 +260,16 @@ trait HasDynamicPage
                     'destroy' => url('/recently-viewed'),
                 ],
             ],
+            'screen' => [
+                'breakpoints' => [
+                    'wide' => 1440, //xxl
+                    'desktop' => 1200, //xl
+                    'laptop' => 991, //lg
+                    'tablet' => 768, //md
+                    'mobile' => 567, //sm
+                ],
+                'current' => request()->screen()
+            ]
         ];
 
 
