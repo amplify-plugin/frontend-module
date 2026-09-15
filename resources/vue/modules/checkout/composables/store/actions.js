@@ -8,6 +8,11 @@ import {
     mockStates,
     mockSteps,
 } from '../../mock';
+
+import {useValidate} from "@/composables/useValidate";
+
+const validator = useValidate();
+
 export default {
     init(props) {
         this.staticMode = props.cart == null;
@@ -97,6 +102,25 @@ export default {
 
     validateCurrentStep() {
         switch (this.activeStep) {
+            case 'account':
+                this.validation = validator.make(this, {
+                    'contact.name' : ['required', 'min:2', 'max:255'],
+                    'contact.email' : ['required', 'min:5', 'max:255', 'email'],
+                    'contact.phone' : ['required', 'min:10', 'max:17'],
+                });
+
+                return true;
+
+                // if (this.contact?.name == null || this.contact?.name === '') {
+                //     this.validationError = 'The name field is required.';
+                //     return false;
+                // }
+                //
+                // if (this.shipping?.ShipToNumber == null || this.shipping?.ShipToNumber === '') {
+                //     this.validationError = 'Please select a shipping address.';
+                //     return false;
+                // }
+
             case 'shipping':
                 if (!this.selectedShippingMethod) {
                     this.validationError = 'Please, Select a Shipping Method!';
@@ -110,10 +134,12 @@ export default {
                     return false;
                 }
                 return true;
+
             case 'review':
                 // The reference review page has no PO field; PO/notes stay
                 // in state for future backend use.
                 return true;
+
             default:
                 return true;
         }

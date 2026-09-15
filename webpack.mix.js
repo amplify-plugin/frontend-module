@@ -86,7 +86,15 @@ mix.setResourceRoot('resources')
                 __VUE_PROD_DEVTOOLS__: JSON.stringify(false),
                 __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: JSON.stringify(false),
             })
-        ]
+        ],
+        resolve: {
+            alias: {
+                '@': path.resolve(__dirname, 'resources/vue'),
+            },
+            fallback: {
+                buffer: require.resolve('buffer/'), // Polyfill for buffer
+            },
+        }
     })
     .js('resources/vue/main.js', 'public/js')
     .vue({version: 3})

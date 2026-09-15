@@ -1,6 +1,6 @@
 <script setup>
 import {useCheckoutStore} from "../composables/useCheckoutStore";
-import {onMounted, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 
 const store = useCheckoutStore();
 
@@ -11,6 +11,8 @@ const countries = ref(store.countries);
 const states = ref(store.states);
 
 const readOnly = !store.editable;
+
+const errors = computed(() => store.validation);
 
 function addressChanged(shipToNumber) {
 
@@ -38,6 +40,7 @@ onMounted(() => {
 <template>
   <div class="row">
     <div class="col-12">
+      {{ errors }}
       <h4 class="border-bottom pb-2 mb-4">
         <i class="icon-head" style="margin-top: -10px"></i>
         Account Information
@@ -46,7 +49,7 @@ onMounted(() => {
         <div class="col-sm-12">
           <div class="form-group">
             <label for="contact-name">Name<span class="text-danger font-weight-bold">*</span></label>
-            <input class="form-control"
+            <input :class="{'form-control': true, 'is-invalid': errors?.has('contact.name')}"
                    :readonly="readOnly"
                    type="text"
                    size="255"
@@ -54,8 +57,11 @@ onMounted(() => {
                    max="255"
                    maxlength="255"
                    placeholder="Enter Contact Name"
-                   id="contact-name" v-model="store.contact.name">
-            <span class="invalid-feedback d-block" id="contact-name-error"></span>
+                   id="contact-name"
+                   v-model="store.contact.name">
+            <span class="invalid-feedback d-block" id="contact-name-error">
+              {{ errors?.first('contact.name') }}
+            </span>
           </div>
         </div>
         <div class="col-sm-6">

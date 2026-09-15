@@ -1,6 +1,7 @@
 import {defineStore} from 'pinia';
 import getters from './store/getters.js';
 import actions from './store/actions.js';
+import {useValidate} from "@/composables/useValidate";
 
 
 export const useCheckoutStore = defineStore('checkout', {
@@ -36,7 +37,8 @@ export const useCheckoutStore = defineStore('checkout', {
             allowRequestQuote : false,
             allowCreateOrderList : false,
             backUrl : window.location.origin,
-            orderListTitle: 'Order List'
+            orderListTitle: 'Order List',
+            validation : useValidate().make()
         }
     },
     getters,
