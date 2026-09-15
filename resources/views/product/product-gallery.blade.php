@@ -87,7 +87,7 @@
 </div>
 
 @push('html-default')
-    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="pswp x-product-product-gallery-lightbox" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="pswp__bg"></div>
         <div class="pswp__scroll-wrap">
             <div class="pswp__container">

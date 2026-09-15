@@ -1387,29 +1387,11 @@ window.Amplify = {
     // Gallery (Photoswipe)
     //------------------------------------------------------------------------------
     initPhotoSwipeFromDOM(gallerySelector = '.gallery-wrapper') {
-        const PHOTOSWIPE_MIN_LONG_EDGE = 1600;
-        const PHOTOSWIPE_FALLBACK_WIDTH = 1600;
-        const PHOTOSWIPE_FALLBACK_HEIGHT = 1200;
-
-        // PhotoSwipe will not upscale slides smaller than the viewport, so a 210x45
-        // badge sits as a tiny overlay on the previous large image. Keep aspect ratio
-        // but give every slide a large enough layout size to fill the lightbox.
-        var normalizePhotoSwipeSize = function (width, height) {
+        var getPhotoSwipeSize = function (width, height) {
             var w = parseInt(width, 10) || 0;
             var h = parseInt(height, 10) || 0;
 
-            if (w < 1 || h < 1) {
-                return {w: PHOTOSWIPE_FALLBACK_WIDTH, h: PHOTOSWIPE_FALLBACK_HEIGHT};
-            }
-
-            var longEdge = Math.max(w, h);
-            if (longEdge < PHOTOSWIPE_MIN_LONG_EDGE) {
-                var scale = PHOTOSWIPE_MIN_LONG_EDGE / longEdge;
-                w = Math.round(w * scale);
-                h = Math.round(h * scale);
-            }
-
-            return {w: w, h: h};
+            return w > 0 && h > 0 ? {w: w, h: h} : {w: 1600, h: 1200};
         };
 
         var photoSwipeSizeFromLink = function (linkEl) {
@@ -1417,12 +1399,36 @@ window.Amplify = {
             if (sizeAttr && sizeAttr.indexOf('x') !== -1) {
                 var parts = sizeAttr.split('x');
                 if (parseInt(parts[0], 10) > 0 && parseInt(parts[1], 10) > 0) {
-                    return normalizePhotoSwipeSize(parts[0], parts[1]);
+                    return getPhotoSwipeSize(parts[0], parts[1]);
                 }
             }
 
             var imgEl = linkEl.querySelector('img');
-            return normalizePhotoSwipeSize(imgEl && imgEl.naturalWidth, imgEl && imgEl.naturalHeight);
+            return getPhotoSwipeSize(imgEl && imgEl.naturalWidth, imgEl && imgEl.naturalHeight);
+        };
+
+        // Protect PhotoSwipe's calculated size from global theme image rules.
+        var preservePhotoSwipeLayout = function (item) {
+            if (!item || !item.container) {
+                return;
+            }
+
+            $(item.container).find('.pswp__img').each(function () {
+                ['width', 'height'].forEach(function (property) {
+                    var value = this.style.getPropertyValue(property);
+                    if (value) {
+                        this.style.setProperty(property, value, 'important');
+                    }
+                }, this);
+            });
+        };
+
+        var schedulePhotoSwipeLayout = function (item) {
+            window.requestAnimationFrame(function () {
+                window.requestAnimationFrame(function () {
+                    preservePhotoSwipeLayout(item);
+                });
+            });
         };
 
         // parse slide data (url, title, size ...) from DOM elements
@@ -1602,9 +1608,7 @@ window.Amplify = {
                 options.showAnimationDuration = 0;
             }
 
-            // Pass data to PhotoSwipe and initialize it
             gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
-            gallery.init();
 
             gallery.listen('gettingData', function (index, item) {
                 if (item.html || item._sizeLoading || !item.src) {
@@ -1612,22 +1616,36 @@ window.Amplify = {
                 }
 
                 item._sizeLoading = true;
-                var preload = new Image();
-                preload.onload = function () {
-                    var loadedSize = normalizePhotoSwipeSize(preload.naturalWidth, preload.naturalHeight);
-                    if (item.w === loadedSize.w && item.h === loadedSize.h) {
+                var image = new Image();
+                image.onload = function () {
+                    var size = getPhotoSwipeSize(image.naturalWidth, image.naturalHeight);
+                    item._sizeLoading = false;
+                    if (item.w === size.w && item.h === size.h) {
                         return;
                     }
-                    item.w = loadedSize.w;
-                    item.h = loadedSize.h;
+
+                    item.w = size.w;
+                    item.h = size.h;
                     gallery.invalidateCurrItems();
                     gallery.updateSize(true);
                 };
-                preload.src = item.src;
+                image.onerror = function () {
+                    item._sizeLoading = false;
+                };
+                image.src = item.src;
             });
 
             gallery.listen('afterChange', function () {
                 gallery.updateSize(true);
+                schedulePhotoSwipeLayout(gallery.currItem);
+            });
+
+            gallery.listen('imageLoadComplete', function (index, item) {
+                schedulePhotoSwipeLayout(item);
+            });
+
+            gallery.listen('initialZoomInEnd', function () {
+                schedulePhotoSwipeLayout(gallery.currItem);
             });
 
             gallery.listen('beforeChange', function () {
@@ -1647,6 +1665,8 @@ window.Amplify = {
                 });
             });
 
+            gallery.init();
+            schedulePhotoSwipeLayout(gallery.currItem);
         };
 
         // loop through all gallery elements and bind events
@@ -1695,28 +1715,129 @@ window.Amplify = {
         });
     },
 
+    // Product gallery thumbnail carousel
+    // Groups thumbnails into responsive pages and keeps them synchronized
+    // with the main product image carousel.
     thumbnailCarousel: function (target) {
-        const $thumbs = $(target);
-        if (!$thumbs.length) {
-            return;
-        }
+        $(target).each(function () {
+            const $thumbs = $(this);
 
-        $thumbs.on('click', '[data-gallery-index]', function (event) {
-            event.preventDefault();
-
-            const index = parseInt(this.getAttribute('data-gallery-index'), 10);
-            if (Number.isNaN(index)) {
+            if ($thumbs.data('amplifyThumbnailCarousel')) {
                 return;
             }
 
-            const $gallery = $thumbs.closest('.product-gallery');
-            const $main = $gallery.find('.product-carousel');
+            const $items = $thumbs.children('[data-gallery-index]');
+            if ($items.length < 2) {
+                return;
+            }
 
-            $thumbs.find('[data-gallery-index]').removeClass('active');
-            $(this).addClass('active');
+            $items.detach();
 
-            if ($main.data('owl.carousel')) {
-                $main.trigger('to.owl.carousel', [index, 200, true]);
+            const $mainCarousel = $thumbs.closest('.product-gallery').find('.product-carousel');
+            const mobileQuery = window.matchMedia('(max-width: 575px)');
+            let pageSize = 0;
+
+            $thumbs.data('amplifyThumbnailCarousel', true);
+
+            const setPageWidth = function (event) {
+                const width = $(event.target).width();
+                $(event.target).find('.owl-item').each(function () {
+                    this.style.setProperty('width', `${width}px`, 'important');
+                });
+            };
+
+            const syncGalleryState = function (event = {}) {
+                const mainCarousel = event.relatedTarget || $mainCarousel.data('owl.carousel');
+                if (!mainCarousel || !mainCarousel.items().length) {
+                    return;
+                }
+
+                const current = mainCarousel.relative(mainCarousel.current());
+                const last = mainCarousel.items().length - 1;
+                const page = Math.floor(current / pageSize);
+
+                if ($thumbs.data('owl.carousel')) {
+                    $thumbs.trigger('to.owl.carousel', [page, 200, true]);
+                }
+
+                $thumbs.find('.owl-prev')
+                    .toggleClass('disabled', current === 0)
+                    .prop('disabled', current === 0);
+                $thumbs.find('.owl-next')
+                    .toggleClass('disabled', current === last)
+                    .prop('disabled', current === last);
+            };
+
+            const buildPages = function () {
+                const nextPageSize = mobileQuery.matches ? 2 : 10;
+                if (pageSize === nextPageSize && $thumbs.data('owl.carousel')) {
+                    return;
+                }
+
+                $items.detach();
+                if ($thumbs.data('owl.carousel')) {
+                    $thumbs.trigger('destroy.owl.carousel');
+                }
+
+                $thumbs
+                    .removeClass('owl-loaded owl-drag owl-hidden')
+                    .empty();
+
+                pageSize = nextPageSize;
+                for (let index = 0; index < $items.length; index += pageSize) {
+                    $('<div class="thumbnail-page"></div>')
+                        .append($items.slice(index, index + pageSize))
+                        .appendTo($thumbs);
+                }
+
+                $thumbs.addClass('owl-carousel').owlCarousel({
+                    items: 1,
+                    loop: false,
+                    dots: true,
+                    nav: false,
+                    autoRefresh: false,
+                    onInitialized: setPageWidth,
+                    onResized: setPageWidth,
+                });
+
+                $thumbs.append(
+                    '<div class="owl-nav product-gallery-nav"><button type="button" class="owl-prev" aria-label="Previous product image"><i class="fa fa-chevron-left" aria-hidden="true"></i></button><button type="button" class="owl-next" aria-label="Next product image"><i class="fa fa-chevron-right" aria-hidden="true"></i></button></div>',
+                );
+
+                syncGalleryState();
+            };
+
+            $thumbs.on('click', '[data-gallery-index]', function (event) {
+                event.preventDefault();
+
+                const index = parseInt(this.getAttribute('data-gallery-index'), 10);
+                if (Number.isNaN(index)) {
+                    return;
+                }
+
+                $thumbs.find('[data-gallery-index]').removeClass('active');
+                $(this).addClass('active');
+
+                if ($mainCarousel.data('owl.carousel')) {
+                    $mainCarousel.trigger('to.owl.carousel', [index, 200, true]);
+                }
+            });
+
+            $thumbs.on('click', '.product-gallery-nav button:not(.disabled)', function () {
+                const action = $(this).hasClass('owl-prev') ? 'prev' : 'next';
+                $mainCarousel.trigger(`${action}.owl.carousel`);
+            });
+
+            $mainCarousel.on(
+                'initialized.owl.carousel.amplifyThumbnail changed.owl.carousel.amplifyThumbnail',
+                syncGalleryState,
+            );
+
+            buildPages();
+            if (typeof mobileQuery.addEventListener === 'function') {
+                mobileQuery.addEventListener('change', buildPages);
+            } else {
+                mobileQuery.addListener(buildPages);
             }
         });
     },

@@ -1,11 +1,3 @@
-/**
- * @class Amplify\Frontend\Components\Product\ProductGallery
- * @name Product Product Gallery
- * @code product.product-gallery
- * @description Login widget
- * @author Hafijul Islam <hafijul.islam@easyask.com>
- *
- */
 
 .x-product-product-gallery {
     border-radius: 8px;
@@ -21,7 +13,7 @@
 
             a {
                 height: 300px;
-                padding: 20px;
+                padding: 8px;
 
                 img {
                     height: 100%;
@@ -49,12 +41,111 @@
         }
 
         .product-thumbnails {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
+            position: relative;
             width: 100%;
             margin-top: 24px;
+
+            &.owl-carousel {
+                display: block;
+            }
+
+            .owl-stage-outer {
+                width: 100%;
+                min-width: 0;
+                overflow: hidden;
+            }
+
+            .owl-stage {
+                display: flex;
+            }
+
+            .owl-item {
+                flex: 0 0 auto;
+            }
+
+            .thumbnail-page {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                width: 100%;
+                margin: 0 auto;
+            }
+
+            .product-gallery-nav {
+                position: absolute;
+                top: 50%;
+                left: -48px;
+                right: -48px;
+                bottom: auto;
+                z-index: 2;
+                display: flex;
+                justify-content: space-between;
+                transform: translateY(-50%);
+                pointer-events: none;
+
+                .owl-prev,
+                .owl-next {
+                    position: static;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 36px;
+                    height: 36px;
+                    margin: 0;
+                    padding: 0;
+                    border: 0;
+                    border-radius: 50%;
+                    background: var(--brand-primary, #333);
+                    color: #9aa0a6;
+                    transform: none;
+                    cursor: pointer;
+                    pointer-events: auto;
+
+                    &::before {
+                        content: none !important;
+                    }
+
+                    &:not(.disabled) {
+                        background: var(--brand-primary, #C31E1E) !important;
+                        color: #fff !important;
+                    }
+
+                    &.disabled {
+                        background: #9aa0a6 !important;
+                        color: #000 !important;
+                        opacity: 0.4;
+                        cursor: default;
+                    }
+                }
+            }
+
+            .owl-dots {
+                display: flex;
+                justify-content: center;
+                gap: 6px;
+                margin-top: 12px;
+
+                &.disabled {
+                    display: none;
+                }
+
+                .owl-dot {
+                    width: 10px;
+                    height: 10px;
+                    margin: 0;
+                    padding: 0;
+                    border: 0;
+                    border-radius: 50%;
+                    background: #d5dce1;
+
+                    &.active {
+                        width: 25px;
+                        border-radius: 10px;
+                        background: var(--product-gallery-nav-color, #1a78be);
+                    }
+                }
+            }
         }
 
         .product-carousel.owl-carousel .owl-stage {
@@ -63,6 +154,36 @@
 
         .product-carousel.owl-carousel .owl-item {
             flex-shrink: 0;
+        }
+    }
+}
+
+// PhotoSwipe controls the rendered dimensions and transform. Theme-level image
+// constraints cause small slides to be scaled twice and offset from the center.
+.x-product-product-gallery-lightbox .pswp__img {
+    max-width: none !important;
+    max-height: none !important;
+}
+
+@media (max-width: 575px) {
+    .x-product-product-gallery .product-gallery .product-thumbnails {
+        .thumbnail-page {
+            flex-wrap: nowrap;
+        }
+
+        .product-gallery-nav {
+            top: 38px;
+            left: 50%;
+            right: auto;
+            width: 255px;
+            transform: translate(-50%, -50%);
+
+            .owl-prev,
+            .owl-next {
+                width: 30px;
+                height: 44px;
+                border-radius: 6px;
+            }
         }
     }
 }
