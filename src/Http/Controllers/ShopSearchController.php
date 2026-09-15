@@ -14,6 +14,8 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
@@ -34,7 +36,24 @@ class ShopSearchController extends Controller
      */
     public function __invoke(?string $query = null): RedirectResponse|string
     {
-        abort_unless(! customer_check() || customer(true)->can('shop.search'), 403);
+        abort_unless(!customer_check() || customer(true)->can('shop.search'), 403);
+
+        $validator = Validator::make(
+            data: \request()->all(),
+            rules: [
+                'view' => ['nullable', 'string', 'in:list,grid'],
+                'per_page' => ['nullable', 'integer', Rule::in(getPaginationLengths())],
+                'page' => ['nullable', 'integer', 'min:1'],
+                'sort_by' => ['nullable', 'string'],
+            ],
+            attributes: [
+                'per_page' => 'results per page',
+                'sort_by' => 'results order',
+            ]);
+
+        if ($validator->fails()) {
+            abort(500, $validator->errors()->first());
+        }
 
         $eaProductData = store()->eaProductsData;
         $products = $eaProductData->getProducts();
@@ -43,10 +62,10 @@ class ShopSearchController extends Controller
 
         $canRedirectToSingleProduct =
             config('amplify.frontend.redirect_to_product_detail_page_on_search')
-            && ! empty($searchQuery)
+            && !empty($searchQuery)
             && empty($searchMessage)
-            && ! request()->filled('page')
-            && ! empty($products)
+            && !request()->filled('page')
+            && !empty($products)
             && count($products) === 1;
 
         if ($canRedirectToSingleProduct) {
@@ -55,7 +74,7 @@ class ShopSearchController extends Controller
             if ($searchQuery === $firstProduct->Product_Code) {
                 $seoPath = $eaProductData->getCurrentSeoPath();
 
-                if (! empty($firstProduct->Sku_Id)) {
+                if (!empty($firstProduct->Sku_Id)) {
                     $parts = explode('-', $firstProduct->Sku_Id);
                     $skuId = $parts[1] ?? null;
 
@@ -72,7 +91,7 @@ class ShopSearchController extends Controller
 
         $this->loadPageByType('shop');
 
-        $shopPath = '/'.config('amplify.frontend.shop_page_prefix');
+        $shopPath = '/' . config('amplify.frontend.shop_page_prefix');
 
         Cookie::queue('showView', active_shop_view(), MONTH / 60, $shopPath);
         Cookie::queue('resultsPerPage', results_per_page(), MONTH / 60, $shopPath);
@@ -80,7 +99,9 @@ class ShopSearchController extends Controller
         return $this->render();
     }
 
-    private function determineSearchMode($query = null) {}
+    private function determineSearchMode($query = null)
+    {
+    }
 
     /**
      * @throws ContainerExceptionInterface
@@ -89,7 +110,7 @@ class ShopSearchController extends Controller
      */
     public function getQuickView($id): JsonResponse
     {
-        abort_unless(! customer_check() || customer(true)->can('shop.browse'), 403);
+        abort_unless(!customer_check() || customer(true)->can('shop.browse'), 403);
         $response = $this->getProductFromEasyAsk($id, 'All');
         abort_if(isset($response['noResultsMessage']), 404);
 
@@ -98,7 +119,7 @@ class ShopSearchController extends Controller
 
         if (has_erp_customer()) {
             $Product->erpProductList = ErpApi::getProductPriceAvailability([
-                'items' => array_map(fn ($item) => ['item' => $item[1]], $Product->skuList),
+                'items' => array_map(fn($item) => ['item' => $item[1]], $Product->skuList),
             ]);
         }
 

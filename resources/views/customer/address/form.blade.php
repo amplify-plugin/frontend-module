@@ -4,7 +4,6 @@
             <form method="post" action="{{ $action_route }}">
                 @csrf
                 @method($action_method)
-                <input type="hidden" name="customer_id" value="{{ customer()->id }}"/>
                 <div class="row">
                     <div class="col-md-6">
                         {!! \Form::rText('address_name', __('Address Name'), old('address_name', $address->address_name ?? ''), true, [

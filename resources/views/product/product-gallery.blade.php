@@ -41,7 +41,7 @@
                 @foreach ($erpAdditionalImages as $key => $additionalImage)
                     <div class="gallery-item" data-hash="{{ 'erp-item-' . $key }}">
                         <a
-                                href="{{ 'https://www.spisafety.com/images/products/' . $additionalImage['value'] }}">
+                           href="{{ 'https://www.spisafety.com/images/products/' . $additionalImage['value'] }}">
                             <img src="{{ 'https://www.spisafety.com/images/products/' . $additionalImage['value'] }}"
                                  alt="Product">
                         </a>
@@ -62,7 +62,7 @@
                     @if (str_contains($image, 'youtube.com') !== false)
                         @php
                             preg_match('/\/embed\/([a-zA-Z0-9_-]+)/', $image, $matches);
-                            $videoId = $matches[1];
+                            $videoId = $matches[1] ?? '';
                         @endphp
                         <li class="item">
                             <a class="product-thumbnail video-thumbnail" href="#{{ 'item-' . $key }}">

@@ -86,10 +86,18 @@ class AuthenticatedSessionController extends Controller
 
         $request->clearRateLimiter();
 
+        $redirectTo = CustomerHelper::afterLoggedRedirectTo($request->all());
+
         $request->session()->regenerate();
 
+        if ($account->password_reset_required) {
+            return redirect()
+                ->route('frontend.force-reset-password')
+                ->with('warning', __('Please reset your password to continue.'));
+        }
+
         return redirect()
-            ->to(CustomerHelper::afterLoggedRedirectTo($request->all()))
+            ->to($redirectTo)
             ->with('success', __('Welcome back! :name', ['name' => $account->name]));
     }
 

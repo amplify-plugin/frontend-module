@@ -3,6 +3,7 @@
 namespace Amplify\Frontend\Http\Controllers;
 
 use Amplify\ErpApi\Facades\ErpApi;
+use Amplify\Frontend\Services\RecentlyViewedProductService;
 use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\System\Backend\Models\Product;
 use Amplify\System\Backend\Models\ProductRelation;
@@ -36,13 +37,24 @@ class ProductDetailController extends Controller
             abort(404, 'Product Unavailable');
         }
 
+        $productId = $this->resolveRecentlyViewedProductId($product);
+
+        if (customer_check() && config('amplify.recently_viewed.enabled', true) && $productId > 0) {
+            app(RecentlyViewedProductService::class)->record($productId, customer(true));
+        }
+
         try {
 
             $eaKey = $product instanceof ItemRow ? $product->Amplify_Id : $product->id;
 
-            store()->eaProductDetail = Sayt::storeProductDetail($eaKey, \request('ref'), ['return_skus' => request('return_skus', false)]);
+            store()->eaProductDetail = Sayt::storeProductDetail(
+                $eaKey,
+                $this->resolveProductDetailSeoPath(),
+                ['return_skus' => request('return_skus', false)]
+            );
 
-            $this->setProductPreviewPage($product);
+            $this->setProductPreviewPage($product instanceof Product ? $product : null);
+            $this->pushGuestRecentlyViewedTracking($productId);
 
             return $this->render();
         } catch (NotFoundHttpException $exception) {
@@ -53,13 +65,66 @@ class ProductDetailController extends Controller
     }
 
     /**
+     * Merchandising refs are valid for list links but break EasyAsk single-product lookup.
+     */
+    private function resolveProductDetailSeoPath(): ?string
+    {
+        $ref = request('ref');
+
+        if (empty($ref)) {
+            return null;
+        }
+
+        if (preg_match('/^merchandising\s*:/i', (string) $ref)) {
+            return null;
+        }
+
+        return $ref;
+    }
+
+    /**
+     * Resolve a numeric product ID from Product or Sayt ItemRow.
+     */
+    private function resolveRecentlyViewedProductId(mixed $product): int
+    {
+        if ($product instanceof ItemRow) {
+            return (int) ($product->Amplify_Id ?? 0);
+        }
+
+        if ($product instanceof Product) {
+            return (int) ($product->getKey() ?: 0);
+        }
+
+        return (int) (data_get($product, 'id') ?: data_get($product, 'Amplify_Id') ?: 0);
+    }
+
+    /**
+     * Persist guest recently-viewed IDs in localStorage when Amplify boots.
+     */
+    private function pushGuestRecentlyViewedTracking(int $productId): void
+    {
+        if (customer_check() || ! config('amplify.recently_viewed.enabled', true) || $productId <= 0) {
+            return;
+        }
+
+        // Register before Amplify.init (pushed in render()) so the listener is ready.
+        push_js(<<<JS
+window.addEventListener('amplify.init', function () {
+    if (window.Amplify?.RecentlyViewed) {
+        Amplify.RecentlyViewed.record({$productId});
+    }
+});
+JS, 'template-script');
+    }
+
+    /**
      * set the product detail page style to load
      *
      * @throws ErrorException
      */
     private function setProductPreviewPage(?Product $product = null): void
     {
-        if (($page = $product->singleProductPage) && config('amplify.pim.use_product_specific_detail_page', false)) {
+        if ($product && ($page = $product->singleProductPage) && config('amplify.pim.use_product_specific_detail_page', false)) {
             store()->dynamicPageModel = $page;
         } else {
             $this->loadPageByType('single_product');

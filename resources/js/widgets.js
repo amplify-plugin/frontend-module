@@ -1,5 +1,8 @@
 import Swal from 'sweetalert2';
 import {AddToCartEvent, InitEvent, RemoveFromCartEvent, RequestQuoteEvent} from './events.js';
+import {QuickOrder} from './modules/quick-order.js';
+import {MediaQuery} from './modules/media-query.js';
+import {RecentlyViewed} from "./modules/recently-viewed";
 
 window.swal = Swal.mixin({
     theme: 'bootstrap-4-light',
@@ -12,6 +15,11 @@ window.swal = Swal.mixin({
 });
 
 window.Amplify = {
+    modules: {
+        QuickOrder,
+        MediaQuery,
+        RecentlyViewed
+    },
     config: {
         env: 'production',
         name: 'Amplify',
@@ -21,6 +29,7 @@ window.Amplify = {
         dateFormat: 'dd/mm/yyyy',
         dateTimeFormat: 'dd/mm/yyyy',
         allowGuestPrice: false,
+        authenticated : false,
         cart: {},
         url: {
             carts: '/carts',
@@ -30,9 +39,71 @@ window.Amplify = {
         }
     },
     cart: {},
+    initialized: false,
+
+    /**
+     * Register an Amplify module.
+     */
+    register(name, module) {
+        if (this.modules[name]) {
+            console.warn(`Amplify module "${name}" is already registered.`);
+            return this;
+        }
+
+        this.modules[name] = module;
+
+        // Initialize immediately if Amplify is already initialized.
+        if (this.initialized) {
+            this.initializeModule(name, module);
+        }
+
+        return this;
+    },
+
+    initializeModule(name, module) {
+
+        if (typeof module.init !== 'function') {
+            console.error(`Amplify module "${name}" is missing an init() function.`);
+            return false;
+        }
+
+        if (this.hasOwnProperty(name)) {
+            console.error(`Amplify has a reserved property name "${name}".`);
+            return false;
+        }
+
+        try {
+
+            this[name] = module.init(this);
+
+            if (this.config.debug) {
+                console.log(`${name} module initialized.`);
+            }
+
+            return true;
+
+        } catch (error) {
+            console.error(
+                `Failed to initialize Amplify module "${name}".`,
+                error
+            );
+
+            return false;
+        }
+    },
+
+    initModules() {
+        for (const [name, module] of Object.entries(this.modules)) {
+            this.initializeModule(name, module);
+        }
+    },
 
     init(config) {
+
         this.config = config;
+
+        this.initModules();
+
         window.dispatchEvent(new InitEvent(this.config));
     },
 
@@ -44,23 +115,23 @@ window.Amplify = {
         return this.config.url.carts + append;
     },
 
-    cartItemRemoveUrl() {
+    get cartItemRemoveUrl() {
         return '/carts/remove/cart_item_id';
     },
 
-    maxCartItemQuantity() {
+    get maxCartItemQuantity() {
         return this.config.cart.maxQuantity;
     },
 
-    favouritesCreateUrl() {
+    get favouritesCreateUrl() {
         return this.config.url.favourites;
     },
 
-    orderListUrl() {
+    get orderListUrl() {
         return this.config.url.orderLists;
     },
 
-    orderExportUrl() {
+    get orderExportUrl() {
         return this.config.url.orderExport;
     },
 
@@ -103,9 +174,8 @@ window.Amplify = {
      * The function validate if the customer is logged in
      * return bool
      */
-    authenticated() {
-        const meta = document.querySelector('meta[name="authenticated"]');
-        return meta ? meta.content === 'true' : false;
+    get authenticated() {
+        return this.config.authenticated;
     },
 
     /**
@@ -1377,6 +1447,44 @@ window.Amplify = {
     // Gallery (Photoswipe)
     //------------------------------------------------------------------------------
     initPhotoSwipeFromDOM(gallerySelector = '.gallery-wrapper') {
+        const PHOTOSWIPE_MIN_LONG_EDGE = 1600;
+        const PHOTOSWIPE_FALLBACK_WIDTH = 1600;
+        const PHOTOSWIPE_FALLBACK_HEIGHT = 1200;
+
+        // PhotoSwipe will not upscale slides smaller than the viewport, so a 210x45
+        // badge sits as a tiny overlay on the previous large image. Keep aspect ratio
+        // but give every slide a large enough layout size to fill the lightbox.
+        var normalizePhotoSwipeSize = function (width, height) {
+            var w = parseInt(width, 10) || 0;
+            var h = parseInt(height, 10) || 0;
+
+            if (w < 1 || h < 1) {
+                return {w: PHOTOSWIPE_FALLBACK_WIDTH, h: PHOTOSWIPE_FALLBACK_HEIGHT};
+            }
+
+            var longEdge = Math.max(w, h);
+            if (longEdge < PHOTOSWIPE_MIN_LONG_EDGE) {
+                var scale = PHOTOSWIPE_MIN_LONG_EDGE / longEdge;
+                w = Math.round(w * scale);
+                h = Math.round(h * scale);
+            }
+
+            return {w: w, h: h};
+        };
+
+        var photoSwipeSizeFromLink = function (linkEl) {
+            var sizeAttr = linkEl.getAttribute('data-size');
+            if (sizeAttr && sizeAttr.indexOf('x') !== -1) {
+                var parts = sizeAttr.split('x');
+                if (parseInt(parts[0], 10) > 0 && parseInt(parts[1], 10) > 0) {
+                    return normalizePhotoSwipeSize(parts[0], parts[1]);
+                }
+            }
+
+            var imgEl = linkEl.querySelector('img');
+            return normalizePhotoSwipeSize(imgEl && imgEl.naturalWidth, imgEl && imgEl.naturalHeight);
+        };
+
         // parse slide data (url, title, size ...) from DOM elements
         // (children of gallerySelector)
         var parseThumbnailElements = function (el) {
@@ -1385,7 +1493,6 @@ window.Amplify = {
                 items = [],
                 figureEl,
                 linkEl,
-                size,
                 item;
 
             for (var i = 0; i < numNodes; i++) {
@@ -1405,28 +1512,12 @@ window.Amplify = {
                         html: $(linkEl).data('video')
                     };
                 } else {
-                    const sizeAttr = linkEl.getAttribute('data-size');
-
-                    if (sizeAttr) {
-                        // ✅ USE data-size
-                        const size = sizeAttr.split('x');
-
-                        item = {
-                            src: linkEl.getAttribute('href'),
-                            w: parseInt(size[0], 10),
-                            h: parseInt(size[1], 10)
-                        };
-
-                    } else {
-                        // 🔥 FIX: get size from existing <img> (NO async)
-                        const imgEl = linkEl.querySelector('img');
-
-                        item = {
-                            src: linkEl.getAttribute('href'),
-                            w: imgEl?.naturalWidth || imgEl?.width || 800,
-                            h: imgEl?.naturalHeight || imgEl?.height || 600
-                        };
-                    }
+                    var size = photoSwipeSizeFromLink(linkEl);
+                    item = {
+                        src: linkEl.getAttribute('href'),
+                        w: size.w,
+                        h: size.h
+                    };
                 }
 
                 if (figureEl.children.length > 1) {
@@ -1534,27 +1625,13 @@ window.Amplify = {
 
             // define options (if needed)
             options = {
-
                 closeOnScroll: false,
-
-                // define gallery index (for URL)
+                // Owl already owns hashes like #item-3; PhotoSwipe history would fight that.
+                history: false,
+                focus: false,
+                // Off-screen Owl slides report bogus thumb bounds and leave zoom leftovers.
+                showHideOpacity: true,
                 galleryUID: galleryElement.getAttribute('data-pswp-uid'),
-
-                getThumbBoundsFn: function (index) {
-                    // See Options -> getThumbBoundsFn section of documentation for more info
-                    var thumbnail = items[index].el.getElementsByTagName('img')[0]; // find thumbnail
-                    if ($(thumbnail).length > 0) {
-                        var pageYScroll = window.pageYOffset || document.documentElement.scrollTop,
-                            rect = thumbnail.getBoundingClientRect();
-
-                        return {
-                            x: rect.left,
-                            y: rect.top + pageYScroll,
-                            w: rect.width
-                        };
-                    }
-                }
-
             };
 
             // PhotoSwipe opened from URL
@@ -1589,10 +1666,34 @@ window.Amplify = {
             gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
             gallery.init();
 
+            gallery.listen('gettingData', function (index, item) {
+                if (item.html || item._sizeLoading || !item.src) {
+                    return;
+                }
+
+                item._sizeLoading = true;
+                var preload = new Image();
+                preload.onload = function () {
+                    var loadedSize = normalizePhotoSwipeSize(preload.naturalWidth, preload.naturalHeight);
+                    if (item.w === loadedSize.w && item.h === loadedSize.h) {
+                        return;
+                    }
+                    item.w = loadedSize.w;
+                    item.h = loadedSize.h;
+                    gallery.invalidateCurrItems();
+                    gallery.updateSize(true);
+                };
+                preload.src = item.src;
+            });
+
+            gallery.listen('afterChange', function () {
+                gallery.updateSize(true);
+            });
+
             gallery.listen('beforeChange', function () {
                 var currItem = $(gallery.currItem.container);
                 $('.pswp__video').removeClass('active');
-                var currItemIframe = currItem.find('.pswp__video').addClass('active');
+                currItem.find('.pswp__video').addClass('active');
                 $('.pswp__video').each(function () {
                     if (!$(this).hasClass('active')) {
                         $(this).attr('src', $(this).attr('src'));
@@ -1625,45 +1726,58 @@ window.Amplify = {
 
     productSlider: function (target) {
         let $productCarousel = $(target);
-        // Carousel init
+
+        const syncProductGalleryThumbs = function (e) {
+            const $carousel = $(e.target);
+            const $gallery = $carousel.closest('.product-gallery');
+            if (!$gallery.length) {
+                return;
+            }
+
+            const index = e.item.index;
+            $gallery.find('[data-gallery-index]').removeClass('active');
+            $gallery.find('[data-gallery-index="' + index + '"]').addClass('active');
+        };
+
+        // Theme scripts may already have initialized this carousel.
+        if ($productCarousel.data('owl.carousel')) {
+            $productCarousel.on('translate.owl.carousel translated.owl.carousel', syncProductGalleryThumbs);
+            return;
+        }
+
         $productCarousel.owlCarousel({
             items: 1,
             loop: false,
             dots: false,
-            URLhashListener: true,
-            startPosition: 'URLHash',
-            onTranslate: function (e) {
-                var i = e.item.index;
-                var $activeHash = $('.owl-item').eq(i).find('[data-hash]').attr('data-hash');
-                $('.product-thumbnails li').removeClass('active');
-                $('[href="#' + $activeHash + '"]').parent().addClass('active');
-                $('.gallery-wrapper .gallery-item').removeClass('active');
-                $('[data-hash="' + $activeHash + '"]').parent().addClass('active');
-
-            }
+            autoRefresh: false,
+            URLhashListener: false,
+            onTranslate: syncProductGalleryThumbs,
         });
     },
 
     thumbnailCarousel: function (target) {
-        let $thumbnailCarousel = $(target);
-        // Carousel init
-        $thumbnailCarousel.owlCarousel({
-            margin: 10,
-            dots: false,
-            nav: true,
-            navText: ["", ""],
-            autoWidth: true,
-            responsive: {
-                0: {
-                    items: 3,
-                },
-                600: {
-                    items: 4,
-                },
-                1000: {
-                    items: 5,
-                },
-            },
+        const $thumbs = $(target);
+        if (!$thumbs.length) {
+            return;
+        }
+
+        $thumbs.on('click', '[data-gallery-index]', function (event) {
+            event.preventDefault();
+
+            const index = parseInt(this.getAttribute('data-gallery-index'), 10);
+            if (Number.isNaN(index)) {
+                return;
+            }
+
+            const $gallery = $thumbs.closest('.product-gallery');
+            const $main = $gallery.find('.product-carousel');
+
+            $thumbs.find('[data-gallery-index]').removeClass('active');
+            $(this).addClass('active');
+
+            if ($main.data('owl.carousel')) {
+                $main.trigger('to.owl.carousel', [index, 200, true]);
+            }
         });
     },
 
@@ -1899,5 +2013,5 @@ window.Amplify = {
     acceptCookie() {
         window.localStorage.setItem('consented', 'true');
         $('#cookie-consent-modal').modal('hide');
-    }
+    },
 }
