@@ -49,11 +49,6 @@
     }
 
     .product-thumbnails {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      width: 100%;
-
       .owl-nav {
         .owl-prev {
           &.disabled {

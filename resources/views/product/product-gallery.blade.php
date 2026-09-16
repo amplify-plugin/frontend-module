@@ -44,10 +44,11 @@
                 @endforeach
             </div>
             <ul class="product-thumbnails owl-carousel"
-                @style(['order: -1' => $thumbnailPosition == 'left']) data-owl-carousel="{{ $thumbnailCarouselConfig() }}">
+                @style(['order: -1' => $thumbnailPosition == 'left'])
+                data-owl-carousel="{{ $thumbnailCarouselConfig() }}">
 
-                <li class="item active" data-gallery-index="0">
-                    <a class="product-thumbnail" href="#item-0">
+                <li class="product-thumbnail item active" data-gallery-index="0">
+                    <a class="text-decoration-none" href="#item-0">
                         <img src="{{ assets_image($productImage->main ?? '') }}" alt="Product" class="img-fluid"/>
                     </a>
                 </li>
@@ -58,15 +59,15 @@
                             preg_match('/\/embed\/([a-zA-Z0-9_-]+)/', $image, $matches);
                             $videoId = $matches[1] ?? '';
                         @endphp
-                        <li class="item" data-gallery-index="{{$key + 1}}">
-                            <a class="product-thumbnail video-thumbnail" href="#{{ 'item-' . ($key + 1) }}">
+                        <li class="product-thumbnail item" data-gallery-index="{{$key + 1}}">
+                            <a class="text-decoration-none video-thumbnail" href="#{{ 'item-' . ($key + 1) }}">
                                 <img src="https://img.youtube.com/vi/{{ $videoId }}/hqdefault.jpg" alt="Product"
                                      class="img-fluid">
                             </a>
                         </li>
                     @else
-                        <li class="item" data-gallery-index="{{$key + 1}}">
-                            <a class="product-thumbnail" href="#{{ 'item-' . ($key + 1) }}">
+                        <li class="product-thumbnail item" data-gallery-index="{{$key + 1}}">
+                            <a class="text-decoration-none" href="#{{ 'item-' . ($key + 1) }}">
                                 <img src="{{ assets_image($image ?? '') }}" alt="Product" class="img-fluid"/>
                             </a>
                         </li>
@@ -74,8 +75,8 @@
                 @endforeach
 
                 @foreach ($erpItems as $key => $additionalImage)
-                    <li class="item">
-                        <a class="product-thumbnail" href="#{{ 'item-' . ($extraItemCount + $key + 1) }}">
+                    <li class="product-thumbnail item">
+                        <a class="text-decoration-none" href="#{{ 'item-' . ($extraItemCount + $key + 1) }}">
                             <img src="{{ assets_image($additionalImage['value']) }}" alt="Product"
                                  class="img-fluid"/>
                         </a>

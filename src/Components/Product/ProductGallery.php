@@ -20,7 +20,7 @@ class ProductGallery extends BaseComponent
         public        $image,
         public        $erpAdditionalImages = [],
         public        $product = null,
-        public string $thumbnailPosition = 'bottom',
+        public string $thumbnailPosition = 'bottom'
     )
     {
         parent::__construct();
@@ -57,13 +57,9 @@ class ProductGallery extends BaseComponent
             'dots' => true,
             'loop' => false,
             'autoplay' => false,
-            'margin' => 12,
-            'responsive' => [
-                0 => ['items' => 1],
-                567 => ['items' => 2],
-                769 => ['items' => 3],
-                1201 => ['items' => 4],
-            ],
+            'margin' => 8,
+            'autoWidth' => true,
+            'autoHeight' => true,
         ]);
 
     }
