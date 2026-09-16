@@ -1,88 +1,90 @@
 <div {!! $htmlAttributes !!}>
     <div class="product-gallery">
-        <div class="product-carousel owl-carousel gallery-wrapper">
-            <div class="gallery-item" data-hash="item-one">
-                <a  href="{{ $productImage->main ?? ' ' }}">
-                    <img src="{{ $productImage->main ?? ' ' }}" alt="Product">
-                </a>
-                @if(!empty($product))
-                    <span class="caption">{{ $product->product_name }}</span>
-                @endif
-            </div>
 
-            @if (!empty($productImage->additional))
-                @foreach ($productImage->additional as $key => $image)
+        {!! $before ?? '' !!}
+        <div @class(['d-flex gap-2 justify-content-start' => $thumbnailPosition == 'left'])>
+            <div class="product-carousel owl-carousel gallery-wrapper">
+
+                <div class="gallery-item" data-hash="item-0">
+                    <a href="{{ assets_image($productImage->main ?? '') }}">
+                        <img src="{{ assets_image($productImage->main ?? '') }}" alt="Product" class="img-fluid">
+                    </a>
+                </div>
+
+                @foreach ($additionalItems as $key => $image)
                     @if (str_contains($image, 'youtube.com') !== false)
                         @php
                             preg_match('/\/embed\/([a-zA-Z0-9_-]+)/', $image, $matches);
                             $videoId = $matches[1];
                         @endphp
-                        <div class="gallery-item video-btn text-center" data-hash="{{ 'item-' . $key }}">
+                        <div class="gallery-item video-btn text-center" data-hash="{{ 'item-' . ($key + 1) }}">
                             <a data-toggle="tooltip" data-type="video" data-size="1920x1080"
                                data-video="&lt;div class=&quot;wrapper&quot;&gt;&lt;div class=&quot;video-wrapper&quot;&gt;&lt;iframe class=&quot;pswp__video&quot; width=&quot;960&quot; height=&quot;640&quot; src=&quot;{{ $image }}&quot; frameborder=&quot;0&quot; autoplay&gt; allowfullscreen&gt;&lt;/iframe&gt;&lt;/div&gt;&lt;/div&gt;"
                                href="https://img.youtube.com/vi/{{ $videoId }}/hqdefault.jpg">
-                                <img src="https://img.youtube.com/vi/{{ $videoId }}/hqdefault.jpg" alt="Product">
+                                <img src="https://img.youtube.com/vi/{{ $videoId }}/hqdefault.jpg" alt="Product"
+                                     class="img-fluid">
                             </a>
                         </div>
                     @else
-                        <div class="gallery-item" data-hash="{{ 'item-' . $key }}">
+                        <div class="gallery-item" data-hash="{{ 'item-' . ($key + 1) }}">
                             <a href="{{ assets_image($image ?? '') }}">
-                                <img src="{{ assets_image($image ?? '') }}" alt="Product">
+                                <img src="{{ assets_image($image ?? '') }}" alt="Product" class="img-fluid">
                             </a>
                         </div>
                     @endif
                 @endforeach
-            @endif
 
-            @if (!empty($erpAdditionalImages))
-                @foreach ($erpAdditionalImages as $key => $additionalImage)
-                    <div class="gallery-item" data-hash="{{ 'erp-item-' . $key }}">
-                        <a
-                           href="{{ 'https://www.spisafety.com/images/products/' . $additionalImage['value'] }}">
-                            <img src="{{ 'https://www.spisafety.com/images/products/' . $additionalImage['value'] }}"
-                                 alt="Product">
+                @foreach ($erpItems as $key => $additionalImage)
+                    <div class="gallery-item" data-hash="{{ 'item-' . ($extraItemCount + $key + 1) }}">
+                        <a href="{{ assets_image($additionalImage['value']) }}">
+                            <img src="{{ assets_image($additionalImage['value']) }}" alt="Product"
+                                 class="img-fluid">
                         </a>
                     </div>
                 @endforeach
-            @endif
-        </div>
+            </div>
+            <ul class="product-thumbnails owl-carousel"
+                @style(['order: -1' => $thumbnailPosition == 'left']) data-owl-carousel="{{ $thumbnailCarouselConfig() }}">
 
-        {{-- Flex row, not Owl: hash + autoWidth Owl was collapsing thumbs into one image after clicks. --}}
-        <div class="product-thumbnails thumbnails-carousel">
-            @php $galleryIndex = 0; @endphp
-            <a class="product-thumbnail item active" href="#" data-gallery-index="{{ $galleryIndex++ }}">
-                <img src="{{ $productImage->main ?? ' ' }}" alt="Product" class="img-fluid"/>
-            </a>
+                <li class="item active" data-gallery-index="0">
+                    <a class="product-thumbnail" href="#item-0">
+                        <img src="{{ assets_image($productImage->main ?? '') }}" alt="Product" class="img-fluid"/>
+                    </a>
+                </li>
 
-            @if (!empty($productImage->additional))
-                @foreach ($productImage->additional as $image)
+                @foreach ($additionalItems as $key => $image)
                     @if (str_contains($image, 'youtube.com') !== false)
                         @php
                             preg_match('/\/embed\/([a-zA-Z0-9_-]+)/', $image, $matches);
                             $videoId = $matches[1] ?? '';
                         @endphp
-                        <a class="product-thumbnail item video-thumbnail" href="#" data-gallery-index="{{ $galleryIndex++ }}">
-                            <img src="https://img.youtube.com/vi/{{ $videoId }}/hqdefault.jpg" alt="Product">
-                        </a>
+                        <li class="item" data-gallery-index="{{$key + 1}}">
+                            <a class="product-thumbnail video-thumbnail" href="#{{ 'item-' . ($key + 1) }}">
+                                <img src="https://img.youtube.com/vi/{{ $videoId }}/hqdefault.jpg" alt="Product"
+                                     class="img-fluid">
+                            </a>
+                        </li>
                     @else
-                        <a class="product-thumbnail item" href="#" data-gallery-index="{{ $galleryIndex++ }}">
-                            <img src="{{ assets_image($image ?? '') }}" alt="Product"/>
-                        </a>
+                        <li class="item" data-gallery-index="{{$key + 1}}">
+                            <a class="product-thumbnail" href="#{{ 'item-' . ($key + 1) }}">
+                                <img src="{{ assets_image($image ?? '') }}" alt="Product" class="img-fluid"/>
+                            </a>
+                        </li>
                     @endif
                 @endforeach
-            @endif
 
-            @if (!empty($erpAdditionalImages))
-                @foreach ($erpAdditionalImages as $additionalImage)
-                    <a class="product-thumbnail item" href="#" data-gallery-index="{{ $galleryIndex++ }}">
-                        <img
-                            src="{{ 'https://www.spisafety.com/images/products/thumb/' . $additionalImage['value'] }}"
-                            alt="Product"
-                        />
-                    </a>
+                @foreach ($erpItems as $key => $additionalImage)
+                    <li class="item">
+                        <a class="product-thumbnail" href="#{{ 'item-' . ($extraItemCount + $key + 1) }}">
+                            <img src="{{ assets_image($additionalImage['value']) }}" alt="Product"
+                                 class="img-fluid"/>
+                        </a>
+                    </li>
                 @endforeach
-            @endif
+            </ul>
         </div>
+        {!! $after ?? '' !!}
+
     </div>
 </div>
 
@@ -127,9 +129,8 @@
     <script>
         $(function () {
             Amplify.initPhotoSwipeFromDOM('.gallery-wrapper');
-
             Amplify.productSlider('.product-carousel');
-            Amplify.thumbnailCarousel('.product-thumbnails');
+            Amplify.thumbnailCarousel('product-gallery ul.product-thumbnails');
         });
     </script>
 @endpushonce

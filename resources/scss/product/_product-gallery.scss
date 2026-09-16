@@ -8,61 +8,81 @@
  */
 
 .x-product-product-gallery {
-    border-radius: 8px;
-    border: 1px solid #e9e9ea;
-    padding: 16px;
-    width: 100% !important;
-    height: 490px;
+  border-radius: 8px;
+  border: 1px solid #e9e9ea;
+  width: 100% !important;
+  height: 490px;
 
-    .product-gallery {
+  .product-gallery {
 
-        .gallery-item {
-            width: 100%;
+    .gallery-item {
+      width: 100%;
 
-            a {
-                height: 300px;
-                padding: 20px;
+      a {
+        height: 300px;
+        padding: 20px;
 
-                img {
-                    height: 100%;
-                    object-fit: contain;
-                }
-            }
+        img {
+          height: 100%;
+          object-fit: contain;
         }
-
-        .product-thumbnail {
-            height: 96px;
-            width: 96px;
-            display: inline-block;
-            padding: 0.75rem;
-            border: 1px solid #e9e9ea;
-            border-radius: 8px;
-            img {
-                width: 100%;
-                height: 100%;
-                object-fit: contain;
-            }
-
-            &.active {
-                border-color: #000;
-            }
-        }
-
-        .product-thumbnails {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-            margin-top: 24px;
-        }
-
-        .product-carousel.owl-carousel .owl-stage {
-            display: block !important;
-        }
-
-        .product-carousel.owl-carousel .owl-item {
-            flex-shrink: 0;
-        }
+      }
     }
+
+    .product-thumbnail {
+      height: 96px;
+      width: 96px;
+      display: inline-block;
+      padding: 0.5rem;
+      border: 1px solid #e9e9ea;
+      border-radius: 8px;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      &.active {
+        border-color: #000;
+      }
+    }
+
+    .product-thumbnails {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
+
+      .owl-nav {
+        .owl-prev {
+          &.disabled {
+            display: none;
+          }
+        }
+
+        .owl-next {
+          &.disabled {
+            display: none;
+          }
+        }
+      }
+
+      .owl-dots {
+        margin-top: 0 !important;
+      }
+    }
+
+    .product-carousel {
+      &.owl-carousel {
+        .owl-stage {
+          display: block;
+        }
+
+        .owl-item {
+          flex-shrink: 0;
+        }
+      }
+    }
+  }
 }
