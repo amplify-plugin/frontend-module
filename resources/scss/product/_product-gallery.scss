@@ -44,7 +44,7 @@
       }
 
       &.active {
-        border-color: #000;
+        border-color: var(--primary, #000);
       }
     }
 
