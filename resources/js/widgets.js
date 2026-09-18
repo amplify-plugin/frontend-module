@@ -115,23 +115,23 @@ window.Amplify = {
         return this.config.url.carts + append;
     },
 
-    get cartItemRemoveUrl() {
+    cartItemRemoveUrl() {
         return '/carts/remove/cart_item_id';
     },
 
-    get maxCartItemQuantity() {
+    maxCartItemQuantity() {
         return this.config.cart.maxQuantity;
     },
 
-    get favouritesCreateUrl() {
+    favouritesCreateUrl() {
         return this.config.url.favourites;
     },
 
-    get orderListUrl() {
+    orderListUrl() {
         return this.config.url.orderLists;
     },
 
-    get orderExportUrl() {
+    orderExportUrl() {
         return this.config.url.orderExport;
     },
 
@@ -174,7 +174,7 @@ window.Amplify = {
      * The function validate if the customer is logged in
      * return bool
      */
-    get authenticated() {
+    authenticated() {
         return this.config.authenticated;
     },
 
