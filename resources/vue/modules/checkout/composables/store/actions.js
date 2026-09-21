@@ -10,6 +10,7 @@ import {
 } from '../../mock';
 
 import {useValidate} from "@/composables/useValidate";
+import axios from  'axios';
 
 const validator = useValidate();
 
@@ -46,6 +47,57 @@ export default {
 
         if (this.shippingGroups.length > 0) {
             this.shippingGroup = this.shippingGroups[0];
+        }
+
+        this.fillAccountData();
+
+        this.fillShippingData();
+    },
+
+    fillAccountData(data = {}) {
+
+        data = JSON.parse(JSON.stringify(data));
+
+        this.account.name = this.contact.name ?? '';
+        this.account.email = this.contact.email ?? '';
+        this.account.phone = this.contact.phone ?? '';
+        this.account.company = this.customer.CustomerName ?? '';
+        this.account.addressLine1 = this.customer.CustomerAddress1 ?? '';
+        this.account.addressLine2 = this.customer.CustomerAddress2 ?? '';
+        this.account.addressLine3 = this.customer.CustomerAddress3 ?? '';
+        this.account.city = this.customer.CustomerCity ?? '';
+        this.account.state = this.customer.CustomerState ?? '';
+        this.account.country = this.customer.CustomerCountry ?? '';
+        this.account.zipCode = this.customer.CustomerZipCode ?? '';
+
+        //@TODO Dynamic entries
+
+        this.account.errors = validator.make();
+    },
+
+    fillShippingData(data = {}) {
+
+        data = JSON.parse(JSON.stringify(data));
+
+        this.shipping.name = data.ShipToName ?? '';
+        this.shipping.number = data.ShipToNumber ?? '';
+        this.shipping.addressLine1 = data.ShipToAddress1 ?? '';
+        this.shipping.addressLine2 = data.ShipToAddress2 ?? '';
+        this.shipping.addressLine3 = data.ShipToAddress3 ?? '';
+        this.shipping.country = data.ShipToCountryCode ?? '';
+        this.shipping.state = data.ShipToState ?? '';
+        this.shipping.city = data.ShipToCity ?? '';
+        this.shipping.zipCode = data.ShipToZipCode ?? '';
+        this.shipping.method = data.CarrierCode ?? '';
+        this.shipping.contact = data.ShipToContact ?? this.account.name ?? '';
+        this.shipping.phone = data.ShipToPhoneNumber ?? this.account.phone ?? '';
+
+        //@TODO Dynamic entries
+
+        this.shipping.errors = validator.make();
+
+        if (data?.ShipToNumber) {
+            this.fetchShippingOptions();
         }
     },
 
@@ -103,37 +155,85 @@ export default {
     validateCurrentStep() {
         switch (this.activeStep) {
             case 'account':
-                this.validation = validator.make(this, {
-                    'contact.name' : ['required', 'min:2', 'max:255'],
-                    'contact.email' : ['required', 'min:5', 'max:255', 'email'],
-                    'contact.phone' : ['required', 'min:10', 'max:17'],
-                });
+                this.account.errors = validator.make(
+                    this.account, {
+                        name: ['required', 'min:2', 'max:255'],
+                        email: ['required', 'min:5', 'max:255', 'email'],
+                        phone: ['required', 'min:10', 'max:17'],
+                        company: ['required', 'min:2', 'max:255'],
+                        addressLine1: ['required', 'max:255'],
+                        addressLine2: ['nullable', 'max:255'],
+                        addressLine3: ['nullable', 'max:255'],
+                        country: ['required', 'max:255'],
+                        state: ['required', 'max:255'],
+                        city: ['required', 'max:255'],
+                        zipCode: ['required'],
+                        poNumber: [this.customer?.PoRequired === 'Y' ? 'required' : 'nullable'],
+                    }, {},
+                    {
+                        addressLine1: 'Address Line 1',
+                        addressLine2: 'Address Line 2',
+                        addressLine3: 'Address Line 3',
+                        zipCode: 'ZIP Code',
+                        poNumber: 'PO Number',
+                    });
 
-                return true;
+                if (this.account.errors.failed()) {
+                    window.Amplify.notify(
+                        'error',
+                        this.account.errors.errors().length > 1
+                            ? 'The given data is invalid.'
+                            : this.account.errors.message,
+                        'Validation Failed');
+                }
 
-                // if (this.contact?.name == null || this.contact?.name === '') {
-                //     this.validationError = 'The name field is required.';
-                //     return false;
-                // }
-                //
-                // if (this.shipping?.ShipToNumber == null || this.shipping?.ShipToNumber === '') {
-                //     this.validationError = 'Please select a shipping address.';
-                //     return false;
-                // }
+                return this.account.errors.passed();
 
             case 'shipping':
-                if (!this.selectedShippingMethod) {
-                    this.validationError = 'Please, Select a Shipping Method!';
-                    return false;
+                this.shipping.errors = validator.make(
+                    this.shipping, {
+                        name: ['required', 'max:255'],
+                        number: ['required', 'max:255'],
+                        addressLine1: ['required', 'max:255'],
+                        addressLine2: ['nullable', 'max:255'],
+                        addressLine3: ['nullable', 'max:255'],
+                        country: ['required', 'max:255'],
+                        state: ['required', 'max:255'],
+                        city: ['required', 'max:255'],
+                        zipCode: ['required'],
+                        phone: ['required', 'min:10', 'max:17'],
+                        contact: ['required', 'max:255'],
+                    }, {},
+                    {
+                        addressLine1: 'Address Line 1',
+                        addressLine2: 'Address Line 2',
+                        addressLine3: 'Address Line 3',
+                        zipCode: 'ZIP Code',
+                    });
+
+                if (this.shipping.errors.failed()) {
+                    window.Amplify.notify(
+                        'error',
+                        this.shipping.errors.errors().length > 1
+                            ? 'The given data is invalid.'
+                            : this.shipping.errors.message,
+                        'Validation Failed');
                 }
-                if (
-                    this.selectedShippingMethod.frttermscd === 'C' &&
-                    !this.freightAccountNumber
-                ) {
-                    this.validationError = 'Enter your freight account number.';
-                    return false;
-                }
-                return true;
+
+                return this.shipping.errors.passed();
+            //
+            // if (!this.selectedShippingMethod) {
+            //     this.validationError = 'Please, Select a Shipping Method!';
+            //     return false;
+            // }
+            // if (
+            //     this.selectedShippingMethod.frttermscd === 'C' &&
+            //     !this.freightAccountNumber
+            // ) {
+            //     this.validationError = 'Enter your freight account number.';
+            //     return false;
+            // }
+            // return true;
 
             case 'review':
                 // The reference review page has no PO field; PO/notes stay
@@ -143,6 +243,40 @@ export default {
             default:
                 return true;
         }
+    },
+
+    fetchShippingOptions() {
+        window.Amplify.confirm('Fetching Shipping Options', 'Checkout', '', {
+            allowEscapeKey: false,
+            showCancelButton: false,
+            willOpen: () => document.querySelector('.swal2-actions').style.justifyContent = 'center',
+            didOpen: () => {
+                window.swal.showLoading();
+                return axios.post('/get/shipping/option', {
+                    shipping_method: this.shipping.method,
+                    shipping_name: this.shipping.name,
+                    customer_order_ref: this.account.poNumber,
+                    ship_to_number: this.shipping.number,
+                    customer_address_one: this.shipping.addressLine1,
+                    customer_address_two: this.shipping.addressLine2,
+                    customer_address_three: this.shipping.addressLine3,
+                    customer_city: this.shipping.city,
+                    customer_country_code: this.shipping.country,
+                    customer_state: this.shipping.state,
+                    customer_zipcode: this.shipping.zipCode,
+                    customer_phone: this.shipping.phone,
+                }, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+
+                    }
+                }).then((response) => {
+                    this.shipOptions = response.data;
+                    window.swal.close();
+                });
+            }
+        });
     },
 
     selectShippingMethod(group, method) {

@@ -78,6 +78,9 @@ const defaultRules = {
         if (Array.isArray(val)) return val.length > 0
         return true
     },
+    nullable: (val) => {
+        return true
+    },
     min: (val, param) => {
         if (val === null || val === undefined || val === '') return true
         const num = Number(param)
@@ -238,7 +241,6 @@ function formatAttributeName(key) {
         .split('.')
         .map(part => part.replace(/_/g, ' '))
         .join(' ')
-        .replace(/\b\w/g, c => c.toUpperCase())
 }
 
 export function useValidate() {
