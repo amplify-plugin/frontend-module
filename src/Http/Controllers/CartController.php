@@ -346,7 +346,7 @@ class CartController extends Controller
             unset($erpProductCodes);
 
             if ($erpProductDetails->isEmpty()) {
-                return $this->apiResponse(false, __(product_not_avail_message() . ' for all products'), 500);
+                return $this->apiResponse(false, __('Part number(s) not found in our system. Please review your spreadsheet and re-upload.'), 500);
             }
 
             $warehouse_codes = array_unique([$erpCustomer->DefaultWarehouse, customer()?->warehouse?->code, config('amplify.frontend.guest_checkout_warehouse')]);
