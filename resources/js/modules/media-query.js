@@ -14,7 +14,7 @@ export const MediaQuery = {
 
         if (!sessionStorage.getItem('screen_initialized')) {
             sessionStorage.setItem('screen_initialized', '1');
-            window.location.reload();
+            window.location.replace(window.location.href);
         } else {
             this.setCookie();
         }
