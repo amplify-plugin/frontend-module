@@ -23,7 +23,7 @@ export const useCheckoutStore = defineStore('checkout', {
             orderNotes: '',
             internalNotes: '',
             validationError: '',
-
+            verifyPoNumber: false,
             guestCheckout: false,
             editable: false,
             allowCreateShipping: false,
@@ -32,7 +32,8 @@ export const useCheckoutStore = defineStore('checkout', {
             allowCreateOrderList: false,
             backUrl: window.location.origin,
             orderListTitle: 'Order List',
-            validation: useValidate().make(),
+            purchaseOrder: null, //if object already verified
+            brandColor: '#0da9ef',
 
             //Account Step
             account: {
@@ -64,7 +65,20 @@ export const useCheckoutStore = defineStore('checkout', {
                 method: '',
                 freightAccountNumber: '',
                 contact: '',
-                phone: ''
+                phone: '',
+                instructions: '',
+            },
+
+            review: {
+                sub_total: null,
+                tax_amount: null,
+                ship_charge: null,
+                hazmat_charge : null,
+                wire_transfer_fee : null,
+                total: null,
+                lines: [],
+                notes: '',
+                coupon: '',
             }
 
         }

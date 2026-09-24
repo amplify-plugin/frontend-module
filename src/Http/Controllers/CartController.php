@@ -63,6 +63,22 @@ class CartController extends Controller
         return new CartResource(null);
     }
 
+    public function items(Request $request)
+    {
+        $cart = \getCart();
+
+        $items = CartItem::where('cart_id', '=', $cart->getKey())
+            ->paginate($request->input('per_page', 5));
+
+        return $this->apiResponse(true, '', 200, [
+            'html' => view('widget::checkout.review.items')->with('items', $items)->render(),
+            'total' => $items->total(),
+            'current' => $items->currentPage(),
+            'last' => $items->lastPage(),
+            'count' => $items->count(),
+        ]);
+    }
+
     public function store(AddToCartRequest $request)
     {
         $cart = getCart();

@@ -10,7 +10,8 @@ import {
 } from '../../mock';
 
 import {useValidate} from "@/composables/useValidate";
-import axios from  'axios';
+import axios from 'axios';
+import Swal from "sweetalert2";
 
 const validator = useValidate();
 
@@ -22,7 +23,6 @@ export default {
         // `active` flags are inconsistent (multiple steps marked active).
         this.activeStep = this.orderedSteps[0]?.component ?? 'account';
         this.cartId = props.cart ?? null;
-        this.cart = props.cart ?? mockCart;
         this.customer = props.customer ?? mockCustomer;
         this.contact = props.contact ?? mockContact;
         // Blade always passes these props (possibly as empty ERP results),
@@ -33,9 +33,7 @@ export default {
             ? props.countries : mockCountries;
         this.states = (Array.isArray(props.states) && props.states.length > 0)
             ? props.states : mockStates;
-        const freightRate = props.shipOptions?.FreightRate ?? null;
-        this.shipOptions = (freightRate && Object.keys(freightRate).length > 0)
-            ? props.shipOptions : mockShipOptions;
+        this.shipOptions = {};
         this.guestCheckout = props.guestCheckout ?? false;
         this.editable = props.editable ?? false;
         this.allowCreateShipping = props.allowCreateShipping ?? false;
@@ -44,6 +42,8 @@ export default {
         this.allowCreateOrderList = props.createFavouriteFromCart ?? false;
         this.orderListTitle = props.orderListTitle ?? 'Order List';
         this.backUrl = props.backToShoppingUrl ?? null;
+        this.verifyPoNumber = props.verifyPoNumber ?? false;
+        this.brandColor = props.templateBrandColor ?? '#0da9ef';
 
         if (this.shippingGroups.length > 0) {
             this.shippingGroup = this.shippingGroups[0];
@@ -51,7 +51,7 @@ export default {
 
         this.fillAccountData();
 
-        this.fillShippingData();
+        this.selectAddressSelected(this.customer.DefaultShipTo);
     },
 
     fillAccountData(data = {}) {
@@ -88,7 +88,7 @@ export default {
         this.shipping.state = data.ShipToState ?? '';
         this.shipping.city = data.ShipToCity ?? '';
         this.shipping.zipCode = data.ShipToZipCode ?? '';
-        this.shipping.method = data.CarrierCode ?? '';
+        this.shipping.method = data.CarrierCode ?? this.customer?.CarrierCode ?? '';
         this.shipping.contact = data.ShipToContact ?? this.account.name ?? '';
         this.shipping.phone = data.ShipToPhoneNumber ?? this.account.phone ?? '';
 
@@ -155,6 +155,7 @@ export default {
     validateCurrentStep() {
         switch (this.activeStep) {
             case 'account':
+
                 this.account.errors = validator.make(
                     this.account, {
                         name: ['required', 'min:2', 'max:255'],
@@ -179,15 +180,19 @@ export default {
                     });
 
                 if (this.account.errors.failed()) {
-                    window.Amplify.notify(
-                        'error',
+                    this.validationError =
                         this.account.errors.errors().length > 1
                             ? 'The given data is invalid.'
-                            : this.account.errors.message,
-                        'Validation Failed');
+                            : this.account.errors.message;
+
+                    return false;
                 }
 
-                return this.account.errors.passed();
+                if (this.verifyPoNumber && this.account.poNumber !== '') {
+                    return this.validatePurchaseNumber();
+                }
+
+                return true;
 
             case 'shipping':
                 this.shipping.errors = validator.make(
@@ -201,23 +206,29 @@ export default {
                         state: ['required', 'max:255'],
                         city: ['required', 'max:255'],
                         zipCode: ['required'],
-                        phone: ['required', 'min:10', 'max:17'],
+                        method: ['required'],
+                        freightAccountNumber: ['nullable', 'max:255'],
                         contact: ['required', 'max:255'],
+                        phone: ['required', 'min:10', 'max:17'],
+                        instructions: ['nullable', 'max:255'],
                     }, {},
                     {
                         addressLine1: 'Address Line 1',
                         addressLine2: 'Address Line 2',
                         addressLine3: 'Address Line 3',
                         zipCode: 'ZIP Code',
+                        method: 'Delivery Method',
+                        instructions: 'Shipping Instructions',
+                        freightAccountNumber: 'Freight Account Number',
                     });
 
                 if (this.shipping.errors.failed()) {
-                    window.Amplify.notify(
-                        'error',
+                    this.validationError =
                         this.shipping.errors.errors().length > 1
                             ? 'The given data is invalid.'
-                            : this.shipping.errors.message,
-                        'Validation Failed');
+                            : this.shipping.errors.message;
+
+                    return false;
                 }
 
                 return this.shipping.errors.passed();
@@ -245,10 +256,21 @@ export default {
         }
     },
 
+    flatShipOptions(methods) {
+        return methods.map(item => {
+            const [name, details] = Object.entries(item)[0];
+            return {
+                name,
+                ...details
+            };
+        });
+    },
+
     fetchShippingOptions() {
         window.Amplify.confirm('Fetching Shipping Options', 'Checkout', '', {
             allowEscapeKey: false,
             showCancelButton: false,
+            showCloseButton: false,
             willOpen: () => document.querySelector('.swal2-actions').style.justifyContent = 'center',
             didOpen: () => {
                 window.swal.showLoading();
@@ -272,11 +294,70 @@ export default {
 
                     }
                 }).then((response) => {
-                    this.shipOptions = response.data;
+                    let shipOptions = response.data?.FreightRate ?? {};
+                    this.review.ship_charge = response.data?.FreightAmount ?? null;
+                    this.review.hazmat_charge = response.data?.HazMatCharge ?? null;
+                    this.review.tax_amount = response.data?.SalesTaxAmount ?? null;
+                    this.review.sub_total = response.data?.TotalLineAmount ?? null;
+                    this.review.total = response.data?.TotalOrderValue ?? null;
+                    this.review.wire_transfer_fee = response.data?.WireTrasnsferFee ?? null;
+                    this.review.errors = validator.make();
+
+                    for (const [name, methods] of Object.entries(shipOptions)) {
+                        this.shipOptions[name] = this.flatShipOptions(methods);
+                    }
+                    window.swal.close();
+                }).catch((error) => {
+                    window.Amplify.alert(
+                        error.response?.data?.message ?? error.message,
+                        'Checkout',
+                        {icon: 'error'}
+                    );
+                });
+            }
+        });
+    },
+
+    validatePurchaseNumber() {
+        window.Amplify.confirm('Validating Purchase Order Number', 'Checkout', '', {
+            allowEscapeKey: false,
+            showCancelButton: false,
+            willOpen: () => document.querySelector('.swal2-actions').style.justifyContent = 'center',
+            didOpen: () => {
+                window.swal.showLoading();
+                return axios.post('/validate/po-number', {
+                    po_number: this.account.poNumber,
+                }, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+
+                    }
+                }).then((response) => {
+                    console.log(response.data);
                     window.swal.close();
                 });
             }
         });
+
+        return false;
+    },
+
+    selectAddressSelected(shipToNumber) {
+
+        let addressFound = false
+
+        for (const address of this.addresses) {
+            if (address.ShipToNumber === shipToNumber) {
+                this.fillShippingData(address);
+                addressFound = true;
+                break;
+            }
+        }
+
+        if (addressFound === false) {
+            this.fillShippingData();
+        }
     },
 
     selectShippingMethod(group, method) {
@@ -288,30 +369,6 @@ export default {
     selectPaymentMethod(method) {
         this.paymentMethod = method;
         this.validationError = '';
-    },
-
-    /**
-     * The `cart` prop is a Laravel Cart model JSON without item rows.
-     * Load them from the existing /carts/show endpoint (CartResource:
-     * products with product_name/qty/price/subtotal + formatted totals).
-     */
-    async loadCartItems() {
-        if (this.cartItems.length > 0) return;
-        if (this.staticMode) return;
-        try {
-            const res = await fetch('/carts/show', {
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-            }).then((res) => res.json());
-            const cart = res?.data ?? res;
-            if (cart && typeof cart === 'object') {
-                this.cart = {...this.cart, ...cart};
-            }
-        } catch {
-            // keep existing cart state on failure
-        }
     },
 
     notifyStaticSubmit() {
@@ -326,7 +383,7 @@ export default {
         const value = parseFloat(String(price ?? '').replace(/[^0-9.\-]/g, ''));
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
-            currency: 'USD',
+            currency: window.Amplify?.config?.currency ?? 'USD',
         }).format(Number.isFinite(value) ? value : 0);
     },
 }

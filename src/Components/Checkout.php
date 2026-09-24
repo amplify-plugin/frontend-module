@@ -2,7 +2,6 @@
 
 namespace Amplify\Frontend\Components;
 
-use Amplify\ErpApi\Collections\ShippingLocationCollection;
 use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\Frontend\Abstracts\BaseComponent;
 use Amplify\System\Backend\Models\Cart;
@@ -32,6 +31,7 @@ class Checkout extends BaseComponent
 
     /**
      * Get the view / contents that represent the component.
+     * @throws \ErrorException
      */
     public function render(): View|Closure|string
     {
@@ -69,11 +69,13 @@ class Checkout extends BaseComponent
 
         $steps = array_reverse($steps);
 
+        $verifyPoNumber = true;
+
         return view('widget::checkout', compact(
+            'verifyPoNumber',
             'allowCreateShipping',
             'editable',
             'guestCheckout',
-            'cart',
             'cartId',
             'cartItemCount',
             'templateBrandColor',

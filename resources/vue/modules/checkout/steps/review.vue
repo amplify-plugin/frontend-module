@@ -1,7 +1,8 @@
 <script setup>
-import {onMounted} from 'vue';
 import {useCheckoutStore} from '../composables/useCheckoutStore';
 import SummarySidebar from "./components/summary.vue";
+import {onBeforeUnmount, onMounted, ref} from "vue";
+import axios from 'axios';
 
 const store = useCheckoutStore();
 
@@ -13,82 +14,114 @@ const paymentLabels = {
   ach: 'ACH',
 };
 
-onMounted(() => {
-  window.Amplify.loadCartSummary();
-  // store.loadCartItems();
-});
+const list = ref(null);
+const loadMoreTrigger = ref(null);
+
+const page = ref(0);
+const perPage = ref(5);
+const count = ref(0);
+
+const loading = ref(false);
+const hasMore = ref(true);
+
+
+let observer = null;
+
+const loadCartItems = async () => {
+
+  if (loading.value || !hasMore.value) {
+    return;
+  }
+
+  loading.value = true;
+
+  try {
+
+    const nextPage = page.value + 1;
+
+    const response = await axios.get(`/carts/items`, {
+      params: {
+        page: nextPage,
+        per_page: perPage.value,
+      }
+    });
+
+    const data = response.data;
+
+    if (!data.success) {
+      return;
+    }
+
+    loadMoreTrigger.value.insertAdjacentHTML(
+        'beforebegin',
+        data.html
+    );
+
+    hasMore.value = data.current < data.total;
+
+    page.value = data.current;
+    count.value = count.value + data.count;
+
+  } catch (error) {
+    console.log(error);
+  } finally {
+    loading.value = false;
+  }
+}
+const setupObserver = () => {
+  observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          loadCartItems()
+        }
+      },
+      {
+        root: list.value,
+        rootMargin: '100px 0px',
+        threshold: 0
+      }
+  );
+
+  if (loadMoreTrigger.value) {
+    observer.observe(loadMoreTrigger.value)
+  }
+}
+
+onMounted(async () => {
+  setupObserver()
+})
+
+onBeforeUnmount(() => {
+  if (observer) {
+    observer.disconnect()
+  }
+})
 
 </script>
 
 <template>
   <div class="row">
     <div class="col-sm-9">
+      <h4 class="border-bottom pb-2 mb-4">
+        <i class="icon-bag" style="margin-top: -10px"></i>
+        Review Your Order
+      </h4>
       <div class="row">
         <div class="col-12">
-          <h4 class="border-bottom pb-2 mb-4">
-            <i class="icon-bag" style="margin-top: -10px"></i>
-            Review Your Order
-          </h4>
-          <div id="cart-summary">
-            <div class="table-responsive shopping-cart mb-2">
-              <table class="table table-hover table-striped">
-                <thead>
-                <tr>
-                  <th class="py-2 text-center">Product</th>
-                  <th class="py-2 text-center" width="100">Quantity</th>
-                  <th class="py-2 text-center">Price</th>
-                  <th class="py-2 text-center" width="100">Total</th>
-                </tr>
-                </thead>
-                <tbody id="cart-item-summary"></tbody>
-                <tfoot>
-                <tr>
-                  <td colspan="4" class="text-right">
-                    Subtotal: <span class="font-weight-bold" id="order-subtotal">$0.00</span>
-                  </td>
-                </tr>
-                </tfoot>
-              </table>
-            </div>
-          </div>
-          <!--          <div class="table-responsive shopping-cart">-->
-          <!--            <table class="table">-->
-          <!--              <thead>-->
-          <!--              <tr>-->
-          <!--                <th>Product Name</th>-->
-          <!--                <th class="text-center">Subtotal</th>-->
-          <!--                <th></th>-->
-          <!--              </tr>-->
-          <!--              </thead>-->
-          <!--              <tbody>-->
-          <!--              <tr v-for="item in store.cartItems" :key="item.id ?? item.product_code ?? item.product_name">-->
-          <!--                <td>-->
-          <!--                  <div class="product-item">-->
-          <!--                    <a class="product-thumb" :href="item.url || '#'" v-if="item.product_image">-->
-          <!--                      <img :src="item.product_image" alt="Product">-->
-          <!--                    </a>-->
-          <!--                    <div class="product-info">-->
-          <!--                      <h4 class="product-title"><a :href="item.url || '#'" @click.prevent>{{-->
-          <!--                          item.product_name ?? item.name ?? item.product_code-->
-          <!--                        }}<small>x {{ item.qty }}</small></a></h4>-->
-          <!--                      <span v-if="item.uom" class="text-muted text-sm">{{ item.uom }}</span>-->
-          <!--                    </div>-->
-          <!--                  </div>-->
-          <!--                </td>-->
-          <!--                <td class="text-center text-lg text-medium">-->
-          <!--                  {{ store.priceFormatter(item.subtotal ?? (item.unit_price ?? item.price ?? 0) * item.qty) }}-->
-          <!--                </td>-->
-          <!--                <td class="text-center"><a class="btn btn-outline-primary btn-sm" href="#" @click.prevent>Edit</a></td>-->
-          <!--              </tr>-->
-          <!--              </tbody>-->
-          <!--            </table>-->
-          <!--          </div>-->
-          <!--          <div class="shopping-cart-footer">-->
-          <!--            <div class="column"></div>-->
-          <!--            <div class="column text-lg">Subtotal: <span class="text-medium">{{-->
-          <!--                store.priceFormatter(store.orderSubtotal)-->
-          <!--              }}</span></div>-->
-          <!--          </div>-->
+          <ul ref="list" class="list-unstyled border-bottom" style="max-height: 300px; overflow-y: auto;">
+            <li ref="loadMoreTrigger" class="text-center py-3">
+              <div v-if="loading" class="spinner-border spinner-border-sm" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+              <span v-else-if="!hasMore" class="text-muted">
+                No more items
+              </span>
+            </li>
+          </ul>
+          <h5 class="text-right font-weight-bold pr-4">
+            <span class="text-muted">Subtotal: </span>
+            {{ store.priceFormatter(store.review.sub_total) }}
+          </h5>
         </div>
         <div class="col-12">
           <h4 class="border-bottom pb-2 my-4">
@@ -96,18 +129,18 @@ onMounted(() => {
             Additional Information
           </h4>
           <div class="form-group">
-            <label for="po-number">
-              PO Number
+            <label for="review-order-note">
+              Order Comments
             </label>
-            <input class="form-control"
-                   type="text"
-                   size="255"
-                   min="2"
-                   max="255"
-                   maxlength="255"
-                   placeholder="Enter Contact Name"
-                   id="po-number" v-model="store.poNumber">
-            <span class="invalid-feedback d-block" id="po-number-error"></span>
+            <textarea :class="{'form-control': true, 'is-invalid': store.review.errors.has('notes')}"
+                      size="255"
+                      maxlength="255"
+                      placeholder="Enter Order Notes"
+                      id="review-order-note"
+                      v-model="store.review.notes"></textarea>
+            <span class="invalid-feedback d-block">
+              {{ store.review.errors.first('notes') }}
+            </span>
           </div>
         </div>
       </div>
@@ -117,3 +150,10 @@ onMounted(() => {
     </div>
   </div>
 </template>
+
+<style>
+.x-product-price span.standard {
+  font-size: 100% !important;
+  margin-top: 0 !important;
+}
+</style>

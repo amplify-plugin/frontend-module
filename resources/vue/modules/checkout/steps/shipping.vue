@@ -1,6 +1,7 @@
 <script setup>
 import {computed, onMounted, ref} from 'vue';
 import {useCheckoutStore} from '../composables/useCheckoutStore';
+import NoShipOptions from "./components/no-ship-options.vue";
 
 const store = useCheckoutStore();
 
@@ -12,46 +13,20 @@ const states = ref(store.states);
 
 const shipping = ref(store.shipping);
 
-const methods = computed(() => {
-  const freightRate = store.shipOptions?.FreightRate ?? {};
-  const list = [];
-  for (const [group, groupMethods] of Object.entries(freightRate)) {
-    for (const methodObj of groupMethods) {
-      const key = Object.keys(methodObj)[0];
-      list.push({group, ...methodObj[key]});
-    }
-  }
-  return list;
-});
-
-function isSelected(method) {
-  return store.selectedShippingMethod?.shipvia === method.shipvia;
-}
-
-function select(method, group) {
-  store.selectShippingMethod(group, method);
-}
-
-function addressSelected(shipToNumber) {
-
-  let addressFound = false
-
-  for (const address of addresses.value) {
-    if (address.ShipToNumber === shipToNumber) {
-      store.fillShippingData(address);
-      addressFound = true;
-      break;
-    }
-  }
-
-  if (addressFound === false) {
-    store.fillShippingData();
-  }
-}
-
-onMounted(() => {
-  addressSelected(store.customer.DefaultShipTo);
+const shipOptionLabels = computed(() => {
+  return Object.keys(store.shipOptions);
 })
+
+function slugify(value) {
+  return String(value)
+      .normalize('NFKD')
+      .replace(/[\u0300-\u036f]/g, '') // Remove accents
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, '')     // Remove special characters
+      .replace(/[\s_-]+/g, '-')         // Spaces/underscores → hyphen
+      .replace(/^-+|-+$/g, '');         // Trim hyphens
+}
 
 </script>
 
@@ -66,7 +41,7 @@ onMounted(() => {
         <label for="shipping-address">Select Address</label>
         <div :class="{'input-group input-append' : store.allowCreateShipping}">
           <select :class="{'form-control custom-select': true, 'is-invalid': shipping.errors.has('number')}"
-                  @change="addressSelected($event.target.value)"
+                  @change="store.selectAddressSelected($event.target.value)"
                   v-model="shipping.number"
                   id="shipping-address"
                   :disabled="!store.allowChooseShipping"
@@ -74,11 +49,10 @@ onMounted(() => {
             <option value="">Choose Address</option>
             <option v-for="address of addresses"
                     :key="address.ShipToNumber"
-                    :selected="address.ShipToNumber === store.customer.DefaultShipTo"
                     :value="address.ShipToNumber">
               {{
                 address.ShipToName + ' - ' +
-                [address.ShipToAddress1, address.ShipToCity, address.ShipToState].filter(i => i !== null && i !== '').join(', ')
+                [address.ShipToAddress1, address.ShipToCity, address.ShipToZipCode, address.ShipToState, address.ShipToCountryCode].filter(i => i !== null && i !== '').join(', ')
               }}
             </option>
           </select>
@@ -236,58 +210,68 @@ onMounted(() => {
     </div>
   </div>
 
-  <h4 class="border-bottom pb-2 mt-4 mb-3">Choose Shipping Method</h4>
-  <div class="card">
-    <div class="card-body">
-      <ul>
-        <li v-for="report in store.shipOptions?.statusReports ?? []" :key="report.statSeq">
-          <p>
-            {{ report.statLine ?? '' }}
-          </p>
+  <h4 class="border-bottom pb-2 mt-4 mb-3">
+    <i class="icon-map" style="margin-top: -10px"></i>
+    Delivery Method
+  </h4>
+  <div class="row justify-content-center">
+    <div class="col-12" v-if="shipOptionLabels.length > 0">
+      <ul class="nav nav-pills" role="tablist" v-if="shipOptionLabels.length > 1">
+        <li class="nav-item" v-for="shipOption in shipOptionLabels">
+          <a :class="{'nav-link show text-capitalize' : true, 'active' : shipOption === 'AWFCO'}"
+             :href="`#${slugify(shipOption)}`"
+             data-toggle="tab" role="tab" aria-selected="true">
+            {{ shipOption }}
+          </a>
         </li>
       </ul>
+      <div :class="{'tab-content': true, 'p-0 border-0' : shipOptionLabels.length === 1}">
+        <div
+            v-for="(methods, name) in store.shipOptions"
+            class="tab-pane fade active show"
+            :id="`${slugify(name)}`"
+            role="tabpanel">
+          <ul class="list-unstyled" style="max-height: 400px; overflow-y: auto">
+            <li :class="{
+              'mb-2 rounded border form-check p-3' : true,
+              'border-primary': method.shipvia === store.shipping.method }"
+                v-for="method in methods">
+              <label class="d-flex align-items-center gap-3 mb-0 justify-content-between"
+                     :for="`method-${slugify(name)}-option-${slugify(method.shipvia)}`">
+                <div class="d-flex align-items-center gap-3">
+                  <input type="radio"
+                         style="width: 1.25rem; height: 1.25rem"
+                         name="method"
+                         @change="store.selectShippingMethod(name, method)"
+                         v-model="store.shipping.method"
+                         :value="method.shipvia"
+                         :id="`method-${slugify(name)}-option-${slugify(method.shipvia)}`"/>
+                  <div>
+                    <p class="font-weight-bold">
+                      <strong>{{ method.name }}</strong>
+                    </p>
+                    <p class="mb-0 text-muted" v-if="method.date !== ''">
+                      Estimated Delivery Date: {{ method.date }}
+                    </p>
+                  </div>
+                </div>
+
+                <div v-if="parseFloat(method.amount) != 0" class="font-weight-bold">
+                  {{ store.priceFormatter(method.amount) }}
+                </div>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <span class="invalid-feedback d-block">{{ shipping.errors.first('method') }}</span>
     </div>
-    <div class="card-body">
-      <pre>{{ JSON.stringify(store.shipOptions, null, 2) }}</pre>
-    </div>
+    <no-ship-options v-else/>
   </div>
-<!--  <div class="table-responsive">-->
-<!--    <table class="table table-hover">-->
-<!--      <thead class="thead-default">-->
-<!--      <tr>-->
-<!--        <th></th>-->
-<!--        <th>Shipping method</th>-->
-<!--        <th>Delivery time</th>-->
-<!--        <th>Handling fee</th>-->
-<!--      </tr>-->
-<!--      </thead>-->
-<!--      <tbody>-->
-<!--      <tr v-for="(method, index) in methods" :key="method.shipvia + index" @click="select(method, method.group)">-->
-<!--        <td class="align-middle">-->
-<!--          <div class="custom-control custom-radio mb-0">-->
-<!--            <input class="custom-control-input" type="radio" name="shipping-method"-->
-<!--                   :id="`shipping-method-${index}`" :value="method"-->
-<!--                   :checked="isSelected(method)" @change="select(method, method.group)">-->
-<!--            <label class="custom-control-label" :for="`shipping-method-${index}`"></label>-->
-<!--          </div>-->
-<!--        </td>-->
-<!--        <td class="align-middle">-->
-<!--          <span class="text-medium">{{ method.name || method.shipvia }}</span><br>-->
-<!--          <span class="text-muted text-sm">{{ method.group }}</span>-->
-<!--        </td>-->
-<!--        <td class="align-middle">&mdash;</td>-->
-<!--        <td class="align-middle">{{ store.priceFormatter(method.amount) }}</td>-->
-<!--      </tr>-->
-<!--      </tbody>-->
-<!--    </table>-->
-<!--  </div>-->
-<!--  <div class="form-group" v-if="store.selectedShippingMethod?.frttermscd === 'C'">-->
-<!--    <label for="freight-account-number">Freight Account Number <span-->
-<!--        class="text-danger font-weight-bold">*</span></label>-->
-<!--    <input type="text" class="form-control" id="freight-account-number"-->
-<!--           placeholder="Enter your freight account number" v-model="store.freightAccountNumber">-->
-<!--  </div>-->
-  <div class="alert alert-danger mt-2" role="alert" v-if="store.validationError">
-    {{ store.validationError }}
-  </div>
+  <!--  <div class="form-group" v-if="store.selectedShippingMethod?.frttermscd === 'C'">-->
+  <!--    <label for="freight-account-number">Freight Account Number <span-->
+  <!--        class="text-danger font-weight-bold">*</span></label>-->
+  <!--    <input type="text" class="form-control" id="freight-account-number"-->
+  <!--           placeholder="Enter your freight account number" v-model="store.freightAccountNumber">-->
+  <!--  </div>-->
 </template>

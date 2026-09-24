@@ -5,13 +5,13 @@ const store = useCheckoutStore();
 
 function formatAddress(customer) {
   return [
-    customer?.ShipToAddress1 ?? '',
-    customer?.ShipToAddress2 ?? '',
-    customer?.ShipToAddress3 ?? '',
-    customer?.ShipToCity ?? '',
-    customer?.ShipToState ?? '',
-    customer?.ShipToZipCode ?? '',
-    customer?.ShipToCountryCode ?? '',
+    customer?.addressLine1 ?? '',
+    customer?.addressLine2 ?? '',
+    customer?.addressLine3 ?? '',
+    customer?.city ?? '',
+    customer?.state ?? '',
+    customer?.zipCode ?? '',
+    customer?.country ?? '',
   ].filter((part) => part && part !== '').join(', ');
 }
 
@@ -24,24 +24,31 @@ function formatAddress(customer) {
   </h4>
 
   <section class="widget widget-order-summary">
-    <h3 class="widget-title">Order Summary</h3>
     <table class="table">
       <tbody>
-      <tr>
+      <tr v-if="store.review.sub_total != null">
         <td>Cart Subtotal:</td>
-        <td class="text-medium">{{ store.priceFormatter(store.orderSubtotal) }}</td>
+        <td class="text-medium">{{ store.priceFormatter(store.review.sub_total) }}</td>
       </tr>
-      <tr>
+      <tr v-if="store.review.ship_charge != null">
         <td>Shipping:</td>
-        <td class="text-medium">{{ store.priceFormatter(store.shippingAmount) }}</td>
+        <td class="text-medium">{{ store.priceFormatter(store.review.ship_charge) }}</td>
       </tr>
-      <tr>
+      <tr v-if="store.review.hazmat_charge != null">
+        <td>Hazmat Change:</td>
+        <td class="text-medium">{{ store.priceFormatter(store.review.hazmat_charge) }}</td>
+      </tr>
+      <tr v-if="store.review.wire_transfer_fee != null">
+        <td>Wire Transfer Fee:</td>
+        <td class="text-medium">{{ store.priceFormatter(store.review.wire_transfer_fee) }}</td>
+      </tr>
+      <tr v-if="store.review.tax_amount != null">
         <td>Estimated tax:</td>
-        <td class="text-medium">{{ store.priceFormatter(store.salesTax) }}</td>
+        <td class="text-medium">{{ store.priceFormatter(store.review.tax_amount) }}</td>
       </tr>
-      <tr>
+      <tr v-if="store.review.total != null">
         <td></td>
-        <td class="text-lg text-medium">{{ store.priceFormatter(store.orderTotal) }}</td>
+        <td class="text-lg text-medium">{{ store.priceFormatter(store.review.total) }}</td>
       </tr>
       </tbody>
     </table>
@@ -52,19 +59,19 @@ function formatAddress(customer) {
     <ul class="list-unstyled">
       <li>
         <span>Method: </span>
-        <b>{{ store.selectedShippingMethod ?? 'N/A' }}</b>
+        <b>{{ store.selectedShippingMethod?.name ?? 'N/A' }}</b>
       </li>
       <li>
         <span>Name: </span>
-        <b>{{ store.shipping.ShipToName ?? 'N/A' }}</b>
+        <b>{{ store.shipping.name ?? 'N/A' }}</b>
       </li>
       <li>
         <span>Address: </span>
         <b>{{ formatAddress(store.shipping) }}</b>
       </li>
-      <li v-if="store.shipping.ShipToPhoneNumber">
+      <li v-if="store.shipping.phone">
         <span>Phone: </span>
-        <b>{{ store.shipping.ShipToPhoneNumber ?? 'N/A' }}</b>
+        <b>{{ store.shipping.phone ?? 'N/A' }}</b>
       </li>
     </ul>
   </section>
@@ -72,59 +79,10 @@ function formatAddress(customer) {
   <section v-if="store.paymentMethod">
     <h5 class="border-bottom pb-2 my-3">Payment Terms:</h5>
     <ul class="list-unstyled">
-      <li><span class="text-muted">Name: </span>{{ store.shipping.ShipToName ?? 'N/A' }}</li>
-      <li><span class="text-muted">Address: </span>{{ formatAddress(store.shipping) }}</li>
-      <li><span class="text-muted">Phone: </span>{{ store.shipping.ShipToPhoneNumber ?? 'N/A' }}</li>
+      <li><span class="text-muted">Name: </span>{{ store.account.company ?? 'N/A' }}</li>
+      <li><span class="text-muted">Address: </span>{{ formatAddress(store.account) }}</li>
+      <li><span class="text-muted">Phone: </span>{{ store.account.phone ?? 'N/A' }}</li>
+      <li><span class="text-muted">Terms: </span>{{ 'COD' }}</li>
     </ul>
   </section>
 </template>
-
-<style scoped>
-/*
- * Original amp-theme Order Summary widget styling (verbatim from the
- * reference pages' styles.min.css), overriding the host widget box variant.
- */
-.widget-order-summary {
-  background: #f6f7f8;
-  border: 1px solid #e1e7ec;
-  border-radius: 7px;
-  padding: 20px;
-  box-shadow: 0 1px 4px rgba(45, 62, 80, .10);
-}
-
-.widget-order-summary .widget-title {
-  border-bottom: 1px solid #e1e7ec;
-  color: #9da9b9;
-  font-size: 14px;
-  font-weight: 500;
-  margin-bottom: 20px;
-  padding-bottom: 12px;
-  text-transform: uppercase;
-}
-
-.widget-order-summary .table {
-  background: transparent;
-}
-
-.widget-order-summary .table td {
-  border: 0;
-  padding: 6px 0;
-}
-
-.widget-order-summary .table td:last-child {
-  text-align: right;
-}
-
-.widget-order-summary .table tr:first-child > td {
-  padding-top: 0;
-}
-
-.widget-order-summary .table tr:last-child > td {
-  border-top: 1px solid #e1e7ec;
-  padding-top: 12px;
-}
-
-.widget-order-summary .table tr:nth-last-child(2) > td {
-  padding-bottom: 12px;
-}
-</style>

@@ -90,6 +90,10 @@ const props = defineProps({
   orderListTitle: {
     type: String,
     default: 'Order List',
+  },
+  verifyPoNumber: {
+    type: Boolean,
+    default: false,
   }
 });
 
@@ -116,8 +120,15 @@ onMounted(() => {
 
 <template>
   <div class="w-100" ref="element">
+
     <steps :active="store.activeStep"/>
+
     <component :is="currentStep"/>
+
+    <div class="alert alert-danger mt-2" role="alert" v-if="store.validationError">
+      {{ store.validationError }}
+    </div>
+
     <navigation :active="store.activeStep"/>
   </div>
 </template>
