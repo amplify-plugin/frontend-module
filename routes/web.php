@@ -41,6 +41,7 @@ use Amplify\Frontend\Http\Controllers\MyProfileController;
 use Amplify\Frontend\Http\Controllers\NewsletterSubscriptionController;
 use Amplify\Frontend\Http\Controllers\OrderController;
 use Amplify\Frontend\Http\Controllers\OrderListController;
+use Amplify\Frontend\Http\Controllers\PurchaseOrderNoValidateController;
 use Amplify\Frontend\Http\Controllers\OrderStatusController;
 use Amplify\Frontend\Http\Controllers\PastItemsController;
 use Amplify\Frontend\Http\Controllers\ProductCompareController;
@@ -106,19 +107,17 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
         ->where(['cart' => '[0-9]+'])
         ->except('update', 'show', 'destroy');
 
-    Route::get('carts/show', [\Amplify\Frontend\Http\Controllers\CartController::class, 'show'])->name('carts.show');
+    Route::prefix('carts')->controller(\Amplify\Frontend\Http\Controllers\CartController::class)->name('carts.')->group(function () {
+        Route::patch('/', 'update')->name('update');
+        Route::delete('/', 'destroy')->name('destroy');
+        Route::get('show', 'show')->name('show');
+        Route::get('items', 'items')->name('items');
+        Route::delete('remove/{cartItem}', 'remove')->name('remove-item')->where(['cartItem' => '[0-9]+']);
+        Route::post('order-file', 'orderFile')->name('order-file');
+        Route::post('code-lookup', 'codeLookup')->name('code-lookup');
+    });
 
-    Route::patch('carts', [\Amplify\Frontend\Http\Controllers\CartController::class, 'update'])
-        ->name('carts.update');
-
-    Route::delete('carts', [\Amplify\Frontend\Http\Controllers\CartController::class, 'destroy'])
-        ->name('carts.destroy');
-
-    Route::delete('carts/remove/{cartItem}', [\Amplify\Frontend\Http\Controllers\CartController::class, 'remove'])
-        ->name('carts.remove-item');
-    Route::post('carts/order-file', [\Amplify\Frontend\Http\Controllers\CartController::class, 'orderFile'])->name('carts.order-file');
     // lookup a single product code (used by quick-order widget)
-    Route::post('carts/code-lookup', [\Amplify\Frontend\Http\Controllers\CartController::class, 'codeLookup'])->name('carts.code-lookup');
     Route::post('carts/submit-quote', CartSubmitQuoteController::class)->name('carts.submit-quote');
     Route::post('/remove/carts', [\Amplify\Frontend\Http\Controllers\CartController::class, 'removeCarts'])->name('frontend.remove-carts');
     Route::get('checkout', CheckoutController::class)->name('checkout');
@@ -136,9 +135,10 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
     Route::get('categories/{query?}', \Amplify\Frontend\Http\Controllers\CategoryIndexController::class)->where(['query' => '(.*)'])->name('categories');
     Route::get('order-completed/{order}', [OrderController::class, 'completed'])->name('orders.completed');
     Route::post('validate/shipping-address', [ShippingController::class, 'validateAddress']);
-    Route::post('/get/shipping/option', [ShippingController::class, 'options'])->name('shipping-options');
+    Route::post('validate/po-number', PurchaseOrderNoValidateController::class)->name('po-number');
+    Route::post('get/shipping/option', [ShippingController::class, 'options'])->name('shipping-options');
     Route::get('related-products/{product}', [ProductDetailController::class, 'relatedProducts'])->name('shop.relatedProducts');
-    Route::post('/order/quick-order-file-upload',
+    Route::post('order/quick-order-file-upload',
         [CustomerOrderController::class, 'quickOrderFileUpload'])->name('order.quick-order-file-upload');
 
     Route::post('/cart/summary', [CartController::class, 'getCartSummary'])->name('cart.summary');
