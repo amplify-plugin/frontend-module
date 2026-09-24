@@ -75,7 +75,7 @@
                 @endforeach
 
                 @foreach ($erpItems as $key => $additionalImage)
-                    <li class="product-thumbnail item">
+                    <li class="product-thumbnail item" data-gallery-index="{{ $extraItemCount + $key + 1 }}">
                         <a class="text-decoration-none" href="#{{ 'item-' . ($extraItemCount + $key + 1) }}">
                             <img src="{{ assets_image($additionalImage['value']) }}" alt="Product"
                                  class="img-fluid"/>
@@ -131,7 +131,7 @@
         $(function () {
             Amplify.initPhotoSwipeFromDOM('.gallery-wrapper');
             Amplify.productSlider('.product-carousel');
-            Amplify.thumbnailCarousel('product-gallery ul.product-thumbnails');
+            Amplify.thumbnailCarousel('.product-gallery ul.product-thumbnails');
         });
     </script>
 @endpushonce
