@@ -214,7 +214,7 @@ class ShippingController extends Controller
 
         event(new CartUpdated($cart, $orderTotal));
 
-        return response()->json($orderTotal->getRawContent());
+        return response()->json($orderTotal);
     }
 
     /**
