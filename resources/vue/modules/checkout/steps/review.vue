@@ -102,7 +102,7 @@ onBeforeUnmount(() => {
 <template>
   <div class="row">
     <div class="col-sm-9">
-      <h4 class="border-bottom pb-2 mb-4">
+      <h4 class="border-bottom pb-2 mb-3">
         <i class="icon-bag" style="margin-top: -10px"></i>
         Review Your Order
       </h4>
@@ -118,13 +118,9 @@ onBeforeUnmount(() => {
               </span>
             </li>
           </ul>
-          <h5 class="text-right font-weight-bold pr-4">
-            <span class="text-muted">Subtotal: </span>
-            {{ store.priceFormatter(store.review.sub_total) }}
-          </h5>
         </div>
         <div class="col-12">
-          <h4 class="border-bottom pb-2 my-4">
+          <h4 class="border-bottom pb-2 mt-4 mb-3">
             <i class="icon-archive" style="margin-top: -10px"></i>
             Additional Information
           </h4>
@@ -133,8 +129,6 @@ onBeforeUnmount(() => {
               Order Comments
             </label>
             <textarea :class="{'form-control': true, 'is-invalid': store.review.errors.has('notes')}"
-                      size="255"
-                      maxlength="255"
                       placeholder="Enter Order Notes"
                       id="review-order-note"
                       v-model="store.review.notes"></textarea>

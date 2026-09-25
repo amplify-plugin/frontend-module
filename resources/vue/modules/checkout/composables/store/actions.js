@@ -12,6 +12,7 @@ import {
 import {useValidate} from "@/composables/useValidate";
 import axios from 'axios';
 import Swal from "sweetalert2";
+import {error} from "../../../../../../../../public/packages/places.js/dist/cdn/places";
 
 const validator = useValidate();
 
@@ -40,14 +41,11 @@ export default {
         this.allowChooseShipping = props.allowChooseShipping ?? false;
         this.allowRequestQuote = props.allowRequestQuote ?? false;
         this.allowCreateOrderList = props.createFavouriteFromCart ?? false;
+        this.hasShipInstruction = props.hasShipInstruction ?? false;
         this.orderListTitle = props.orderListTitle ?? 'Order List';
         this.backUrl = props.backToShoppingUrl ?? null;
         this.verifyPoNumber = props.verifyPoNumber ?? false;
         this.brandColor = props.templateBrandColor ?? '#0da9ef';
-
-        if (this.shippingGroups.length > 0) {
-            this.shippingGroup = this.shippingGroups[0];
-        }
 
         this.fillAccountData();
 
@@ -115,9 +113,8 @@ export default {
     goNext() {
         if (!this.validateCurrentStep()) return;
         if (this.isLastStep) {
-            // Static mode: no order submission.
             this.validationError = '';
-            this.notifyStaticSubmit();
+            this.submitRequest('order');
             return;
         }
         this.validationError = '';
@@ -267,80 +264,129 @@ export default {
     },
 
     fetchShippingOptions() {
-        window.Amplify.confirm('Fetching Shipping Options', 'Checkout', '', {
+
+        let payload = {
+            shipping_method: this.shipping.method,
+            shipping_name: this.shipping.name,
+            customer_order_ref: this.account.poNumber,
+            ship_to_number: this.shipping.number,
+            customer_address_one: this.shipping.addressLine1,
+            customer_address_two: this.shipping.addressLine2,
+            customer_address_three: this.shipping.addressLine3,
+            customer_city: this.shipping.city,
+            customer_country_code: this.shipping.country,
+            customer_state: this.shipping.state,
+            customer_zipcode: this.shipping.zipCode,
+            customer_phone: this.shipping.phone,
+        };
+
+        window.Amplify.confirm('Retrieving Shipping Options...', 'Checkout', '', {
             allowEscapeKey: false,
             showCancelButton: false,
             showCloseButton: false,
+            backdrop: true,
             willOpen: () => document.querySelector('.swal2-actions').style.justifyContent = 'center',
-            didOpen: () => {
-                window.swal.showLoading();
-                return axios.post('/get/shipping/option', {
-                    shipping_method: this.shipping.method,
-                    shipping_name: this.shipping.name,
-                    customer_order_ref: this.account.poNumber,
-                    ship_to_number: this.shipping.number,
-                    customer_address_one: this.shipping.addressLine1,
-                    customer_address_two: this.shipping.addressLine2,
-                    customer_address_three: this.shipping.addressLine3,
-                    customer_city: this.shipping.city,
-                    customer_country_code: this.shipping.country,
-                    customer_state: this.shipping.state,
-                    customer_zipcode: this.shipping.zipCode,
-                    customer_phone: this.shipping.phone,
-                }, {
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-
-                    }
-                }).then((response) => {
-                    let shipOptions = response.data?.FreightRate ?? {};
-                    this.review.ship_charge = response.data?.FreightAmount ?? null;
-                    this.review.hazmat_charge = response.data?.HazMatCharge ?? null;
-                    this.review.tax_amount = response.data?.SalesTaxAmount ?? null;
-                    this.review.sub_total = response.data?.TotalLineAmount ?? null;
-                    this.review.total = response.data?.TotalOrderValue ?? null;
-                    this.review.wire_transfer_fee = response.data?.WireTrasnsferFee ?? null;
-                    this.review.errors = validator.make();
-
-                    for (const [name, methods] of Object.entries(shipOptions)) {
-                        this.shipOptions[name] = this.flatShipOptions(methods);
-                    }
-                    window.swal.close();
-                }).catch((error) => {
-                    window.Amplify.alert(
-                        error.response?.data?.message ?? error.message,
-                        'Checkout',
-                        {icon: 'error'}
+            didOpen: () => window.swal.clickConfirm(),
+            allowOutsideClick: () => !window.swal.isLoading(),
+            preConfirm: async () => {
+                try {
+                    const response = await axios.post(
+                        '/get/shipping/option',
+                        payload,
+                        {
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json',
+                            }
+                        }
                     );
-                });
-            }
-        });
+
+                    return {
+                        success: true,
+                        data: response.data,
+                        error: null
+                    };
+
+                } catch (error) {
+
+                    return {
+                        success: false,
+                        data: error.response.data,
+                        error: error.response?.data?.message ?? error.message
+                    };
+                }
+            },
+        })
+            .then((result) => {
+
+                if (!result.value.success) {
+                    window.Amplify.alert(result.value.error, 'Checkout', {icon: 'error'});
+                    return;
+                }
+                let response = result.value.data;
+                let shipOptions = response.FreightRate ?? {};
+
+                this.review.ship_charge = response.FreightAmount ?? null;
+                this.review.hazmat_charge = response.HazMatCharge ?? null;
+                this.review.tax_amount = response.SalesTaxAmount ?? null;
+                this.review.sub_total = response.TotalLineAmount ?? null;
+                this.review.total = response.TotalOrderValue ?? null;
+                this.review.wire_transfer_fee = response.WireTrasnsferFee ?? null;
+                this.review.errors = validator.make();
+
+                for (const [name, methods] of Object.entries(shipOptions)) {
+                    this.shipOptions[name] = this.flatShipOptions(methods);
+                }
+
+                return result.value.success;
+            });
     },
 
-    validatePurchaseNumber() {
-        window.Amplify.confirm('Validating Purchase Order Number', 'Checkout', '', {
+    async validatePurchaseNumber() {
+        return await window.Amplify.confirm('Validating Purchase Order Number', 'Checkout', '', {
             allowEscapeKey: false,
             showCancelButton: false,
+            showCloseButton: false,
+            backdrop: true,
             willOpen: () => document.querySelector('.swal2-actions').style.justifyContent = 'center',
-            didOpen: () => {
-                window.swal.showLoading();
-                return axios.post('/validate/po-number', {
-                    po_number: this.account.poNumber,
-                }, {
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
+            didOpen: () => window.swal.clickConfirm(),
+            allowOutsideClick: () => !window.swal.isLoading(),
+            preConfirm: async () => {
+                try {
+                    const response = await axios.post(
+                        '/validate/po-number',
+                        {po_number: this.account.poNumber,}, {
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json',
 
-                    }
-                }).then((response) => {
-                    console.log(response.data);
-                    window.swal.close();
-                });
+                            }
+                        }
+                    );
+
+                    return {
+                        success: true,
+                        data: response.data,
+                        error: null
+                    };
+
+                } catch (error) {
+                    return {
+                        success: false,
+                        data: error.response.data,
+                        error: error.response?.data?.message ?? error.message
+                    };
+                }
             }
-        });
+        }).then((result) => {
 
-        return false;
+            if (!result.value.success) {
+                window.Amplify.alert(result.value.error, 'Checkout', {icon: 'error'});
+                return;
+            }
+
+            return result.value.success;
+        });
     },
 
     selectAddressSelected(shipToNumber) {
@@ -371,12 +417,87 @@ export default {
         this.validationError = '';
     },
 
-    notifyStaticSubmit() {
-        if (typeof window !== 'undefined' && typeof window.ShowNotification === 'function') {
-            window.ShowNotification('info', 'Order', 'Static checkout preview — order submission is disabled.');
-        } else {
-            alert('Static checkout preview — order submission is disabled.');
-        }
+    /**
+     * Submit Request To Server
+     *
+     * 1. Draft Order
+     * 2. Quote
+     * 3. Order
+     * @param type
+     */
+    submitRequest(type = 'order') {
+        const messages = {
+            order: 'Order Processing...',
+            quotation: 'Request For Quote Processing...',
+            draft: 'Draft Order Processing...',
+        };
+
+        const urls = {
+            order: '/carts/submit-order',
+            quotation: '/carts/submit-quote',
+            draft: '/drafts',
+        };
+
+        let payload = {};
+
+        window.Amplify.confirm(messages[type], 'Checkout', '', {
+            icon: 'info',
+            showConfirmButton: false,
+            allowEscapeKey: false,
+            showCancelButton: false,
+            showCloseButton: false,
+            backdrop: true,
+            willOpen: () => document.querySelector('.swal2-actions').style.justifyContent = 'center',
+            didOpen: () => window.swal.clickConfirm(),
+            allowOutsideClick: () => !window.swal.isLoading(),
+            preConfirm: async () => {
+                try {
+
+                    const response = await axios
+                        .post(urls[type], payload);
+
+                    return {
+                        success: true,
+                        data: response.data,
+                        error: null
+                    };
+                } catch (e) {
+                    return {
+                        success: false,
+                        data: error.response.data,
+                        error: error.response?.data?.message ?? error.message
+                    }
+                }
+            }
+        }).then((result) => {
+
+            if (!result.value.success) {
+                window.Amplify.alert(result.value.error, 'Checkout', {icon: 'error'});
+                return;
+            }
+
+            let response = result.value.data;
+
+            window.Amplify.confirm(response.message, 'Checkout', 'Continue Shopping', {
+                icon: 'success',
+                cancelButtonText: 'Review ' + this.capitalizeFirstLetter(type),
+                customClass: {
+                    confirmButton: 'btn btn-primary',
+                    cancelButton: 'btn btn-secondary',
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.replace(this.backUrl);
+                    return;
+                }
+
+                if (result.isDismissed) {
+                    window.location.href = (result.dismiss === 'cancel')
+                        ? response.redirect_to
+                        : this.backUrl;
+                }
+            });
+        });
     },
 
     priceFormatter(price) {
@@ -385,5 +506,9 @@ export default {
             style: 'currency',
             currency: window.Amplify?.config?.currency ?? 'USD',
         }).format(Number.isFinite(value) ? value : 0);
+    },
+
+    capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1)
     },
 }

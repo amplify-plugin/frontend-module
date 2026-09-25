@@ -20,8 +20,6 @@ export const useCheckoutStore = defineStore('checkout', {
             shipOptions: {},
             paymentMethod: 'on_account',
             creditCardToken: '',
-            orderNotes: '',
-            internalNotes: '',
             validationError: '',
             verifyPoNumber: false,
             guestCheckout: false,
@@ -30,6 +28,7 @@ export const useCheckoutStore = defineStore('checkout', {
             allowChooseShipping: false,
             allowRequestQuote: false,
             allowCreateOrderList: false,
+            hasShipInstruction: false,
             backUrl: window.location.origin,
             orderListTitle: 'Order List',
             purchaseOrder: null, //if object already verified
@@ -69,6 +68,7 @@ export const useCheckoutStore = defineStore('checkout', {
                 instructions: '',
             },
 
+            //Review  Step
             review: {
                 sub_total: null,
                 tax_amount: null,

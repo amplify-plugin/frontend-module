@@ -11,10 +11,23 @@ const countries = ref(store.countries);
 
 const states = ref(store.states);
 
-const shipping = ref(store.shipping);
-
 const shipOptionLabels = computed(() => {
   return Object.keys(store.shipOptions);
+})
+
+const defaultShippingOption = computed(() => {
+
+  for (const [group, methods] of Object.entries(store.shipOptions)) {
+
+    for (const option of methods) {
+
+      if (option.shipvia === store.shipping.method) {
+        return group;
+      }
+    }
+  }
+
+  return '';
 })
 
 function slugify(value) {
@@ -40,9 +53,9 @@ function slugify(value) {
       <div class="form-group">
         <label for="shipping-address">Select Address</label>
         <div :class="{'input-group input-append' : store.allowCreateShipping}">
-          <select :class="{'form-control custom-select': true, 'is-invalid': shipping.errors.has('number')}"
+          <select :class="{'form-control custom-select': true, 'is-invalid': store.shipping.errors.has('number')}"
                   @change="store.selectAddressSelected($event.target.value)"
-                  v-model="shipping.number"
+                  v-model="store.shipping.number"
                   id="shipping-address"
                   :disabled="!store.allowChooseShipping"
           >
@@ -63,14 +76,14 @@ function slugify(value) {
             </button>
           </div>
         </div>
-        <span class="invalid-feedback d-block">{{ shipping.errors.first('number') }}</span>
+        <span class="invalid-feedback d-block">{{ store.shipping.errors.first('number') }}</span>
       </div>
     </div>
     <div class="col-sm-6">
       <div class="form-group">
         <label for="shipping-contact">Contact<span class="text-danger font-weight-bold">*</span></label>
-        <input :class="{'form-control': true, 'is-invalid': shipping.errors.has('contact')}"
-               :readonly="shipping.number"
+        <input :class="{'form-control': true, 'is-invalid': store.shipping.errors.has('contact')}"
+               :readonly="store.shipping.number"
                type="text"
                size="255"
                min="2"
@@ -78,16 +91,16 @@ function slugify(value) {
                maxlength="255"
                placeholder="Enter Shipping Contact Name"
                id="shipping-contact"
-               v-model="shipping.contact"
+               v-model="store.shipping.contact"
         >
-        <span class="invalid-feedback d-block">{{ shipping.errors.first('contact') }}</span>
+        <span class="invalid-feedback d-block">{{ store.shipping.errors.first('contact') }}</span>
       </div>
     </div>
     <div class="col-sm-6">
       <div class="form-group">
         <label for="shipping-phone">Phone</label>
-        <input :class="{'form-control': true, 'is-invalid': shipping.errors.has('phone')}"
-               :readonly="shipping.number"
+        <input :class="{'form-control': true, 'is-invalid': store.shipping.errors.has('phone')}"
+               :readonly="store.shipping.number"
                type="text"
                size="255"
                min="2"
@@ -95,16 +108,16 @@ function slugify(value) {
                maxlength="255"
                placeholder="Enter Shipping Phone Number"
                id="shipping-phone"
-               v-model="shipping.phone"
+               v-model="store.shipping.phone"
         >
-        <span class="invalid-feedback d-block">{{ shipping.errors.first('phone') }}</span>
+        <span class="invalid-feedback d-block">{{ store.shipping.errors.first('phone') }}</span>
       </div>
     </div>
     <div class="col-sm-12">
       <div class="form-group">
         <label for="shipping-address">Street Address<span class="text-danger font-weight-bold">*</span></label>
-        <input :class="{'form-control mb-1': true, 'is-invalid': shipping.errors.has('addressLine1')}"
-               :readonly="shipping.number"
+        <input :class="{'form-control mb-1': true, 'is-invalid': store.shipping.errors.has('addressLine1')}"
+               :readonly="store.shipping.number"
                type="text"
                size="255"
                min="2"
@@ -112,9 +125,9 @@ function slugify(value) {
                maxlength="255"
                placeholder="Enter Address Line 1"
                id="shipping-address"
-               v-model="shipping.addressLine1">
-        <input :class="{'form-control mb-1': true, 'is-invalid': shipping.errors.has('addressLine2')}"
-               :readonly="shipping.number"
+               v-model="store.shipping.addressLine1">
+        <input :class="{'form-control mb-1': true, 'is-invalid': store.shipping.errors.has('addressLine2')}"
+               :readonly="store.shipping.number"
                type="text"
                size="255"
                min="2"
@@ -122,9 +135,9 @@ function slugify(value) {
                maxlength="255"
                placeholder="Enter Address Line 2"
                id="shipping-address-2"
-               v-model="shipping.addressLine2">
-        <input :class="{'form-control mb-1': true, 'is-invalid': shipping.errors.has('addressLine3')}"
-               :readonly="shipping.number"
+               v-model="store.shipping.addressLine2">
+        <input :class="{'form-control mb-1': true, 'is-invalid': store.shipping.errors.has('addressLine3')}"
+               :readonly="store.shipping.number"
                type="text"
                size="255"
                min="2"
@@ -132,12 +145,12 @@ function slugify(value) {
                maxlength="255"
                placeholder="Enter Address Line 3"
                id="shipping-address-3"
-               v-model="shipping.addressLine3">
+               v-model="store.shipping.addressLine3">
         <span class="invalid-feedback d-block">
           {{
-            [shipping.errors.first('addressLine1'),
-              shipping.errors.first('addressLine2'),
-              shipping.errors.first('addressLine3')
+            [store.shipping.errors.first('addressLine1'),
+              store.shipping.errors.first('addressLine2'),
+              store.shipping.errors.first('addressLine3')
             ].filter((i) => i != null).join('<br>')
           }}
         </span>
@@ -146,39 +159,39 @@ function slugify(value) {
     <div class="col-sm-6">
       <div class="form-group">
         <label for="shipping-country">Country<span class="text-danger font-weight-bold">*</span></label>
-        <select :class="{'form-control custom-select': true, 'is-invalid': shipping.errors.has('country')}"
+        <select :class="{'form-control custom-select': true, 'is-invalid': store.shipping.errors.has('country')}"
                 id="shipping-country"
-                v-model="shipping.country"
-                :disabled="shipping.number"
+                v-model="store.shipping.country"
+                :disabled="store.shipping.number"
         >
           <option value="" selected>Choose country</option>
           <option v-for="country of countries" :key="country.iso2" :value="country.iso2">
             {{ country.name }}
           </option>
         </select>
-        <span class="invalid-feedback d-block">{{ shipping.errors.first('country') }}</span>
+        <span class="invalid-feedback d-block">{{ store.shipping.errors.first('country') }}</span>
       </div>
     </div>
     <div class="col-sm-6">
       <div class="form-group">
         <label for="shipping-state">State<span class="text-danger font-weight-bold">*</span></label>
-        <select :class="{'form-control custom-select': true, 'is-invalid': shipping.errors.has('state')}"
+        <select :class="{'form-control custom-select': true, 'is-invalid': store.shipping.errors.has('state')}"
                 id="shipping-state"
-                v-model="shipping.state"
-                :disabled="shipping.number">
+                v-model="store.shipping.state"
+                :disabled="store.shipping.number">
           <option>Choose state</option>
           <option v-for="state of states" :key="state.iso2" :value="state.iso2">
             {{ state.name }}
           </option>
         </select>
-        <span class="invalid-feedback d-block">{{ shipping.errors.first('state') }}</span>
+        <span class="invalid-feedback d-block">{{ store.shipping.errors.first('state') }}</span>
       </div>
     </div>
     <div class="col-sm-6">
       <div class="form-group">
         <label for="shipping-city">City<span class="text-danger font-weight-bold">*</span></label>
-        <input :class="{'form-control': true, 'is-invalid': shipping.errors.has('city')}"
-               :readonly="shipping.number"
+        <input :class="{'form-control': true, 'is-invalid': store.shipping.errors.has('city')}"
+               :readonly="store.shipping.number"
                type="text"
                size="255"
                min="2"
@@ -186,16 +199,16 @@ function slugify(value) {
                maxlength="255"
                placeholder="Enter City Name"
                id="shipping-city"
-               v-model="shipping.city"
+               v-model="store.shipping.city"
         >
-        <span class="invalid-feedback d-block">{{ shipping.errors.first('city') }}</span>
+        <span class="invalid-feedback d-block">{{ store.shipping.errors.first('city') }}</span>
       </div>
     </div>
     <div class="col-sm-6">
       <div class="form-group">
         <label for="shipping-zip">ZIP Code<span class="text-danger font-weight-bold">*</span></label>
-        <input :class="{'form-control': true, 'is-invalid': shipping.errors.has('zipCode')}"
-               :readonly="shipping.number"
+        <input :class="{'form-control': true, 'is-invalid': store.shipping.errors.has('zipCode')}"
+               :readonly="store.shipping.number"
                type="text"
                size="255"
                min="2"
@@ -203,9 +216,9 @@ function slugify(value) {
                maxlength="255"
                placeholder="Enter City Name"
                id="shipping-zip"
-               v-model="shipping.zipCode"
+               v-model="store.shipping.zipCode"
         >
-        <span class="invalid-feedback d-block">{{ shipping.errors.first('zipCode') }}</span>
+        <span class="invalid-feedback d-block">{{ store.shipping.errors.first('zipCode') }}</span>
       </div>
     </div>
   </div>
@@ -218,7 +231,7 @@ function slugify(value) {
     <div class="col-12" v-if="shipOptionLabels.length > 0">
       <ul class="nav nav-pills" role="tablist" v-if="shipOptionLabels.length > 1">
         <li class="nav-item" v-for="shipOption in shipOptionLabels">
-          <a :class="{'nav-link show text-capitalize' : true, 'active' : shipOption === 'AWFCO'}"
+          <a :class="{'nav-link show text-capitalize' : true, 'active' : shipOption === defaultShippingOption}"
              :href="`#${slugify(shipOption)}`"
              data-toggle="tab" role="tab" aria-selected="true">
             {{ shipOption }}
@@ -228,7 +241,7 @@ function slugify(value) {
       <div :class="{'tab-content': true, 'p-0 border-0' : shipOptionLabels.length === 1}">
         <div
             v-for="(methods, name) in store.shipOptions"
-            class="tab-pane fade active show"
+            :class="{'tab-pane fade': true, 'active show': name === defaultShippingOption}"
             :id="`${slugify(name)}`"
             role="tabpanel">
           <ul class="list-unstyled" style="max-height: 400px; overflow-y: auto">
@@ -256,7 +269,7 @@ function slugify(value) {
                   </div>
                 </div>
 
-                <div v-if="parseFloat(method.amount) != 0" class="font-weight-bold">
+                <div v-if="parseFloat(method.amount) !== 0" class="font-weight-bold">
                   {{ store.priceFormatter(method.amount) }}
                 </div>
               </label>
@@ -264,7 +277,19 @@ function slugify(value) {
           </ul>
         </div>
       </div>
-      <span class="invalid-feedback d-block">{{ shipping.errors.first('method') }}</span>
+      <span class="invalid-feedback d-block">{{ store.shipping.errors.first('method') }}</span>
+      <div class="form-group" v-if="store.hasShipInstruction">
+        <label for="shipping-ship-ins">
+          Shipping Instructions
+        </label>
+        <textarea :class="{'form-control': true, 'is-invalid': store.shipping.errors.has('instructions')}"
+                  placeholder="Write your shipping instructions"
+                  id="shipping-ship-ins"
+                  v-model="store.shipping.instructions"></textarea>
+        <span class="invalid-feedback d-block">
+              {{ store.shipping.errors.first('instructions') }}
+            </span>
+      </div>
     </div>
     <no-ship-options v-else/>
   </div>

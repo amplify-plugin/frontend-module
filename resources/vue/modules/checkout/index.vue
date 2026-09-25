@@ -9,10 +9,6 @@ import payment from './steps/payment.vue';
 import review from './steps/review.vue';
 
 const props = defineProps({
-  cart: {
-    type: Object,
-    default: null,
-  },
   cartId: {
     type: Number,
     required: true,
@@ -27,6 +23,10 @@ const props = defineProps({
   },
   steps: {
     type: Array,
+    default: null,
+  },
+  contact: {
+    type: Object,
     default: null,
   },
   customer: {
@@ -45,10 +45,6 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
-  shipOptions: {
-    type: [Object, Array],
-    default: null,
-  },
   createFavouriteFromCart: {
     type: Boolean,
     default: true,
@@ -66,10 +62,6 @@ const props = defineProps({
     default: () => {
       return typeof window !== 'undefined' ? window.location.origin : '/';
     },
-  },
-  contact: {
-    type: Object,
-    default: null,
   },
   guestCheckout: {
     type: Boolean,
@@ -94,7 +86,11 @@ const props = defineProps({
   verifyPoNumber: {
     type: Boolean,
     default: false,
-  }
+  },
+  hasShipInstruction: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const store = useCheckoutStore();

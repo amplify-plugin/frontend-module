@@ -4,8 +4,9 @@ namespace Amplify\Frontend\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
-class CartSubmitQuoteController
+class CartSubmitQuoteController extends Controller
 {
     public function __invoke(Request $request): JsonResponse
     {

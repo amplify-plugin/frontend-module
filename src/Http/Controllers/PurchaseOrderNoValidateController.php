@@ -40,7 +40,7 @@ class PurchaseOrderNoValidateController extends Controller
 
             $erpPODetail = ErpApi::getPODetails($request->all());
 
-            return $this->apiResponse(true, ' Purchase Order Number Verified', 200, ['data' => $erpPODetail]);
+            return $this->apiResponse(true, 'Purchase Order Number Verified', 200, ['data' => $erpPODetail]);
         } catch (\Exception $e) {
             return $this->apiResponse(false, $e->getMessage(), 500);
         }

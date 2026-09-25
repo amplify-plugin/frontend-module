@@ -44,10 +44,6 @@ export default {
         return this.currentIndex === this.orderedSteps.length - 1;
     },
 
-    shippingGroups(state) {
-        return Object.keys(state.shipOptions?.FreightRate ?? {});
-    },
-
     cartItems(state) {
         return state.cart?.products ?? state.cart?.items ?? [];
     },

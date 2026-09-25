@@ -65,11 +65,11 @@ class Checkout extends BaseComponent
 
         $states = State::select('iso2', 'country_id', 'name')->whereIn('country_id', $countryIds)->get();
 
-        $shipOptions = ErpApi::getShippingOption();
-
         $steps = array_reverse($steps);
 
-        $verifyPoNumber = true;
+        $verifyPoNumber = false;
+
+        $hasShipInstruction = true;
 
         return view('widget::checkout', compact(
             'verifyPoNumber',
@@ -84,8 +84,8 @@ class Checkout extends BaseComponent
             'addresses',
             'countries',
             'states',
-            'shipOptions',
             'allowChooseShipping',
+            'hasShipInstruction',
             'contact',
         ));
     }

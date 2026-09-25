@@ -22,7 +22,6 @@ use Amplify\Frontend\Http\Controllers\Auth\RequestOnlineAccessController;
 use Amplify\Frontend\Http\Controllers\Auth\VerifyEmailController;
 use Amplify\Frontend\Http\Controllers\BrandIndexController;
 use Amplify\Frontend\Http\Controllers\CampaignController;
-use Amplify\Frontend\Http\Controllers\CartSubmitQuoteController;
 use Amplify\Frontend\Http\Controllers\CheckoutController;
 use Amplify\Frontend\Http\Controllers\ContactLoginController;
 use Amplify\Frontend\Http\Controllers\CustomerPartNumberController;
@@ -118,9 +117,11 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
     });
 
     // lookup a single product code (used by quick-order widget)
-    Route::post('carts/submit-quote', CartSubmitQuoteController::class)->name('carts.submit-quote');
+    Route::post('carts/submit-order', \Amplify\Frontend\Http\Controllers\CartSubmitOrderController::class)->name('carts.submit-order');
+    Route::post('carts/submit-quote', \Amplify\Frontend\Http\Controllers\CartSubmitQuoteController::class)->name('carts.submit-quote');
     Route::post('/remove/carts', [\Amplify\Frontend\Http\Controllers\CartController::class, 'removeCarts'])->name('frontend.remove-carts');
     Route::get('checkout', CheckoutController::class)->name('checkout');
+    Route::post('checkout', CheckoutController::class)->name('checkout');
     Route::post('subscribe', NewsletterSubscriptionController::class)->name('subscribe');
 
     Route::prefix('faq')->controller(FaqController::class)->group(function () {
@@ -263,7 +264,7 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
         Route::resource('orders', OrderController::class)->only('index', 'show')->where(['order' => '[A-Za-z0-9\-]+']);
         Route::post('orders/export', \Amplify\Frontend\Http\Controllers\Order\ExportController::class)->name('orders.export');
         Route::post('orders/{id}/approve', [OrderController::class, 'approve'])->name('orders.approve')->where(['id' => '[0-9]+']);
-        Route::resource('drafts', DraftController::class)->only('index', 'show');
+        Route::resource('drafts', DraftController::class);
 
         Route::resource('quotations', QuotationController::class)
             ->only('index', 'show');
