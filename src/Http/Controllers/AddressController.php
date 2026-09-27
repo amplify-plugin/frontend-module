@@ -7,6 +7,7 @@ use Amplify\Frontend\Http\Requests\ShipToAddressRequest;
 use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\System\Backend\Models\Contact;
 use Amplify\System\Backend\Models\CustomerAddress;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Collection;
@@ -43,7 +44,7 @@ class AddressController extends Controller
     }
 
     /**
-     * @return RedirectResponse
+     * @return RedirectResponse|JsonResponse
      *                          The purpose of this function is to store the address from the customer admin panel
      */
     public function store(ShipToAddressRequest $request)
@@ -58,7 +59,7 @@ class AddressController extends Controller
             // Input: "  123 Main Street  " → Output: "123 Main Street"
             $address1 = trim($validated['address_1'] ?? '');
 
-            if (! empty($address1)) {
+            if (!empty($address1)) {
                 // Step 2: Extract the first word/token from the address
                 // Input: "123 Main Street" → Output: "123"
                 // Input: "BuildingA Suite 200" → Output: "BuildingA"
@@ -94,12 +95,12 @@ class AddressController extends Controller
                 $counter = 0;
 
                 while (
-                    CustomerAddress::where('customer_id', customer()->getKey())
-                        ->where('address_code', $candidate)
-                        ->exists()
+                CustomerAddress::where('customer_id', customer()->getKey())
+                    ->where('address_code', $candidate)
+                    ->exists()
                 ) {
                     $counter++;
-                    $candidate = $baseCode.'-'.$counter;
+                    $candidate = $baseCode . '-' . $counter;
                 }
 
                 // Store the generated unique address code in validated data
@@ -118,12 +119,17 @@ class AddressController extends Controller
                 'ship_to_country_code' => $validated['country_code'],
                 'ship_to_state' => $validated['state'] ?? null,
                 'ship_to_zip_code' => $validated['zip_code'],
+                'ship_to_phone' => $validated['phone'],
             ]);
 
             if ($validateAddress->Response !== 'Success') {
-                Session::flash('error', $validateAddress->Message ?? 'The address value was incomplete.');
+                $message = $validateAddress->Message ?? 'The address value was incomplete.';
 
-                return back();
+                if ($request->expectsJson()) {
+                    throw new \ErrorException($message);
+                }
+
+                return back()->with('error', $message);
             }
 
             $erpAddress = ErpApi::createCustomerShippingLocation([
@@ -144,11 +150,11 @@ class AddressController extends Controller
                 'zip_code' => $validated['zip_code'],
             ]);
 
-            if (isset($erpAddress->Message) && ! empty($erpAddress->Message)) {
+            if (!empty($erpAddress->Message)) {
                 throw new \Exception($erpAddress->Message);
             }
 
-            if (config('amplify.client_code') != 'ACP' && ! empty($erpAddress->ShipToNumber)) {
+            if (config('amplify.client_code') != 'ACP' && !empty($erpAddress->ShipToNumber)) {
                 CustomerAddress::create([
                     'customer_id' => customer()->getKey(),
                     'address_code' => $erpAddress->ShipToNumber,
@@ -160,7 +166,7 @@ class AddressController extends Controller
                     'state' => $erpAddress->ShipToState,
                     'city' => $erpAddress->ShipToCity,
                     'zip_code' => $erpAddress->ShipToZipCode,
-                    'phone' => $validated['phone'] ?? null,
+                    'phone' => $erpAddress->ShipToPhoneNumber ?? $validated['phone'] ?? null,
                 ]);
             }
 
@@ -170,14 +176,27 @@ class AddressController extends Controller
 
             Cache::forget("getCustomerShippingLocationList-{$customerNumber}");
 
-            Session::flash('success', 'Address Added Successfully');
+            $message = 'Address added successfully.';
 
-            return redirect()->route('frontend.addresses.index');
+            if ($request->expectsJson()) {
+                return $this->apiResponse(true, $message, 200, [
+                    'erp'=> $erpAddress,
+                ]);
+            }
+
+            return redirect()
+                ->route('frontend.addresses.index')
+                ->with('success', $message);
+
         } catch (\Throwable $th) {
-            Log::error($th);
-            Session::flash('error', $th->getMessage() ?? 'Sorry something went wrong...');
 
-            return back();
+            Log::error($th);
+
+            if ($request->expectsJson()) {
+                return $this->apiResponse(false, $th->getMessage(), 500);
+            }
+
+            return back()->with('error', $th->getMessage());
         }
     }
 
@@ -207,7 +226,7 @@ class AddressController extends Controller
         if ($address->customer_id !== customer()->getKey()) {
             abort(403);
         }
-        
+
         hasAccessOrFail('address.update');
 
         store()->addressModel = $address;

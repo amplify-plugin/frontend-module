@@ -37,7 +37,7 @@ function handleCreateOrderList() {
     </div>
     <div class="column">
       <button type="button"
-              :class="{'btn': true, 'btn-primary': !store.isLastStep, 'btn-success' : store.isLastStep }"
+              :class="{'btn': true, 'btn-primary': !store.isLastStep, 'btn-success' : store.isLastStep, 'disabled': store.newShipping }"
               @click.prevent="store.goNext()">
         <span class="hidden-xs-down" v-if="!store.isLastStep">Continue&nbsp;</span>
         <span v-else>Complete Order</span>

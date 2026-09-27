@@ -8,7 +8,6 @@ use Amplify\System\Backend\Models\Cart;
 use Amplify\System\Backend\Models\CustomerOrder;
 use Amplify\System\Backend\Models\CustomerOrderLine;
 use Amplify\System\Backend\Models\SystemConfiguration;
-use Amplify\System\Backend\Models\Warehouse;
 use Amplify\System\OrderRule\Facades\OrderRuleCheck;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -46,8 +45,8 @@ class CartSubmitOrderController extends Controller
                     'product_id' => $product->product_id,
                     'product_code' => $product->product_code,
                     'warehouse_id' => $product->warehouse_id ?? null,
-                    'qty' => (int) $product->quantity,
-                    'customer_price' => (float) $product->unitprice,
+                    'qty' => floatval($product->quantity),
+                    'customer_price' => floatval($product->unitprice),
                     'ship_to_address_id' => $product->address_id,
                     'source_type' => $product->source_type ?? null,
                     'source' => $product->source ?? null,
@@ -87,9 +86,9 @@ class CartSubmitOrderController extends Controller
 
             // ===========================================
             // $order->user_id = customer(true)->id;
-            $order->total_shipping_cost = $request->shipping_amount;
-            $order->shipping_method = $request->shipping_method;
-            $order->shipping_number = $request->shipping_number;
+            $order->total_shipping_cost = $request->input('shipping_amount');
+            $order->shipping_method = $request->input('shipping_method');
+            $order->shipping_number = $request->input('shipping_number');
             // ===========================================
 
             if ($customerDetails->CreditCardOnly == 'Y') {
@@ -259,7 +258,7 @@ class CartSubmitOrderController extends Controller
      *
      * @param  mixed  $cart
      */
-    public function customerCartUpdate(Cart $cart): void
+    private function customerCartUpdate(Cart $cart): void
     {
         $cart->update([
             'status' => 0,

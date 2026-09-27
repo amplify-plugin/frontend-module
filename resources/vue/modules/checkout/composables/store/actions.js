@@ -1,18 +1,7 @@
-import {
-    mockAddresses,
-    mockCart,
-    mockContact,
-    mockCountries,
-    mockCustomer,
-    mockShipOptions,
-    mockStates,
-    mockSteps,
-} from '../../mock';
+import {mockContact, mockCountries, mockCustomer, mockStates, mockSteps,} from '../../mock';
 
 import {useValidate} from "@/composables/useValidate";
 import axios from 'axios';
-import Swal from "sweetalert2";
-import {error} from "../../../../../../../../public/packages/places.js/dist/cdn/places";
 
 const validator = useValidate();
 
@@ -29,7 +18,7 @@ export default {
         // Blade always passes these props (possibly as empty ERP results),
         // so fall back to fixtures on null AND empty — not just nullish.
         this.addresses = (Array.isArray(props.addresses) && props.addresses.length > 0)
-            ? props.addresses : mockAddresses;
+            ? props.addresses : [];
         this.countries = (Array.isArray(props.countries) && props.countries.length > 0)
             ? props.countries : mockCountries;
         this.states = (Array.isArray(props.states) && props.states.length > 0)
@@ -152,7 +141,6 @@ export default {
     validateCurrentStep() {
         switch (this.activeStep) {
             case 'account':
-
                 this.account.errors = validator.make(
                     this.account, {
                         name: ['required', 'min:2', 'max:255'],
@@ -169,19 +157,15 @@ export default {
                         poNumber: [this.customer?.PoRequired === 'Y' ? 'required' : 'nullable'],
                     }, {},
                     {
-                        addressLine1: 'Address Line 1',
-                        addressLine2: 'Address Line 2',
-                        addressLine3: 'Address Line 3',
-                        zipCode: 'ZIP Code',
-                        poNumber: 'PO Number',
+                        addressLine1: 'address line 1',
+                        addressLine2: 'address line 2',
+                        addressLine3: 'address line 3',
+                        zipCode: 'zip code',
+                        poNumber: 'po number',
                     });
 
                 if (this.account.errors.failed()) {
-                    this.validationError =
-                        this.account.errors.errors().length > 1
-                            ? 'The given data is invalid.'
-                            : this.account.errors.message;
-
+                    this.validationError = 'The given data is invalid.';
                     return false;
                 }
 
@@ -192,56 +176,7 @@ export default {
                 return true;
 
             case 'shipping':
-                this.shipping.errors = validator.make(
-                    this.shipping, {
-                        name: ['required', 'max:255'],
-                        number: ['required', 'max:255'],
-                        addressLine1: ['required', 'max:255'],
-                        addressLine2: ['nullable', 'max:255'],
-                        addressLine3: ['nullable', 'max:255'],
-                        country: ['required', 'max:255'],
-                        state: ['required', 'max:255'],
-                        city: ['required', 'max:255'],
-                        zipCode: ['required'],
-                        method: ['required'],
-                        freightAccountNumber: ['nullable', 'max:255'],
-                        contact: ['required', 'max:255'],
-                        phone: ['required', 'min:10', 'max:17'],
-                        instructions: ['nullable', 'max:255'],
-                    }, {},
-                    {
-                        addressLine1: 'Address Line 1',
-                        addressLine2: 'Address Line 2',
-                        addressLine3: 'Address Line 3',
-                        zipCode: 'ZIP Code',
-                        method: 'Delivery Method',
-                        instructions: 'Shipping Instructions',
-                        freightAccountNumber: 'Freight Account Number',
-                    });
-
-                if (this.shipping.errors.failed()) {
-                    this.validationError =
-                        this.shipping.errors.errors().length > 1
-                            ? 'The given data is invalid.'
-                            : this.shipping.errors.message;
-
-                    return false;
-                }
-
-                return this.shipping.errors.passed();
-            //
-            // if (!this.selectedShippingMethod) {
-            //     this.validationError = 'Please, Select a Shipping Method!';
-            //     return false;
-            // }
-            // if (
-            //     this.selectedShippingMethod.frttermscd === 'C' &&
-            //     !this.freightAccountNumber
-            // ) {
-            //     this.validationError = 'Enter your freight account number.';
-            //     return false;
-            // }
-            // return true;
+                return this.validateShippingAddress();
 
             case 'review':
                 // The reference review page has no PO field; PO/notes stay
@@ -265,22 +200,8 @@ export default {
 
     fetchShippingOptions() {
 
-        let payload = {
-            shipping_method: this.shipping.method,
-            shipping_name: this.shipping.name,
-            customer_order_ref: this.account.poNumber,
-            ship_to_number: this.shipping.number,
-            customer_address_one: this.shipping.addressLine1,
-            customer_address_two: this.shipping.addressLine2,
-            customer_address_three: this.shipping.addressLine3,
-            customer_city: this.shipping.city,
-            customer_country_code: this.shipping.country,
-            customer_state: this.shipping.state,
-            customer_zipcode: this.shipping.zipCode,
-            customer_phone: this.shipping.phone,
-        };
-
-        window.Amplify.confirm('Retrieving Shipping Options...', 'Checkout', '', {
+        return window.Amplify.confirm('Retrieving Shipping Options...', 'Checkout', '', {
+            icon: 'info',
             allowEscapeKey: false,
             showCancelButton: false,
             showCloseButton: false,
@@ -290,6 +211,22 @@ export default {
             allowOutsideClick: () => !window.swal.isLoading(),
             preConfirm: async () => {
                 try {
+
+                    let payload = {
+                        shipping_method: this.shipping.method,
+                        shipping_name: this.shipping.name,
+                        customer_order_ref: this.account.poNumber,
+                        ship_to_number: this.shipping.number,
+                        customer_address_one: this.shipping.addressLine1,
+                        customer_address_two: this.shipping.addressLine2,
+                        customer_address_three: this.shipping.addressLine3,
+                        customer_city: this.shipping.city,
+                        customer_country_code: this.shipping.country,
+                        customer_state: this.shipping.state,
+                        customer_zipcode: this.shipping.zipCode,
+                        customer_phone: this.shipping.phone,
+                    };
+
                     const response = await axios.post(
                         '/get/shipping/option',
                         payload,
@@ -389,9 +326,130 @@ export default {
         });
     },
 
+    validateShippingAddress() {
+        this.shipping.errors = validator.make(
+            this.shipping, {
+                name: ['required', 'max:255'],
+                number: ['required', 'max:255'],
+                addressLine1: ['required', 'max:255'],
+                addressLine2: ['nullable', 'max:255'],
+                addressLine3: ['nullable', 'max:255'],
+                country: ['required', 'max:255'],
+                state: ['required', 'max:255'],
+                city: ['required', 'max:255'],
+                zipCode: ['required'],
+                method: ['required'],
+                freightAccountNumber: ['nullable', 'max:255'],
+                contact: ['nullable', 'max:255'],
+                phone: ['nullable', 'min:10', 'max:17'],
+                instructions: ['nullable', 'max:255'],
+            }, {},
+            {
+                addressLine1: 'address line 1',
+                addressLine2: 'address line 2',
+                addressLine3: 'address line 3',
+                zipCode: 'zip code',
+                method: 'delivery method',
+                number: this.newShipping ? 'code' : 'address',
+                instructions: 'shipping instructions',
+                freightAccountNumber: 'freight account number',
+            });
+
+        if (this.shipping.errors.failed()) {
+            this.validationError = 'The given data is invalid.';
+            return false;
+        }
+
+        return this.shipping.errors.passed();
+    },
+
+    async saveNewShippingAddress() {
+
+        if (!this.validateShippingAddress()) {
+            return false;
+        }
+
+        return await window.Amplify.confirm('Creating Shipping Address...', 'Checkout', '', {
+            icon: 'info',
+            allowEscapeKey: false,
+            showCancelButton: false,
+            showCloseButton: false,
+            backdrop: true,
+            willOpen: () => document.querySelector('.swal2-actions').style.justifyContent = 'center',
+            didOpen: () => window.swal.clickConfirm(),
+            allowOutsideClick: () => !window.swal.isLoading(),
+            preConfirm: async () => {
+                try {
+
+                    let payload = {
+                        address_code: this.shipping.number,
+                        address_name: this.shipping.name,
+                        address_1: this.shipping.addressLine1,
+                        address_2: this.shipping.addressLine2,
+                        address_3: this.shipping.addressLine3,
+                        state: this.shipping.state,
+                        city: this.shipping.city,
+                        zip_code: this.shipping.zipCode,
+                        country_code: this.shipping.country,
+                        phone: this.shipping.phone,
+                    };
+
+                    const response = await axios.post(
+                        '/addresses',
+                        payload, {
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json',
+
+                            }
+                        }
+                    );
+
+                    return {
+                        success: true,
+                        code: response.status,
+                        data: response.data,
+                        error: null
+                    };
+
+                } catch (error) {
+                    return {
+                        success: false,
+                        code: error?.response.status ?? 500,
+                        data: error?.response.data ?? {},
+                        error: error?.response?.data?.message ?? error.message
+                    };
+                }
+            }
+        }).then((result) => {
+
+            if (!result.value.success) {
+                window.Amplify.alert(result.value.error, 'Checkout', {icon: 'error'});
+                return;
+            }
+
+            let newEntry = result.value?.data?.erp ?? null;
+
+            if (newEntry) {
+
+                this.addresses.push(newEntry);
+
+                window.Amplify.notify('success', result.value.data.message, 'Checkout');
+
+                this.newShipping = false;
+
+                this.selectAddressSelected(newEntry.ShipToNumber);
+            }
+
+            return result.value.success;
+        });
+    },
+
     selectAddressSelected(shipToNumber) {
 
-        let addressFound = false
+        this.validationError = '';
+
+        let addressFound = false;
 
         for (const address of this.addresses) {
             if (address.ShipToNumber === shipToNumber) {
@@ -425,7 +483,8 @@ export default {
      * 3. Order
      * @param type
      */
-    submitRequest(type = 'order') {
+    async submitRequest(type = 'order', data = {}) {
+
         const messages = {
             order: 'Order Processing...',
             quotation: 'Request For Quote Processing...',
@@ -438,9 +497,7 @@ export default {
             draft: '/drafts',
         };
 
-        let payload = {};
-
-        window.Amplify.confirm(messages[type], 'Checkout', '', {
+        return window.Amplify.confirm(messages[type], 'Checkout', '', {
             icon: 'info',
             showConfirmButton: false,
             allowEscapeKey: false,
@@ -453,6 +510,44 @@ export default {
             preConfirm: async () => {
                 try {
 
+                    let payload = {
+                        order_type: type,
+                        total_order_value: this.review.subtotal,
+                        sales_tax_amount: this.review.tax_amount,
+                        freight_amount: this.review.ship_charge,
+                        shipping_amount: this.review.ship_charge,
+                        hazmat_charge: this.review.hazmat_charge,
+                        order_notes: this.review.notes,
+                        internal_notes: this.shipping.instructions,
+
+                        po_number: this.account.poNumber,
+                        customer_name: this.account.company,
+                        customer_email: this.account.email,
+                        customer_phone: this.account.phone,
+
+                        address_1: this.shipping.addressLine1,
+                        address_2: this.shipping.addressLine2,
+                        address_3: this.shipping.addressLine3,
+                        address_country_code: this.shipping.country,
+                        address_state: this.shipping.state,
+                        address_city: this.shipping.city,
+                        address_zip_code: this.shipping.zipCode,
+                        shipping_method: this.shipping.method,
+                        shipping_number: this.shipping.number,
+                        shipping_phone: this.shipping.phone,
+                    };
+
+                    switch (type) {
+                        case 'draft':
+                            payload.draft_name = data.draft_name ?? null;
+                            break;
+
+                        case 'quotation':
+                            break;
+
+                        default:
+                    }
+
                     const response = await axios
                         .post(urls[type], payload);
 
@@ -461,7 +556,9 @@ export default {
                         data: response.data,
                         error: null
                     };
-                } catch (e) {
+
+                } catch (error) {
+
                     return {
                         success: false,
                         data: error.response.data,

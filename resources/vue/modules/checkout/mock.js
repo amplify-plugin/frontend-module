@@ -36,20 +36,6 @@ export const mockContact = {
     phone: '555-0101',
 };
 
-export const mockAddresses = [
-    {
-        ShipToNumber: 'ST-001',
-        ShipToName: 'Main Warehouse',
-        ShipToAddress1: '100 Main St',
-        ShipToAddress2: '',
-        ShipToAddress3: '',
-        ShipToCity: 'Los Angeles',
-        ShipToState: 'CA',
-        ShipToCountryCode: 'US',
-        ShipToZipCode: '90001',
-    },
-];
-
 export const mockCountries = [
     { id: 1, name: 'United States', iso2: 'US' },
     { id: 2, name: 'Canada', iso2: 'CA' },

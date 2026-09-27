@@ -11,6 +11,7 @@
 @stack('template-script')
 <!-- HTML Default -->
 @stack('html-default')
+<div id="html-default"></div>
 {{--@include('cms::inc.delete_confirm')--}}
 @include('cms::inc.order_confirm')
 <!-- Custom Script Footer-->

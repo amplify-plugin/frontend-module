@@ -1,7 +1,6 @@
 import {defineStore} from 'pinia';
 import getters from './store/getters.js';
 import actions from './store/actions.js';
-import {useValidate} from "@/composables/useValidate";
 
 
 export const useCheckoutStore = defineStore('checkout', {
@@ -51,6 +50,8 @@ export const useCheckoutStore = defineStore('checkout', {
             },
 
             //Shipping Step
+            newShipping : false,
+
             shipping: {
                 name: '',
                 number: '',
@@ -73,8 +74,8 @@ export const useCheckoutStore = defineStore('checkout', {
                 sub_total: null,
                 tax_amount: null,
                 ship_charge: null,
-                hazmat_charge : null,
-                wire_transfer_fee : null,
+                hazmat_charge: null,
+                wire_transfer_fee: null,
                 total: null,
                 lines: [],
                 notes: '',

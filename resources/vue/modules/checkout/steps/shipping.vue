@@ -5,8 +5,6 @@ import NoShipOptions from "./components/no-ship-options.vue";
 
 const store = useCheckoutStore();
 
-const addresses = ref(store.addresses);
-
 const countries = ref(store.countries);
 
 const states = ref(store.states);
@@ -41,55 +39,106 @@ function slugify(value) {
       .replace(/^-+|-+$/g, '');         // Trim hyphens
 }
 
+function formatAddress(address) {
+  return address.ShipToName
+      + ' - ' + [
+        address.ShipToAddress1,
+        address.ShipToCity,
+        address.ShipToZipCode,
+        address.ShipToState,
+        address.ShipToCountryCode
+      ].filter(i => i !== null && i !== '').join(', ');
+}
+
+function handleNewShipping() {
+  store.newShipping = true;
+  store.selectAddressSelected('')
+  store.shipOptions = {};
+}
+
+function resetShippingAddress() {
+  store.newShipping = false;
+  store.selectAddressSelected(store.customer?.DefaultShipTo ?? '');
+}
+
 </script>
 
 <template>
   <h4 class="border-bottom pb-2 mb-3">
     <i class="icon-book" style="margin-top: -10px"></i>
-    Shipping Address
+    {{ store.newShipping ? 'New Shipping Address' : 'Shipping Address' }}
   </h4>
   <div class="row">
     <div class="col-sm-12">
       <div class="form-group">
-        <label for="shipping-address">Select Address</label>
-        <div :class="{'input-group input-append' : store.allowCreateShipping}">
-          <select :class="{'form-control custom-select': true, 'is-invalid': store.shipping.errors.has('number')}"
-                  @change="store.selectAddressSelected($event.target.value)"
-                  v-model="store.shipping.number"
-                  id="shipping-address"
-                  :disabled="!store.allowChooseShipping"
-          >
-            <option value="">Choose Address</option>
-            <option v-for="address of addresses"
-                    :key="address.ShipToNumber"
-                    :value="address.ShipToNumber">
-              {{
-                address.ShipToName + ' - ' +
-                [address.ShipToAddress1, address.ShipToCity, address.ShipToZipCode, address.ShipToState, address.ShipToCountryCode].filter(i => i !== null && i !== '').join(', ')
-              }}
-            </option>
-          </select>
-          <div v-if="store.allowCreateShipping" class="input-group-append">
-            <button type="submit" class="btn btn-primary mx-0 my-0">
-              <i class="icon-plus font-weight-bolder"></i>
-              <span class="d-none d-md-inline-block ml-1">New Ship To</span>
-            </button>
-          </div>
-        </div>
-        <span class="invalid-feedback d-block">{{ store.shipping.errors.first('number') }}</span>
+        <label for="shipping-address" class="d-flex align-items-center justify-content-between">
+          <span>Select Address</span>
+          <a href="#"
+             class="font-weight-bold"
+             v-if="store.allowCreateShipping && !store.newShipping"
+             @click.prevent="handleNewShipping()">+ New Ship Address</a>
+        </label>
+        <select :class="{'form-control custom-select': true, 'is-invalid': store.shipping.errors.has('number') && !store.newShipping}"
+                @change="store.selectAddressSelected($event.target.value)"
+                v-model="store.shipping.number"
+                id="shipping-address"
+                :disabled="!store.allowChooseShipping || store.newShipping"
+        >
+          <option value="">Choose Address</option>
+          <option v-for="address of store.addresses"
+                  :key="address.ShipToNumber"
+                  :value="address.ShipToNumber">
+            {{ formatAddress(address) }}
+          </option>
+        </select>
+        <span class="invalid-feedback d-block" v-if="!store.newShipping">{{ store.shipping.errors.first('number') }}</span>
       </div>
     </div>
-    <div class="col-sm-6">
+
+    <div class="col-sm-6" v-show="store.newShipping">
       <div class="form-group">
-        <label for="shipping-contact">Contact<span class="text-danger font-weight-bold">*</span></label>
-        <input :class="{'form-control': true, 'is-invalid': store.shipping.errors.has('contact')}"
-               :readonly="store.shipping.number"
+        <label for="shipping-name">Name<span class="text-danger font-weight-bold">*</span></label>
+        <input :class="{'form-control': true, 'is-invalid': store.shipping.errors.has('name')}"
                type="text"
                size="255"
                min="2"
                max="255"
                maxlength="255"
-               placeholder="Enter Shipping Contact Name"
+               placeholder="Enter Address Name"
+               id="shipping-name"
+               v-model="store.shipping.name"
+        >
+        <span class="invalid-feedback d-block">{{ store.shipping.errors.first('name') }}</span>
+      </div>
+    </div>
+    <div class="col-sm-6" v-show="store.newShipping">
+      <div class="form-group">
+        <label for="shipping-number">Code<span class="text-danger font-weight-bold">*</span></label>
+        <input :class="{'form-control': true, 'is-invalid': store.shipping.errors.has('number')}"
+               type="text"
+               size="255"
+               min="2"
+               max="255"
+               maxlength="255"
+               placeholder="Enter Address Unique Code"
+               id="shipping-number"
+               v-model="store.shipping.number"
+        >
+        <span class="invalid-feedback d-block">{{ store.shipping.errors.first('number') }}</span>
+      </div>
+    </div>
+
+<!--    <div class="col-sm-6">
+      <div class="form-group">
+        <label for="shipping-contact">Contact<span class="text-danger font-weight-bold">*</span></label>
+        <input :class="{'form-control': true, 'is-invalid': store.shipping.errors.has('contact')}"
+               :readonly="store.shipping.number || !store.newShipping"
+               type="text"
+               size="255"
+               min="2"
+               max="255"
+               maxlength="255"
+               placeholder="Enter Contact Name"
                id="shipping-contact"
                v-model="store.shipping.contact"
         >
@@ -100,51 +149,52 @@ function slugify(value) {
       <div class="form-group">
         <label for="shipping-phone">Phone</label>
         <input :class="{'form-control': true, 'is-invalid': store.shipping.errors.has('phone')}"
-               :readonly="store.shipping.number"
+               :readonly="store.shipping.number || !store.newShipping"
                type="text"
                size="255"
                min="2"
                max="255"
                maxlength="255"
-               placeholder="Enter Shipping Phone Number"
+               placeholder="Enter Phone Number"
                id="shipping-phone"
                v-model="store.shipping.phone"
         >
         <span class="invalid-feedback d-block">{{ store.shipping.errors.first('phone') }}</span>
       </div>
-    </div>
+    </div>-->
+
     <div class="col-sm-12">
       <div class="form-group">
-        <label for="shipping-address">Street Address<span class="text-danger font-weight-bold">*</span></label>
+        <label for="shipping-street-address">Street Address<span class="text-danger font-weight-bold">*</span></label>
         <input :class="{'form-control mb-1': true, 'is-invalid': store.shipping.errors.has('addressLine1')}"
-               :readonly="store.shipping.number"
+               :readonly="!store.newShipping"
                type="text"
                size="255"
                min="2"
                max="255"
                maxlength="255"
                placeholder="Enter Address Line 1"
-               id="shipping-address"
+               id="shipping-street-address"
                v-model="store.shipping.addressLine1">
         <input :class="{'form-control mb-1': true, 'is-invalid': store.shipping.errors.has('addressLine2')}"
-               :readonly="store.shipping.number"
+               :readonly="!store.newShipping"
                type="text"
                size="255"
                min="2"
                max="255"
                maxlength="255"
                placeholder="Enter Address Line 2"
-               id="shipping-address-2"
+               id="shipping-street-address-2"
                v-model="store.shipping.addressLine2">
         <input :class="{'form-control mb-1': true, 'is-invalid': store.shipping.errors.has('addressLine3')}"
-               :readonly="store.shipping.number"
+               :readonly="!store.newShipping"
                type="text"
                size="255"
                min="2"
                max="255"
                maxlength="255"
                placeholder="Enter Address Line 3"
-               id="shipping-address-3"
+               id="shipping-street-address-3"
                v-model="store.shipping.addressLine3">
         <span class="invalid-feedback d-block">
           {{
@@ -156,13 +206,14 @@ function slugify(value) {
         </span>
       </div>
     </div>
+
     <div class="col-sm-6">
       <div class="form-group">
         <label for="shipping-country">Country<span class="text-danger font-weight-bold">*</span></label>
         <select :class="{'form-control custom-select': true, 'is-invalid': store.shipping.errors.has('country')}"
                 id="shipping-country"
                 v-model="store.shipping.country"
-                :disabled="store.shipping.number"
+                :disabled="!store.newShipping"
         >
           <option value="" selected>Choose country</option>
           <option v-for="country of countries" :key="country.iso2" :value="country.iso2">
@@ -178,7 +229,7 @@ function slugify(value) {
         <select :class="{'form-control custom-select': true, 'is-invalid': store.shipping.errors.has('state')}"
                 id="shipping-state"
                 v-model="store.shipping.state"
-                :disabled="store.shipping.number">
+                :disabled="!store.newShipping">
           <option>Choose state</option>
           <option v-for="state of states" :key="state.iso2" :value="state.iso2">
             {{ state.name }}
@@ -187,11 +238,12 @@ function slugify(value) {
         <span class="invalid-feedback d-block">{{ store.shipping.errors.first('state') }}</span>
       </div>
     </div>
+
     <div class="col-sm-6">
       <div class="form-group">
         <label for="shipping-city">City<span class="text-danger font-weight-bold">*</span></label>
         <input :class="{'form-control': true, 'is-invalid': store.shipping.errors.has('city')}"
-               :readonly="store.shipping.number"
+               :readonly="!store.newShipping"
                type="text"
                size="255"
                min="2"
@@ -208,26 +260,41 @@ function slugify(value) {
       <div class="form-group">
         <label for="shipping-zip">ZIP Code<span class="text-danger font-weight-bold">*</span></label>
         <input :class="{'form-control': true, 'is-invalid': store.shipping.errors.has('zipCode')}"
-               :readonly="store.shipping.number"
+               :readonly="!store.newShipping"
                type="text"
                size="255"
                min="2"
                max="255"
                maxlength="255"
-               placeholder="Enter City Name"
+               placeholder="Enter Zip Code"
                id="shipping-zip"
                v-model="store.shipping.zipCode"
         >
         <span class="invalid-feedback d-block">{{ store.shipping.errors.first('zipCode') }}</span>
       </div>
     </div>
+
+    <div class="col-12" v-if="store.newShipping">
+      <button
+          class="btn btn-primary"
+          type="button"
+          @click="store.saveNewShippingAddress()">
+        Save
+      </button>
+      <button
+          class="btn btn-secondary"
+          type="button"
+          @click="resetShippingAddress()">
+        Cancel
+      </button>
+    </div>
   </div>
 
-  <h4 class="border-bottom pb-2 mt-4 mb-3">
+  <h4 class="border-bottom pb-2 mt-4 mb-3" v-if="!store.newShipping">
     <i class="icon-map" style="margin-top: -10px"></i>
     Delivery Method
   </h4>
-  <div class="row justify-content-center">
+  <div class="row justify-content-center" v-if="!store.newShipping">
     <div class="col-12" v-if="shipOptionLabels.length > 0">
       <ul class="nav nav-pills" role="tablist" v-if="shipOptionLabels.length > 1">
         <li class="nav-item" v-for="shipOption in shipOptionLabels">
@@ -293,10 +360,4 @@ function slugify(value) {
     </div>
     <no-ship-options v-else/>
   </div>
-  <!--  <div class="form-group" v-if="store.selectedShippingMethod?.frttermscd === 'C'">-->
-  <!--    <label for="freight-account-number">Freight Account Number <span-->
-  <!--        class="text-danger font-weight-bold">*</span></label>-->
-  <!--    <input type="text" class="form-control" id="freight-account-number"-->
-  <!--           placeholder="Enter your freight account number" v-model="store.freightAccountNumber">-->
-  <!--  </div>-->
 </template>

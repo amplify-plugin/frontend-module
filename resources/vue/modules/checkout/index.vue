@@ -121,11 +121,24 @@ onMounted(() => {
 
     <component :is="currentStep"/>
 
-    <div class="alert alert-danger mt-2" role="alert" v-if="store.validationError">
-      {{ store.validationError }}
+    <div class="alert alert-danger mt-3" role="alert" v-if="store.validationError">
+      <i class="icon-ban"></i>
+      <strong>&nbsp;Warning:&nbsp;&nbsp;</strong>{{ store.validationError }}
     </div>
 
     <navigation :active="store.activeStep"/>
   </div>
 </template>
 
+<style scoped>
+:deep(.form-group) {
+  margin-bottom: 4px !important;
+}
+
+:deep(.form-group > label) {
+  font-weight: 600 !important;
+}
+:deep(.alert) {
+  padding: 1rem !important;
+}
+</style>

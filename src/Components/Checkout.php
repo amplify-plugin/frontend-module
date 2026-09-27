@@ -45,7 +45,8 @@ class Checkout extends BaseComponent
         $templateBrandColor = theme_option('primary_color');
         $allowChooseShipping = havePermissions(['checkout.choose-ship-to']);
         $editable = true;
-        $allowCreateShipping = config('amplify.erp.auto_create_ship_to');
+//        $allowCreateShipping = config('amplify.erp.auto_create_ship_to');
+        $allowCreateShipping = true;
 
         $steps = [
             ['index' => 1, 'id' => 'customer', 'label' => 'Account', 'active' => false, 'component' => 'account'],
