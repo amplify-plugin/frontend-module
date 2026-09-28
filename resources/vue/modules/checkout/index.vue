@@ -91,6 +91,10 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  shipTo: {
+    type: Number|String,
+    required: false,
+  }
 });
 
 const store = useCheckoutStore();

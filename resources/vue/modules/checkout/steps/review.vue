@@ -18,7 +18,7 @@ const list = ref(null);
 const loadMoreTrigger = ref(null);
 
 const page = ref(0);
-const perPage = ref(5);
+const perPage = ref(10);
 const count = ref(0);
 
 const loading = ref(false);
@@ -77,7 +77,7 @@ const setupObserver = () => {
       },
       {
         root: list.value,
-        rootMargin: '100px 0px',
+        rootMargin: '300px 0px',
         threshold: 0
       }
   );
@@ -108,7 +108,7 @@ onBeforeUnmount(() => {
       </h4>
       <div class="row">
         <div class="col-12">
-          <ul ref="list" class="list-unstyled border-bottom" style="max-height: 300px; overflow-y: auto;">
+          <ul ref="list" class="list-unstyled" style="max-height: 500px; overflow-y: auto;">
             <li ref="loadMoreTrigger" class="text-center py-3">
               <div v-if="loading" class="spinner-border spinner-border-sm" role="status">
                 <span class="sr-only">Loading...</span>

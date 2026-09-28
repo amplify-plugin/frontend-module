@@ -58,7 +58,7 @@ function handleNewShipping() {
 
 function resetShippingAddress() {
   store.newShipping = false;
-  store.selectAddressSelected(store.customer?.DefaultShipTo ?? '');
+  store.selectAddressSelected(store.shipTo ?? '');
 }
 
 </script>

@@ -1,7 +1,7 @@
 @foreach($items as $item)
     <li @class(["media border-bottom p-2", "rounded border border-warning" => $item->additional_info['is_ncnr']])>
         <div class="d-flex mr-2" style="width: 72px; height: 72px">
-            <img class="w-100 h-100 object-contain"
+            <img class="w-100 h-100 object-contain img-thumbnail"
                  alt="{{ $item->product_name   }}"
                  src="{{ assets_image($item->product_image) }}"/>
         </div>
@@ -13,13 +13,14 @@
             <div class="d-grid gap-2 d-md-flex justify-content-between">
                 <div>
                     <section class="d-flex flex-wrap gap-2">
-                    <span class="tag mr-0 ">
-                        <span>Product Code: </span>
-                        {{ $item->product_code }}
-                    </span>
-                        <span class="tag mr-0 active">
+                    <span class="tag mr-0 active">
                         <span>Quantity: </span>
                         <b>{{ round($item->quantity) }}</b>
+                    </span>
+
+                        <span class="tag mr-0 ">
+                        <span>Product Code: </span>
+                        {{ $item->product_code }}
                     </span>
                         <x-product.price
                                 element="span"
@@ -27,10 +28,10 @@
                                 :product="$item->product"
                                 :value="$item->unitprice"
                                 :uom="$item->uom"
-                                :std-price="floatval($item->product->msrp)"
                         >
                             <span>Price:&nbsp;&nbsp;</span>
                         </x-product.price>
+
                         <span class="tag mr-0 ">
                         <span>Warehouse: </span>
                         {{ $item->product_warehouse_code }}

@@ -1,7 +1,4 @@
 <div {!! $htmlAttributes !!}>
-    <template id="cart-single-item-template">
-        {!! $itemRow ?? '' !!}
-    </template>
     @if ($cartItemCount > 0)
         <div id="app">
             <{{ $componentName }}
@@ -23,4 +20,10 @@
     @else
         <script src="{{ mix($assetUrl) }}"></script>
     @endempty
+@endpushonce
+
+@pushonce('custom-script')
+    @foreach($gatewayAssets() as $assetUrl)
+        <script defer src="{{ $assetUrl }}"></script>
+    @endforeach
 @endpushonce

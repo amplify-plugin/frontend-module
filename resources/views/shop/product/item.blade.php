@@ -43,7 +43,7 @@
                 :uom="$product->ERP?->UnitOfMeasure ?? 'EA'"
                 :std-price="$product->Msrp->toFloat()"/>
 
-        <div class="d-flex w-100 justify-content-center justify-content-md-start">
+        <div class="d-flex w-100 justify-content-center justify-content-md-start flex-wrap">
 
             @if($product->total_quantity_available > 1)
                 <x-product.availability
@@ -193,7 +193,7 @@
             :uom="$product->ERP?->UnitOfMeasure ?? 'EA'"
             :std-price="$product->Msrp->toFloat()"/>
 
-    <div class="d-flex w-100 justify-content-center justify-content-md-start">
+    <div class="d-flex w-100 justify-content-center justify-content-md-start flex-wrap">
         @if($product->total_quantity_available > 1)
             <x-product.availability
                     :product="$product" :value="$product->total_quantity_available"

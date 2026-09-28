@@ -35,10 +35,11 @@ export default {
         this.backUrl = props.backToShoppingUrl ?? null;
         this.verifyPoNumber = props.verifyPoNumber ?? false;
         this.brandColor = props.templateBrandColor ?? '#0da9ef';
+        this.shipTo = props.shipTo ?? this.customer.DefaultShipTo;
 
         this.fillAccountData();
 
-        this.selectAddressSelected(this.customer.DefaultShipTo);
+        this.selectAddressSelected(this.shipTo);
     },
 
     fillAccountData(data = {}) {
