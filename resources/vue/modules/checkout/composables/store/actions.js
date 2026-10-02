@@ -39,6 +39,7 @@ export default {
         this.paymentTerms = props.paymentTerms ?? {
             TermsType: null
         };
+        this.apteanStyle = props.apteanStyle ?? {};
         this.fillAccountData();
 
         this.selectAddressSelected(this.shipTo);
@@ -191,7 +192,7 @@ export default {
                 return this.validateShippingAddress();
 
             case 'payment':
-                if(Object.entries(this.payment.credentials).length === 0);
+                if (Object.entries(this.payment.credentials).length === 0) ;
 
             case 'review':
                 // The reference review page has no PO field; PO/notes stay
@@ -554,8 +555,6 @@ export default {
 
             return result.value.success;
         });
-
-
     },
 
     base64UrlDecode(value) {
@@ -805,5 +804,25 @@ export default {
                 metadata: {}
             }
         };
+    },
+
+    async setIpAddress() {
+
+        try {
+            const response = await axios.get('https://api.ipify.org', {
+                params: {
+                    format: 'json',
+                },
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            return response.data.ip;
+        } catch (error) {
+            console.error('Error fetching IP:', error);
+            return '127.0.0.1';
+        }
     }
 }

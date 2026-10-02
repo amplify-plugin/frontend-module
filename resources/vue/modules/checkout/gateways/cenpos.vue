@@ -1,76 +1,68 @@
 <script setup>
-import {onBeforeUnmount, onMounted} from "vue";
+import {computed, onMounted, ref} from "vue";
 import {useCheckoutStore} from '../composables/useCheckoutStore';
+import axios from 'axios';
+
 const store = useCheckoutStore();
 
 const config = store.payment.config;
 
-let apTeanPay = null;
-let cardComponent = null;
+const method = ref('credit_card');
 
-function createClaim() {
+const captureUrl = computed(() => {
 
-  const expirationDate = new Date();
+  let prefix = window.Amplify.config.debug ? 'webstaging' : 'www';
 
-  expirationDate.setMonth(
-      expirationDate.getMonth() + 1
-  );
+  return method.value === 'credit_card'
+      ? `https://${prefix}.cenpos.net/simplewebpay/cards/`
+      : `https://${prefix}.cenpos.net/simplewebpay/checks/`;
+});
+const ip = ref('127.0.0.1');
 
-  apTeanPay.createClaim(
-      cardComponent,
+
+async function siteVerify() {
+
+  let payload = {
+    merchant: config.cenpos_encrypted_mid,
+    secretKey: config.secret_key,
+    email: store.account.email,
+    customerCode: store.customer.CustomerNumber,
+    amount: store.review.total,
+    tokenid: '',
+    invoicenumber: '',
+    type: 'Auth',
+    ip: ip.value,
+    address: store.payment.address,
+    zipcode: store.payment.zipCode,
+  };
+
+  console.log({config, payload})
+
+  const response = await axios.post(
+      captureUrl.value + '?app=genericcontroller&action=siteVerify',
+      payload,
       {
-        name: store.account.company,
-        addressLine1: store.account.addressLine1,
-        addressLine2: store.account.addressLine2,
-        addressCity: store.account.city,
-        addressState: store.account.state,
-        addressZip: store.account.zipCode,
-        addressCountry: store.account.country,
-        emailAddress: store.account.email,
-        recurring: false,
-        phoneCode: store.account.country === 'US' ? '+1' : '',
-        phoneNumber: store.account.phone.replace(/\D/g, ""),
-      },
-      {
-        accountId: config.account_id,
-        expirationDate,
-        singleUse: false,
-      },
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+      });
 
-      (paymentMethodClaim, err) => {
-        if (err) {
-          store.validationError = JSON.stringify(err);
-          return;
-        }
+  const data = response.data;
 
-        if (paymentMethodClaim) {
-
-          store.payment.token = paymentMethodClaim;
-
-          console.log(
-              'Payment claim:',
-              paymentMethodClaim
-          );
-        }
-      }
-  );
+  if (data.Result === "-1") {
+    store.validationError = data.Message;
+  }
+  console.log(response.data);
 }
 
-onMounted(() => {
-  apTeanPay = window.ApteanPay(config.api_key, config.product_id, config.tenant_id);
-  const components = apTeanPay.components({});
+onMounted(async () => {
 
-  cardComponent = components.create('card', {});
+  ip.value = await store.setIpAddress();
 
-  cardComponent.mount('capture', '#submit')
-
-  createClaim();
-
+  await siteVerify();
 });
 
-onBeforeUnmount(() => {
-  cardComponent?.destroy?.();
-});
 
 </script>
 
@@ -95,8 +87,7 @@ onBeforeUnmount(() => {
         </p>
       </div>
       <div class="col-lg-6 col-md-8 col-12">
-        <div id="capture"></div>
-        <button class="btn btn-outline-success" id="submit" type="button">Submit</button>
+        <div id="card-capture"></div>
       </div>
     </div>
 
@@ -112,7 +103,7 @@ onBeforeUnmount(() => {
     </h4>
     <div class="row justify-content-between" id="cenpos-ach">
       <div class="col-lg-6 col-md-8 col-12">
-
+        <div id="ach-capture"></div>
       </div>
     </div>
   </div>

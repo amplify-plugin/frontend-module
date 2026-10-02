@@ -102,6 +102,10 @@ const props = defineProps({
   allowChooseBilling: {
     type: Boolean,
     default: false,
+  },
+  apteanStyle : {
+    type: Object,
+    default: {},
   }
 });
 

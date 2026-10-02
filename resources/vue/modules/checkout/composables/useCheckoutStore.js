@@ -34,6 +34,7 @@ export const useCheckoutStore = defineStore('checkout', {
             purchaseOrder: null, //if object already verified
             brandColor: '#0da9ef',
             paymentAddressChanged: false,
+            apteanStyle : {},
 
             paymentTerms: {
                 TermsType: null

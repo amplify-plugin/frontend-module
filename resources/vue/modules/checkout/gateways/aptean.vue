@@ -1,5 +1,5 @@
 <script setup>
-import {computed, onBeforeUnmount, onMounted, ref, watch} from "vue";
+import {computed, onMounted, ref} from "vue";
 import {useCheckoutStore} from '../composables/useCheckoutStore';
 
 const store = useCheckoutStore();
@@ -8,7 +8,6 @@ const config = store.payment.config;
 
 let apTeanPay = null;
 let options = null;
-let cardComponent = null;
 
 const cardErrors = ref([]);
 
@@ -37,7 +36,11 @@ async function captureCreditCard() {
 
   store.selectPaymentMethod('credit_card');
 
-  cardComponent = options.create('card', {});
+  const cardComponent = options.create('card', {
+    customStyle: store.apteanStyle,
+    showLabels: true,
+    showPlaceholders: true
+  });
 
   cardComponent.mount('capture', '#submit');
 
@@ -99,15 +102,13 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="accordion mt-4" id="apteanAccordion" role="tablist">
-    <h4
-        class="border-bottom pb-2 mb-3"
-        data-toggle="collapse"
-        data-target="#aptean-credit-card"
-        data-parent="#apteanAccordion"
-        aria-expanded="true"
-        aria-controls="aptean-credit-card"
-    >
+<!--  <div class="accordion mt-4" id="apteanAccordion" role="tablist">-->
+<!--        data-toggle="collapse"-->
+<!--        data-target="#aptean-credit-card"-->
+<!--        data-parent="#apteanAccordion"-->
+<!--        aria-expanded="true"-->
+<!--        aria-controls="aptean-credit-card"-->
+    <h4 class="border-bottom pb-2 mb-3">
       <i class="icon-columns mr-0" style="margin-top: -10px"></i>
       Pay with Credit Card
     </h4>
@@ -144,5 +145,25 @@ onMounted(async () => {
 
       </div>
     </div>-->
-  </div>
+<!--  </div>-->
 </template>
+
+<style lang="scss">
+#capture {
+  #ptt-card-container {
+    width: 100%;
+  }
+
+  #ptt-card-expiry-container{
+    display: inline-block;
+    width: calc(50% - 0.5rem) !important;
+    max-width: calc(50% - 0.5rem) !important;
+  }
+
+  #ptt-card-cvv-container {
+    display: inline-block;
+    width: calc(50% - 0.5rem) !important;
+    max-width: calc(50% - 0.5rem) !important;
+  }
+}
+</style>

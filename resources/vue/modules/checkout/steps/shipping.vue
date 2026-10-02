@@ -1,5 +1,5 @@
 <script setup>
-import {computed, onMounted, ref} from 'vue';
+import {computed, ref} from 'vue';
 import {useCheckoutStore} from '../composables/useCheckoutStore';
 import NoShipOptions from "./components/no-ship-options.vue";
 
