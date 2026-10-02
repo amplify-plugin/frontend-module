@@ -81,17 +81,7 @@ class Checkout extends BaseComponent
         $data['allowChooseBilling'] = true;
 
         if (config('amplify.payment.default') == 'aptean') {
-            $data['apteanStyle'] = [
-                'styles' => [
-                    'base' => [
-                        'border-radius' => '22px',
-                        'height' => '44px',
-                        'padding' => '0 18px 3px',
-                        'border' => '1px solid #e1e7ec',
-                        'font-size' => '1rem',
-                    ]
-                ]
-            ];
+            $data['apteanStyle'] = $this->apteanStyle();
         }
 
         return view('widget::checkout', $this->withData($data));
@@ -190,6 +180,22 @@ class Checkout extends BaseComponent
         }
 
         return $variables;
+    }
+
+
+    protected function apteanStyle(): array
+    {
+        return [
+            'styles' => [
+                'base' => [
+                    'border-radius' => '22px',
+                    'height' => '44px',
+                    'padding' => '0 18px 3px',
+                    'border' => '1px solid #e1e7ec',
+                    'font-size' => '1rem',
+                ]
+            ]
+        ];
     }
 
     public function gatewayAssets(): array
