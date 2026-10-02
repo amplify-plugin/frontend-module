@@ -52,25 +52,23 @@ class Checkout extends BaseComponent
         $data['allowCreateShipping'] = config('amplify.erp.auto_create_ship_to');
         $data['shipTo'] = session('ship_to_address.ShipToNumber', $customer->DefaultShipTo);
 
-        $steps = [
-            ['index' => 1, 'id' => 'customer', 'label' => 'Account', 'active' => false, 'component' => 'account'],
-            ['index' => 2, 'id' => 'shipping', 'label' => 'Shipping', 'active' => false, 'component' => 'shipping'],
-            ['index' => 3, 'id' => 'review', 'label' => 'Review', 'active' => true, 'component' => 'review'],
+        $data['steps'] = [
+            ['id' => 'account', 'label' => 'Account', 'active' => false, 'component' => 'account'],
+            ['id' => 'shipping', 'label' => 'Shipping', 'active' => false, 'component' => 'shipping'],
         ];
-
 //        if ($customer->CreditCardOnly == 'Y' && havePermissions(['checkout.allow-credit-card-payment'])) {
         if (config('amplify.payment.default') != 'default') {
-            $steps[] = ['index' => 4, 'id' => 'payment', 'label' => 'Payment', 'active' => false, 'component' => 'payment'];
+            $data['steps'][] = ['id' => 'payment', 'label' => 'Payment', 'active' => false, 'component' => 'payment'];
         }
 //        }
+
+        $data['steps'][] = ['id' => 'review', 'label' => 'Review', 'active' => true, 'component' => 'review'];
 
         $countryIds = array_map(fn($country) => $country['id'], config('amplify.basic.countries'));
 
         $data['countries'] = Country::enabled()->select('id', 'name', 'iso2')->whereIn('id', $countryIds)->get();
 
         $data['states'] = State::select('iso2', 'country_id', 'name')->whereIn('country_id', $countryIds)->get();
-
-        $data['steps'] = array_reverse($steps);
 
         $data['verifyPoNumber'] = false;
 
@@ -79,6 +77,8 @@ class Checkout extends BaseComponent
         $data['paymentTerms'] = ErpApi::getTermsType();
 
         $data['customer'] = $customer;
+
+        $data['allowChooseBilling'] = true;
 
         return view('widget::checkout', $this->withData($data));
     }

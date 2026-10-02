@@ -20,6 +20,18 @@
     @else
         <script src="{{ mix($assetUrl) }}"></script>
     @endempty
+    <script>
+        window.addEventListener('pageshow', function (event) {
+            const navigation = performance.getEntriesByType('navigation')[0];
+
+            if (
+                event.persisted ||
+                navigation?.type === 'back_forward'
+            ) {
+                window.location.reload();
+            }
+        });
+    </script>
 @endpushonce
 
 @pushonce('custom-script')

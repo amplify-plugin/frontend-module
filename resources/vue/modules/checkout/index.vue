@@ -94,6 +94,14 @@ const props = defineProps({
   shipTo: {
     type: Number|String,
     required: false,
+  },
+  paymentTerms: {
+    type: Object,
+    default: {},
+  },
+  allowChooseBilling: {
+    type: Boolean,
+    default: false,
   }
 });
 

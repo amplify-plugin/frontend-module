@@ -19,11 +19,11 @@
                     <i class="icon-circle-check" style="margin-top: -3px"></i> In Stock
                 </div>
             @endif
-            @if(is_numeric($diff))
-                <div class="product-badge product-end">
-                    {{ \Illuminate\Support\Number::percentage($diff) }} Off
-                </div>
-            @endif
+{{--            @if(is_numeric($diff))--}}
+{{--                <div class="product-badge product-end">--}}
+{{--                    {{ \Illuminate\Support\Number::percentage($diff) }} Off--}}
+{{--                </div>--}}
+{{--            @endif--}}
         @endif
     </x-product.main-image>
     <div class="product-info">
@@ -41,15 +41,15 @@
                 :product="$product"
                 :value="$product->ERP?->Price"
                 :uom="$product->ERP?->UnitOfMeasure ?? 'EA'"
-                :std-price="$product->Msrp->toFloat()"/>
+        />
 
-        <div class="d-flex w-100 justify-content-center justify-content-md-start flex-wrap">
+        <div class="widget-tags justify-content-center justify-content-md-start">
 
             @if($product->total_quantity_available > 1)
                 <x-product.availability
                         :product="$product" :value="$product->total_quantity_available"
                         data-toggle="tooltip" title="Stock Inventory"
-                        element="a" class="tag border-primary font-weight-bold">
+                        element="a" class="tag">
                     <x-slot:prefix>
                         <i class="icon-layers font-weight-bold"></i>
                     </x-slot:prefix>
@@ -60,7 +60,7 @@
             @endif
 
             @if(!empty($product->min_order_qty))
-                <a href="#" class="tag border-warning font-weight-bold"
+                <a href="#" class="tag"
                    data-toggle="tooltip" title="Minimum Order Quantity">
                     MOQ: {{ $product->min_order_qty }}
                     @if($product->min_order_qty > 1)
@@ -72,7 +72,7 @@
             @endif
 
             @if($product->is_ncnr)
-                <a href="#" class="tag border-danger font-weight-bold"
+                <a href="#" class="tag"
                    data-toggle="tooltip" title="Non-Cancellable, Non-Returnable">
                     <i class="icon-bell font-weight-bold text-danger" style="margin-top: -3px"></i>
                     NCNR
@@ -156,11 +156,11 @@
                     <i class="icon-circle-check" style="margin-top: -3px"></i> In Stock
                 </div>
             @endif
-            @if(is_numeric($diff))
-                <div class="product-badge product-end">
-                    {{ \Illuminate\Support\Number::percentage($diff) }} Off
-                </div>
-            @endif
+{{--            @if(is_numeric($diff))--}}
+{{--                <div class="product-badge product-end">--}}
+{{--                    {{ \Illuminate\Support\Number::percentage($diff) }} Off--}}
+{{--                </div>--}}
+{{--            @endif--}}
         @endif
 
         @if(!$showFavourite)
@@ -191,14 +191,14 @@
             :product="$product"
             :value="$product->ERP?->Price"
             :uom="$product->ERP?->UnitOfMeasure ?? 'EA'"
-            :std-price="$product->Msrp->toFloat()"/>
+    />
 
-    <div class="d-flex w-100 justify-content-center justify-content-md-start flex-wrap">
+    <div class="widget-tags justify-content-center justify-content-md-start">
         @if($product->total_quantity_available > 1)
             <x-product.availability
                     :product="$product" :value="$product->total_quantity_available"
                     data-toggle="tooltip" title="Stock Inventory"
-                    element="a" class="tag border-primary font-weight-bold">
+                    element="a" class="tag">
                 <x-slot:prefix>
                     <i class="icon-layers font-weight-bold"></i>
                 </x-slot:prefix>
@@ -209,7 +209,7 @@
         @endif
 
         @if(!empty($product->min_order_qty))
-            <a href="#" class="tag border-warning font-weight-bold"
+            <a href="#" class="tag"
                data-toggle="tooltip" title="Minimum Order Quantity">
                 MOQ: {{ $product->min_order_qty }}
                 @if($product->min_order_qty > 1)

@@ -6,6 +6,7 @@ import actions from './store/actions.js';
 export const useCheckoutStore = defineStore('checkout', {
     state: () => {
         return {
+            loading: false,
             staticMode: true,
             steps: [],
             activeStep: '',
@@ -17,7 +18,6 @@ export const useCheckoutStore = defineStore('checkout', {
             countries: [],
             states: [],
             shipOptions: {},
-            paymentMethod: 'on_account',
             creditCardToken: '',
             validationError: '',
             verifyPoNumber: false,
@@ -25,6 +25,7 @@ export const useCheckoutStore = defineStore('checkout', {
             editable: false,
             allowCreateShipping: false,
             allowChooseShipping: false,
+            allowChooseBilling: false,
             allowRequestQuote: false,
             allowCreateOrderList: false,
             hasShipInstruction: false,
@@ -32,6 +33,11 @@ export const useCheckoutStore = defineStore('checkout', {
             orderListTitle: 'Order List',
             purchaseOrder: null, //if object already verified
             brandColor: '#0da9ef',
+            paymentAddressChanged: false,
+
+            paymentTerms: {
+                TermsType: null
+            },
 
             //Account Step
             account: {
@@ -80,6 +86,20 @@ export const useCheckoutStore = defineStore('checkout', {
                 lines: [],
                 notes: '',
                 coupon: '',
+            },
+
+            //Payment Step
+            payment : {
+                biller : '',
+                address : '',
+                city : '',
+                state : '',
+                zipCode : '',
+                country : '',
+                method: 'on_account',
+                driver: 'default',
+                config: {},
+                credentials: {}
             }
 
         }

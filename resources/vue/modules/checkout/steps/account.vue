@@ -86,7 +86,7 @@ const states = ref(store.states);
 
   <h4 class="border-bottom pb-2 mt-4 mb-3">
     <i class="icon-briefcase" style="margin-top: -10px"></i>
-    Billing Information
+    Customer/Company Information
   </h4>
   <div class="row">
     <div class="form-group col-sm-12">

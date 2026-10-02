@@ -12,7 +12,7 @@
             </a>
             <div class="d-grid gap-2 d-md-flex justify-content-between">
                 <div>
-                    <section class="d-flex flex-wrap gap-2">
+                    <section class="widget-tags">
                     <span class="tag mr-0 active">
                         <span>Quantity: </span>
                         <b>{{ round($item->quantity) }}</b>

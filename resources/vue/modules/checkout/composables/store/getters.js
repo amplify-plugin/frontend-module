@@ -1,10 +1,14 @@
 export default {
     // Canonical checkout step sequence. Incoming blade data may be reversed
     // or carry duplicate/contradictory indexes — ordering is enforced here.
-    orderedSteps(state) {
-        const canonical = ['account', 'shipping', 'review', 'payment'];
+    orderedSteps() {
+
+        let steps = this.steps ?? [];
+
+        const canonical = steps.map((step, i) => step.component);
+
         const seen = new Set();
-        return [...state.steps]
+        return [...steps]
             .sort((a, b) => {
                 const posA = canonical.indexOf(a.component);
                 const posB = canonical.indexOf(b.component);
@@ -26,14 +30,6 @@ export default {
 
     currentStep() {
         return this.orderedSteps[this.currentIndex] ?? null;
-    },
-
-    isEditable(state) {
-        if (state.isGuestCheckout) {
-            return true;
-        }
-
-        return false;
     },
 
     isFirstStep() {
@@ -102,4 +98,12 @@ export default {
 
         return subtotal + shipping + tax;
     },
+
+    paymentMethod() {
+        let labels = {
+            credit_card: 'Credit Card',
+        }
+
+        return labels[this.payment.method] ?? null;
+    }
 }

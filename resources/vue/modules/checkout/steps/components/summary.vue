@@ -3,15 +3,16 @@ import {useCheckoutStore} from '../../composables/useCheckoutStore';
 
 const store = useCheckoutStore();
 
-function formatAddress(customer) {
+function formatAddress(entry) {
   return [
-    customer?.addressLine1 ?? '',
-    customer?.addressLine2 ?? '',
-    customer?.addressLine3 ?? '',
-    customer?.city ?? '',
-    customer?.state ?? '',
-    customer?.zipCode ?? '',
-    customer?.country ?? '',
+    entry?.address ?? '',
+    entry?.addressLine1 ?? '',
+    entry?.addressLine2 ?? '',
+    entry?.addressLine3 ?? '',
+    entry?.city ?? '',
+    entry?.state ?? '',
+    entry?.zipCode ?? '',
+    entry?.country ?? '',
   ].filter((part) => part && part !== '').join(', ');
 }
 
@@ -76,13 +77,12 @@ function formatAddress(customer) {
     </ul>
   </section>
 
-  <section v-if="store.paymentMethod">
+  <section>
     <h5 class="border-bottom pb-2 my-3">Payment Terms:</h5>
     <ul class="list-unstyled">
-      <li><span class="text-muted">Name: </span>{{ store.account.company ?? 'N/A' }}</li>
-      <li><span class="text-muted">Address: </span>{{ formatAddress(store.account) }}</li>
-      <li><span class="text-muted">Phone: </span>{{ store.account.phone ?? 'N/A' }}</li>
-      <li><span class="text-muted">Terms: </span>{{ 'COD' }}</li>
+      <li><span class="text-muted">Name: </span>{{ store.payment.biller ?? 'N/A' }}</li>
+      <li><span class="text-muted">Address: </span>{{ formatAddress(store.payment) }}</li>
+      <li><span class="text-muted">Terms: </span>{{ store.paymentMethod }}</li>
     </ul>
   </section>
 </template>

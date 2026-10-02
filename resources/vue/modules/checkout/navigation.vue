@@ -6,6 +6,7 @@ const store = useCheckoutStore();
 function handleRequestForQuote(element) {
   Amplify.submitCartAsQuote(element);
 }
+
 function handleCreateOrderList() {
   Amplify.addToNewOrderList(store.cartId, 'cart', store.orderListTitle);
 }
@@ -37,6 +38,15 @@ function handleCreateOrderList() {
     </div>
     <div class="column">
       <button type="button"
+              v-if="store.currentStep.component === 'payment'"
+              id="submit"
+              :class="{'btn': true, 'btn-primary': !store.isLastStep, 'btn-success' : store.isLastStep }">
+        <span class="hidden-xs-down" v-if="!store.isLastStep">Continue&nbsp;</span>
+        <span v-else>Complete Order</span>
+        <i class="icon-arrow-right" v-if="!store.isLastStep"></i>
+      </button>
+
+      <button type="button" v-else
               :class="{'btn': true, 'btn-primary': !store.isLastStep, 'btn-success' : store.isLastStep, 'disabled': store.newShipping }"
               @click.prevent="store.goNext()">
         <span class="hidden-xs-down" v-if="!store.isLastStep">Continue&nbsp;</span>

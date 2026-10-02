@@ -3,12 +3,6 @@
  * Used when the blade-provided props are absent (static frontend preview).
  */
 
-export const mockSteps = [
-    { index: 1, id: 'customer', label: 'Account', active: true, component: 'account' },
-    { index: 2, id: 'shipping', label: 'Shipping', active: false, component: 'shipping' },
-    { index: 3, id: 'review', label: 'Review', active: false, component: 'review' },
-    { index: 4, id: 'billing', label: 'Payment', active: false, component: 'payment' },
-];
 
 export const mockCart = {
     total_price: 312.5,

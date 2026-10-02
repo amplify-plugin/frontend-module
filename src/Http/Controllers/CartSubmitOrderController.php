@@ -3,6 +3,7 @@
 namespace Amplify\Frontend\Http\Controllers;
 
 use Amplify\ErpApi\Facades\ErpApi;
+use Amplify\Frontend\Http\Requests\CheckoutRequest;
 use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\System\Backend\Models\Cart;
 use Amplify\System\Backend\Models\CustomerOrder;
@@ -30,7 +31,7 @@ class CartSubmitOrderController extends Controller
     /**
      * This function submits the order & quotation
      */
-    public function __invoke(Request $request): JsonResponse
+    public function __invoke(CheckoutRequest $request): JsonResponse
     {
         $cart = getCart();
 

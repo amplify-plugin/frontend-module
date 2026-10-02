@@ -22,7 +22,6 @@ use Amplify\Frontend\Http\Controllers\Auth\RequestOnlineAccessController;
 use Amplify\Frontend\Http\Controllers\Auth\VerifyEmailController;
 use Amplify\Frontend\Http\Controllers\BrandIndexController;
 use Amplify\Frontend\Http\Controllers\CampaignController;
-use Amplify\Frontend\Http\Controllers\CheckoutController;
 use Amplify\Frontend\Http\Controllers\ContactLoginController;
 use Amplify\Frontend\Http\Controllers\CustomerPartNumberController;
 use Amplify\Frontend\Http\Controllers\DashboardController;
@@ -40,12 +39,12 @@ use Amplify\Frontend\Http\Controllers\MyProfileController;
 use Amplify\Frontend\Http\Controllers\NewsletterSubscriptionController;
 use Amplify\Frontend\Http\Controllers\OrderController;
 use Amplify\Frontend\Http\Controllers\OrderListController;
-use Amplify\Frontend\Http\Controllers\PurchaseOrderNoValidateController;
 use Amplify\Frontend\Http\Controllers\OrderStatusController;
 use Amplify\Frontend\Http\Controllers\PastItemsController;
 use Amplify\Frontend\Http\Controllers\ProductCompareController;
 use Amplify\Frontend\Http\Controllers\ProductDetailController;
 use Amplify\Frontend\Http\Controllers\ProductSearchController;
+use Amplify\Frontend\Http\Controllers\PurchaseOrderNoValidateController;
 use Amplify\Frontend\Http\Controllers\QuickListController;
 use Amplify\Frontend\Http\Controllers\QuotationController;
 use Amplify\Frontend\Http\Controllers\RecentlyViewedController;
@@ -120,8 +119,9 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
     Route::post('carts/submit-order', \Amplify\Frontend\Http\Controllers\CartSubmitOrderController::class)->name('carts.submit-order');
     Route::post('carts/submit-quote', \Amplify\Frontend\Http\Controllers\CartSubmitQuoteController::class)->name('carts.submit-quote');
     Route::post('/remove/carts', [\Amplify\Frontend\Http\Controllers\CartController::class, 'removeCarts'])->name('frontend.remove-carts');
-    Route::get('checkout', CheckoutController::class)->name('checkout');
-    Route::post('checkout', CheckoutController::class)->name('checkout');
+    Route::get('checkout', \Amplify\Frontend\Http\Controllers\Checkout\IndexController::class)->name('checkout');
+    Route::post('checkout', \Amplify\Frontend\Http\Controllers\Checkout\StoreController::class);
+
     Route::post('subscribe', NewsletterSubscriptionController::class)->name('subscribe');
 
     Route::prefix('faq')->controller(FaqController::class)->group(function () {
@@ -361,5 +361,5 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
 
     Route::get('/{slug?}', DynamicPageLoadController::class)
         ->name('dynamic-route')
-        ->where('slug', '^(?!admin(?:/|$)|sayt(?:/|$)|_debugbar(?:/|$)).*');
+        ->where('slug', '^(?!admin(?:/|$)|sayt(?:/|$)|api(?:/|$)|telescope(?:/|$)|_debugbar(?:/|$)).*');
 });

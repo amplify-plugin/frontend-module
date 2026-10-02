@@ -1,11 +1,11 @@
 <?php
 
-namespace Amplify\Frontend\Http\Controllers;
+namespace Amplify\Frontend\Http\Controllers\Checkout;
 
 use Amplify\Frontend\Traits\HasDynamicPage;
 use Illuminate\Routing\Controller;
 
-class CheckoutController extends Controller
+class IndexController extends Controller
 {
     use HasDynamicPage;
 

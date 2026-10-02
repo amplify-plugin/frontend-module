@@ -1,4 +1,4 @@
-import {mockContact, mockCountries, mockCustomer, mockStates, mockSteps,} from '../../mock';
+import {mockContact, mockCountries, mockCustomer, mockStates,} from '../../mock';
 
 import {useValidate} from "@/composables/useValidate";
 import axios from 'axios';
@@ -7,8 +7,7 @@ const validator = useValidate();
 
 export default {
     init(props) {
-        this.staticMode = props.cart == null;
-        this.steps = props.steps ?? mockSteps;
+        this.steps = props.steps ?? [];
         // Canonical order always starts at the first step; the incoming
         // `active` flags are inconsistent (multiple steps marked active).
         this.activeStep = this.orderedSteps[0]?.component ?? 'account';
@@ -30,13 +29,16 @@ export default {
         this.allowChooseShipping = props.allowChooseShipping ?? false;
         this.allowRequestQuote = props.allowRequestQuote ?? false;
         this.allowCreateOrderList = props.createFavouriteFromCart ?? false;
+        this.allowChooseBilling = props.allowChooseBilling ?? false;
         this.hasShipInstruction = props.hasShipInstruction ?? false;
         this.orderListTitle = props.orderListTitle ?? 'Order List';
         this.backUrl = props.backToShoppingUrl ?? null;
         this.verifyPoNumber = props.verifyPoNumber ?? false;
         this.brandColor = props.templateBrandColor ?? '#0da9ef';
         this.shipTo = props.shipTo ?? this.customer.DefaultShipTo;
-
+        this.paymentTerms = props.paymentTerms ?? {
+            TermsType: null
+        };
         this.fillAccountData();
 
         this.selectAddressSelected(this.shipTo);
@@ -57,6 +59,16 @@ export default {
         this.account.state = this.customer.CustomerState ?? '';
         this.account.country = this.customer.CustomerCountry ?? '';
         this.account.zipCode = this.customer.CustomerZipCode ?? '';
+
+        // Payment Gateway Information
+        this.payment.biller = this.account.company;
+        this.payment.address = `${this.account.addressLine1} ${this.account.addressLine2} ${this.account.addressLine3}`.toString().trim();
+        this.payment.city = this.account.city;
+        this.payment.state = this.account.state;
+        this.payment.zipCode = this.account.zipCode;
+        this.payment.country = this.account.country;
+        this.payment.phone = this.account.phone;
+        this.payment.errors = validator.make();
 
         //@TODO Dynamic entries
 
@@ -103,7 +115,6 @@ export default {
     goNext() {
         if (!this.validateCurrentStep()) return;
         if (this.isLastStep) {
-            this.validationError = '';
             this.submitRequest('order');
             return;
         }
@@ -178,6 +189,9 @@ export default {
 
             case 'shipping':
                 return this.validateShippingAddress();
+
+            case 'payment':
+                if(Object.entries(this.payment.credentials).length === 0);
 
             case 'review':
                 // The reference review page has no PO field; PO/notes stay
@@ -466,14 +480,154 @@ export default {
     },
 
     selectShippingMethod(group, method) {
-        this.shippingGroup = group;
         this.selectedShippingMethod = method;
         this.validationError = '';
     },
 
     selectPaymentMethod(method) {
-        this.paymentMethod = method;
-        this.validationError = '';
+        this.payment.method = method;
+    },
+
+    fillPaymentGateway(data) {
+        this.payment.driver = data.driver ?? 'default';
+        this.payment.config = data.config ?? {};
+    },
+
+    priceFormatter(price) {
+        const value = parseFloat(String(price ?? '').replace(/[^0-9.\-]/g, ''));
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: window.Amplify?.config?.currency ?? 'USD',
+        }).format(Number.isFinite(value) ? value : 0);
+    },
+
+    capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1)
+    },
+
+    async initPaymentGateway() {
+        if (!this.validateShippingAddress()) {
+            return false;
+        }
+
+        return await window.Amplify.confirm('Loading Payment Gateway...', 'Checkout', '', {
+            icon: 'info',
+            allowEscapeKey: false,
+            showCancelButton: false,
+            showCloseButton: false,
+            backdrop: true,
+            willOpen: () => document.querySelector('.swal2-actions').style.justifyContent = 'center',
+            didOpen: () => window.swal.clickConfirm(),
+            allowOutsideClick: () => !window.swal.isLoading(),
+            preConfirm: async () => {
+                try {
+                    const response = await axios.get('/api/payment/initialize')
+
+                    return {
+                        success: true,
+                        data: response.data.data,
+                        error: null
+                    };
+
+                } catch (error) {
+                    return {
+                        success: false,
+                        data: '',
+                        error: error?.response?.data?.message ?? error.message
+                    };
+                }
+            }
+        }).then(async (result) => {
+
+            if (!result.value.success) {
+                window.Amplify.alert(result.value.error, 'Checkout', {icon: 'error'});
+                return;
+            }
+
+            let gateway = result.value?.data ?? null;
+
+            if (gateway) {
+                let configuration = await this.decryptPaymentConfig(gateway);
+
+                this.fillPaymentGateway(configuration);
+            }
+
+            return result.value.success;
+        });
+
+
+    },
+
+    base64UrlDecode(value) {
+        value += '='.repeat((4 - value.length % 4) % 4);
+
+        const binary = atob(
+            value
+                .replace(/-/g, '+')
+                .replace(/_/g, '/')
+        );
+
+        return Uint8Array.from(
+            binary,
+            char => char.charCodeAt(0)
+        );
+    },
+
+    async deriveKey(secret) {
+        const hash = await crypto.subtle.digest(
+            'SHA-256',
+            new TextEncoder().encode(secret)
+        );
+
+        return crypto.subtle.importKey(
+            'raw',
+            hash,
+            {
+                name: 'AES-GCM'
+            },
+            false,
+            ['decrypt']
+        );
+    },
+
+    async decryptPaymentConfig(token) {
+
+        let secret = window.Amplify.clientCode();
+
+        const parts = token.split('.');
+
+        if (parts.length !== 4 || parts[0] !== 'pg') {
+            throw new Error('Invalid payment configuration.');
+        }
+
+        const [, ivPart, ciphertextPart, tagPart] = parts;
+
+        const iv = this.base64UrlDecode(ivPart);
+        const ciphertext = this.base64UrlDecode(ciphertextPart);
+        const tag = this.base64UrlDecode(tagPart);
+
+        const key = await this.deriveKey(secret);
+
+        const encryptedData = new Uint8Array(
+            ciphertext.length + tag.length
+        );
+
+        encryptedData.set(ciphertext);
+        encryptedData.set(tag, ciphertext.length);
+
+        const decrypted = await crypto.subtle.decrypt(
+            {
+                name: 'AES-GCM',
+                iv,
+                tagLength: 128
+            },
+            key,
+            encryptedData
+        );
+
+        const json = new TextDecoder().decode(decrypted);
+
+        return JSON.parse(json);
     },
 
     /**
@@ -484,7 +638,9 @@ export default {
      * 3. Order
      * @param type
      */
-    async submitRequest(type = 'order', data = {}) {
+    async submitRequest(type = 'order') {
+
+        this.validationError = '';
 
         const messages = {
             order: 'Order Processing...',
@@ -493,7 +649,7 @@ export default {
         };
 
         const urls = {
-            order: '/carts/submit-order',
+            order: '/checkout',
             quotation: '/carts/submit-quote',
             draft: '/drafts',
         };
@@ -511,46 +667,8 @@ export default {
             preConfirm: async () => {
                 try {
 
-                    let payload = {
-                        order_type: type,
-                        total_order_value: this.review.subtotal,
-                        sales_tax_amount: this.review.tax_amount,
-                        freight_amount: this.review.ship_charge,
-                        shipping_amount: this.review.ship_charge,
-                        hazmat_charge: this.review.hazmat_charge,
-                        order_notes: this.review.notes,
-                        internal_notes: this.shipping.instructions,
-
-                        po_number: this.account.poNumber,
-                        customer_name: this.account.company,
-                        customer_email: this.account.email,
-                        customer_phone: this.account.phone,
-
-                        address_1: this.shipping.addressLine1,
-                        address_2: this.shipping.addressLine2,
-                        address_3: this.shipping.addressLine3,
-                        address_country_code: this.shipping.country,
-                        address_state: this.shipping.state,
-                        address_city: this.shipping.city,
-                        address_zip_code: this.shipping.zipCode,
-                        shipping_method: this.shipping.method,
-                        shipping_number: this.shipping.number,
-                        shipping_phone: this.shipping.phone,
-                    };
-
-                    switch (type) {
-                        case 'draft':
-                            payload.draft_name = data.draft_name ?? null;
-                            break;
-
-                        case 'quotation':
-                            break;
-
-                        default:
-                    }
-
                     const response = await axios
-                        .post(urls[type], payload);
+                        .post(urls[type], this.getCheckoutRequestPayload(type));
 
                     return {
                         success: true,
@@ -598,15 +716,94 @@ export default {
         });
     },
 
-    priceFormatter(price) {
-        const value = parseFloat(String(price ?? '').replace(/[^0-9.\-]/g, ''));
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: window.Amplify?.config?.currency ?? 'USD',
-        }).format(Number.isFinite(value) ? value : 0);
-    },
-
-    capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1)
-    },
+    getCheckoutRequestPayload(type = 'order', data = {}) {
+        return {
+            amounts: {
+                subtotal: this.review.sub_total,
+                shipping: this.review.ship_charge,
+                tax: this.review.tax_amount,
+                total: this.review.tax_amount,
+                additional: [
+                    {
+                        field: 'hazmat_charge',
+                        label: 'Hazmat Charge',
+                        value: this.review.hazmat_charge,
+                        source: 'erp',
+                        metadata: {}
+                    },
+                    {
+                        field: 'wire_transfer_fee',
+                        label: 'Wire Transfer Fee',
+                        value: this.review.wire_transfer_fee,
+                        source: 'erp',
+                        metadata: {}
+                    }
+                ]
+            },
+            checkout: {
+                version: 1,
+                channel: 'web',
+                type: type,
+            },
+            contact: {
+                id: null, //will be overwritten on server
+                name: this.account.name,
+                email: this.account.email,
+                phone: this.account.phone
+            },
+            customer: {
+                id: null, //will be overwritten on server
+                number: this.customer.CustomerNumber ?? null,
+                name: this.account.company,
+                address1: this.account.addressLine1,
+                address2: this.account.addressLine2,
+                address3: this.account.addressLine3,
+                city: this.account.city,
+                state: this.account.state,
+                zip_code: this.account.zipCode,
+                country: this.account.country
+            },
+            shipping: {
+                id: null, //will be overwritten on server
+                name: this.shipping.name,
+                number: this.shipping.number,
+                address1: this.shipping.addressLine1,
+                address2: this.shipping.addressLine2,
+                address3: this.shipping.addressLine3,
+                city: this.shipping.city,
+                state: this.shipping.state,
+                zip_code: this.shipping.zipCode,
+                country: this.shipping.country,
+                method: {
+                    code: this.selectedShippingMethod.shipvia ?? null,
+                    label: this.selectedShippingMethod.name ?? null,
+                    amount: this.selectedShippingMethod.amount ?? null,
+                },
+                instructions: this.shipping.instructions ?? null,
+                additional: [
+                    // {
+                    //     field: '',
+                    //     label: '',
+                    //     value: '',
+                    //     source: '',
+                    //     metadata: {}
+                    // }
+                ]
+            },
+            items: [],
+            payment: {
+                gateway: this.payment.driver,
+                method: this.payment.method,
+                credentials: JSON.parse(JSON.stringify(this.payment.credentials)),
+                name: this.payment.biller,
+                address: this.payment.address,
+                city: this.payment.city,
+                state: this.payment.state,
+                zip_code: this.payment.zipCode,
+                country: this.payment.country,
+                phone: this.payment.phone,
+                metadata: {}
+            }
+        };
+    }
 }
