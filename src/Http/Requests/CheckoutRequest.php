@@ -84,7 +84,22 @@ class CheckoutRequest extends FormRequest
             'shipping.additional.*.source' => 'present|nullable',
             'shipping.additional.*.metadata' => 'nullable|array',
 
-            'items' => 'present|array',
+            'items' => 'required_if:checkout.channel,api|array',
+            'items.*.qty' => 'required|numeric|min:0',
+            'items.*.unit_code' => 'required|string',
+            'items.*.product_id' => 'required|integer',
+            'items.*.product_code' => 'required|string',
+            'items.*.options' => 'present|array',
+            'items.*.warehouse_id' => 'required|integer',
+            'items.*.shipping_cost' => 'present|nullable|numeric|min:0',
+            'items.*.ssp' => 'present|nullable|numeric|min:0', //Standalone Selling Price
+            'items.*.discount_amount' => 'present|nullable|numeric|min:0',
+            'items.*.customer_price' => 'present|nullable|numeric|min:0',
+            'items.*.spare_1' => 'nullable|string',
+            'items.*.spare_2' => 'nullable|string',
+            'items.*.source_type' => 'nullable|string',
+            'items.*.source' => 'nullable|string',
+            'items.*.additional_info' => 'present|array',
 
             'payment' => 'required|array',
             'payment.gateway' => ['required', 'string', Rule::in(array_keys(config('amplify.payment.labels', [])))],
