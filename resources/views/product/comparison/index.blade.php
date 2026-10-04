@@ -1,8 +1,7 @@
 @php
-    $keys = array_keys($items);
-
-    $attributes = array_keys($items[$keys[0]]);
-
+    $items = is_array($items) ? $items : [];
+    $firstItem = reset($items);
+    $attributes = is_array($firstItem) ? array_keys($firstItem) : [];
 @endphp
 <div {!! $htmlAttributes !!}>
     <div class="card">

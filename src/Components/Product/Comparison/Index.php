@@ -17,7 +17,9 @@ class Index extends BaseComponent
 
     public function __construct()
     {
-        $this->items = request()->session()->get('compareProducts');
+        $items = request()->session()->get('compareProducts', []);
+
+        $this->items = is_array($items) ? $items : [];
 
         parent::__construct();
     }
@@ -27,7 +29,7 @@ class Index extends BaseComponent
      */
     public function shouldRender(): bool
     {
-        if (customer_check() && !customer()->can('product-compare.details')) {
+        if (customer_check() && !customer(true)->can('product-compare.details')) {
             return false;
         }
 

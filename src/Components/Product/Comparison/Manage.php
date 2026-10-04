@@ -25,7 +25,7 @@ class Manage extends BaseComponent
      */
     public function shouldRender(): bool
     {
-        if (customer_check() && !customer()->can('product-compare.manage')) {
+        if (customer_check() && !customer(true)->can('product-compare.manage')) {
             return false;
         }
 
@@ -42,9 +42,15 @@ class Manage extends BaseComponent
 
     public function htmlAttributes(): string
     {
-        $productId = $this->product instanceof ItemRow ? $this->product->Amplify_Id : $this->product->id;
+        $productId = $this->product instanceof ItemRow
+            ? ($this->product->Amplify_Id ?: $this->product->Product_Id)
+            : ($this->product->id ?? $this->product->Product_Id ?? null);
 
-        $this->attributes = $this->attributes->merge(['onclick' => "Amplify.compareProducts(this, {$productId}, 'add');"]);
+        if ($productId) {
+            $this->attributes = $this->attributes->merge([
+                'onclick' => "Amplify.compareProducts(this, {$productId}, 'add');",
+            ]);
+        }
 
         return parent::htmlAttributes();
     }
