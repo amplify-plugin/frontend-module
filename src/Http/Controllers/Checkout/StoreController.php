@@ -11,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class StoreController extends Controller
@@ -27,46 +28,34 @@ class StoreController extends Controller
 
     public function __invoke(CheckoutRequest $request): JsonResponse
     {
-        $context = app(Pipeline::class)
-            ->send(new CheckoutContext($request->validated()))
-            ->through(config('amplify.checkout_pipeline', []))
-            ->then(function (CheckoutContext $context) {
-//                foreach ($data['items'] as $index => $item) {
-//                    $data['items'][$index]['error'] = isset($data['errors'][$index]) ? implode("\n", $data['errors'][$index]) : null;
-//                }
-
-                return $context;
-            });
-
-        dd($context);
-
-        if (!empty($context['errors'])) {
-            return $this->apiResponse(false, count($context['errors']) == 1
-                ? Arr::first(Arr::flatten($context['errors']))
-                : __('There are issue(s) appeared on your order (marked in red). Please correct before adding to the Cart.'), 400,
-                ['errors' => $context['errors']]
-            );
-        }
-
         try {
 
-//            $cart->cartItems()
-//                ->whereIn('product_code', collect($data['items'])->pluck('product_code')->toArray())
-//                ->delete();
-//
-//            $cart->cartItems()->createMany($data['items']);
-//
-//            \event(new CartUpdated($cart));
-//
-//            if (customer_check()) {
-//                $productIds = collect($data['items'])->pluck('product_id')->filter()->all();
-//                app(RecentlyViewedProductService::class)->markAddedToCart(customer(true), $productIds);
-//            }
+            $context = app(Pipeline::class)
+                ->send(new CheckoutContext($request->validated()))
+                ->through(config('amplify.checkout_pipeline', []))
+                ->then(function (CheckoutContext $context) {
+                    $response = DB::transaction(function () use (&$context) {
+                        $order = $context->resolved['order'];
+                        $lines = $context->resolved['items'] ?? [];
+                        $notes = $context->resolved['note'] ?? [];
+
+                        if ($order->save()) {
+                            if ($order->orderLines()->saveMany($lines) && $order->orderNotes()->saveMany($notes)) {
+                                $context->resolved['order'] = $order->fresh();
+                                return $context;
+                            }
+                        }
+
+                        return null;
+                    });
+                    return $context;
+                });
+
 
             return $this->apiResponse(true, __('Product(s) added to cart successfully.'), 200, [
                 'data' => [
-                    'total' => cart_count_badge($cart),
-                    'items' => array_values($context['items'])
+                    'total' => count($context->payload['items']),
+                    'items' => array_values($context->payload['items'])
                 ]
             ]);
 

@@ -113,6 +113,11 @@ class CheckoutRequest extends FormRequest
             'payment.phone' => ['present','string', 'min:10', new PhoneNumberRule],
             'payment.metadata' => 'present|array',
             'payment.credentials' => 'required|array',
+
+            'notes' => 'present|nullable|array',
+            'notes.*.subject' => 'required|string',
+            'notes.*.note' => 'required|string',
+            'notes.*.type' => 'required|string'
         ];
     }
 }
