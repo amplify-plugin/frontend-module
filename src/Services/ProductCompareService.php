@@ -178,7 +178,7 @@ class ProductCompareService
         }
 
         $with = $detailed
-            ? ['productImage', 'brand', 'manufacturerRelation', 'categories', 'attributes']
+            ? ['productImage', 'brand', 'manufacturerRelation', 'categories', 'attributes', 'attributeValues']
             : ['productImage'];
 
         $products = $this->comparableQuery()
@@ -348,13 +348,25 @@ class ProductCompareService
         foreach ($products as $product) {
             foreach ($product->attributes as $attribute) {
                 $name = $this->display($attribute->name);
+                $value = $this->display($attribute->pivot->attribute_value ?? null);
 
-                if ($name === '' || $this->attributeExcluded($name)) {
+                if ($name === '' || $value === '' || $this->attributeExcluded($name)) {
                     continue;
                 }
 
-                $label = $attribute->unit ? $name.' ('.$attribute->unit.')' : $name;
-                $attributeLabels[$label][(int) $product->id] = $this->display($attribute->pivot->attribute_value ?? null);
+                $label = $attribute->unit ? $name.' ('.$this->display($attribute->unit).')' : $name;
+                $this->putAttributeValue($attributeLabels, $label, (int) $product->id, $value);
+            }
+
+            foreach ($product->attributeValues as $attribute) {
+                $name = $this->display($attribute->attribute_name);
+                $value = $this->display($attribute->attribute_value);
+
+                if ($name === '' || $value === '' || $this->attributeExcluded($name)) {
+                    continue;
+                }
+
+                $this->putAttributeValue($attributeLabels, $name, (int) $product->id, $value);
             }
         }
 
@@ -388,6 +400,15 @@ class ProductCompareService
             'values' => $comparable,
             'differs' => count(array_unique($comparable)) > 1,
         ];
+    }
+
+    /**
+     * @param  array<string, array<int, string>>  $labels
+     */
+    private function putAttributeValue(array &$labels, string $label, int $productId, string $value): void
+    {
+        $existing = $labels[$label][$productId] ?? '';
+        $labels[$label][$productId] = $existing === '' ? $value : $existing.', '.$value;
     }
 
     private function attributeExcluded(string $name): bool
