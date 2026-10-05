@@ -100,6 +100,11 @@ class AnalyticInit extends BaseComponent
         }
 
         if ($type == 'Product') {
+            $product = \store('productModel');
+
+            if (! $product) {
+                return $data;
+            }
 
             if ($categoryId = store()->eaProductDetail?->getCategories()?->getSuggestedCategoryID()) {
                 $categories = Category::categoryTree($categoryId);
@@ -111,7 +116,6 @@ class AnalyticInit extends BaseComponent
             /**
              * @var Product $product
              */
-            $product = \store('productModel');
             $productErp = collect($this->productPaginate())->first();
 
             $data['keywords'] = $product->meta_keywords ?? '';

@@ -2570,6 +2570,17 @@ return [
         '@nestedItems' => [],
         'description' => 'This widget allows you to add or remove products for comparison.',
     ],
+    Components\Product\Comparison\Bar::class => [
+        'name' => 'product-comparison-bar',
+        'reserved' => true,
+        'internal' => true,
+        '@inside' => null,
+        '@client' => null,
+        'model' => [],
+        '@attributes' => [],
+        '@nestedItems' => [],
+        'description' => 'Sticky bar for the products currently selected for comparison.',
+    ],
     Components\ManufactureSlider::class => [
         'name' => 'manufacture-slider',
         'reserved' => true,

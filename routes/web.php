@@ -80,6 +80,12 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
 
     $productRoutePrefix = config('amplify.frontend.product_page_prefix');
 
+    $productComparePage = trim((string) config('amplify.frontend.product_compare_page', '/product/compare'), '/');
+
+    if ($productComparePage !== '') {
+        Route::get($productComparePage, [ProductCompareController::class, 'page'])->name('product-compare.page');
+    }
+
     Route::get("{$productRoutePrefix}/{identifier}/{slug?}", ProductDetailController::class)
         ->where(['identifier' => '([a-zA-Z0-9\-\_\[\]\(\)\+\#\.\"\~\: ]+)', 'slug' => '(.+)'])
         ->name('shop.show');

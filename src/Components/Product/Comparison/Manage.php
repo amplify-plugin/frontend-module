@@ -3,6 +3,7 @@
 namespace Amplify\Frontend\Components\Product\Comparison;
 
 use Amplify\Frontend\Abstracts\BaseComponent;
+use Amplify\Frontend\Services\ProductCompareService;
 use Amplify\System\Sayt\Classes\ItemRow;
 use Closure;
 use Illuminate\Contracts\View\View;
@@ -10,14 +11,26 @@ use Illuminate\Contracts\View\View;
 /**
  * @class Button
  * @package Amplify\Frontend\Components\Product\Comparison
- *
  */
 class Manage extends BaseComponent
 {
-    public function __construct(public mixed  $product,
-                                public string $element = 'button')
+    public ?int $productId = null;
+
+    public bool $selected = false;
+
+    public function __construct(public mixed $product, public string $element = 'button')
     {
         parent::__construct();
+
+        if (! $this->shouldRender()) {
+            return;
+        }
+
+        $this->productId = $this->resolveProductId($product);
+
+        if ($this->productId) {
+            $this->selected = app(ProductCompareService::class)->contains($this->productId);
+        }
     }
 
     /**
@@ -25,7 +38,11 @@ class Manage extends BaseComponent
      */
     public function shouldRender(): bool
     {
-        if (customer_check() && !customer(true)->can('product-compare.manage')) {
+        if (! app(ProductCompareService::class)->enabled()) {
+            return false;
+        }
+
+        if (customer_check() && ! customer(true)->can('product-compare.manage')) {
             return false;
         }
 
@@ -42,16 +59,27 @@ class Manage extends BaseComponent
 
     public function htmlAttributes(): string
     {
-        $productId = $this->product instanceof ItemRow
-            ? ($this->product->Amplify_Id ?: $this->product->Product_Id)
-            : ($this->product->id ?? $this->product->Product_Id ?? null);
-
-        if ($productId) {
+        if ($this->productId) {
             $this->attributes = $this->attributes->merge([
-                'onclick' => "Amplify.compareProducts(this, {$productId}, 'add');",
+                'data-compare-product' => $this->productId,
+                'data-compare-state' => $this->selected ? 'compared' : 'idle',
+                'onclick' => "Amplify.compareProducts(this, {$this->productId}, 'add'); return false;",
             ]);
         }
 
+        if ($this->selected) {
+            $this->attributes = $this->attributes->class(['is-compared']);
+        }
+
         return parent::htmlAttributes();
+    }
+
+    private function resolveProductId(mixed $product): ?int
+    {
+        $productId = $product instanceof ItemRow
+            ? ($product->Product_Id ?: $product->Amplify_Id)
+            : ($product->id ?? $product->Product_Id ?? null);
+
+        return is_numeric($productId) ? (int) $productId : null;
     }
 }

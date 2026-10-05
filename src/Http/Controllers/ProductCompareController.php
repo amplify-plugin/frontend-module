@@ -2,8 +2,9 @@
 
 namespace Amplify\Frontend\Http\Controllers;
 
+use Amplify\Frontend\Services\ProductCompareService;
 use Amplify\Frontend\Traits\HasDynamicPage;
-use Amplify\System\Backend\Models\Product;
+use Amplify\System\Cms\Models\Page;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -13,101 +14,99 @@ class ProductCompareController extends Controller
 {
     use HasDynamicPage;
 
-    private array $items = [];
-
-    private string $sessionKey = 'compareProducts';
-
-    private int $maxItems = 4;
-
-    public function __invoke(Request $request): JsonResponse
+    public function __construct(Request $request)
     {
+        if (optional($request->route())->getName() !== 'frontend.product-compare.page') {
+            return;
+        }
 
-        $this->items = request()->session()->get($this->sessionKey, []);
+        $page = Page::published()->where('slug', $this->comparePageSlug())->first();
 
+        if ($page && ! empty($page->middleware)) {
+            $this->middleware($page->middleware);
+        }
+    }
+
+    public function page(ProductCompareService $compare): string
+    {
+        if (! $compare->enabled()) {
+            abort(404, 'Product comparison is not available.');
+        }
+
+        $slug = $this->comparePageSlug();
+        $page = Page::published()->where('slug', $slug)->first();
+
+        if (! $page) {
+            $page = new Page([
+                'name' => 'Product Comparison',
+                'title' => 'Product Comparison',
+                'slug' => $slug,
+                'page_type' => 'static_page',
+                'content' => '<x-product-comparison-list />',
+                'is_published' => true,
+                'has_footer' => true,
+                'has_breadcrumb' => false,
+                'styles' => '',
+                'updated_at' => now(),
+                'created_at' => now(),
+            ]);
+        }
+
+        store()->dynamicPageModel = $page;
+
+        return $this->render();
+    }
+
+    private function comparePageSlug(): string
+    {
+        return trim((string) config('amplify.frontend.product_compare_page', '/product/compare'), '/');
+    }
+
+    public function __invoke(Request $request, ProductCompareService $compare): JsonResponse
+    {
         try {
+            if (! $compare->enabled()) {
+                return $this->apiResponse(false, 'Product comparison is not available.', 404);
+            }
+
+            if (! customer_check()) {
+                return $this->apiResponse(false, 'You need to be logged in to compare products.', 403);
+            }
 
             hasAccessOrFail('product-compare.manage');
 
             $validator = Validator::make($request->all(), [
-                'product' => 'nullable|integer|exists:products,id',
-                'action' => 'string|in:add,remove,clear',
+                'product' => 'nullable|integer',
+                'action' => 'nullable|string|in:add,remove,clear,list',
             ]);
 
-            if ($validator->failed()) {
-                return $this->apiResponse(false, $validator->errors()->first(), 500);
+            if ($validator->fails()) {
+                return $this->apiResponse(false, (string) $validator->errors()->first(), 422);
             }
 
-            $action = $request->input('action');
+            $action = $request->input('action', 'list');
+            $productId = (int) $request->input('product');
 
-            $message = '';
+            $result = match ($action) {
+                'add' => $compare->add($productId),
+                'remove' => $compare->remove($productId),
+                'clear' => $compare->clear(),
+                default => $compare->list(),
+            };
 
-            $data = [];
-
-            switch ($action) {
-
-                case 'clear':
-                {
-
-                    $this->items = [];
-
-                    $message = 'Your product comparison list have been cleared.';
-
-                    break;
-                }
-
-                case 'remove':
-                {
-
-                    $this->items = array_filter($this->items, fn($item) => $item['id'] != $request->input('product'));
-
-                    $message = 'Item removed from product comparison list.';
-
-                    break;
-                }
-
-                case 'add':
-                {
-
-                    $this->items = array_filter($this->items, fn($item) => $item['id'] != $request->input('product'));
-
-                    if (count($this->items) >= $this->maxItems) {
-                        return $this->apiResponse(false, "You can only compare up to <b>{$this->maxItems}</b> products at a time. <br>Please remove an existing product before adding.", 500);
-                    }
-
-                    $product = Product::findOrFail($request->input('product'));
-
-                    $this->items[] = [
-                        'id' => $product->id,
-                        'code' => $product->product_code,
-                        'name' => $product->product_name,
-                        'image' => $product->productImage?->main ?? config('amplify.frontend.fallback_image_path'),
-                        'href' => frontendSingleProductURL($product),
-                    ];
-
-                    $message = "<strong>{$product->product_name}</strong> added to your product comparison list.";
-
-                    break;
-                }
-
-                default:
-                {
-                    $message = 'Your product comparison list';
-
-                    $data = [
-                        'data' => [
-                            'count' => count($this->items),
-                            'html' => view('widget::product.comparison.dropdown', [
-                                'items' => $this->items,
-                            ])->render()
-                        ]
-                    ];
-                }
-            }
-
-            $request->session()->put($this->sessionKey, $this->items);
-
-            return $this->apiResponse(true, $message, 200, $data);
-
+            return $this->apiResponse($result['success'], $result['message'], 200, [
+                'count' => $result['count'],
+                'max' => $result['max'],
+                'state' => $result['state'],
+                'items' => $result['items'],
+                'data' => [
+                    'count' => $result['count'],
+                    'html' => view('widget::product.comparison.dropdown', [
+                        'items' => $result['items'],
+                        'compareUrl' => $compare->pageUrl(),
+                    ])->render(),
+                ],
+            ]);
         } catch (\Throwable $exception) {
             return $this->apiResponse(false, $exception->getMessage(), 500);
         }

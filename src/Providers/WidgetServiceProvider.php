@@ -5,6 +5,8 @@ namespace Amplify\Frontend\Providers;
 use Amplify\Frontend\Abstracts\Widget;
 use Amplify\Frontend\Commands\CleanCartCommand;
 use Amplify\Frontend\Commands\WidgetMakeCommand;
+use Amplify\Frontend\Components\Product\Comparison\Bar;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 class WidgetServiceProvider extends ServiceProvider
@@ -15,6 +17,8 @@ class WidgetServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->loadViewsFrom(__DIR__.'/../../resources/views', 'widget');
+
+        Blade::component(Bar::class, 'product-comparison-bar');
 
         $this->publishes([
             __DIR__.'/../../public' => public_path('vendor/widget'),

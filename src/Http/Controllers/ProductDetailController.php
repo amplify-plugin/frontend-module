@@ -3,6 +3,7 @@
 namespace Amplify\Frontend\Http\Controllers;
 
 use Amplify\ErpApi\Facades\ErpApi;
+use Amplify\Frontend\Services\ProductCompareService;
 use Amplify\Frontend\Services\RecentlyViewedProductService;
 use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\System\Backend\Models\Product;
@@ -29,6 +30,10 @@ class ProductDetailController extends Controller
      */
     public function __invoke(string $identifier, ?string $slug = null): string
     {
+        if ($this->isProductCompareRequest($identifier, $slug)) {
+            return app(ProductCompareController::class)->page(app(ProductCompareService::class));
+        }
+
         abort_unless(! customer_check() || customer(true)->can('shop.browse'), 403);
 
         $product = store()->productModel;
@@ -62,6 +67,15 @@ class ProductDetailController extends Controller
         } catch (\Exception $exception) {
             abort(500, $exception->getMessage());
         }
+    }
+
+    private function isProductCompareRequest(string $identifier, ?string $slug): bool
+    {
+        $configured = trim((string) config('amplify.frontend.product_compare_page', '/product/compare'), '/');
+        $prefix = trim((string) config('amplify.frontend.product_page_prefix', 'product'), '/');
+        $path = $prefix.'/'.$identifier.($slug ? '/'.$slug : '');
+
+        return $configured !== '' && trim($path, '/') === $configured;
     }
 
     /**
