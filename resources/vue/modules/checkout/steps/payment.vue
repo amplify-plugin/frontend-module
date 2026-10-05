@@ -68,7 +68,7 @@ onMounted(() => {
     <i class="icon-file-add" style="margin-top: -10px"></i>
     Billing Information
   </h4>
-  <div class="w-100 d-grid d-md-flex justify-content-between gap-2 align-items-center"
+  <div class="w-100 d-grid d-md-flex justify-content-between gap-2 align-items-center mb-4"
        v-if="store.allowChooseBilling">
     <span>
       <span>Biller:&nbsp;</span>

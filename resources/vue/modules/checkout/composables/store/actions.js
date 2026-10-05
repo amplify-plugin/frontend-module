@@ -115,10 +115,12 @@ export default {
 
     goNext() {
         if (!this.validateCurrentStep()) return;
+
         if (this.isLastStep) {
             this.submitRequest('order');
             return;
         }
+
         this.validationError = '';
         this.activeStep = this.orderedSteps[this.currentIndex + 1].component;
     },
@@ -152,6 +154,7 @@ export default {
     },
 
     validateCurrentStep() {
+
         switch (this.activeStep) {
             case 'account':
                 this.account.errors = validator.make(
@@ -192,6 +195,9 @@ export default {
                 return this.validateShippingAddress();
 
             case 'payment':
+
+                store.loading = true;
+
                 if (Object.entries(this.payment.credentials).length === 0) ;
 
             case 'review':
@@ -743,6 +749,7 @@ export default {
                 version: 1,
                 channel: 'web',
                 type: type,
+                po_number: this.account.poNumber
             },
             contact: {
                 id: null, //will be overwritten on server
@@ -802,7 +809,19 @@ export default {
                 country: this.payment.country,
                 phone: this.payment.phone,
                 metadata: {}
-            }
+            },
+            notes: [
+                {
+                    subject: 'Order Note',
+                    type: 'INT',
+                    note: this.review.notes,
+                },
+                {
+                    subject: 'Warehouse Note',
+                    type: 'WTDO',
+                    note: 'This checkout has different items need transfer',
+                }
+            ]
         };
     },
 

@@ -20,43 +20,6 @@
     {!!  $after ?? '' !!}
 </div>
 
-<style>
-    .x-product-information-tabs .document-accordion .card-header {
-        padding: 0;
-    }
-
-    .x-product-information-tabs .document-accordion .card,
-    .x-product-information-tabs .document-accordion .card:focus,
-    .x-product-information-tabs .document-accordion .card:focus-within {
-        outline: none;
-        box-shadow: none;
-    }
-
-    .x-product-information-tabs .document-accordion .btn-link {
-        color: inherit;
-        text-decoration: none;
-        white-space: normal;
-        box-shadow: none;
-        outline: none;
-        cursor: pointer;
-    }
-
-    .x-product-information-tabs .document-accordion .btn-link:hover,
-    .x-product-information-tabs .document-accordion .btn-link:focus,
-    .x-product-information-tabs .document-accordion .btn-link:active,
-    .x-product-information-tabs .document-accordion .btn-link:focus-visible {
-        color: inherit;
-        text-decoration: none;
-        box-shadow: none;
-        outline: none;
-    }
-
-    .x-product-information-tabs .document-accordion .iframe-style {
-        margin: 0;
-        width: 100%;
-    }
-</style>
-
 @push('footer-script')
     <script>
         document.addEventListener("DOMContentLoaded", (event) => {
@@ -97,6 +60,15 @@
                     }
                 });
             }
+
+            setTimeout(() => {
+                const html = document.querySelector('.x-product-information-tabs #product-information-tabs').innerHTML.toString().trim();
+                if(html.length === 0){
+                    document.querySelector('.x-product-information-tabs').remove();
+                }
+
+            }, 100);
+
         });
     </script>
 @endpush

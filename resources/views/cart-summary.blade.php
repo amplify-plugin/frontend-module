@@ -277,6 +277,61 @@
         <h4 class="border-bottom pb-2 mb-3">
             <i class="icon-bag" style="margin-top: -10px"></i> Cart Items
         </h4>
+        <div class="shopping-cart-footer d-md-flex justify-content-md-between d-grid">
+            <a class="btn btn-outline-secondary align-items-center" href="{{ $backToShoppingUrl() }}">
+                <i class="icon-arrow-left"></i>&nbsp;{{ __('Back to Shopping') }}
+            </a>
+            <div class="d-md-flex d-grid gap-2 justify-content-center">
+                <butoon type="button"
+                        class="btn btn-primary"
+                        data-action-link="{{ route('frontend.carts.destroy', $cartId) }}"
+                        onclick="Amplify.clearCart(this)">
+                    <i class="icon-circle-cross"></i>&nbsp;{{ __('Clear Cart') }}
+                </butoon>
+                @if($createOrderListFromCart)
+                    <button type="button"
+                            class="btn btn-primary"
+                            onclick="Amplify.addToNewOrderList({{ $cartId }}, 'cart', '{{ $orderListLabel }}')">
+                        <i class="icon-file-subtract"></i>&nbsp;{{ $createOrderListLabel() }}
+                    </button>
+                @endif
+            </div>
+            <div id="checkout-btn">
+                @if($showSubmitQuoteButton && (customer_check() && customer(true)->can('cart.submit-quote')))
+                    <button
+                            type="button"
+                            id="submit-quote-btn"
+                            class="btn btn-warning align-items-center"
+                            data-url="{{ route('frontend.carts.submit-quote') }}"
+                            data-backtoshop="{{ $backToShoppingUrl() }}"
+                            data-note-label="{{ $quoteNoteLabel() }}"
+                            data-note-placeholder="{{ $quoteNotePlaceholder() }}"
+                            onclick="Amplify.submitCartAsQuote(this)">
+                        <i class="icon-file"></i>&nbsp;{{ __('Submit Quote') }}
+                    </button>
+                @endif
+                <a @class(["btn btn-success align-items-center", 'd-none' => customer_check() && !customer(true)->can('cart.checkout')])
+                   href="{{ route('frontend.checkout') }}">
+                    {{ __('Checkout') }}&nbsp;<i class="icon-arrow-right"></i>
+                </a>
+            </div>
+            @if($updateStyle == 'bulk')
+                <div id="quantity-update-actions" class="gap-2 d-none">
+                    <button type="button"
+                            onclick="Amplify.discardQtyChange(event)"
+                            class="btn discard-from-cart">
+                        <i class="icon-reload"></i>&nbsp;{{ __('Revert') }}
+                    </button>
+                    <button
+                            type="button"
+                            id="update-quantities-btn"
+                            class="btn update-from-cart">
+                        <i class="icon-check"></i>&nbsp;{{ __('Update') }}
+                    </button>
+                </div>
+            @endif
+        </div>
+
         <div class="table-responsive shopping-cart mb-1">
             <table class="table table-hover">
                 <thead>
@@ -302,6 +357,7 @@
                 </tfoot>
             </table>
         </div>
+
         <div class="shopping-cart-footer d-md-flex justify-content-md-between d-grid">
             <a class="btn btn-outline-secondary align-items-center" href="{{ $backToShoppingUrl() }}">
                 <i class="icon-arrow-left"></i>&nbsp;{{ __('Back to Shopping') }}

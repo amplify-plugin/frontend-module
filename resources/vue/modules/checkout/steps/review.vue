@@ -6,14 +6,6 @@ import axios from 'axios';
 
 const store = useCheckoutStore();
 
-const paymentLabels = {
-  credit_card: 'Credit Card',
-  paypal: 'PayPal',
-  reward_points: 'Reward Points',
-  on_account: 'On Account',
-  ach: 'ACH',
-};
-
 const list = ref(null);
 const loadMoreTrigger = ref(null);
 

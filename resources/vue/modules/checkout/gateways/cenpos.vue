@@ -17,8 +17,33 @@ const captureUrl = computed(() => {
       ? `https://${prefix}.cenpos.net/simplewebpay/cards/`
       : `https://${prefix}.cenpos.net/simplewebpay/checks/`;
 });
+
 const ip = ref('127.0.0.1');
 
+const siteVerifyToken = ref(null);
+
+const cardErrors = ref([]);
+
+const creditCardErrors = computed(() => {
+
+  const field = {ccnumber: 'card number', ccexp: 'expiration date', cvv: 'cvv'};
+
+  return cardErrors.value.map((error, index) => {
+
+    let message = `The ${String(error.message).toLowerCase()}`;
+
+    if (error.message === 'Field is empty') {
+      message = `The ${field[error.param]} field is required.`;
+    }
+
+    if (index === 0) {
+      store.validationError = message;
+    }
+
+    return message;
+
+  });
+})
 
 async function siteVerify() {
 
@@ -36,14 +61,12 @@ async function siteVerify() {
     zipcode: store.payment.zipCode,
   };
 
-  console.log({config, payload})
-
   const response = await axios.post(
       captureUrl.value + '?app=genericcontroller&action=siteVerify',
       payload,
       {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded',
           Accept: 'application/json'
         },
       });
@@ -52,8 +75,41 @@ async function siteVerify() {
 
   if (data.Result === "-1") {
     store.validationError = data.Message;
+    return;
   }
-  console.log(response.data);
+  siteVerifyToken.value = data.Data ?? null;
+}
+
+async function captureCreditCard() {
+
+  let payload = {
+    isEmail: 'true',
+    type: 'Sale',
+    customerCode: store.customer.CustomerNumber,
+    issubmit: 'false',
+    amount: store.review.total,
+    isCvv: 'true',
+    autologin: 'false',
+    disabledalert: 'false',
+    verifyingpost: siteVerifyToken.value,
+  };
+
+  let encoded = new URLSearchParams(payload).toString();
+
+  console.log(payload, encoded);
+
+  window.$('#card-capture').createWebpay({
+    url: captureUrl.value,
+    params: encoded,
+    width: '100%',
+    sessionToken: false,
+    success: (response) => {
+      console.log(response);
+    },
+    cancel: (response) => {
+      console.log(response);
+    },
+  })
 }
 
 onMounted(async () => {
@@ -61,8 +117,9 @@ onMounted(async () => {
   ip.value = await store.setIpAddress();
 
   await siteVerify();
-});
 
+  await captureCreditCard();
+});
 
 </script>
 
@@ -86,8 +143,16 @@ onMounted(async () => {
                style="width: 120px;" alt="Credit Cards">
         </p>
       </div>
-      <div class="col-lg-6 col-md-8 col-12">
+      <div class="col-md-6 col-12">
         <div id="card-capture"></div>
+      </div>
+      <div class="col-md-6 col-12">
+        <ul class="text-danger">
+          <li v-for="error in creditCardErrors">{{ error }}</li>
+        </ul>
+      </div>
+      <div class="col-lg-6 col-md-8 col-12">
+
       </div>
     </div>
 

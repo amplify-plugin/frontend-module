@@ -1,32 +1,14 @@
-@php
-
-    $diff = null;
-    $msrp =  $product?->Msrp?->toFloat() ?? null;
-    $price =  $product?->ERP?->Price ?? null;
-
-    if ($price != null && $msrp != null) {
-        $diff = (abs($msrp - $price) * 100)/$msrp;
-    }
-
-@endphp
 <div {!! $htmlAttributes !!}>
     <div class="row">
 
         <x-product.product-gallery class="col-md-4 col-12" :image="$product?->product_image">
             <x-slot:before>
-                {{--                    @if(!$showDiscountBadge)--}}
                 @if(!$product->in_stock)
                     <div class="product-badge product-start text-white bg-success"
                          data-toggle="tooltip" title="Inventory Status">
                         <i class="icon-circle-check" style="margin-top: -3px"></i> In Stock
                     </div>
                 @endif
-                @if(is_numeric($diff))
-                    <div class="product-badge product-end text-danger">
-                        {{ \Illuminate\Support\Number::percentage($diff) }} Off
-                    </div>
-                @endif
-                {{--                    @endif--}}
             </x-slot:before>
         </x-product.product-gallery>
 
@@ -49,9 +31,9 @@
                     :uom="$product->ERP?->UnitOfMeasure ?? 'EA'"
                     :std-price="$product->Msrp->toFloat()"/>
 
-            <div class="d-flex w-100 justify-content-start mb-2">
+            <div class="widget-tags mb-2">
 
-                <x-product-manufacture-image :product="$product" class="tag border-info" title="Brand"
+                <x-product-manufacture-image :product="$product" class="tag" title="Brand"
                                              data-toggle="tooltip">
                     <x-slot:prefix>
                         <i class="icon-star font-weight-bold" style="margin-top: -3px"></i>
@@ -62,7 +44,7 @@
                     <x-product.availability
                             :product="$product" :value="$product->total_quantity_available"
                             data-toggle="tooltip" title="Quantity Available"
-                            element="a" class="tag border-primary font-weight-bold">
+                            element="a" class="tag">
                         <x-slot:prefix>
                             <i class="icon-layers font-weight-bold" style="margin-top: -3px"></i>
                         </x-slot:prefix>
@@ -73,7 +55,7 @@
                 @endif
 
                 @if(!empty($product->min_order_qty))
-                    <a href="#" class="tag border-warning font-weight-bold"
+                    <a href="#" class="tag"
                        data-toggle="tooltip" title="Minimum Order Quantity">
                         MOQ: {{ $product->min_order_qty }}
                         @if($product->min_order_qty > 1)
@@ -85,13 +67,14 @@
                 @endif
 
                 @if($product->is_ncnr)
-                    <a href="#" class="tag border-danger font-weight-bold"
+                    <a href="#" class="tag"
                        data-toggle="tooltip" title="Non-Cancellable, Non-Returnable">
                         <i class="icon-bell font-weight-bold text-danger" style="margin-top: -3px"></i>
                         NCNR
                     </a>
                 @endif
             </div>
+
             @if(!empty($product->ship_restriction))
                 <p class="mb-2">
                     {!! $product->ship_restriction ?? '' !!}
@@ -119,8 +102,6 @@
             @endif
 
             {!! $middle ?? null !!}
-
-            <hr class="mb-3">
 
             <div class="d-grid d-md-flex justify-content-end gap-2 product-card border-0 p-0">
                 @if(!empty($product->ERP->FutureReceiptDetails))
