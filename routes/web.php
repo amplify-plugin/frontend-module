@@ -35,7 +35,6 @@ use Amplify\Frontend\Http\Controllers\FormResponseAcceptController;
 use Amplify\Frontend\Http\Controllers\HomeController;
 use Amplify\Frontend\Http\Controllers\InvoiceController;
 use Amplify\Frontend\Http\Controllers\LocalizationController;
-use Amplify\Frontend\Http\Controllers\MessageController;
 use Amplify\Frontend\Http\Controllers\MyProfileController;
 use Amplify\Frontend\Http\Controllers\NewsletterSubscriptionController;
 use Amplify\Frontend\Http\Controllers\OrderController;
@@ -290,10 +289,6 @@ Route::name('frontend.')->middleware(['web', 'frontend'])->group(function () {
             ShippingController::class,
             'storeSessionAddress',
         ])->name('session.shipping-address.store');
-        Route::resource('messages', MessageController::class)
-            ->names('messages')
-            ->where(['message' => '[\d]+']);
-
         // custom product route
 
         Route::controller(ContactLoginController::class)->prefix('contact-logins')

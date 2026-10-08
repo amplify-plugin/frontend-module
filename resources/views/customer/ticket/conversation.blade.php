@@ -23,12 +23,42 @@
             flex: 0 0 auto;
         }
 
-        .ticket-conversation [data-ticket-scroll] {
+        .ticket-conversation .chat-stage {
+            position: relative;
             flex: 1 1 auto;
             min-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .ticket-conversation [data-ticket-scroll] {
+            flex: 1 1 0%;
+            height: 0;
+            min-height: 0;
             overflow-y: auto;
+            overflow-anchor: none;
             overscroll-behavior: contain;
         }
+        .chat-boot {
+            display: none;
+            position: absolute;
+            inset: 0;
+            z-index: 3;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #C31E1E;
+        }
+        .chat-stage.is-loading .chat-boot { display: flex; }
+        .chat-booting > * { visibility: hidden; }
+        .chat-boot__spinner {
+            width: 28px;
+            height: 28px;
+            border: 3px solid rgba(195, 30, 30, 0.2);
+            border-top-color: currentColor;
+            border-radius: 50%;
+            animation: chat-boot-spin .7s linear infinite;
+        }
+        @keyframes chat-boot-spin { to { transform: rotate(360deg); } }
 
         .ticket-composer {
             display: flex;
@@ -46,16 +76,28 @@
             letter-spacing: 0;
             border-radius: 4px !important;
         }
+        .ticket-composer .btn-primary:focus,
+        .ticket-composer .btn-primary:focus-visible,
+        .ticket-composer .btn-primary:active,
+        .ticket-composer .btn-primary:disabled,
+        .ticket-composer .btn-primary.disabled {
+            outline: none !important;
+            border-color: #C31E1E !important;
+            box-shadow: 0 0 0 0.2rem rgba(195, 30, 30, 0.35) !important;
+        }
         .ticket-composer textarea.ticket-composer__input {
             flex: 1 1 auto;
             width: 100%;
             height: 44px !important;
             min-height: 44px !important;
-            max-height: 120px;
+            max-height: 44px !important;
             margin: 0 !important;
-            padding: 0 18px !important;
-            line-height: 42px !important;
+            padding: 4px 14px !important;
+            line-height: 16px !important;
+            font-size: 14px !important;
             box-sizing: border-box;
+            border-radius: 4px !important;
+            overflow-y: auto;
             resize: none;
         }
         .chat-picks { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
@@ -143,7 +185,11 @@
             </header>
 
             <!-- Chat Messages Area -->
-            <section data-ticket-scroll class="flex-grow-1 overflow-auto p-4" style="background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);">
+            <div class="chat-stage is-loading">
+            <div class="chat-boot" role="status" aria-label="Loading messages">
+                <span class="chat-boot__spinner"></span>
+            </div>
+            <section data-ticket-scroll class="chat-booting flex-grow-1 overflow-auto p-4" style="background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);">
                 @if ($threadMsg->tickets?->count())
                     <div data-ticket-list class="chat-messages">
                         @foreach ($threadMsg->tickets as $message)
@@ -156,15 +202,9 @@
                             @endphp
 
                             <div data-message-id="{{ $message->id }}" class="d-flex mb-4 {{ $isMine ? 'justify-content-end' : 'justify-content-start' }}">
-                                @if (!$isMine)
-                                    <div class="avatar-sm bg-secondary mr-2 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 36px; height: 36px; border-radius: 50%; margin-top: 4px;">
-                                        <i class="fa fa-user-tie" style="font-size: 14px;"></i>
-                                    </div>
-                                @endif
-
-                                <div class="message-content {{ $isMine ? 'text-right' : '' }}" style="max-width: 75%;">
-                                    <div class="message-bubble p-3 {{ $isMine ? 'bg-primary text-white' : 'bg-white border' }}" style="border-radius: {{ $isMine ? '18px 18px 4px 18px' : '18px 18px 18px 4px' }}; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-                                        <p class="mb-0" style="white-space: pre-wrap; word-break: break-word;">{!! nl2br(e($message->message)) !!}</p>
+                                <div class="message-content" style="max-width: 75%;">
+                                    <div class="message-bubble p-3 text-left {{ $isMine ? 'bg-primary text-white' : 'bg-white border' }}" style="border-radius: {{ $isMine ? '18px 18px 4px 18px' : '18px 18px 18px 4px' }}; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                                        <p class="mb-0 text-left" style="margin: 0; line-height: 1.45; word-break: break-word;">{!! nl2br(e($message->message)) !!}</p>
 
                                         @if ($attachments->isNotEmpty())
                                             <!-- Image Attachments -->
@@ -189,34 +229,26 @@
 
                                             <!-- File Attachments -->
                                             @if ($fileAttachments->isNotEmpty())
-                                                <div class="mt-3">
-                                                    @foreach ($fileAttachments as $index => $attachment)
-                                                        <a href="{{ $attachment }}"
-                                                           target="_blank"
-                                                           download
-                                                           class="d-flex align-items-center p-2 mb-2 rounded {{ $isMine ? 'bg-white bg-opacity-20' : 'bg-light' }} text-decoration-none"
-                                                           style="{{ $isMine ? 'background: rgba(255,255,255,0.15);' : '' }}">
-                                                            <div class="file-icon mr-2 d-flex align-items-center justify-content-center bg-secondary text-white" style="width: 32px; height: 32px; border-radius: 6px;">
-                                                                <i class="fa fa-file-alt" style="font-size: 14px;"></i>
-                                                            </div>
-                                                            <span class="text-truncate small {{ $isMine ? 'text-white' : 'text-dark' }}">
-                                                                {{ $attachmentTitles->get($index, basename($attachment)) }}
-                                                            </span>
-                                                        </a>
-                                                    @endforeach
-                                                </div>
+                                                @foreach ($fileAttachments as $index => $attachment)
+                                                    <a href="{{ $attachment }}"
+                                                       target="_blank"
+                                                       download
+                                                       class="d-flex align-items-center p-2 mt-2 rounded text-decoration-none {{ $isMine ? '' : 'bg-light' }}"
+                                                       style="{{ $isMine ? 'background: rgba(255,255,255,0.15);' : '' }}">
+                                                        <span class="mr-2 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; border-radius: 6px; background: #dfe3ea; color: #3d4d6a; flex: 0 0 32px;">
+                                                            <i class="fa fa-file-alt" style="font-size: 14px;"></i>
+                                                        </span>
+                                                        <span class="text-truncate small {{ $isMine ? 'text-white' : 'text-dark' }}">
+                                                            {{ $attachmentTitles->get($index, basename($attachment)) }}
+                                                        </span>
+                                                    </a>
+                                                @endforeach
                                             @endif
                                         @endif
                                     </div>
                                     <small class="text-muted d-block mt-1 px-2" style="font-size: 11px;"
                                            data-ticket-time="{{ $message->created_at?->toIso8601String() }}">{{ \Amplify\System\Ticket\TicketService::humanTime($message->created_at) }}</small>
                                 </div>
-
-                                @if ($isMine)
-                                    <div class="avatar-sm bg-info text-white ml-2 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 36px; height: 36px; border-radius: 50%; margin-top: 4px;">
-                                        <i class="fa fa-user" style="font-size: 14px;"></i>
-                                    </div>
-                                @endif
                             </div>
                         @endforeach
                     </div>
@@ -232,6 +264,7 @@
                     </div>
                 @endif
             </section>
+            </div>
 
             <!-- Chat Input Footer -->
             <footer class="border-top bg-white p-3">
@@ -243,7 +276,7 @@
                             <i class="fa fa-paperclip text-muted"></i>
                         </button>
                         <textarea name="message"
-                                  class="form-control border rounded-pill ticket-composer__input"
+                                  class="form-control border ticket-composer__input"
                                   rows="1"
                                   placeholder="Type your message...">{{ old('message') }}</textarea>
                         <button type="submit"
