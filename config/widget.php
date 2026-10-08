@@ -667,7 +667,7 @@ return [
         '@nestedItems' => null,
         'description' => '',
     ],
-    Components\Customer\Message::class => [
+    \Amplify\System\Message\View\Components\Customer\Message::class => [
         'name' => 'customer.message',
         'reserved' => true,
         'internal' => false,
