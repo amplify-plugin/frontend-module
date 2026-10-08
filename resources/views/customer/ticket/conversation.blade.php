@@ -297,7 +297,7 @@
                             {{ $errors->first('attachments.*') }}
                         </small>
                     @endif
-                    <input type="file" class="chat-file-input" data-compose-file name="attachments[]" multiple tabindex="-1" aria-hidden="true">
+                    <input type="file" class="chat-file-input" data-compose-file name="attachments[]" multiple tabindex="-1" aria-hidden="true" accept="{{ \Amplify\System\Ticket\Requests\TicketRequest::acceptAttribute() }}">
                 </form>
             </footer>
             </div>
