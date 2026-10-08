@@ -28,7 +28,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email:rfc,dns', 'max:255', 'exists:contacts,email', 'ascii'],
+            'login_id' => ['required', 'string', 'max:255', 'ascii', 'exists:contacts,login_id'],
             'password' => ['required', 'string', 'min:'.SecurityHelper::passwordLength(), 'max:255'],
         ];
     }
@@ -49,7 +49,7 @@ class LoginRequest extends FormRequest
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'email' => trans('auth.throttle', [
+            'login_id' => trans('auth.throttle', [
                 'seconds' => $seconds,
                 'minutes' => ceil($seconds / 60),
             ]),
@@ -66,6 +66,6 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->input('email')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($this->input('login_id')).'|'.$this->ip());
     }
 }

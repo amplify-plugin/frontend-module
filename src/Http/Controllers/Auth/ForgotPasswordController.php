@@ -33,7 +33,7 @@ class ForgotPasswordController extends Controller
     {
         try {
 
-            $contact = Contact::where('email', $request->email)->first();
+            $contact = Contact::where('login_id', $request->login_id)->first();
             if ($contact) {
                 $otp = mt_rand(100000, 999999);
                 NotificationFactory::call(Event::RESET_PASSWORD, [
@@ -61,7 +61,7 @@ class ForgotPasswordController extends Controller
     public function otpCheck(Request $request)
     {
 
-        $contact = Contact::where([['email', $request->email], ['otp', $request->otp]])->first();
+        $contact = Contact::where([['login_id', $request->login_id], ['otp', $request->otp]])->first();
         if ($contact) {
             return response([
                 'message' => 'OTP verification successful.',
@@ -80,7 +80,7 @@ class ForgotPasswordController extends Controller
             'password' => "required|min:$passLength",
         ]);
 
-        $contact = Contact::where([['email', $request->email], ['otp', $request->otp]])->first();
+        $contact = Contact::where([['login_id', $request->login_id], ['otp', $request->otp]])->first();
 
         if ($contact) {
             $contact->password = $request->password;

@@ -4,12 +4,12 @@
         {!! $subtitle ?? '' !!}
         <div class="form-group">
             <div class="input-group">
-                <input class="form-control" type="email" name="email" id="email" placeholder="Email" required/>
+                <input class="form-control" type="text" name="login_id" id="login-id" placeholder="Login ID" maxlength="255" required/>
                 <span class="input-group-addon">
-                <i class="icon-mail"></i>
+                <i class="icon-user"></i>
             </span>
             </div>
-            <span class="invalid-feedback d-block" id="email-error"></span>
+            <span class="invalid-feedback d-block" id="login-id-error"></span>
         </div>
         <div class="d-flex justify-content-center justify-content-sm-end">
             <button class="btn btn-primary margin-bottom-none" id="submit-btn" type="submit">
@@ -119,7 +119,7 @@
             const forgotForm = document.getElementById('forgot-password-form');
             const otpForm = document.getElementById('otp-form');
             const passwordForm = document.getElementById('password-form');
-            const emailInput = document.getElementById('email');
+            const loginIdInput = document.getElementById('login-id');
             const otpInput = document.getElementById('otp');
             const passwordInput = document.getElementById('password');
             const confirmPasswordInput = document.getElementById('confirmPassword');
@@ -129,14 +129,14 @@
             const otpSubmitText = document.getElementById('otp-submit-text');
             const passwordSubmitBtn = document.getElementById('password-submit-btn');
             const passwordSubmitText = document.getElementById('password-submit-text');
-            const emailError = document.getElementById('email-error');
+            const emailError = document.getElementById('login-id-error');
             const otpError = document.getElementById('otp-error');
             const passwordError = document.getElementById('password-error');
             const confirmPasswordError = document.getElementById('confirm-password-error');
             const otpResend = document.getElementById('otp-resend');
             const resendLink = document.getElementById('resend-link');
 
-            let email = '';
+            let loginId = '';
             let otp = '';
             let codeSend = false;
             let resendTimer = null;
@@ -170,7 +170,7 @@
 
             forgotForm.addEventListener('submit', function (e) {
                 e.preventDefault();
-                email = emailInput.value;
+                loginId = loginIdInput.value;
                 clearErrors();
                 setLoading(submitBtn, submitText, true);
                 fetch('{{ route('frontend.password_reset_otp') }}', {
@@ -181,7 +181,7 @@
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    body: JSON.stringify({email: email})
+                    body: JSON.stringify({login_id: loginId})
                 })
                     .then(async (response) => {
                         const data = await response.json().catch(() => ({})); // safely parse JSON
@@ -214,7 +214,7 @@
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    body: JSON.stringify({email: email})
+                    body: JSON.stringify({login_id: loginId})
                 })
                     .then(response => response.json())
                     .then(() => {
@@ -256,7 +256,7 @@
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    body: JSON.stringify({email: email, otp: otp})
+                    body: JSON.stringify({login_id: loginId, otp: otp})
                 })
                     .then(async (response) => {
                         const data = await response.json().catch(() => ({}));
@@ -308,7 +308,7 @@
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    body: JSON.stringify({email: email, password: password, otp: otp})
+                    body: JSON.stringify({login_id: loginId, password: password, otp: otp})
                 })
                     .then(response => response.json())
                     .then(data => {
