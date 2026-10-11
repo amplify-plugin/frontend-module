@@ -210,6 +210,20 @@ class ProductList extends BaseComponent
         return $this->cartButtonLabel ?? 'Add To Cart';
     }
 
+    public function canAddToCart($product): bool {
+        if (!customer_check() && config('amplify.frontend.guest_add_to_cart')) {
+            return true;
+        }
+
+        if (customer_check() && haveAnyPermissions(['cart.add'])) {
+            return true;
+        }
+
+        //write product and customer specific condition
+
+        return false;
+    }
+
     public function productDetailBtnLabel(): string
     {
         return $this->detailButtonLabel ?? 'View Detail';

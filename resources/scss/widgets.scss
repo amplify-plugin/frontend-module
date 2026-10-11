@@ -115,6 +115,12 @@
 @use "product/product-ncnr-item-flag";
 @use "product/product-in-stock-flag";
 @use "product/shopping-list";
+@use "product/favourite-manage-button";
+@use "product/sku-quick-to-cart";
+@use "product/discount-badge";
+@use "product/default-document-link";
+@use "product/information-tabs";
+@use "product/quick-action";
 @use "menu/exchange-reward-menu";
 @use "auth/login/input-login";
 @use "testimonial";
@@ -184,12 +190,7 @@
 @use "has-permission";
 @use "product-manufacture-image";
 @use "product-social-media-link";
-@use "product/favourite-manage-button";
-@use "product/sku-quick-to-cart";
 @use "order-status";
-@use "product/discount-badge";
-@use "product/default-document-link";
-@use "product/information-tabs";
 @use "flipper-card";
 @use "warehouse-selection";
 @use "exchange-rewards";

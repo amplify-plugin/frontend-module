@@ -10,7 +10,7 @@
         @endif
     </x-product.main-image>
     <div class="product-info">
-        @if($allowDisplayProductCode())
+        @if($showProductCode)
             <x-product.item-number
                     :product="$product"
                     format="<a href='{{ frontendSingleProductURL($product, $seoPath) }}'><b>{product_code}</b></a>"
@@ -20,13 +20,14 @@
 
         <x-product.price
                 element="div"
-                class="w-100 d-flex justify-content-md-start justify-content-center product-price"
+                class="w-100 d-flex justify-content-sm-start justify-content-center product-price"
                 :product="$product"
                 :value="$product->ERP?->Price"
                 :uom="$product->ERP?->UnitOfMeasure ?? 'EA'"
+                :std-price="$showPublicPrice ? $product->ERP?->ListPrice : null"
         />
 
-        <div class="widget-tags justify-content-center justify-content-md-start">
+        <div class="widget-tags">
 
             @if($product->total_quantity_available > 1)
                 <x-product.availability
@@ -66,14 +67,19 @@
         <x-product.short-description :content="$product->short_description" :lines="2" class="py-2 w-100"/>
 
     </div>
-    <x-product.quick-action
-            :cart-label="$cartButtonLabel"
-            :detail-label="$detailButtonLabel"
-            :product="$product"
-            :seo-path="$seoPath"
-            :index="$loop->index"
-            order-list-label="List"
-    />
+    <div class="product-buttons">
+        <x-product.quick-action
+                :cart-label="$cartButtonLabel"
+                :detail-label="$detailButtonLabel"
+                :allow-sku-quick-order="$skuQuickOrderOption"
+                :product="$product"
+                :seo-path="$seoPath"
+                :index="$loop->index"
+                :allow-add-to-cart="$canAddToCart($product)"
+                :product-view="$productView"
+                order-list-label="List"
+        />
+    </div>
 @else
     <x-product.main-image :product="$product" :seo-path="$seoPath" :wrap-link="true">
         @if(!$showDiscountBadge)
@@ -126,13 +132,18 @@
             {!! $product->ship_restriction ?? '' !!}
         </p>
     @endif
-    <x-product.quick-action
-            :cart-label="$cartButtonLabel"
-            :detail-label="$detailButtonLabel"
-            :product="$product"
-            :seo-path="$seoPath"
-            :index="$loop->index"
-            order-list-label="List"
-            class="pt-2"
-    />
+    <div class="product-buttons">
+        <x-product.quick-action
+                :cart-label="$cartButtonLabel"
+                :detail-label="$detailButtonLabel"
+                :allow-sku-quick-order="$skuQuickOrderOption"
+                :product="$product"
+                :seo-path="$seoPath"
+                :index="$loop->index"
+                :allow-add-to-cart="$canAddToCart($product)"
+                :product-view="$productView"
+                order-list-label="List"
+                class="pt-2"
+        />
+    </div>
 @endif
