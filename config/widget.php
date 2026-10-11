@@ -667,6 +667,17 @@ return [
         '@nestedItems' => null,
         'description' => '',
     ],
+    \Amplify\System\Message\View\Components\Customer\Message::class => [
+        'name' => 'customer.message',
+        'reserved' => true,
+        'internal' => false,
+        '@inside' => null,
+        '@client' => null,
+        'model' => ['message'],
+        '@attributes' => [],
+        '@nestedItems' => [],
+        'description' => 'Customer message inbox',
+    ],
     Components\Customer\Invoice\Index::class => [
         'name' => 'customer.invoice.list',
         'reserved' => true,
