@@ -1,13 +1,11 @@
 .x-checkout, .x-order-checkout {
   $color_1: #606975;
-  $primary-color: #0da9ef;
-  $white-color: #fff;
-  $success-color: #43d9a3;
-  $background-color_1: #fff;
-  $background-color_2: #0da9ef;
-  $border-color_1: transparent transparent transparent #fff;
+  $primary-color: var(--primary, #0da9ef);
+  $white-color: var(--white, #fff);
+  $success-color: var(--success, #43d9a3);
+  $background-color_1: var(--white, #fff);
+  $border-color_1: transparent transparent transparent var(--white, #fff);
   $border-color_2: transparent transparent transparent #d8e0e6;
-  $border-left-color_1: #0da9ef;
 
   .checkout-steps {
     > a {
@@ -80,21 +78,21 @@
     }
 
     > a.active {
-      background-color: $background-color_2;
+      background-color: $primary-color;
       color: $white-color;
       cursor: default;
       pointer-events: none;
 
       > .angle {
         &:after {
-          border-left-color: $border-left-color_1;
+          border-left-color: $primary-color;
         }
       }
 
       + {
         a {
           > .angle {
-            background-color: $background-color_2;
+            background-color: $primary-color;
           }
         }
       }
