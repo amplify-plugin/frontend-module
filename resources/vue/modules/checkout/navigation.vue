@@ -4,8 +4,6 @@ import {storeToRefs} from "pinia";
 
 const store = useCheckoutStore();
 
-const processRunning = storeToRefs(store.loading);
-
 function handleRequestForQuote(element) {
   Amplify.submitCartAsQuote(element);
 }
@@ -17,7 +15,6 @@ function handleCreateOrderList() {
 </script>
 
 <template>
-  <svg width="64px" height="64px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="4.8"><path d="M12.39 20.87a.696.696 0 0 1-.78 0C9.764 19.637 2 14.15 2 8.973c0-6.68 7.85-7.75 10-3.25 2.15-4.5 10-3.43 10 3.25 0 5.178-7.764 10.664-9.61 11.895z" fill="#000000"></path></g><g id="SVGRepo_iconCarrier"><path d="M12.39 20.87a.696.696 0 0 1-.78 0C9.764 19.637 2 14.15 2 8.973c0-6.68 7.85-7.75 10-3.25 2.15-4.5 10-3.43 10 3.25 0 5.178-7.764 10.664-9.61 11.895z" fill="#000000"></path></g></svg>
   <div class="checkout-footer">
     <div class="column">
       <a class="btn btn-outline-secondary" href="#" @click.prevent="store.goBack()">
@@ -43,7 +40,6 @@ function handleCreateOrderList() {
     <div class="column">
       <button type="button"
               id="submit"
-              :disabled="processRunning"
               :class="{'btn': true, 'btn-primary': !store.isLastStep, 'btn-success' : store.isLastStep, 'disabled': store.newShipping }"
               @click.prevent="store.goNext()">
         <span class="hidden-xs-down" v-if="!store.isLastStep">Continue&nbsp;</span>
