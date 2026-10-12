@@ -206,7 +206,8 @@ class Checkout extends BaseComponent
                 'https://www.cenpos.com/Plugins/porthole.min.js',
                 'https://www.cenpos.com/Plugins/jquery.simplewebpay.js',
             ],
-            'aptean' => ['https://stg.js.apteansharedservices.com/apteanpay-js/v1']
+            'aptean' => ['https://stg.js.apteansharedservices.com/apteanpay-js/v1'],
+            default => []
         };
     }
 }
