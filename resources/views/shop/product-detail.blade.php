@@ -66,6 +66,13 @@
                     </a>
                 @endif
 
+                @if(!empty($product->qty_interval) &&$product->qty_interval > 1)
+                    <a href="#" class="tag"
+                       data-toggle="tooltip" title="Pack Size">
+                        {{ number_format($product->qty_interval) }}/Pack
+                    </a>
+                @endif
+
                 @if($product->is_ncnr)
                     <a href="#" class="tag"
                        data-toggle="tooltip" title="Non-Cancellable, Non-Returnable">
