@@ -50,7 +50,7 @@
                 </a>
             @endif
 
-            @if(!empty($product->qty_interval) &&$product->qty_interval > 1)
+            @if(!empty($product->qty_interval) && $product->qty_interval > 1)
                 <a href="#" class="tag"
                    data-toggle="tooltip" title="Pack Size">
                     {{ number_format($product->qty_interval) }}/Pack
@@ -134,6 +134,13 @@
                 MOQ: {{ number_format($product->min_order_qty) }}
             </a>
         @endif
+
+            @if(!empty($product->qty_interval) && $product->qty_interval > 1)
+                <a href="#" class="tag"
+                   data-toggle="tooltip" title="Pack Size">
+                    {{ number_format($product->qty_interval) }}/Pack
+                </a>
+            @endif
     </div>
     @if(!empty($product->ship_restriction))
         <p class="mb-2">
