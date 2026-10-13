@@ -3,17 +3,13 @@
 namespace Amplify\Frontend\Http\Controllers\Checkout;
 
 use Amplify\ErpApi\Facades\ErpApi;
-use Amplify\Frontend\Events\CartUpdated;
 use Amplify\Frontend\Http\Requests\CheckoutRequest;
-use Amplify\Frontend\Services\RecentlyViewedProductService;
 use Amplify\Frontend\Traits\HasDynamicPage;
 use Amplify\System\Backend\Models\CustomerOrder;
 use Amplify\System\Contexts\CheckoutContext;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class StoreController extends Controller
@@ -42,12 +38,11 @@ class StoreController extends Controller
                 });
 
             $order = $context->resolved['order']->fresh();
-
-            $order->load(['orderLines', 'orderLines.warehouse', 'orderLines.product']);
-
+            $order->load(['orderLines', 'orderLines.warehouse', 'orderLines.product', 'orderNotes']);
             $orderInfo = $order->toArray();
-
             $orderInfo['credentials'] = $context->payload['payment']['credentials'];
+
+            $response = null;
 
             if ($order->order_type == CustomerOrder::IS_ORDER_TYPE) {
                 $response = ErpApi::createOrder($orderInfo);
@@ -57,11 +52,37 @@ class StoreController extends Controller
                 $response = ErpApi::createQuotation($orderInfo);
             }
 
-            return $this->apiResponse(true, __('Product(s) added to cart successfully.'), 200, [
-                'data' => [
-                    'total' => count($context->payload['items']),
-                    'items' => array_values($context->payload['items'])
-                ]
+            $order->refresh();
+
+            $success = empty($response->Message);
+
+            $message = '';
+
+            $erpLog = $order->erp_log ?? [];
+
+            if (!$success) {
+                $erpLog['error'] = $response->Message;
+            }
+
+            CustomerOrder::query()
+                ->where('id', $order->id)
+                ->update([
+                    'order_status' => $success ? 'Approved' : 'Rejected',
+                    'erp_order_id' => $response->OrderNumber,
+                    'erp_log' => $erpLog,
+                ]);
+
+            $orderType = $context->payload['checkout']['type'];
+
+            return $this->apiResponse($success, "Thank you for your {$orderType}. Your {$orderType} number is {$response->OrderNumber}.", 200, [
+                'redirect_to' => match ($orderType) {
+                    'order' => route('frontend.orders.show', [$response->OrderNumber, 'suffix' => $response->OrderSuffix]),
+                    'quotation' => route('frontend.quotations.show', ['quotation' => $response->OrderNumber, 'suffix' => $response->OrderSuffix]),
+                    'draft' => route('frontend.drafts.show', ['draft' => $order->id]),
+                    default => route('frontend.orders.index'),
+                },
+                'items' => array_values($context->payload['items']),
+                'order_number' => $response->OrderNumber ?? null,
             ]);
 
         } catch (\Exception $exception) {
