@@ -83,6 +83,7 @@ function formatAddress(entry) {
       <li><span class="text-muted">Name: </span>{{ store.payment.biller ?? 'N/A' }}</li>
       <li><span class="text-muted">Address: </span>{{ formatAddress(store.payment) }}</li>
       <li><span class="text-muted">Terms: </span>{{ store.paymentMethod }}</li>
+      <li><span class="text-muted" v-if="store.payment.method == 'credit_card'">Card: </span>{{ store.payment?.credentials?.card_number?.toString().padStart(16, '*') ?? 'N/A' }}</li>
     </ul>
   </section>
 </template>

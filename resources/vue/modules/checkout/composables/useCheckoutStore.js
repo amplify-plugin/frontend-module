@@ -81,8 +81,6 @@ export const useCheckoutStore = defineStore('checkout', {
                 sub_total: null,
                 tax_amount: null,
                 ship_charge: null,
-                hazmat_charge: null,
-                wire_transfer_fee: null,
                 total: null,
                 lines: [],
                 notes: '',
@@ -100,7 +98,8 @@ export const useCheckoutStore = defineStore('checkout', {
                 method: 'on_account',
                 driver: 'default',
                 config: {},
-                credentials: {}
+                credentials: {},
+                additional: []
             }
 
         }

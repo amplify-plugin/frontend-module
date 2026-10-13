@@ -1,9 +1,10 @@
 import {mockContact, mockCountries, mockCustomer, mockStates,} from '../../mock';
 
-import {useValidate} from "@/composables/useValidate";
+import {useValidate, useEvent} from "@/composables";
 import axios from 'axios';
 
 const validator = useValidate();
+const {emit} = useEvent();
 
 export default {
     init(props) {
@@ -113,7 +114,16 @@ export default {
         this.activeStep = this.orderedSteps[this.currentIndex - 1].component;
     },
 
-    goNext() {
+    goNext(force = false) {
+
+        if (force === true) {
+            this.validationError = '';
+            this.activeStep = this.orderedSteps[this.currentIndex + 1].component;
+            return;
+        }
+
+        emit('step-changing', {});
+
         if (!this.validateCurrentStep()) return;
 
         if (this.isLastStep) {
@@ -123,6 +133,8 @@ export default {
 
         this.validationError = '';
         this.activeStep = this.orderedSteps[this.currentIndex + 1].component;
+
+        emit('step-changed', {});
     },
 
     /**
@@ -195,10 +207,16 @@ export default {
                 return this.validateShippingAddress();
 
             case 'payment':
+                if (['aptean'].includes(this.payment.driver)) {
+                    return false;
+                }
 
-                store.loading = true;
+                if (['cenpos'].includes(this.payment.driver)) {
+                    emit('payment-submitted', this.payment);
+                    return false;
+                }
 
-                if (Object.entries(this.payment.credentials).length === 0) ;
+                return Object.entries(this.payment.credentials).length !== 0;
 
             case 'review':
                 // The reference review page has no PO field; PO/notes stay
@@ -302,7 +320,7 @@ export default {
     },
 
     async validatePurchaseNumber() {
-        return await window.Amplify.confirm('Validating Purchase Order Number', 'Checkout', '', {
+        return await window.Amplify.confirm('Validating Purchase Order Number...', 'Checkout', '', {
             allowEscapeKey: false,
             showCancelButton: false,
             showCloseButton: false,
@@ -488,6 +506,7 @@ export default {
 
     selectShippingMethod(group, method) {
         this.selectedShippingMethod = method;
+        this.review.ship_charge = method.amount ?? null;
         this.validationError = '';
     },
 
@@ -808,18 +827,13 @@ export default {
                 zip_code: this.payment.zipCode,
                 country: this.payment.country,
                 phone: this.payment.phone,
-                metadata: {}
+                additional: this.payment.additional,
             },
             notes: [
                 {
                     subject: 'Order Note',
                     type: 'INT',
-                    note: this.review.notes,
-                },
-                {
-                    subject: 'Warehouse Note',
-                    type: 'WTDO',
-                    note: 'This checkout has different items need transfer',
+                    note: this.review?.notes ?? null,
                 }
             ]
         };

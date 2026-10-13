@@ -111,8 +111,20 @@ class CheckoutRequest extends FormRequest
             'payment.country' => 'required|string|size:2',
             'payment.zip_code' => 'required|string|min:4',
             'payment.phone' => ['present','string', 'min:10', new PhoneNumberRule],
-            'payment.metadata' => 'present|array',
+
             'payment.credentials' => 'required|array',
+            'payment.credentials.card_number' => 'required_if:payment.method,credit_card|string',
+            'payment.credentials.card_expiry' => 'required_if:payment.method,credit_card|string|size:4',
+            'payment.credentials.card_type' => 'required_if:payment.method,credit_card|string',
+            'payment.credentials.card_holder_name' => 'required_if:payment.method,credit_card|string',
+            'payment.credentials.card_token' => 'required_if:payment.method,credit_card|string',
+
+            'payment.additional' => 'present|array',
+            'payment.additional.*.field' => 'required|string',
+            'payment.additional.*.label' => 'required|string',
+            'payment.additional.*.value' => 'present|nullable',
+            'payment.additional.*.source' => 'present|nullable',
+            'payment.additional.*.metadata' => 'nullable|array',
 
             'notes' => 'present|nullable|array',
             'notes.*.subject' => 'required|string',

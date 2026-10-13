@@ -4,7 +4,7 @@ import {useCheckoutStore} from '../composables/useCheckoutStore';
 import cenposGateway from '../gateways/cenpos.vue';
 import apteanGateway from '../gateways/aptean.vue';
 import defaultGateway from '../gateways/default.vue';
-import {useValidate} from "@/composables/useValidate";
+import {useValidate} from "@/composables";
 
 const store = useCheckoutStore();
 

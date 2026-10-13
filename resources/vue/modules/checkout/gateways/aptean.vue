@@ -15,7 +15,7 @@ const creditCardErrors = computed(() => {
 
   const field = {ccnumber: 'card number', ccexp: 'expiration date', cvv: 'cvv'};
 
-  return  cardErrors.value.map((error, index) => {
+  return cardErrors.value.map((error, index) => {
 
     let message = `The ${String(error.message).toLowerCase()}`;
 
@@ -78,15 +78,61 @@ function responseHandler(token, error) {
   if (error) {
     store.payment.credentials = {};
     cardErrors.value = error;
-    store.loading = false;
     return;
   }
 
   if (token) {
-    store.payment.credentials = JSON.parse(JSON.stringify(token));
+
+    token = JSON.parse(JSON.stringify(token));
+
+    store.payment.additional = [
+      {
+        field: 'card_Number',
+        label: 'Card Number',
+        value: token.cardInfo.lastFour.toString().padStart(16, '*'),
+        source: store.payment.driver,
+        metadata: []
+      },
+      {
+        field: 'card_holder_name',
+        label: 'Card holder Name',
+        value: store.payment.biller,
+        source: store.payment.driver,
+        metadata: []
+      },
+      {
+        field: 'card_expiry_date',
+        label: 'Card Expiry Date',
+        value: token.cardInfo.expirationMonth.toString().padStart(2, '0') + token.cardInfo.expirationYear.toString().slice(-2),
+        source: store.payment.driver,
+        metadata: []
+      },
+      {
+        field: 'card_type',
+        label: 'Card Type',
+        value: token.cardInfo.cardBrand,
+        source: store.payment.driver,
+        metadata: []
+      },
+    ];
+    store.payment.credentials.card_number = token.cardInfo.lastFour.toString();
+    store.payment.credentials.card_expiry = token.cardInfo.expirationMonth.toString().padStart(2, '0') + token.cardInfo.expirationYear.toString().slice(-2);
+    store.payment.credentials.card_type = token.cardInfo.cardBrand;
+    store.payment.credentials.card_holder_name = store.payment.biller;
+    store.payment.credentials.card_token = token.id;
+
+    delete token.id;
+
+    store.payment.additional.push({
+      field: 'gateway_response',
+      label: 'Gateway Response',
+      value: null,
+      source: store.payment.driver,
+      metadata: token
+    });
+
     cardErrors.value = [];
-    store.goNext();
-    store.loading = false;
+    store.goNext(true);
   }
 }
 
@@ -102,50 +148,50 @@ onMounted(async () => {
 </script>
 
 <template>
-<!--  <div class="accordion mt-4" id="apteanAccordion" role="tablist">-->
-<!--        data-toggle="collapse"-->
-<!--        data-target="#aptean-credit-card"-->
-<!--        data-parent="#apteanAccordion"-->
-<!--        aria-expanded="true"-->
-<!--        aria-controls="aptean-credit-card"-->
-    <h4 class="border-bottom pb-2 mb-3">
-      <i class="icon-columns mr-0" style="margin-top: -10px"></i>
-      Pay with Credit Card
-    </h4>
-    <div class="row justify-content-between" id="aptean-credit-card">
-      <div class="col-12">
-        <p>We accept following credit cards:&nbsp;
-          <img class="d-inline-block align-middle"
-               src="/vendor/widget/img/credit-cards.png"
-               style="width: 120px;" alt="Credit Cards">
-        </p>
-      </div>
-      <div class="col-md-6 col-12">
-        <div id="capture"></div>
-      </div>
-      <div class="col-md-6 col-12">
-        <ul class="text-danger">
-          <li v-for="error in creditCardErrors">{{ error }}</li>
-        </ul>
-      </div>
+  <!--  <div class="accordion mt-4" id="apteanAccordion" role="tablist">-->
+  <!--        data-toggle="collapse"-->
+  <!--        data-target="#aptean-credit-card"-->
+  <!--        data-parent="#apteanAccordion"-->
+  <!--        aria-expanded="true"-->
+  <!--        aria-controls="aptean-credit-card"-->
+  <h4 class="border-bottom pb-2 mb-3">
+    <i class="icon-columns mr-0" style="margin-top: -10px"></i>
+    Pay with Credit Card
+  </h4>
+  <div class="row justify-content-between" id="aptean-credit-card">
+    <div class="col-12">
+      <p>We accept following credit cards:&nbsp;
+        <img class="d-inline-block align-middle"
+             src="/vendor/widget/img/credit-cards.png"
+             style="width: 120px;" alt="Credit Cards">
+      </p>
     </div>
+    <div class="col-md-6 col-12">
+      <div id="capture"></div>
+    </div>
+    <div class="col-md-6 col-12">
+      <ul class="text-danger">
+        <li v-for="error in creditCardErrors">{{ error }}</li>
+      </ul>
+    </div>
+  </div>
 
-<!--    <h4 class="border-bottom pb-2 mt-4 mb-3"
-        data-toggle="collapse"
-        data-target="#aptean-ach"
-        data-parent="#apteanAccordion"
-        aria-expanded="true"
-        aria-controls="aptean-ach"
-    >
-      <i class="icon-file mr-0" style="margin-top: -10px"></i>
-      Pay with ACH/eCheck
-    </h4>
-    <div class="row justify-content-between" id="aptean-ach">
-      <div class="col-lg-6 col-md-8 col-12">
+  <!--    <h4 class="border-bottom pb-2 mt-4 mb-3"
+          data-toggle="collapse"
+          data-target="#aptean-ach"
+          data-parent="#apteanAccordion"
+          aria-expanded="true"
+          aria-controls="aptean-ach"
+      >
+        <i class="icon-file mr-0" style="margin-top: -10px"></i>
+        Pay with ACH/eCheck
+      </h4>
+      <div class="row justify-content-between" id="aptean-ach">
+        <div class="col-lg-6 col-md-8 col-12">
 
-      </div>
-    </div>-->
-<!--  </div>-->
+        </div>
+      </div>-->
+  <!--  </div>-->
 </template>
 
 <style lang="scss">
@@ -154,7 +200,7 @@ onMounted(async () => {
     width: 100%;
   }
 
-  #ptt-card-expiry-container{
+  #ptt-card-expiry-container {
     display: inline-block;
     width: calc(50% - 0.5rem) !important;
     max-width: calc(50% - 0.5rem) !important;

@@ -1,6 +1,5 @@
 <script setup>
 import {useCheckoutStore} from './composables/useCheckoutStore';
-import {storeToRefs} from "pinia";
 
 const store = useCheckoutStore();
 

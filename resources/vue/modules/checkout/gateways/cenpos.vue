@@ -2,6 +2,9 @@
 import {computed, onMounted, ref} from "vue";
 import {useCheckoutStore} from '../composables/useCheckoutStore';
 import axios from 'axios';
+import {useEvent} from '@/composables';
+
+const {on} = useEvent();
 
 const store = useCheckoutStore();
 
@@ -96,7 +99,7 @@ async function captureCreditCard() {
 
   let encoded = new URLSearchParams(payload).toString();
 
-  console.log(payload, encoded);
+  store.selectPaymentMethod('credit_card');
 
   window.$('#card-capture').createWebpay({
     url: captureUrl.value,
@@ -104,13 +107,68 @@ async function captureCreditCard() {
     width: '100%',
     sessionToken: false,
     success: (response) => {
-      console.log(response);
+      store.payment.credentials.card_number = response.CardNumber;
+      store.payment.credentials.card_expiry = response.CardExpirationDate;
+      store.payment.credentials.card_type = response.CardType;
+      store.payment.credentials.card_holder_name = response.NameOnCard;
+      store.payment.credentials.card_token = response.TokenId;
+      store.payment.additional = [
+        {
+          field: 'card_Number',
+          label: 'Card Number',
+          value: response.ProtectedCardNumber,
+          source: store.payment.driver,
+          metadata: []
+        },
+        {
+          field: 'card_holder_name',
+          label: 'Card holder Name',
+          value: response.NameOnCard,
+          source: store.payment.driver,
+          metadata: []
+        },
+        {
+          field: 'card_expiry_date',
+          label: 'Card Expiry Date',
+          value: response.CardExpirationDate,
+          source: store.payment.driver,
+          metadata: []
+        },
+        {
+          field: 'card_type',
+          label: 'Card Type',
+          value: response.CardType,
+          source: store.payment.driver,
+          metadata: []
+        },
+      ];
+
+      delete response.RecurringSaleTokenId;
+      delete response.TokenId;
+
+      store.payment.additional.push({
+        field: 'gateway_response',
+        label: 'Gateway Response',
+        value: null,
+        source: store.payment.driver,
+        metadata: response
+      });
+
+      this.validationError = '';
+
+      store.goNext();
     },
     cancel: (response) => {
-      console.log(response);
+      store.payment.credentials = {};
+      this.validationError = 'The given data is invalid.';
     },
   })
 }
+
+on('payment-submitted', (payload) => {
+  let submitter = store.payment.method === 'credit_card' ? '#card-capture' : '#ach-capture';
+  window.$(submitter).submitAction();
+});
 
 onMounted(async () => {
 

@@ -44,64 +44,11 @@ export default {
         return state.cart?.products ?? state.cart?.items ?? [];
     },
 
-    orderSubtotal(state) {
-        const toNumber = (value) => {
-            const parsed = parseFloat(String(value ?? '').replace(/[^0-9.\-]/g, ''));
-            return Number.isFinite(parsed) ? parsed : 0;
-        };
-
-        return toNumber(
-            state.cart?.total_price
-            ?? state.cart?.sub_total
-            ?? state.cart?.total
-            ?? state.cart?.total_amount
-        ) || this.cartItems.reduce(
-            (sum, item) => sum + toNumber(item.subtotal ?? (item.unit_price ?? item.price ?? 0) * item.qty),
-            0
-        );
-    },
-
-    salesTax(state) {
-        const toNumber = (value) => {
-            const parsed = parseFloat(String(value ?? '').replace(/[^0-9.\-]/g, ''));
-            return Number.isFinite(parsed) ? parsed : 0;
-        };
-        // Prefer the cart's own tax (CartResource) over the ERP quote value.
-        return toNumber(state.cart?.tax_amount)
-            || toNumber(this.shipOptions?.SalesTaxAmount);
-    },
-
-    wireTransferFee() {
-        return Number(this.shipOptions?.WireTransferFee ?? this.shipOptions?.WireTrasnsferFee ?? 0);
-    },
-
-    shippingAmount() {
-        const parsed = parseFloat(String(this.selectedShippingMethod?.amount ?? '').replace(/[^0-9.\-]/g, ''));
-        return Number.isFinite(parsed) ? parsed : 0;
-    },
-
-    orderTotal(state) {
-        const toNumber = (value) => {
-            const parsed = parseFloat(String(value ?? '').replace(/[^0-9.\-]/g, ''));
-            return Number.isFinite(parsed) ? parsed : 0;
-        };
-
-        const subtotal = this.orderSubtotal;
-        const shipping = this.shippingAmount;
-        const tax = this.salesTax;
-
-        if (subtotal === 0 && shipping === 0 && tax === 0) {
-            return toNumber(state.cart?.total_amount)
-                ?? toNumber(state.cart?.total)
-                ?? toNumber(state.shipOptions?.TotalOrderValue);
-        }
-
-        return subtotal + shipping + tax;
-    },
 
     paymentMethod() {
         let labels = {
             credit_card: 'Credit Card',
+            on_account: 'Standard Account',
         }
 
         return labels[this.payment.method] ?? null;

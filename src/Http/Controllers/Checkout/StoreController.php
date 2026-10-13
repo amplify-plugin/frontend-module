@@ -34,20 +34,6 @@ class StoreController extends Controller
                 ->send(new CheckoutContext($request->validated()))
                 ->through(config('amplify.checkout_pipeline', []))
                 ->then(function (CheckoutContext $context) {
-                    $response = DB::transaction(function () use (&$context) {
-                        $order = $context->resolved['order'];
-                        $lines = $context->resolved['items'] ?? [];
-                        $notes = $context->resolved['note'] ?? [];
-
-                        if ($order->save()) {
-                            if ($order->orderLines()->saveMany($lines) && $order->orderNotes()->saveMany($notes)) {
-                                $context->resolved['order'] = $order->fresh();
-                                return $context;
-                            }
-                        }
-
-                        return null;
-                    });
                     return $context;
                 });
 
