@@ -707,9 +707,9 @@ export default {
                     if (error.response.status == 400) {
                         let errors = error.response?.data?.errors ?? [];
                         if (errors.length > 0) {
-                            message = message
-                                + "<ul class='text-danger'>"
-                                + errors.map((item) => `<li>${item}</li>`)
+                            message = `<p>${message}</p>`
+                                + "<ul class='alert alert-danger list-unstyled my-0 p-1'>"
+                                + errors.map((item) => `<li class="text-left">${item}</li>`)
                                     .join('\n')
                                 + "</ul>";
                         }
