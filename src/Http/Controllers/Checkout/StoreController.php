@@ -73,7 +73,7 @@ class StoreController extends Controller
             $orderType = $context->payload['checkout']['type'];
 
             if (!$success) {
-                return $this->apiResponse(false, "Your {$orderType} submission failed. Please review given errors", 400, [
+                return $this->apiResponse(false, "Your {$orderType} submission failed. Review the errors below and try again.", 400, [
                     'redirect_to' => '',
                     'errors' => explode(" | ", $response->Message),
                     'items' => array_values($context->payload['items']),

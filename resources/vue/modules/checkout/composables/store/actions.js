@@ -702,10 +702,25 @@ export default {
 
                 } catch (error) {
 
+                    let message = error.response?.data?.message ?? error.message;
+
+                    if (error.response.status === 400) {
+                        let errors = error.response?.data?.errors ?? '';
+                        if (errors.length > 0) {
+                            message = message
+                                + "<ul class='text-danger'>"
+                                + errors.split(" | ")
+                                    .map((item) => `<li>${item}</li>`)
+                                    .join('\n')
+                                + "</ul>";
+                        }
+                    }
+
                     return {
                         success: false,
+                        code: error.response.status,
                         data: error.response.data,
-                        error: error.response?.data?.message ?? error.message
+                        error: message
                     }
                 }
             }
