@@ -56,8 +56,6 @@ class StoreController extends Controller
 
             $success = empty($response->Message);
 
-            $message = '';
-
             $erpLog = $order->erp_log ?? [];
 
             if (!$success) {
@@ -74,7 +72,16 @@ class StoreController extends Controller
 
             $orderType = $context->payload['checkout']['type'];
 
-            return $this->apiResponse($success, "Thank you for your {$orderType}. Your {$orderType} number is {$response->OrderNumber}.", 200, [
+            if (!$success) {
+                return $this->apiResponse(false, "Your {$orderType} submission failed. Please review given errors", 400, [
+                    'redirect_to' => '',
+                    'errors' => explode(" | ", $response->Message),
+                    'items' => array_values($context->payload['items']),
+                    'order_number' => null,
+                ]);
+            }
+
+            return $this->apiResponse(true, "Thank you for your {$orderType}. Your {$orderType} number is {$response->OrderNumber}.", 200, [
                 'redirect_to' => match ($orderType) {
                     'order' => route('frontend.orders.show', [$response->OrderNumber, 'suffix' => $response->OrderSuffix]),
                     'quotation' => route('frontend.quotations.show', ['quotation' => $response->OrderNumber, 'suffix' => $response->OrderSuffix]),
