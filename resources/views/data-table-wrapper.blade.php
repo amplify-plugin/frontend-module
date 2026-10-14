@@ -1,5 +1,5 @@
 @pushonce('plugin-style')
-    <link type="stylesheet" href="https://cdn.datatables.net/v/bs4/dt-1.13.1/datatables.min.css"/>
+    <link rel="stylesheet" href="https://cdn.datatables.net/v/bs4/dt-1.13.1/datatables.min.css"/>
 
 @endpushonce
 

@@ -1,1 +1,8425 @@
-(()=>{var e,t={894:(e,t,n)=>{"use strict";var o=n(455),r=n.n(o);function a(e){return a="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},a(e)}function i(e,t,n){return(t=c(t))in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}function s(e,t){for(var n=0;n<t.length;n++){var o=t[n];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(e,c(o.key),o)}}function l(e,t,n){return t&&s(e.prototype,t),n&&s(e,n),Object.defineProperty(e,"prototype",{writable:!1}),e}function c(e){var t=function(e,t){if("object"!=a(e)||!e)return e;var n=e[Symbol.toPrimitive];if(void 0!==n){var o=n.call(e,t||"default");if("object"!=a(o))return o;throw new TypeError("@@toPrimitive must return a primitive value.")}return("string"===t?String:Number)(e)}(e,"string");return"symbol"==a(t)?t:t+""}function d(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function u(e,t,n){return t=f(t),function(e,t){if(t&&("object"==a(t)||"function"==typeof t))return t;if(void 0!==t)throw new TypeError("Derived constructors may only return object or undefined");return function(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return e}(e)}(e,w()?Reflect.construct(t,n||[],f(e).constructor):t.apply(e,n))}function p(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function");e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),Object.defineProperty(e,"prototype",{writable:!1}),t&&h(e,t)}function m(e){var t="function"==typeof Map?new Map:void 0;return m=function(e){if(null===e||!function(e){try{return-1!==Function.toString.call(e).indexOf("[native code]")}catch(t){return"function"==typeof e}}(e))return e;if("function"!=typeof e)throw new TypeError("Super expression must either be null or a function");if(void 0!==t){if(t.has(e))return t.get(e);t.set(e,n)}function n(){return function(e,t,n){if(w())return Reflect.construct.apply(null,arguments);var o=[null];o.push.apply(o,t);var r=new(e.bind.apply(e,o));return n&&h(r,n.prototype),r}(e,arguments,f(this).constructor)}return n.prototype=Object.create(e.prototype,{constructor:{value:n,enumerable:!1,writable:!0,configurable:!0}}),h(n,e)},m(e)}function w(){try{var e=!Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],function(){}))}catch(e){}return(w=function(){return!!e})()}function h(e,t){return h=Object.setPrototypeOf?Object.setPrototypeOf.bind():function(e,t){return e.__proto__=t,e},h(e,t)}function f(e){return f=Object.setPrototypeOf?Object.getPrototypeOf.bind():function(e){return e.__proto__||Object.getPrototypeOf(e)},f(e)}var g=function(e){function t(e){var n=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{};return d(this,t),u(this,t,[e,{detail:n}])}return p(t,e),l(t)}(m(CustomEvent)),v=function(e){function t(e){var n=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{};return d(this,t),u(this,t,[e,{detail:n,bubbles:!0,composed:!0}])}return p(t,e),l(t)}(m(CustomEvent)),b=function(e){function t(e){return d(this,t),console.log("Amplify Initialized..."),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(g);i(b,"EVENT_NAME","amplify.init"),i(function(e){function t(e){return d(this,t),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(g),"EVENT_NAME","qty_change"),i(function(e){function t(e){return d(this,t),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(g),"EVENT_NAME","qty_removed"),i(function(e){function t(e){return d(this,t),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(v),"EVENT_NAME","view_item_list"),i(function(e){function t(e){return d(this,t),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(v),"EVENT_NAME","select_item"),i(function(e){function t(e){return d(this,t),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(v),"EVENT_NAME","view_item"),i(function(e){function t(e){return d(this,t),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(v),"EVENT_NAME","search");var y=function(e){function t(e){return d(this,t),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(v);i(y,"EVENT_NAME","add_to_cart");var _=function(e){function t(e){return d(this,t),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(v);i(_,"EVENT_NAME","remove_from_cart"),i(function(e){function t(e){return d(this,t),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(v),"EVENT_NAME","view_cart"),i(function(e){function t(e){return d(this,t),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(v),"EVENT_NAME","begin_checkout"),i(function(e){function t(e){return d(this,t),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(v),"EVENT_NAME","add_shipping_info");var x=function(e){function t(e){return d(this,t),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(v);i(x,"EVENT_NAME","request_quote"),i(function(e){function t(e){return d(this,t),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(v),"EVENT_NAME","add_payment_info"),i(function(e){function t(e){return d(this,t),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(v),"EVENT_NAME","purchase"),i(function(e){function t(e){return d(this,t),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(v),"EVENT_NAME","refund"),i(function(e){function t(e){return d(this,t),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(v),"EVENT_NAME","login"),i(function(e){function t(e){return d(this,t),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(v),"EVENT_NAME","sign_up"),i(function(e){function t(e){return d(this,t),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(v),"EVENT_NAME","generate_lead"),i(function(e){function t(e){return d(this,t),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(v),"EVENT_NAME","view_promotion"),i(function(e){function t(e){return d(this,t),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(v),"EVENT_NAME","select_promotion"),i(function(e){function t(e){return d(this,t),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(v),"EVENT_NAME","add_to_wishlist"),i(function(e){function t(e){return d(this,t),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(v),"EVENT_NAME","remove_from_wishlist"),i(function(e){function t(e){return d(this,t),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(v),"EVENT_NAME","newsletter_signup"),i(function(e){function t(e){return d(this,t),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(v),"EVENT_NAME","coupon_applied"),i(function(e){function t(e){return d(this,t),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(v),"EVENT_NAME","coupon_removed"),i(function(e){function t(e){return d(this,t),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(v),"EVENT_NAME","product_review_submitted"),i(function(e){function t(e){return d(this,t),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(v),"EVENT_NAME","address_validated"),i(function(e){function t(e){return d(this,t),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(v),"EVENT_NAME","order_cancelled"),i(function(e){function t(e){return d(this,t),u(this,t,[t.EVENT_NAME,e])}return p(t,e),l(t)}(v),"EVENT_NAME","order_exported");var C={initialized:!1,limit:0,from:0,pendingRequests:0,root:null,Amplify:{},init:function(e){if(this.Amplify=e,!this.initialized&&(this.root=document.querySelector(".x-quick-order"),this.root))return this.initialized=!0,this.limit=0,this.from=0,this.pendingRequests=0,this.addProduct(!0),this.bindEvents(),this},config:function(){var e,t=this.root||document.querySelector(".x-quick-order"),n=t?t.dataset:{};return{warehouseCode:n.warehouseCode||"",warehouseName:n.warehouseName||"",checkQty:1===parseInt(n.checkQty||"0",10),uploadUrl:n.uploadUrl||"",lookupUrl:n.lookupUrl||"",csrf:n.csrf||(null===(e=document.querySelector('meta[name="csrf-token"]'))||void 0===e?void 0:e.getAttribute("content"))||"",addToOrderLabel:n.addToOrderLabel||"Add to Order",uploadLabel:n.uploadLabel||"Upload",filePlaceholder:n.filePlaceholder||"Choose a CSV, XLS, or XLSX file",pressEnterHint:n.pressEnterHint||"Press Enter to add"}},bindEvents:function(){var e=this,t=document.getElementById("quick_order_tbody"),n=document.getElementById("quick_order_file"),o=document.getElementById("upload_btn"),r=document.getElementById("add_to_order_btn");null==t||t.addEventListener("keydown",function(t){t.target.matches('input[name="product_code[]"]')&&("Enter"!==t.key&&13!==t.keyCode||(t.preventDefault(),e.lookupProductByCode(t.target)))}),null==t||t.addEventListener("input",function(t){t.target.matches('input[name="product_code[]"]')&&e.handleProductCodeInput(t.target)}),null==t||t.addEventListener("click",function(t){var n=t.target.closest("[data-quick-order-remove]");n&&(t.preventDefault(),e.removeProduct(n))}),null==n||n.addEventListener("change",function(t){e.readQuickOrderFile(t.target)}),null==o||o.addEventListener("click",function(t){t.preventDefault(),e.uploadQuickOrderFile()}),null==r||r.addEventListener("click",function(t){t.preventDefault(),e.addToOrder()})},spinnerHtml:function(e){return'<span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>'+e},refreshActionButtons:function(){var e=this.pendingRequests>0,t=$("#quick_order_tbody tr.added_products").filter(function(){return""!==$(this).find('input[name="product_code[]"]').val().trim()}).length;$("#add_to_order_btn").prop("disabled",e||0===t),$("#upload_btn").prop("disabled",e),$("#quick_order_file").prop("disabled",e)},setBusy:function(e,t){this.pendingRequests+=e?1:-1,this.pendingRequests<0&&(this.pendingRequests=0),this.pendingRequests>0&&t&&$("#quick_order_status").text(t).removeClass("d-none"),0===this.pendingRequests&&$("#quick_order_status").text("").addClass("d-none"),this.refreshActionButtons()},setRowLoading:function(e,t){var n=$("#added_products_"+e),o=$("#product_code_"+e);n.toggleClass("quick-order-row-loading",t),n.data("fetching",t),o.prop("disabled",t),t&&($("#product_name_"+e).html('<span class="text-muted d-inline-flex align-items-center">'+this.spinnerHtml("Fetching product...")+"</span>"),$("#product_code_error_"+e).text(""),$("#product_code_hint_"+e).addClass("d-none"))},escapeHtml:function(e){return String(e||"").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;")},getRowIndexFromCodeInput:function(e){return String($(e).attr("id").replace("product_code_",""))},normalizeProductCode:function(e){return String(e||"").trim().toUpperCase()},getResolvedCode:function(e){return this.normalizeProductCode($("#product_code_"+e).data("resolvedCode"))},setResolvedCode:function(e,t){$("#product_code_"+e).data("resolvedCode",this.normalizeProductCode(t)),$("#product_code_hint_"+e).remove()},clearResolvedCode:function(e){$("#product_code_"+e).removeData("resolvedCode"),""!==$("#product_id_"+e).val()?$("#product_code_hint_"+e).remove():0===$("#product_code_hint_"+e).length&&$("#product_code_"+e).after('<small class="quick-order-code-hint text-muted" id="product_code_hint_'.concat(e,'">').concat(this.config().pressEnterHint,"</small>"))},productCodeFieldHtml:function(e,t,n){var o=n||{},r=o.error?this.escapeHtml(o.error):"",a=o.alreadyAdded?"":'<small class="quick-order-code-hint text-muted" id="product_code_hint_'.concat(e,'">').concat(this.config().pressEnterHint,"</small>");return'<input type="text" aria-label="Product code" autocomplete="off"\n                    id="product_code_'.concat(e,'" placeholder="Enter product code"\n                    name="product_code[]" class="form-control form-control-sm"\n                    value="').concat(this.escapeHtml(t),'">\n                ').concat(a,'\n                <small class="text-danger" id="product_code_error_').concat(e,'">').concat(r,"</small>")},productRowHtml:function(e,t){var n=void 0!==t.qty&&""!==t.qty?t.qty:1;return'<tr class="added_products" id="added_products_'.concat(e,'">\n            <td class="quick-order-code-col">\n                <input type="hidden" id="product_id_').concat(e,'" value="').concat(this.escapeHtml(t.product_id),'" name="product_id[]" />\n                <input type="hidden" id="product_back_order_').concat(e,'" value="').concat(this.escapeHtml(t.product_back_order),'" name="product_back_order[]" />\n                ').concat(this.productCodeFieldHtml(e,t.product_code,{alreadyAdded:!0,error:t.error}),'\n            </td>\n            <td>\n                <span id="product_name_').concat(e,'">').concat(this.escapeHtml(t.product_name||"-"),'</span>\n            </td>\n            <td class="warehouse text-center align-middle">\n                ').concat(this.createWarehouse(t.ERP,e),'\n            </td>\n            <td class="text-center align-middle">\n                <input type="number" aria-label="Quantity" placeholder="Quantity" name="qty[]" value="').concat(this.escapeHtml(n),'" min="1" max="" id="qty_').concat(e,'" class="form-control form-control-sm mx-auto" style="width: 110px;">\n                <small class="text-danger" id="qty_error_').concat(e,'"></small>\n            </td>\n            ').concat(this.removeButtonCell(!1),"\n        </tr>")},handleProductCodeInput:function(e){var t=this.getRowIndexFromCodeInput(e),n=this.normalizeProductCode($(e).val()),o=this.getResolvedCode(t);$("#product_code_error_"+t).text(""),""!==o&&n!==o&&($("#product_id_"+t).val(""),$("#product_back_order_"+t).val(""),$("#product_name_"+t).text("-"),$("#qty_error_"+t).text(""),$("#added_products_".concat(t," .warehouse")).html(this.createWarehouse([],t)),this.clearResolvedCode(t))},focusProductCode:function(e){var t=$("#product_code_"+e);t.length&&t.trigger("focus")},readQuickOrderFile:function(e){var t=e.files&&e.files[0];$("#quick_order_file_label").text(t?t.name:this.config().filePlaceholder)},uploadQuickOrderFile:function(){var e,t=this;$("#error_div").empty();var n=null===(e=$("#quick_order_file")[0])||void 0===e?void 0:e.files[0];if(void 0!==n){var o=new FormData;o.append("file",n),o.append("_token",this.config().csrf),$.ajax({url:this.config().uploadUrl,type:"POST",data:o,processData:!1,contentType:!1,beforeSend:function(){$("#upload_btn").html(t.spinnerHtml("Uploading file...")),t.setBusy(!0,"Uploading spreadsheet and fetching products...")},success:function(e){if(e.success){var n=e.data,o=Object.keys(n).map(function(e){return n[e]});if(""!==e.message?$("#error_div").removeClass("d-none").html(e.message):$("#error_div").addClass("d-none").html(""),0!==o.length){var r=$("#quick_order_tbody tr.added_products").last(),a=r.length>0&&""===r.find('input[name="product_id[]"]').val(),i=0,s=0;o.forEach(function(e){if(t.findExistingProductRow(e.product_code))s+=1;else{var n=t.limit;t.limit+=1,t.from=n;var o=t.productRowHtml(n,e);a?r.before(o):$("#quick_order_tbody").append(o),t.setMaxQty(n),e.product_id&&t.setResolvedCode(n,e.product_code),i+=1}}),a||t.addProduct(),t.updateAddedProductCount(),$("#quick_order_file").val(""),$("#quick_order_file_label").text(t.config().filePlaceholder),i>0&&ShowNotification("success","Quick Order","File uploaded successfully"),s>0&&ShowNotification("info","Quick Order",1===s?"1 product from the file was already in the list and was skipped.":s+" products from the file were already in the list and were skipped."),0===i&&0===s&&ShowNotification("info","Quick Order","No new products were added from the file.")}}else ShowNotification("error","Quick Order",e.message)},error:function(e){var t="Something went wrong while uploading the file.";e.responseJSON&&e.responseJSON.message&&(t=e.responseJSON.message),422===e.status&&e.responseJSON&&e.responseJSON.message&&$("#error_div").html(e.responseJSON.message),ShowNotification("error","Quick Order",t)},complete:function(){$("#upload_btn").html(t.config().uploadLabel),t.setBusy(!1)}})}else ShowNotification("error","Quick Order","Please select a file to upload")},getCustomerWarehouse:function(e){var t=this;return(e||[]).find(function(e){return String(e.WarehouseID)===String(t.config().warehouseCode)})||{WarehouseID:this.config().warehouseCode,WarehouseName:this.config().warehouseName,QuantityAvailable:""}},setMaxQty:function(e){var t=$("#warehouse_"+e).data("quantity"),n=$("#qty_"+e),o=parseFloat(t);!("Y"===$("#product_back_order_"+e).val())&&Number.isFinite(o)&&o>0?n.attr("max",o):n.removeAttr("max")},createWarehouse:function(e,t){var n=this.getCustomerWarehouse(e),o=n.QuantityAvailable,r=parseFloat(o),a="";return""!==o&&null!=o&&(a=Number.isFinite(r)&&r>0?'<div class="text-muted small">'.concat(o," available</div>"):'<div class="text-danger small">0 available · Backorder</div>'),'<input type="hidden" name="product_warehouse_code[]" id="warehouse_'.concat(t,'" value="').concat(n.WarehouseID||"",'" data-quantity="').concat(o,'">\n            <div class="font-weight-bold">').concat(n.WarehouseName||"—","</div>\n            ").concat(a,'\n            <small class="text-danger" id="warehouse_error_').concat(t,'"></small>')},removeButtonCell:function(e){return'<td class="text-center align-middle" style="width: 70px">\n            <button type="button" class="btn btn-sm m-0 px-2'.concat(e?" d-none":"",'" data-toggle="tooltip" title="Remove" data-quick-order-remove>\n                <i class="icon-cross text-danger font-weight-bold"></i>\n            </button>\n        </td>')},findExistingProductRow:function(e,t){var n=this,o=this.normalizeProductCode(e),r=null;return $("#quick_order_tbody tr.added_products").each(function(e,a){var i=$(a);if(String(i.attr("id").split("_").pop())!==String(t)){var s=i.find('input[name="product_id[]"]').val(),l=n.normalizeProductCode(i.find('input[name="product_code[]"]').val());return s&&""!==l&&l===o?(r=i,!1):void 0}}),r},resetProductRow:function(e){$("#product_id_"+e).val(""),$("#product_back_order_"+e).val(""),$("#product_code_"+e).val(""),$("#product_name_"+e).text("-"),$("#product_code_error_"+e).text(""),$("#qty_"+e).val(""),$("#qty_error_"+e).text(""),$("#added_products_".concat(e," .warehouse")).html(this.createWarehouse([],e)),$("#added_products_".concat(e," td button")).addClass("d-none"),this.clearResolvedCode(e)},notifyProductAlreadyAdded:function(e,t){var n=$("#added_products_"+e);n.is($("#quick_order_tbody tr.added_products").last())?(this.resetProductRow(e),this.focusProductCode(e)):n.remove(),this.updateAddedProductCount(),ShowNotification("info","Quick Order",t+" is already added to the list.")},updateAddedProductCount:function(){var e=$("#quick_order_tbody tr.added_products").filter(function(){return""!==$(this).find('input[name="product_code[]"]').val().trim()}).length;$("#added_product_count").text(e>0?e+" Products added":""),this.refreshActionButtons()},addProduct:function(e){$("#no_product_tr").length>0&&$("#no_product_tr").remove(),this.from=this.limit,this.limit+=1;for(var t="",n=this.from;n<this.limit;n++)t+=' <tr class="added_products" id="added_products_'.concat(n,'">\n                        <td class="quick-order-code-col">\n                            <input type="hidden" id="product_id_').concat(n,'" value="" name="product_id[]" />\n                            <input type="hidden" id="product_back_order_').concat(n,'" value="" name="product_back_order[]" />\n                            ').concat(this.productCodeFieldHtml(n,"",{alreadyAdded:!1}),'\n                        </td>\n                        <td>\n                            <span id="product_name_').concat(n,'">-</span>\n                        </td>\n                        <td class="warehouse text-center align-middle">\n                            ').concat(this.createWarehouse([],n),'\n                        </td>\n                        <td class="text-center align-middle">\n                            <input type="number" aria-label="Quantity" placeholder="Quantity" name="qty[]" value="" min="0" max=""\n                                    onkeypress="return event.charCode >= 48"\n                                    id="qty_').concat(n,'"\n                                    class="form-control form-control-sm mx-auto" style="width: 110px;">\n                            <small class="text-danger" id="qty_error_').concat(n,'"></small>\n                        </td>\n                        ').concat(this.removeButtonCell(!0),"\n                    </tr>");$("#quick_order_tbody").append(t),this.updateAddedProductCount(),e&&this.focusProductCode(this.from)},promptRemoveButton:function(e){$("#added_products_".concat(e," td button")).removeClass("d-none")},removeProduct:function(e){$(e).closest("tr").remove(),ShowNotification("success","Quick Order","Product removed successfully"),this.updateAddedProductCount(),0===$("#quick_order_tbody tr").length&&this.showNoProductsFound()},lookupProductByCode:function(e){var t=this,n=$(e).val(),o=this.getRowIndexFromCodeInput(e),r=this.normalizeProductCode(n);""!==r&&(r.length<3?$("#product_code_error_"+o).text("Enter at least 3 characters, then press Enter"):$("#added_products_"+o).data("fetching")||this.getResolvedCode(o)===r&&""!==$("#product_id_"+o).val()||(this.findExistingProductRow(n,o)?this.notifyProductAlreadyAdded(o,n):$.ajax({url:this.config().lookupUrl,type:"POST",data:{product_code:n,_token:this.config().csrf},beforeSend:function(){t.setRowLoading(o,!0),t.setBusy(!0)},success:function(e){if(1==e.success){if(t.findExistingProductRow(n,o))return void t.notifyProductAlreadyAdded(o,n);$("#product_id_"+o).val(e.data.product_id),$("#product_back_order_"+o).val(e.data.product_back_order),$("#product_name_"+o).text(e.data.product_name),$("#product_code_error_"+o).text(""),t.setResolvedCode(o,n),$("#qty_"+o).val()||$("#qty_"+o).val(1),t.selectWarehouseForSingleProduct(e.data,o),""!=$("#quick_order_tbody tr").last().find('input[name="product_code[]"]').val()&&(t.addProduct(),t.promptRemoveButton(o))}else $("#product_name_"+o).text(e.data.product_name||"N/A"),$("#product_code_error_"+o).text(e.data.error),$("#added_products_".concat(o," .warehouse")).html(t.createWarehouse([],o))},error:function(){$("#product_name_"+o).text("-"),$("#product_code_error_"+o).text("Unable to fetch this product. Please try again."),ShowNotification("error","Quick Order","Unable to fetch product details.")},complete:function(){t.setRowLoading(o,!1),t.setBusy(!1)}})))},selectWarehouseForSingleProduct:function(e,t){$("#added_products_".concat(t," .warehouse")).html(this.createWarehouse((null==e?void 0:e.ERP)||[],t)),this.setMaxQty(t)},showNoProductsFound:function(){$("#quick_order_tbody").empty(),this.addProduct()},addToOrder:function(){var e=this,t=[],n=!1,o=$("#quick-order-link").data("link");if($("#quick_order_tbody tr").length>0&&0===$("#quick_order_tbody tr#no_product_tr").length){if($("#quick_order_tbody tr").each(function(o,r){var a=$(r).find('input[name="product_code[]"]').val(),i=$(r).find('input[name="product_id[]"]').val(),s=$(r).find('input[name="qty[]"]').val(),l=$(r).find('input[name="product_warehouse_code[]"]').val(),c=$(r).attr("id").split("_")[2],d=$(r).find('input[name="product_warehouse_code[]"]').data("quantity");if(""!==a.trim()&&""!==s.trim()){$("#product_code_error_"+c).text(""),$("#qty_error_"+c).text(""),$("#warehouse_error_"+c).text(""),t.push({product_code:a,product_id:i,qty:s,product_warehouse_code:l});var u="Y"===$(r).find('input[name="product_back_order[]"]').val(),p=parseFloat(d),m=parseFloat(s);e.config().checkQty&&!u&&Number.isFinite(p)&&p>0&&Number.isFinite(m)&&m>p&&($("#qty_error_"+c).text("Quantity exceeds available inventory"),n=!0)}else""!==a.trim()?(""===s.trim()?$("#qty_error_"+c).text("Quantity is required"):$("#qty_error_"+c).text(""),n=!0):$("#product_code_error_"+c).text("")}),n)return void ShowNotification("error","Quick Order","Please fix the highlighted rows before adding to order.");if(0===t.length)return void ShowNotification("error","Quick Order","Please add at least one product");$.ajax({url:o,type:"POST",data:{products:t,_token:this.config().csrf},beforeSend:function(){$("#add_to_order_btn").html(e.spinnerHtml("Adding to order...")),e.setBusy(!0,"Adding products to your order...")},success:function(t){t.success?(e.showNoProductsFound(),e.updateAddedProductCount(),ShowNotification("success","Quick Order",t.message),setTimeout(function(){Amplify.loadCartDropdown()},1e3)):ShowNotification("error","Quick Order",t.message)},error:function(e){var t=e.responseJSON&&e.responseJSON.message?e.responseJSON.message:"Unable to add products to your order. Please try again.";ShowNotification("error","Quick Order",t)},complete:function(){$("#add_to_order_btn").html(e.config().addToOrderLabel),e.setBusy(!1)}})}else ShowNotification("error","Quick Order","Please add at least one product")}};function k(){var e;null===(e=window.Amplify)||void 0===e||null===(e=e.QuickOrder)||void 0===e||e.init()}function E(e,t){return function(e){if(Array.isArray(e))return e}(e)||function(e,t){var n=null==e?null:"undefined"!=typeof Symbol&&e[Symbol.iterator]||e["@@iterator"];if(null!=n){var o,r,a,i,s=[],l=!0,c=!1;try{if(a=(n=n.call(e)).next,0===t){if(Object(n)!==n)return;l=!1}else for(;!(l=(o=a.call(n)).done)&&(s.push(o.value),s.length!==t);l=!0);}catch(e){c=!0,r=e}finally{try{if(!l&&null!=n.return&&(i=n.return(),Object(i)!==i))return}finally{if(c)throw r}}return s}}(e,t)||function(e,t){if(e){if("string"==typeof e)return A(e,t);var n={}.toString.call(e).slice(8,-1);return"Object"===n&&e.constructor&&(n=e.constructor.name),"Map"===n||"Set"===n?Array.from(e):"Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)?A(e,t):void 0}}(e,t)||function(){throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}function A(e,t){(null==t||t>e.length)&&(t=e.length);for(var n=0,o=Array(t);n<t;n++)o[n]=e[n];return o}"loading"===document.readyState?document.addEventListener("DOMContentLoaded",k):k();var T={Amplify:{},breakpoints:{wide:1440,desktop:1200,laptop:991,tablet:768,mobile:567},init:function(e){return this.breakpoints=e.config.screen.breakpoints,sessionStorage.getItem("screen_initialized")?this.setCookie():(sessionStorage.setItem("screen_initialized","1"),window.location.replace(window.location.href)),this.updateCookie(),this},updateCookie:function(){window.addEventListener("resize",function(){Amplify.MediaQuery.setCookie()})},setCookie:function(){var e=window.innerWidth,t=window.innerHeight;document.cookie="mw=".concat(e,"; path=/; SameSite=Lax"),document.cookie="md=".concat(t,"; path=/; SameSite=Lax")},get width(){return window.innerWidth},screen:function(){for(var e=this.width,t=0,n=Object.entries(this.breakpoints);t<n.length;t++){var o=E(n[t],2),r=o[0];if(e>=o[1])return r}return"mobile"},isDesktop:function(){return"desktop"===this.screen()},isLaptop:function(){return"laptop"===this.screen()},isTablet:function(){return"tablet"===this.screen()},isMobile:function(){return"mobile"===this.screen()}};function S(e){return S="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},S(e)}function O(e,t){var n=Object.keys(e);if(Object.getOwnPropertySymbols){var o=Object.getOwnPropertySymbols(e);t&&(o=o.filter(function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable})),n.push.apply(n,o)}return n}function P(e){for(var t=1;t<arguments.length;t++){var n=null!=arguments[t]?arguments[t]:{};t%2?O(Object(n),!0).forEach(function(t){N(e,t,n[t])}):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(n)):O(Object(n)).forEach(function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(n,t))})}return e}function N(e,t,n){return(t=function(e){var t=function(e,t){if("object"!=S(e)||!e)return e;var n=e[Symbol.toPrimitive];if(void 0!==n){var o=n.call(e,t||"default");if("object"!=S(o))return o;throw new TypeError("@@toPrimitive must return a primitive value.")}return("string"===t?String:Number)(e)}(e,"string");return"symbol"==S(t)?t:t+""}(t))in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}var L={init:function(e){return this.isEnabled()&&(this.mergeGuestHistory(),this.initProductDetailTracking(),this.initCarouselWidgets(),this.initPageWidgets()),this},storageKey:function(){var e;return Amplify.config.recentlyViewedStorageKey||(null===(e=Amplify.config.url)||void 0===e?void 0:e.recentlyViewedStorageKey)||"amplify-rv"},maxItems:function(){var e;return parseInt(Amplify.config.recentlyViewedMaxItems||(null===(e=Amplify.config.url)||void 0===e?void 0:e.recentlyViewedMaxItems)||20,10)},isEnabled:function(){var e,t;return!1!==(null!==(e=Amplify.config.recentlyViewedEnabled)&&void 0!==e?e:null===(t=Amplify.config.url)||void 0===t?void 0:t.recentlyViewedEnabled)},isAuthenticated:function(){return!0===Amplify.config.isCustomerAuthenticated},urls:function(){var e;return(null===(e=Amplify.config.url)||void 0===e?void 0:e.recentlyViewed)||{}},getAll:function(){try{var e=window.localStorage.getItem(this.storageKey()),t=e?JSON.parse(e):[];return Array.isArray(t)?t.map(function(e){return parseInt(e,10)}).filter(Boolean):[]}catch(e){return[]}},save:function(e){window.localStorage.setItem(this.storageKey(),JSON.stringify(e.slice(0,this.maxItems())))},add:function(e){if(!(e=parseInt(e,10)))return this.getAll();var t=this.getAll().filter(function(t){return t!==e});return t.unshift(e),this.save(t),t},remove:function(e){e=parseInt(e,10);var t=this.getAll().filter(function(t){return t!==e});return this.save(t),t},clearStorage:function(){window.localStorage.removeItem(this.storageKey())},record:function(e){this.isEnabled()&&(e=parseInt(e,10))&&(this.isAuthenticated()||this.add(e))},mergeGuestHistory:function(){var e=this;if(this.isEnabled()&&this.isAuthenticated()){var t=this.getAll();t.length&&this.urls().merge&&$.ajax({url:this.urls().merge,method:"POST",dataType:"json",data:{product_ids:t,_token:this.getCsrfTokenFromMeta()}}).done(function(t){null!=t&&t.success&&e.clearStorage()})}},parseSettings:function(e){try{return e?JSON.parse(e):{}}catch(e){return{}}},buildRequestSettings:function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:{};return{layout:e.layout||"card",products_limit:e.productsLimit,show_cart_btn:e.showCartBtn,cart_button_label:e.cartButtonLabel,detail_button_label:e.detailButtonLabel,show_price:e.showPrice,show_guest_price:e.showGuestPrice,show_top_discount_badge:e.showTopDiscountBadge,show_order_list:e.showOrderList,order_list_label:e.orderListLabel,show_navigation:e.showNavigation,slider_item_gap:e.sliderItemGap,display_product_code:e.displayProductCode,display_short_description:e.displayShortDescription,display_manufacturer:e.displayManufacturer,allow_remove:!0===e.allowRemove}},fetchProducts:function(e){var t=(arguments.length>1&&void 0!==arguments[1]?arguments[1]:null)||this.getAll();if(!t.length||!this.urls().products)return $.Deferred().resolve({success:!0,count:0,html:""}).promise();var n=P(P({product_ids:t},this.buildRequestSettings(e)),{},{_token:this.getCsrfTokenFromMeta()});return $.ajax({url:this.urls().products,method:"POST",dataType:"json",data:n})},getCsrfTokenFromMeta:function(){return $('meta[name="csrf-token"]').attr("content")||""},mountCarousel:function(e,t){t?(e.closest(".recently-viewed-section").removeClass("d-none"),e.removeClass("d-none"),e.trigger("destroy.owl.carousel"),e.html(t),"function"==typeof window.initOwlCarousel?window.initOwlCarousel(e):e.data("owl.carousel")?e.owlCarousel("refresh"):e.owlCarousel(JSON.parse(e.attr("data-owl-carousel")||"{}"))):e.closest(".recently-viewed-section").addClass("d-none")},initCarouselWidgets:function(){var e=this;document.querySelectorAll('[data-recently-viewed-widget="carousel"]').forEach(function(t){if("1"!==t.dataset.recentlyViewedLoaded){var n=e.parseSettings(t.dataset.recentlyViewedSettings||"{}"),o="1"===t.dataset.recentlyViewedAuthenticated;if(o&&t.querySelector(".owl-carousel .grid-item"))t.dataset.recentlyViewedLoaded="1";else if(!o){t.dataset.recentlyViewedLoaded="1";var r=$(t).find(".recently-viewed-guest-carousel");e.fetchProducts(n).done(function(t){null!=t&&t.html?e.mountCarousel(r,t.html):e.mountCarousel(r,"")}).fail(function(){t.dataset.recentlyViewedLoaded="0"})}}})},initPageWidgets:function(){var e=this;document.querySelectorAll('[data-recently-viewed-widget="page"]').forEach(function(t){if(e.bindPageActions(t),"1"!==t.dataset.recentlyViewedAuthenticated&&"1"!==t.dataset.recentlyViewedLoaded){t.dataset.recentlyViewedLoaded="1";var n=e.parseSettings(t.dataset.recentlyViewedSettings||"{}"),o=e.getAll(),r=t.querySelector(".recently-viewed-guest-grid"),a=t.querySelector(".recently-viewed-guest-page"),i=t.querySelector(".recently-viewed-guest-empty"),s=t.querySelector(".recently-viewed-clear-btn");if(!o.length)return null==a||a.classList.add("d-none"),null==i||i.classList.remove("d-none"),void(null==s||s.classList.add("d-none"));e.fetchProducts(n,o).done(function(n){if(null==n||!n.html||!r)return null==a||a.classList.add("d-none"),null==i||i.classList.remove("d-none"),void(null==s||s.classList.add("d-none"));r.innerHTML=n.html,null==a||a.classList.remove("d-none"),null==i||i.classList.add("d-none"),null==s||s.classList.remove("d-none"),e.bindPageActions(t)}).fail(function(){t.dataset.recentlyViewedLoaded="0"})}})},bindPageActions:function(e){var t=this;e.querySelectorAll(".recently-viewed-remove-btn").forEach(function(e){"1"!==e.dataset.bound&&(e.dataset.bound="1",e.addEventListener("click",function(){var n,o=parseInt(e.dataset.productId,10);o&&(t.isAuthenticated()?$.ajax({url:"".concat(t.urls().destroy,"/").concat(o),method:"DELETE",dataType:"json"}).done(function(t){var n;null!=t&&t.success&&(null===(n=e.closest(".recently-viewed-grid-item"))||void 0===n||n.remove(),Amplify.notify("success",t.message))}):(t.remove(o),null===(n=e.closest(".recently-viewed-grid-item"))||void 0===n||n.remove(),t.initPageWidgets()))}))}),e.querySelectorAll(".recently-viewed-clear-btn").forEach(function(e){"1"!==e.dataset.bound&&(e.dataset.bound="1",e.addEventListener("click",function(){swal.fire({title:"Clear recently viewed?",text:"This will remove all recently viewed products from your history.",icon:"warning",showCancelButton:!0,confirmButtonText:"Clear All",cancelButtonText:"Cancel"}).then(function(e){e.isConfirmed&&(t.isAuthenticated()?$.ajax({url:t.urls().clear,method:"DELETE",dataType:"json"}).done(function(e){null!=e&&e.success&&window.location.reload()}):(t.clearStorage(),window.location.reload()))})}))})},initProductDetailTracking:function(){var e=this;document.querySelectorAll("[data-recently-viewed-product-id]").forEach(function(t){e.record(t.dataset.recentlyViewedProductId)})}};function q(e){return q="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},q(e)}function j(){var e,t,n="function"==typeof Symbol?Symbol:{},o=n.iterator||"@@iterator",r=n.toStringTag||"@@toStringTag";function a(n,o,r,a){var l=o&&o.prototype instanceof s?o:s,c=Object.create(l.prototype);return B(c,"_invoke",function(n,o,r){var a,s,l,c=0,d=r||[],u=!1,p={p:0,n:0,v:e,a:m,f:m.bind(e,4),d:function(t,n){return a=t,s=0,l=e,p.n=n,i}};function m(n,o){for(s=n,l=o,t=0;!u&&c&&!r&&t<d.length;t++){var r,a=d[t],m=p.p,w=a[2];n>3?(r=w===o)&&(l=a[(s=a[4])?5:(s=3,3)],a[4]=a[5]=e):a[0]<=m&&((r=n<2&&m<a[1])?(s=0,p.v=o,p.n=a[1]):m<w&&(r=n<3||a[0]>o||o>w)&&(a[4]=n,a[5]=o,p.n=w,s=0))}if(r||n>1)return i;throw u=!0,o}return function(r,d,w){if(c>1)throw TypeError("Generator is already running");for(u&&1===d&&m(d,w),s=d,l=w;(t=s<2?e:l)||!u;){a||(s?s<3?(s>1&&(p.n=-1),m(s,l)):p.n=l:p.v=l);try{if(c=2,a){if(s||(r="next"),t=a[r]){if(!(t=t.call(a,l)))throw TypeError("iterator result is not an object");if(!t.done)return t;l=t.value,s<2&&(s=0)}else 1===s&&(t=a.return)&&t.call(a),s<2&&(l=TypeError("The iterator does not provide a '"+r+"' method"),s=1);a=e}else if((t=(u=p.n<0)?l:n.call(o,p))!==i)break}catch(t){a=e,s=1,l=t}finally{c=1}}return{value:t,done:u}}}(n,r,a),!0),c}var i={};function s(){}function l(){}function c(){}t=Object.getPrototypeOf;var d=[][o]?t(t([][o]())):(B(t={},o,function(){return this}),t),u=c.prototype=s.prototype=Object.create(d);function p(e){return Object.setPrototypeOf?Object.setPrototypeOf(e,c):(e.__proto__=c,B(e,r,"GeneratorFunction")),e.prototype=Object.create(u),e}return l.prototype=c,B(u,"constructor",c),B(c,"constructor",l),l.displayName="GeneratorFunction",B(c,r,"GeneratorFunction"),B(u),B(u,r,"Generator"),B(u,o,function(){return this}),B(u,"toString",function(){return"[object Generator]"}),(j=function(){return{w:a,m:p}})()}function B(e,t,n,o){var r=Object.defineProperty;try{r({},"",{})}catch(e){r=0}B=function(e,t,n,o){function a(t,n){B(e,t,function(e){return this._invoke(t,n,e)})}t?r?r(e,t,{value:n,enumerable:!o,configurable:!o,writable:!o}):e[t]=n:(a("next",0),a("throw",1),a("return",2))},B(e,t,n,o)}function M(e,t,n,o,r,a,i){try{var s=e[a](i),l=s.value}catch(e){return void n(e)}s.done?t(l):Promise.resolve(l).then(o,r)}function I(e){return function(){var t=this,n=arguments;return new Promise(function(o,r){var a=e.apply(t,n);function i(e){M(a,o,r,i,s,"next",e)}function s(e){M(a,o,r,i,s,"throw",e)}i(void 0)})}}function V(e,t){var n=Object.keys(e);if(Object.getOwnPropertySymbols){var o=Object.getOwnPropertySymbols(e);t&&(o=o.filter(function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable})),n.push.apply(n,o)}return n}function H(e){for(var t=1;t<arguments.length;t++){var n=null!=arguments[t]?arguments[t]:{};t%2?V(Object(n),!0).forEach(function(t){D(e,t,n[t])}):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(n)):V(Object(n)).forEach(function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(n,t))})}return e}function D(e,t,n){return(t=function(e){var t=function(e,t){if("object"!=q(e)||!e)return e;var n=e[Symbol.toPrimitive];if(void 0!==n){var o=n.call(e,t||"default");if("object"!=q(o))return o;throw new TypeError("@@toPrimitive must return a primitive value.")}return("string"===t?String:Number)(e)}(e,"string");return"symbol"==q(t)?t:t+""}(t))in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}function z(e,t){return function(e){if(Array.isArray(e))return e}(e)||function(e,t){var n=null==e?null:"undefined"!=typeof Symbol&&e[Symbol.iterator]||e["@@iterator"];if(null!=n){var o,r,a,i,s=[],l=!0,c=!1;try{if(a=(n=n.call(e)).next,0===t){if(Object(n)!==n)return;l=!1}else for(;!(l=(o=a.call(n)).done)&&(s.push(o.value),s.length!==t);l=!0);}catch(e){c=!0,r=e}finally{try{if(!l&&null!=n.return&&(i=n.return(),Object(i)!==i))return}finally{if(c)throw r}}return s}}(e,t)||function(e,t){if(e){if("string"==typeof e)return R(e,t);var n={}.toString.call(e).slice(8,-1);return"Object"===n&&e.constructor&&(n=e.constructor.name),"Map"===n||"Set"===n?Array.from(e):"Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)?R(e,t):void 0}}(e,t)||function(){throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}function R(e,t){(null==t||t>e.length)&&(t=e.length);for(var n=0,o=Array(t);n<t;n++)o[n]=e[n];return o}window.swal=r().mixin({theme:"bootstrap-4-light",showCloseButton:!0,customClass:{confirmButton:"btn btn-danger",cancelButton:"btn btn-outline-secondary"}}),window.Amplify={modules:{QuickOrder:C,MediaQuery:T,RecentlyViewed:L},config:{env:"production",name:"Amplify",debug:!1,currency:"USD",language:"en",dateFormat:"dd/mm/yyyy",dateTimeFormat:"dd/mm/yyyy",allowGuestPrice:!1,authenticated:!1,cart:{},url:{carts:"/carts",favourites:"/favourites",orderLists:"/order-lists",orderExport:"/orders/export"}},cart:{},initialized:!1,register:function(e,t){return this.modules[e]?(console.warn('Amplify module "'.concat(e,'" is already registered.')),this):(this.modules[e]=t,this.initialized&&this.initializeModule(e,t),this)},initializeModule:function(e,t){if("function"!=typeof t.init)return console.error('Amplify module "'.concat(e,'" is missing an init() function.')),!1;if(this.hasOwnProperty(e))return console.error('Amplify has a reserved property name "'.concat(e,'".')),!1;try{return this[e]=t.init(this),this.config.debug&&console.log("".concat(e," module initialized.")),!0}catch(t){return console.error('Failed to initialize Amplify module "'.concat(e,'".'),t),!1}},initModules:function(){for(var e=0,t=Object.entries(this.modules);e<t.length;e++){var n=z(t[e],2),o=n[0],r=n[1];this.initializeModule(o,r)}},init:function(e){this.config=e,this.initModules(),window.dispatchEvent(new b(this.config))},clientCode:function(){return atob(this.config.client.split("").reverse().join(""))},cartUrl:function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"";return this.config.url.carts+e},cartItemRemoveUrl:function(){return"/carts/remove/cart_item_id"},maxCartItemQuantity:function(){return this.config.cart.maxQuantity},favouritesCreateUrl:function(){return this.config.url.favourites},orderListUrl:function(){return this.config.url.orderLists},orderExportUrl:function(){return this.config.url.orderExport},productNotAvailableMessage:function(e){return"".concat(this.config.cart.notAvailableMsg).replace("__product_code__",e).toString()},isHtml:function(e){return(new DOMParser).parseFromString(e,"text/html").body.children.length>0},isNumeric:function(e){return/^-?\d+(\.\d+)?$/.test(e)},getCart:function(){return this.cart||$.ajax({url:this.cartUrl("/show"),method:"GET",dataType:"json",headers:{Accept:"application/json"},success:function(e){Amplify.cart=e},error:function(e){var t;console.error(null!==(t=e.responseJSON.message)&&void 0!==t?t:e.statusText,"Cart")}}),this.cart},authenticated:function(){return this.config.authenticated},notify:function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"info",t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:"Your message here!",n=arguments.length>2&&void 0!==arguments[2]?arguments[2]:"Notification",o=arguments.length>3&&void 0!==arguments[3]?arguments[3]:{},a=["success","error","warning","info","question"];a.includes(e)||alert("The ".concat(e," type is not allowed. Allowed types: ").concat(a)),window.swal.mixin({toast:!0,position:"top-end",showConfirmButton:!1,timer:2500,timerProgressBar:!0,didOpen:function(e){e.onmouseenter=r().stopTimer,e.onmouseleave=r().resumeTimer},padding:"0.25em 0.75em"}).fire(H({icon:e,title:n,html:t},o))},confirm:function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"You won't be able to revert this!",t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:"Are you sure?",n=arguments.length>2&&void 0!==arguments[2]?arguments[2]:"",o=arguments.length>3&&void 0!==arguments[3]?arguments[3]:{};return window.swal.mixin({icon:"warning",showCancelButton:!0,showConfirmButton:!0,showLoaderOnConfirm:!0,allowOutsideClick:!1,padding:"1em"}).fire(H({title:t,html:e,confirmButtonText:n},o))},alert:function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"This action is not allowed",t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:"Alert",n=arguments.length>2&&void 0!==arguments[2]?arguments[2]:{};return this.confirm(e,t,"",H({icon:"warning",showConfirmButton:!0,showLoaderOnConfirm:!1,showCancelButton:!1,confirmButtonText:"Okay",customClass:{confirmButton:"btn btn-outline-secondary"},willOpen:function(){return document.querySelector(".swal2-actions").style.justifyContent="center"}},n))},syncCustomPartNumber:function(e,t){var n,o=document.getElementById(t),a=e,i=a.dataset.route,s=a.dataset.productId,l=o.dataset.current.toString(),c=o.dataset.uom.toString(),d=o.value.toString();this.authenticated()?l||d?l?this.confirm("Are you sure you want to remove this part number?","Customer Part Number","Remove",{preConfirm:(n=I(j().m(function e(){return j().w(function(e){for(;;)switch(e.n){case 0:return e.n=1,$.ajax({url:i,type:"DELETE",data:{product_id:s,customer_product_uom:c,customer_product_code:l},success:function(e){return o.dataset.current=!1,e},error:function(e){var t;r().showValidationMessage("<p>".concat(null!==(t=e.responseJSON.message)&&void 0!==t?t:e.statusText,"</p>")),r().hideLoading()}});case 1:return e.a(2,e.v)}},e)})),function(){return n.apply(this,arguments)}),allowOutsideClick:function(){return!r().isLoading()}}).then(function(e){e.isConfirmed&&(Amplify.notify("warning",e.value.message,"Customer Part Number"),o.value="",o.dataset.current="",a.innerHTML="Add")}).catch(function(e){return console.error(e)}):$.ajax({url:i,type:"POST",data:{product_id:s,customer_product_uom:c,customer_product_code:d},success:function(e){Amplify.notify("success",e.message,"Customer Part Number"),o.dataset.current=d,a.innerHTML="Delete"},error:function(e){var t;Amplify.alert(null!==(t=e.responseJSON.message)&&void 0!==t?t:e.statusText,"Customer Part Number")}}):this.notify("warning","This field is required","Customer Part Number"):this.notify("warning","You need to be logged in to access this feature.","Customer Part Number")},clearCart:function(e){var t,n=this;this.confirm("Are you sure to remove all items from shopping cart?","Cart","Confirm",{preConfirm:(t=I(j().m(function e(){return j().w(function(e){for(;;)switch(e.n){case 0:return e.n=1,$.ajax({url:n.cartUrl(),type:"DELETE",data:{},header:{"Content-Type":"application/json",Accept:"application/json"},success:function(e){return e},error:function(e){var t;r().showValidationMessage("<p>".concat(null!==(t=e.responseJSON.message)&&void 0!==t?t:e.statusText,"</p>")),r().hideLoading()}});case 1:return e.a(2,e.v)}},e)})),function(){return t.apply(this,arguments)}),allowOutsideClick:function(){return!r().isLoading()}}).then(function(e){var t;e.isConfirmed&&(Amplify.notify("success",e.value.message,"Cart"),window.dispatchEvent(new _(null===(t=e.value)||void 0===t||null===(t=t.data)||void 0===t?void 0:t.items)),setTimeout(function(){var e=window.location,t=e.origin,n=e.pathname;window.location.replace(t+n)},2e3))}).catch(function(e){return console.error(e)})},discardQtyChange:function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:"input[data-quantity]";document.querySelectorAll(t).forEach(function(e){return e.value=e.dataset.quantity}),this.handleQuantityChange(t,"input")},renderCartItemBadge:function(e){e.length>0?($(".total_cart_items").text(e),$(".total_cart_items").removeClass("d-none")):($(".total_cart_items").text(e),$(".total_cart_items").addClass("d-none"))},removeCartItem:function(e){var t,n=this.cartItemRemoveUrl().replace("cart_item_id",e);return this.confirm("Are you sure to remove this item from cart?","Cart","Remove",{preConfirm:(t=I(j().m(function e(){return j().w(function(e){for(;;)switch(e.n){case 0:return e.n=1,$.ajax({url:n,type:"DELETE",data:{},header:{"Content-Type":"application/json",Accept:"application/json"},success:function(e){return e},error:function(e){var t;r().showValidationMessage("<p>".concat(null!==(t=e.responseJSON.message)&&void 0!==t?t:e.statusText,"</p>")),r().hideLoading()}});case 1:return e.a(2,e.v)}},e)})),function(){return t.apply(this,arguments)}),allowOutsideClick:function(){return!r().isLoading()}}).then(function(e){var t,n,o,r;e.isConfirmed&&(Amplify.notify("success",e.value.message,"Cart"),window.dispatchEvent(new CustomEvent("qty-removed")),window.dispatchEvent(new _(null!==(t=null===(n=e.value)||void 0===n||null===(n=n.data)||void 0===n?void 0:n.items)&&void 0!==t?t:[])),Amplify.renderCartItemBadge(null!==(o=null===(r=e.value)||void 0===r||null===(r=r.data)||void 0===r?void 0:r.total)&&void 0!==o?o:""))}).catch(function(e){return console.error(e)})},updateCartItem:function(e,t,n){if(e.preventDefault(),e.stopPropagation(),this.handleQuantityChange(t,"input")){var o=document.querySelector(t),a=o.value,i=this.cartUrl(),s=o.dataset.warehouseCode,l=o.dataset.productCode;swal.fire({title:"Cart",icon:"warning",backdrop:!0,showCancelButton:!1,text:"Updating ".concat(l,"'s information in cart..."),confirmButtonText:"Okay",customClass:{confirmButton:"btn btn-outline-secondary"},willOpen:function(){return document.querySelector(".swal2-actions").style.justifyContent="center"},didOpen:function(){return $.ajax({beforeSend:function(){return r().showLoading()},url:i,type:"PATCH",data:{products:[{id:n,qty:Number(a),product_code:l,product_warehouse_code:s}]},header:{"Content-Type":"application/json",Accept:"application/json"},success:function(e){e.success&&(r().close(),Amplify.notify("success",e.message,"Cart"),setTimeout(function(){var e=window.location,t=e.origin,n=e.pathname;window.location.replace(t+n)},2e3))},error:function(e){var t;r().showValidationMessage("<p>".concat(null!==(t=e.responseJSON.message)&&void 0!==t?t:e.statusText,"</p>")),r().hideLoading()}})},allowOutsideClick:function(){return!r().isLoading()}})}},updateCart:function(e){var t=this;e.preventDefault(),e.stopPropagation();var n=[];document.querySelectorAll("#cart-summary input[data-quantity]").forEach(function(e){var t=e.value;t!==e.dataset.quantity&&n.push({id:Number(e.id.replace("cart-item-","")),qty:Number(t),product_code:e.dataset.productCode,product_warehouse_code:e.dataset.warehouseCode})}),0!==n.length&&swal.fire({title:"Cart",icon:"warning",backdrop:!0,showCancelButton:!1,text:"Updating product information in cart...",confirmButtonText:"Okay",customClass:{confirmButton:"btn btn-outline-secondary"},willOpen:function(){return document.querySelector(".swal2-actions").style.justifyContent="center"},didOpen:function(){return $.ajax({beforeSend:function(){return r().showLoading()},url:t.cartUrl(),type:"PATCH",data:{products:n},header:{"Content-Type":"application/json",Accept:"application/json"},success:function(e){e.success&&(r().close(),Amplify.notify("success",e.message,"Cart"),setTimeout(function(){var e=window.location,t=e.origin,n=e.pathname;window.location.replace(t+n)},2e3))},error:function(e){var t;r().showValidationMessage("<p>".concat(null!==(t=e.responseJSON.message)&&void 0!==t?t:e.statusText,"</p>")),r().hideLoading()}})},allowOutsideClick:function(){return!r().isLoading()}})},loadCartSummary:function(){var e=this;return I(j().m(function t(){return j().w(function(t){for(;;)switch(t.n){case 0:return window.addEventListener("qty-change",function(e){var t=document.querySelector("div.x-cart-summary");Amplify.listenQtyChangeOnCartSummary(e,t.dataset.updateStyle)}),window.addEventListener("qty-removed",function(e){return Amplify.loadCartSummary()}),t.n=1,$.ajax({beforeSend:function(){$("#cart-preloader").show(),$("#cart-skeleton").hide(),$("#cart-summary").hide()},url:e.cartUrl("/show"),method:"GET",dataType:"json",headers:{Accept:"application/json"},success:function(e){Amplify.cart=e,$("#cart-preloader").hide(),$("#cart-item-summary").empty(),e.data.products.length>0?($("#cart-skeleton").hide(),$("#cart-summary").show(),$(e.data.products).each(function(e,t){var n=Amplify.renderCartSummaryItemRow(t,e);$("#cart-item-summary").append(n)})):($("#cart-skeleton").show(),$("#cart-summary").hide()),$("#order-subtotal").text(e.data.sub_total)},error:function(e){var t;Amplify.cart=null,Amplify.alert(null!==(t=e.responseJSON.message)&&void 0!==t?t:e.statusText,"Cart")}}).done(function(){return Amplify.attachQuantityInputEvents()});case 1:return t.a(2)}},t)}))()},renderCartSummaryItemRow:function(e,t){var n,o,r,a,i=$("#cart-single-item-template").html(),s={"{serial}":t+1,"{cart_item_id}":e.id,"{code}":e.product_code,"{warehouse}":e.warehouse_name,"{warehouse_code}":e.product_warehouse_code,"{name}":e.product_name,"{description}":e.short_description,"{manufacturer}":e.manufacturer_name,"{quantity}":e.qty,"{unit_price}":e.price,"{subtotal}":e.subtotal,"{image}":e.product_image,"{uom}":e.uom,"{actions}":JSON.stringify(e),"{url}":e.url,"{min_qty}":null!==(n=null==e||null===(o=e.additional_info)||void 0===o?void 0:o.minimum_quantity)&&void 0!==n?n:1,"{qty_interval}":null!==(r=null==e||null===(a=e.additional_info)||void 0===a?void 0:a.quantity_interval)&&void 0!==r?r:1,"{note}":e.note,"{ncnr_msg}":e.ncnr_msg,"{ship_restriction}":e.ship_restriction,"{error}":e.error};return stringReplaceArray(Object.keys(s),Object.values(s),i)},loadCartDropdown:function(){var e=this;return I(j().m(function t(){return j().w(function(t){for(;;)switch(t.n){case 0:return t.n=1,$.ajax(e.cartUrl("/show"),{beforeSend:function(){return Amplify.renderEmptyCart("/vendor/widget/img/loading.gif",!0)},method:"GET",dataType:"json",headers:{Accept:"application/json"},success:function(e){var t=this;this.cart=e,$(".cart-dropdown").empty(),e.data.products.length>0?($("#cart-menu-subtotal").show(),$(".total_cart_items").text(e.data.item_count),$(".total_cart_items").removeClass("d-none"),e.data.products.forEach(function(e,n){$(".cart-dropdown").append('\n                        <div class="dropdown-product-item" id="cart_products_'.concat(n,'">\n                        <span class="dropdown-product-remove" onclick="Amplify.removeCartItem(').concat(e.id,')">\n                            <i class="icon-cross"></i>\n                        </span>\n                        <a class="dropdown-product-thumb"\n                           href="').concat(e.url,'">\n                            <img src="').concat(e.product_image,'"\n                                onerror="this.onerror=null; this.src=FALLBACK_IMG_SRC;"\n                                alt="Product">\n                        </a>\n                        <div class="dropdown-product-info">\n                            <a class="dropdown-product-title" href="').concat(e.url,'">\n                                ').concat(e.product_name,'\n                            </a>\n                            <span class="dropdown-product-details" style="font-size: 90%; font-weight: bold">').concat("STV"===t.clientCode()?"".concat(e.qty," @ ").concat(e.price,"/").concat(e.uom," = ").concat(e.subtotal):"".concat(e.qty," x ").concat(e.price," = ").concat(e.subtotal),"</span>\n                        </div>\n                    </div>"))}),$(".total_cart_amount").text(e.data.sub_total)):this.renderEmptyCart()}.bind(Amplify),error:function(t,n){e.cart=null,e.renderEmptyCart()}});case 1:return t.a(2)}},t)}))()},renderEmptyCart:function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"/assets/img/empty_cart.png",t=arguments.length>1&&void 0!==arguments[1]&&arguments[1];$(".cart-dropdown").empty(),$("#cart-menu-subtotal").hide(),$(".total_cart_items").text(0),$(".total_cart_amount").text("$0.00"),$(".total_cart_items").addClass("d-none");var n=t?"loading":"loaded";$(".cart-dropdown").append('\n        <div id="cart_items" class="'.concat(n,'">\n            <img src="').concat(e,'" class="img-fluid" alt="No items in cart"/>\n        </div>\n    '))},attachQuantityInputEvents:function(){document.querySelectorAll("input.item-quantity").forEach(function(e){e.addEventListener("input",function(){var e=this.value,t=(e=e.replace(/[^0-9.]/g,"")).split(".");t.length>2&&(e=t[0]+"."+t.slice(1).join("")),this.value=e,Amplify.handleQuantityChange("#"+this.id,"input")}),e.addEventListener("keydown",function(e){"ArrowUp"===e.key&&Amplify.handleQuantityChange("#"+e.target.id,"increment"),"ArrowDown"===e.key&&Amplify.handleQuantityChange("#"+e.target.id,"decrement"),["Backspace","Delete","ArrowLeft","ArrowRight","Tab"].includes(e.key)||e.key>="0"&&e.key<="9"||"."===e.key&&!this.value.includes(".")||e.preventDefault()})})},handleQuantityChange:function(e,t){var n=document.querySelector(e),o=n.dataset.productCode;if(["decrement","input","increment"].includes(t)||this.alert("Invalid Quantity Change action [".concat(t,"]."),"Cart"),!n)return this.alert("Target input element not found in ".concat(e),"Cart"),!1;n.max=this.maxCartItemQuantity();var r=n.dataset.minOrderQty;if(!this.isNumeric(r))return this.alert(this.productNotAvailableMessage(o),"Cart"),!1;if(!(r=parseFloat(r)))return this.alert("Target input element [".concat(e,'] doesn\'t have "data-min-order-qty" attribute set or is empty.'),"Cart"),!1;n.min=r;var a=n.dataset.qtyInterval;if(!this.isNumeric(a))return this.alert("You entered an invalid quantity. Product ".concat(o," requires a quantity between 1 and ").concat(this.maxCartItemQuantity(),"."),"Cart"),!1;if(!(a=parseFloat(a)))return this.alert("Target input element [".concat(e,'] doesn\'t have "data-qty-interval" attribute set or is empty.'),"Cart"),!1;n.step=a;var i=Number(n.value);if(i<=0||i>=this.maxCartItemQuantity())return this.alert("You entered an invalid quantity. Product ".concat(o," requires a quantity between ").concat(r," and ").concat(this.maxCartItemQuantity(),"."),"Cart"),n.value=r,!1;switch(t){case"decrement":var s=i-a;if(s<r)return this.alert("Product ".concat(o," requires a minimum order of ").concat(r," quantity. You entered ").concat(s,"."),"Cart"),!1;n.value=s;break;case"increment":var l=i+a;if(l>this.maxCartItemQuantity())return this.alert("Product ".concat(o," requires a maximum order quantity of ").concat(this.maxCartItemQuantity(),". You entered ").concat(l,"."),"Cart"),!1;n.value=l;break;default:if(i<r)return this.alert("Product ".concat(o," requires a minimum order quantity of ").concat(r,". You entered ").concat(i,"."),"Cart"),n.value=r,!1;if(i>this.maxCartItemQuantity())return this.alert("Product ".concat(o," requires a maximum order quantity of ").concat(this.maxCartItemQuantity(),". You entered ").concat(i,"."),"Cart"),n.value=r,!1}return n.value.length>0&&!1===this.verifyQuantityInterval(n.value,a)?(this.alert("Product ".concat(o," requires a order pack(s) of ").concat(a,". You entered ").concat(n.value,"."),"Cart"),n.value=this.toNearestQtyInterval(n.value,a),!1):(window.dispatchEvent(new CustomEvent("qty-change",{detail:{target:n,quantity:Number(n.value),id:n.id,changed:n.value!==n.dataset.quantity}})),!0)},verifyQuantityInterval:function(e,t){return!(t<=0)&&Math.abs(e%t)<1e-10},toNearestQtyInterval:function(e,t){return 0===t?e:Math.ceil(e/t)*t},listenQtyChangeOnCartSummary:function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:"bulk",n=e.detail,o=n.changed,r=n.id;if("line"===t){var a=r.replace("cart-item-","");o?($("#update-button-".concat(a)).show(),$("#discard-button-".concat(a)).show()):($("#update-button-".concat(a)).hide(),$("#discard-button-".concat(a)).hide())}var i=!1;document.querySelectorAll("#cart-summary input[data-quantity]").forEach(function(e){e.value!==e.dataset.quantity&&(i=!0)}),i?$("#checkout-btn").hide():$("#checkout-btn").show(),"bulk"===t&&(i?$("#quantity-update-actions").removeClass("d-none"):$("#quantity-update-actions").addClass("d-none"))},addToNewOrderList:function(e){var t,n=arguments.length>1&&void 0!==arguments[1]?arguments[1]:"product",o=arguments.length>2&&void 0!==arguments[2]?arguments[2]:"Order List";if(this.authenticated())return this.confirm("Create a new "+o.toLowerCase()+" & add item on it",o,"Save",{icon:void 0,input:"text",inputPlaceholder:"Enter name",inputAttributes:{required:!0,max:"255",maxlength:"255",autocorrect:"on"},customClass:{confirmButton:"btn btn-primary",cancelButton:"btn btn-outline-secondary"},preConfirm:(t=I(j().m(function t(){var a;return j().w(function(t){for(;;)switch(t.p=t.n){case 0:return t.p=0,(a={type:n,list_id:null,list_name:$("#swal2-input").val(),list_type:$("#swal2-select").val(),list_desc:$("#swal2-textarea").val(),title:o})[n+"_id"]=e,t.n=1,$.ajax({url:Amplify.orderListUrl(),type:"POST",data:JSON.stringify(a),contentType:"application/json; charset=UTF-8",headers:{Accept:"application/json"},success:function(e){return e},error:function(e){var t;r().showValidationMessage("<p>".concat(null!==(t=e.responseJSON.message)&&void 0!==t?t:e.statusText,"</p>")),r().hideLoading()}});case 1:return t.a(2,t.v);case 2:return t.p=2,t.v,t.a(2,!1)}},t,null,[[0,2]])})),function(){return t.apply(this,arguments)}),allowOutsideClick:function(){return!r().isLoading()},willOpen:function(){$.get("/api/list-types",function(e){if($.each(e.data,function(e,t){$("#swal2-select").append('<option value="'+e+'">'+t+"</option>")}),e.count>=2)$("#swal2-select").css({display:"flex"}).addClass("swal2-input");else{$("#swal2-select").css({display:"none"}).addClass("swal2-input");var t=Object.keys(e.data)[0];$("#swal2-select").val(t).trigger("change")}})},didOpen:function(){$("#swal2-textarea").css("display","flex").attr("placeholder","Enter description")}}).then(function(e){e.isConfirmed&&Amplify.notify("success",e.value.message,o)}).catch(function(e){return console.error(e)}),!0;this.alert("You need to be logged in to access this feature.",o)},addToExistingOrderList:function(e,t){var n,o=this,a=arguments.length>2&&void 0!==arguments[2]?arguments[2]:"product",i=arguments.length>3&&void 0!==arguments[3]?arguments[3]:"Order List";if(this.authenticated())return this.confirm("Add item to existing "+i.toLowerCase(),i,"Save",{icon:void 0,input:"text",inputPlaceholder:"Enter Quantity",customClass:{confirmButton:"btn btn-primary",cancelButton:"btn btn-outline-secondary"},inputValidator:function(e){return e?isNaN(e)?"The quantity is not a number":Number(e)<=0?"The quantity cannot to be less than 0":Number(e)>=o.maxCartItemQuantity()?"The quantity cannot to be greater than "+o.maxCartItemQuantity():void 0:"The quantity is required"},preConfirm:(n=I(j().m(function n(o){var s;return j().w(function(n){for(;;)switch(n.p=n.n){case 0:return n.p=0,(s={type:a,list_id:e,is_shopping_list:1,list_type:null,title:i})[a+"_id"]=t,"product"===a&&(s.product_qty=o),n.n=1,$.ajax({url:Amplify.orderListUrl(),type:"POST",data:JSON.stringify(s),contentType:"application/json; charset=UTF-8",headers:{Accept:"application/json"},success:function(e){return e},error:function(e){var t;r().showValidationMessage("<p>".concat(null!==(t=e.responseJSON.message)&&void 0!==t?t:e.statusText,"</p>")),r().hideLoading()}});case 1:return n.a(2,n.v);case 2:return n.p=2,n.v,n.a(2,!1)}},n,null,[[0,2]])})),function(e){return n.apply(this,arguments)}),allowOutsideClick:function(){return!r().isLoading()}}).then(function(e){e.isConfirmed&&Amplify.notify("success",e.value.message,"Shopping List")}).catch(function(e){return console.error(e)}),!0;this.alert("You need to be logged in to access this feature.",i)},manageOrderList:function(e,t){var n,o=arguments.length>2&&void 0!==arguments[2]?arguments[2]:null;this.confirm(null==o?"Create a new ":"Update existing "+t.toLowerCase(),t,"Save",{icon:void 0,input:"text",inputPlaceholder:"Enter name",inputAttributes:{required:!0,max:"255",maxlength:"255",autocorrect:"on"},customClass:{confirmButton:"btn btn-primary",cancelButton:"btn btn-outline-secondary"},preConfirm:(n=I(j().m(function n(){return j().w(function(n){for(;;)switch(n.p=n.n){case 0:return n.p=0,n.n=1,$.ajax(e.dataset.action,{type:"PATCH",data:JSON.stringify({name:$("#swal2-input").val(),list_type:$("#swal2-select").val(),description:$("#swal2-textarea").val(),title:t}),contentType:"application/json; charset=UTF-8",headers:{Accept:"application/json"},success:function(e){return e},error:function(e){var t,n;r().showValidationMessage("<p>".concat(null!==(t=null===(n=e.responseJSON)||void 0===n?void 0:n.message)&&void 0!==t?t:e.statusText,"</p>")),r().hideLoading()}});case 1:return n.a(2,n.v);case 2:return n.p=2,n.v,n.a(2,!1)}},n,null,[[0,2]])})),function(){return n.apply(this,arguments)}),allowOutsideClick:function(){return!r().isLoading()},willOpen:function(){$.get("/api/list-types",function(e){$.each(e.data,function(e,t){$("#swal2-select").append('<option value="'+e+'">'+t+"</option>")})}).then(function(){$.ajax(e.dataset.action,{type:"GET",contentType:"application/json; charset=UTF-8",headers:{Accept:"application/json"},success:function(e){var t=e.data;$("#swal2-textarea").val(t.description).trigger("change"),$("#swal2-input").val(t.name).trigger("change"),$("#swal2-select").val(t.list_type).trigger("change")}})})},didOpen:function(){$("#swal2-select").css({display:"flex"}).addClass("swal2-input"),$("#swal2-textarea").css("display","flex").attr("placeholder","Enter description")}}).then(function(e){e.isConfirmed&&Amplify.notify("success",e.value.message,t),setTimeout(function(){var e=window.location,t=e.origin,n=e.pathname;window.location.replace(t+n)},2e3)})},addSingleItemToCart:function(e,t){var n=this;return I(j().m(function o(){var r,a,i,s,l,c,d,u;return j().w(function(o){for(;;)switch(o.n){case 0:if(r=e.innerHTML,a=document.querySelector(t),e.disabled=!0,e.innerHTML='<i class="icon-loader spinner"></i> Processing...',!n.handleQuantityChange(t,"input")){o.n=1;break}return l=e.dataset.warehouse,c=JSON.parse(e.dataset.options),d={product_code:c.code,product_warehouse_code:l,qty:a.value},u=null!==(i=null===(s=document.querySelector('meta[name="category"]'))||void 0===s?void 0:s.content)&&void 0!==i?i:"static",o.n=1,$.ajax(n.cartUrl(),{beforeSend:function(){return Amplify.renderEmptyCart("/assets/img/preloader.gif",!0)},method:"POST",dataType:"json",data:{products:[d]},headers:{Accept:"application/json",ContentType:"application/json"},success:function(e){var t,n,o,r;Amplify.notify("success",e.message,"Cart"),window.dispatchEvent(new y({page:u,items:null!==(t=null==e||null===(n=e.data)||void 0===n?void 0:n.items)&&void 0!==t?t:[]})),Amplify.renderCartItemBadge(null!==(o=null===(r=e.data)||void 0===r?void 0:r.total)&&void 0!==o?o:"")},error:function(e){var t,n;Amplify.alert(null!==(t=null===(n=e.responseJSON)||void 0===n?void 0:n.message)&&void 0!==t?t:"Something went wrong. Please try again later.","Cart")}}).always(function(){e.innerHTML=r,e.disabled=!1});case 1:e.innerHTML=r,e.disabled=!1;case 2:return o.a(2)}},o)}))()},addMultipleItemToCart:function(e,t){var n=this,o=e.innerHTML;e.disabled=!0,e.innerHTML='<i class="icon-loader spinner"></i> Processing...',swal.fire({title:"Cart",icon:"info",backdrop:!0,showCancelButton:!1,text:"Adding Items to Cart...",confirmButtonText:"Okay",customClass:{confirmButton:"btn btn-outline-secondary"},willOpen:function(){return document.querySelector(".swal2-actions").style.justifyContent="center"},didOpen:function(){try{var e,o,a=null!==(e=null===(o=document.querySelector('meta[name="category"]'))||void 0===o?void 0:o.content)&&void 0!==e?e:"static";return $.ajax(n.cartUrl(),{beforeSend:function(){r().showLoading(),$('span[id^="product-"][id$="-error"]').each(function(e,t){var n=this.id.match(/product-(\d+)-error/);if(n){var o=n[1];$("input#product-code-".concat(o)).removeClass("is-invalid")}$(t).empty()})},method:"POST",data:$("form".concat(t)).serialize(),processData:!1,contentType:"application/x-www-form-urlencoded; charset=UTF-8",success:function(e){var t,n,o,r;e.success&&(Amplify.notify("success",e.message,"Cart"),window.dispatchEvent(new y({page:a,items:null!==(t=null==e||null===(n=e.data)||void 0===n?void 0:n.items)&&void 0!==t?t:[]})),Amplify.renderCartItemBadge(null!==(o=null==e||null===(r=e.data)||void 0===r?void 0:r.total)&&void 0!==o?o:""),setTimeout(function(){var e=window.location,t=e.origin,n=e.pathname;window.location.replace(t+n)},2e3))},error:function(e){var t,n=null!==(t=e.responseJSON)&&void 0!==t?t:{};400===e.status&&$.each(n.errors,function(e,t){var n=t.join("<br>");$("input#product-code-".concat(e)).addClass("is-invalid"),$("#product-".concat(e,"-error")).html(n)}),r().showValidationMessage("<p>".concat(n.message,"</p>")),r().hideLoading()}})}catch(e){return console.error(e),!1}},allowOutsideClick:function(){return!r().isLoading()}}).then(function(){e.innerHTML=o,e.disabled=!1}),e.innerHTML=o,e.disabled=!1},deleteConfirmation:function(e,t){var n,o=arguments.length>2&&void 0!==arguments[2]?arguments[2]:{},a=!(arguments.length>3&&void 0!==arguments[3])||arguments[3],i=arguments.length>4&&void 0!==arguments[4]?arguments[4]:"Are you sure to delete this item?",s=e.dataset.action;s?this.confirm(i,t,"Delete",{preConfirm:(n=I(j().m(function e(){return j().w(function(e){for(;;)switch(e.n){case 0:return e.n=1,$.ajax({url:s,type:"DELETE",dataType:"json",data:o,header:{"Content-Type":"application/json",Accept:"application/json"},success:function(e){return e},error:function(e){var t;r().showValidationMessage("<p>".concat(null!==(t=e.responseJSON.message)&&void 0!==t?t:e.statusText,"</p>")),r().hideLoading()}});case 1:return e.a(2,e.v)}},e)})),function(){return n.apply(this,arguments)}),allowOutsideClick:function(){return!window.swal.isLoading()}}).then(function(e){e.isConfirmed&&(Amplify.notify("success",e.value.message,t),a&&setTimeout(function(){var e=window.location,t=e.origin,n=e.pathname;window.location.replace(t+n)},2e3))}).catch(function(e){return console.error(e)}):this.alert("There is no action link in the target element.<br>Please add `data-action` attribute to the target element.")},filterFaqList:function(e){e.each(function(){var e=$(this),t=e.data("filter-list"),n=e.find("input[type=text]"),o=e.find("input[type=radio]"),r=$(t).find(".list-group-item");n.keyup(function(){var e=n.val();r.each(function(){0===$(this).text().toLowerCase().indexOf(e.toLowerCase())?$(this).show():$(this).hide()})}),o.on("click",function(e){var t=$(this).val();"all"!==t?(r.hide(),$("[data-filter-item="+t+"]").show()):r.show()})})},shopCategories:function(){var e=$(".widget-categories .has-children > a");function t(){e.parent().removeClass("expanded")}e.on("click",function(e){$(e.target).parent().is(".expanded")?t():(t(),$(this).parent().addClass("expanded"))})},initPhotoSwipeFromDOM:function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:".gallery-wrapper",t=function(e,t){var n=parseInt(e,10)||0,o=parseInt(t,10)||0;if(n<1||o<1)return{w:1600,h:1200};var r=Math.max(n,o);if(r<1600){var a=1600/r;n=Math.round(n*a),o=Math.round(o*a)}return{w:n,h:o}},n=function(e){var n=e.getAttribute("data-size");if(n&&-1!==n.indexOf("x")){var o=n.split("x");if(parseInt(o[0],10)>0&&parseInt(o[1],10)>0)return t(o[0],o[1])}var r=e.querySelector("img");return t(r&&r.naturalWidth,r&&r.naturalHeight)},o=function e(t,n){return t&&(n(t)?t:e(t.parentNode,n))};for(var r=function(e){(e=e||window.event).preventDefault?e.preventDefault():e.returnValue=!1;var t=e.target||e.srcElement,n=o(t,function(e){return t="gallery-item",(" "+e.className+" ").indexOf(" "+t+" ")>-1;var t});if(n){for(var r,i=n.closest(".gallery-wrapper"),s=$(n.closest(".gallery-wrapper")).find(".gallery-item:not(.isotope-hidden)").get(),l=s.length,c=0,d=0;d<l;d++)if(1===s[d].nodeType){if(s[d]===n){r=c;break}c++}return r>=0&&a(r,i),!1}},a=function(e,o,r,a){var i,s,l,c=document.querySelectorAll(".pswp")[0];if(l=function(e){for(var t,o,r,a=$(e).find(".gallery-item:not(.isotope-hidden)").get(),i=a.length,s=[],l=0;l<i;l++)if(1===(t=a[l]).nodeType){if(o=t.children[0],"video"===$(o).data("type"))r={html:$(o).data("video")};else{var c=n(o);r={src:o.getAttribute("href"),w:c.w,h:c.h}}t.children.length>1&&(r.title=$(t).find(".caption").html()),o.children.length>0&&(r.msrc=o.children[0].getAttribute("src")),r.el=t,s.push(r)}return s}(o),s={closeOnScroll:!1,history:!1,focus:!1,showHideOpacity:!0,galleryUID:o.getAttribute("data-pswp-uid")},a)if(s.galleryPIDs){for(var d=0;d<l.length;d++)if(l[d].pid==e){s.index=d;break}}else s.index=parseInt(e,10)-1;else s.index=parseInt(e,10);isNaN(s.index)||(r&&(s.showAnimationDuration=0),(i=new PhotoSwipe(c,PhotoSwipeUI_Default,l,s)).init(),i.listen("gettingData",function(e,n){if(!n.html&&!n._sizeLoading&&n.src){n._sizeLoading=!0;var o=new Image;o.onload=function(){var e=t(o.naturalWidth,o.naturalHeight);n.w===e.w&&n.h===e.h||(n.w=e.w,n.h=e.h,i.invalidateCurrItems(),i.updateSize(!0))},o.src=n.src}}),i.listen("afterChange",function(){i.updateSize(!0)}),i.listen("beforeChange",function(){var e=$(i.currItem.container);$(".pswp__video").removeClass("active"),e.find(".pswp__video").addClass("active"),$(".pswp__video").each(function(){$(this).hasClass("active")||$(this).attr("src",$(this).attr("src"))})}),i.listen("close",function(){$(".pswp__video").each(function(){$(this).attr("src",$(this).attr("src"))})}))},i=document.querySelectorAll(e),s=0,l=i.length;s<l;s++)i[s].setAttribute("data-pswp-uid",s+1),i[s].onclick=r;var c=function(){var e=window.location.hash.substring(1),t={};if(e.length<5)return t;for(var n=e.split("&"),o=0;o<n.length;o++)if(n[o]){var r=n[o].split("=");r.length<2||(t[r[0]]=r[1])}return t.gid&&(t.gid=parseInt(t.gid,10)),t}();c.pid&&c.gid&&a(c.pid,i[c.gid-1],!0,!0)},productSlider:function(e){var t=$(e),n=function(e){var t=$(e.target).closest(".product-gallery");if(t.length){var n=e.item.index;t.find("[data-gallery-index]").removeClass("active"),t.find('[data-gallery-index="'+n+'"]').addClass("active")}};t.data("owl.carousel")?t.on("translate.owl.carousel translated.owl.carousel",n):t.owlCarousel({items:1,loop:!1,dots:!1,autoRefresh:!1,URLhashListener:!1,onTranslate:n})},thumbnailCarousel:function(e){var t=$(e);t.length&&t.on("click","[data-gallery-index]",function(e){e.preventDefault();var n=parseInt(this.getAttribute("data-gallery-index"),10);if(!Number.isNaN(n)){var o=t.closest(".product-gallery").find(".product-carousel");t.find("[data-gallery-index]").removeClass("active"),$(this).addClass("active"),o.data("owl.carousel")&&o.trigger("to.owl.carousel",[n,200,!0])}})},submitCartAsQuote:function(e){var t,n,o;if("true"!==e.dataset.submitting){var r=e.dataset.url,a=null!==(t=e.dataset.backtoshop)&&void 0!==t?t:window.location.href,i=null!==(n=e.dataset.noteLabel)&&void 0!==n?n:"Comments",s=null!==(o=e.dataset.notePlaceholder)&&void 0!==o?o:"Enter comments";if(r){var l='\n            <div class="form-group text-left mb-0">\n                <label for="quote-order-notes" class="font-weight-bold">'.concat(i,'</label>\n                <textarea\n                    id="quote-order-notes"\n                    class="form-control"\n                    rows="3"\n                    placeholder="').concat(s,'"\n                ></textarea>\n            </div>\n        ');Amplify.confirm("","Quotation","Submit",{html:l,cancelButtonText:"Cancel",customClass:{confirmButton:"btn btn-primary",cancelButton:"btn btn-outline-secondary"},preConfirm:function(){var t,n,o=null!==(t=null===(n=document.getElementById("quote-order-notes"))||void 0===n?void 0:n.value)&&void 0!==t?t:"";return e.dataset.submitting="true",$.ajax({url:r,method:"POST",data:{order_notes:o}}).then(function(t){return e.dataset.submitting="false",null!=t&&t.success&&(window.dispatchEvent(new x({quote_number:t.order_number,items:t.items})),Amplify.confirm(t.message,"Quotation","Continue Shopping",{icon:"success",cancelButtonText:"Review Quotation",customClass:{actions:"w-100 d-flex justify-content-center",confirmButton:"btn btn-primary",cancelButton:"btn btn-secondary"}}).then(function(e){e.isConfirmed?window.location.href=a:e.isDismissed&&(window.location.href="cancel"===e.dismiss&&t.redirect_to||a)})),t}).catch(function(t){var n,o;e.dataset.submitting="false";var r=t.responseJSON||t.response;throw Amplify.alert(null!==(n=null!==(o=null==r?void 0:r.message)&&void 0!==o?o:null==r?void 0:r.statusText)&&void 0!==n?n:"Something went wrong","Quotation",{icon:"error"}),t})}})}}},exportOrders:function(e,t){var n;e.preventDefault(),e.stopPropagation();var o,a=parseInt(t.dataset.entries),i=parseInt(t.dataset.threshold),s=null!==(n=t.dataset.mime)&&void 0!==n?n:"Xlsx",l=a>i?"Exporting a large number of entries will take time.  The report will be sent to your registered email address.":1==a?"Exporting one entry. Do you want to proceed?":"Exporting ".concat(a," entries. Do you want to proceed?");this.confirm(l,"Orders","Export",{customClass:{confirmButton:"btn btn-primary",cancelButton:"btn btn-outline-secondary"},preConfirm:(o=I(j().m(function e(){var t;return j().w(function(e){for(;;)switch(e.p=e.n){case 0:return e.p=0,e.n=1,$.ajax(Amplify.orderExportUrl(),{type:"POST",data:JSON.stringify({entries:a,threshold:i,mime:s,filters:window.location.search.substring(1)}),contentType:"application/json; charset=UTF-8",headers:{Accept:"application/json"},success:function(e){return e},error:function(e){var t;r().showValidationMessage("<p>".concat(null!==(t=e.responseJSON.message)&&void 0!==t?t:e.statusText,"</p>")),r().hideLoading()}});case 1:return e.a(2,e.v);case 2:return e.p=2,t=e.v,console.error(t),e.a(2,!1)}},e,null,[[0,2]])})),function(){return o.apply(this,arguments)})}).then(function(e){if(e.isConfirmed){Amplify.notify(e.value.success?"success":"error",e.value.message,"Orders");var t=e.value.data;if(!t||!t.content)return;for(var n=atob(t.content),o=new Array(n.length),r=0;r<n.length;r++)o[r]=n.charCodeAt(r);var a=new Uint8Array(o),i=new Blob([a],{type:t.mime}),s=URL.createObjectURL(i),l=document.createElement("a");l.href=s,l.download=t.filename,document.body.appendChild(l),l.click(),l.remove(),URL.revokeObjectURL(s)}}).catch(function(e){console.error(e)})},compareProducts:function(e,t,n){var o,r=this,a=arguments.length>3&&void 0!==arguments[3]?arguments[3]:null,i=null!==(o=null==e?void 0:e.innerHTML)&&void 0!==o?o:"";$.ajax(this.config.url.productCompare,{beforeSend:function(){e.innerHTML='<i class="icon-loader spinner"></i> Processing...',"list"===n&&(document.querySelector(a).innerHTML="")},method:"POST",dataType:"json",data:{product:null!=t?t:null,action:n},success:function(e){"list"===n?document.querySelector(a).innerHTML=e.data.html:r.alert(e.message,"Product Comparison",{icon:!0===e.success?"success":"error",timer:2500,timerProgressBar:!0})},error:function(e){var t,n;r.alert(null!==(t=null===(n=e.responseJSON)||void 0===n?void 0:n.message)&&void 0!==t?t:"Something went wrong. Please try again later.","Product Comparison",{timer:2500,timerProgressBar:!0})}}).always(function(){e.innerHTML=i})},acceptCookie:function(){window.localStorage.setItem("consented","true"),$("#cookie-consent-modal").modal("hide")}}},94:()=>{},455:function(e){e.exports=function(){"use strict";function e(e,t,n){if("function"==typeof e?e===t:e.has(t))return arguments.length<3?t:n;throw new TypeError("Private element is not present on this object")}function t(e,t){if(t.has(e))throw new TypeError("Cannot initialize the same private elements twice on an object")}function n(t,n){return t.get(e(t,n))}function o(e,n,o){t(e,n),n.set(e,o)}function r(t,n,o){return t.set(e(t,n),o),o}const a=100,i={},s=()=>{i.previousActiveElement instanceof HTMLElement?(i.previousActiveElement.focus(),i.previousActiveElement=null):document.body&&document.body.focus()},l=e=>new Promise(t=>{if(!e)return t();const n=window.scrollX,o=window.scrollY;i.restoreFocusTimeout=setTimeout(()=>{s(),t()},a),window.scrollTo(n,o)}),c="swal2-",d=["container","shown","height-auto","iosfix","popup","modal","no-backdrop","no-transition","toast","toast-shown","show","hide","close","title","html-container","actions","confirm","deny","cancel","footer","icon","icon-content","image","input","file","range","select","radio","checkbox","label","textarea","inputerror","input-label","validation-message","progress-steps","active-progress-step","progress-step","progress-step-line","loader","loading","styled","top","top-start","top-end","top-left","top-right","center","center-start","center-end","center-left","center-right","bottom","bottom-start","bottom-end","bottom-left","bottom-right","grow-row","grow-column","grow-fullscreen","rtl","timer-progress-bar","timer-progress-bar-container","scrollbar-measure","icon-success","icon-warning","icon-info","icon-question","icon-error","draggable","dragging"].reduce((e,t)=>(e[t]=c+t,e),{}),u=["success","warning","info","question","error"].reduce((e,t)=>(e[t]=c+t,e),{}),p="SweetAlert2:",m=e=>e.charAt(0).toUpperCase()+e.slice(1),w=e=>{console.warn(`${p} ${"object"==typeof e?e.join(" "):e}`)},h=e=>{console.error(`${p} ${e}`)},f=[],g=e=>{f.includes(e)||(f.push(e),w(e))},v=(e,t=null)=>{g(`"${e}" is deprecated and will be removed in the next major release.${t?` Use "${t}" instead.`:""}`)},b=e=>"function"==typeof e?e():e,y=e=>e&&"function"==typeof e.toPromise,_=e=>y(e)?e.toPromise():Promise.resolve(e),x=e=>e&&Promise.resolve(e)===e,C=()=>navigator.userAgent.includes("Firefox"),k=()=>document.body.querySelector(`.${d.container}`),E=e=>{const t=k();return t?t.querySelector(e):null},A=e=>E(`.${e}`),$=()=>A(d.popup),T=()=>A(d.icon),S=()=>A(d["icon-content"]),O=()=>A(d.title),P=()=>A(d["html-container"]),N=()=>A(d.image),L=()=>A(d["progress-steps"]),q=()=>A(d["validation-message"]),j=()=>E(`.${d.actions} .${d.confirm}`),B=()=>E(`.${d.actions} .${d.cancel}`),M=()=>E(`.${d.actions} .${d.deny}`),I=()=>A(d["input-label"]),V=()=>E(`.${d.loader}`),H=()=>A(d.actions),D=()=>A(d.footer),z=()=>A(d["timer-progress-bar"]),R=()=>A(d.close),F='\n  a[href],\n  area[href],\n  input:not([disabled]),\n  select:not([disabled]),\n  textarea:not([disabled]),\n  button:not([disabled]),\n  iframe,\n  object,\n  embed,\n  [tabindex="0"],\n  [contenteditable],\n  audio[controls],\n  video[controls],\n  summary\n',Q=()=>{const e=$();if(!e)return[];const t=e.querySelectorAll('[tabindex]:not([tabindex="-1"]):not([tabindex="0"])'),n=Array.from(t).sort((e,t)=>{const n=parseInt(e.getAttribute("tabindex")||"0"),o=parseInt(t.getAttribute("tabindex")||"0");return n>o?1:n<o?-1:0}),o=e.querySelectorAll(F),r=Array.from(o).filter(e=>"-1"!==e.getAttribute("tabindex"));return[...new Set(n.concat(r))].filter(e=>ue(e))},U=()=>K(document.body,d.shown)&&!K(document.body,d["toast-shown"])&&!K(document.body,d["no-backdrop"]),W=()=>{const e=$();return!!e&&K(e,d.toast)},J=()=>{const e=$();return!!e&&e.hasAttribute("data-loading")},Y=(e,t)=>{if(e.textContent="",t){const n=(new DOMParser).parseFromString(t,"text/html"),o=n.querySelector("head");o&&Array.from(o.childNodes).forEach(t=>{e.appendChild(t)});const r=n.querySelector("body");r&&Array.from(r.childNodes).forEach(t=>{t instanceof HTMLVideoElement||t instanceof HTMLAudioElement?e.appendChild(t.cloneNode(!0)):e.appendChild(t)})}},K=(e,t)=>!!t&&t.split(/\s+/).every(t=>e.classList.contains(t)),G=(e,t)=>{Array.from(e.classList).forEach(n=>{Object.values(d).includes(n)||Object.values(u).includes(n)||Object.values(t.showClass||{}).includes(n)||e.classList.remove(n)})},X=(e,t,n)=>{if(G(e,t),!t.customClass)return;const o=t.customClass[n];o&&("string"==typeof o||o.forEach?ne(e,o):w(`Invalid type of customClass.${n}! Expected string or iterable object, got "${typeof o}"`))},Z=(e,t)=>{if(!t)return null;switch(t){case"select":case"textarea":case"file":return e.querySelector(`.${d.popup} > .${d[t]}`);case"checkbox":return e.querySelector(`.${d.popup} > .${d.checkbox} input`);case"radio":return e.querySelector(`.${d.popup} > .${d.radio} input:checked`)||e.querySelector(`.${d.popup} > .${d.radio} input:first-child`);case"range":return e.querySelector(`.${d.popup} > .${d.range} input`);default:return e.querySelector(`.${d.popup} > .${d.input}`)}},ee=e=>{if(e.focus(),"file"!==e.type){const t=e.value;e.value="",e.value=t}},te=(e,t,n)=>{if(!e||!t)return;const o="string"==typeof t?t.split(/\s+/).filter(Boolean):t;(Array.isArray(e)?e:[e]).forEach(e=>{o.forEach(t=>{n?e.classList.add(t):e.classList.remove(t)})})},ne=(e,t)=>{te(e,t,!0)},oe=(e,t)=>{te(e,t,!1)},re=(e,t)=>Array.from(e.children).find(e=>e instanceof HTMLElement&&K(e,t)),ae=(e,t,n)=>{n===`${parseInt(`${n}`)}`&&(n=parseInt(n)),n||0===n?e.style.setProperty(t,"number"==typeof n?`${n}px`:n):e.style.removeProperty(t)},ie=(e,t="flex")=>{e&&(e.style.display=t)},se=e=>{e&&(e.style.display="none")},le=(e,t="block")=>{e&&new MutationObserver(()=>{de(e,e.innerHTML,t)}).observe(e,{childList:!0,subtree:!0})},ce=(e,t,n,o)=>{const r=e.querySelector(t);r&&r.style.setProperty(n,o)},de=(e,t,n="flex")=>{t?ie(e,n):se(e)},ue=e=>Boolean(e&&(e.offsetWidth||e.offsetHeight||e.getClientRects().length)),pe=()=>!ue(j())&&!ue(M())&&!ue(B()),me=e=>Boolean(e.scrollHeight>e.clientHeight),we=(e,t)=>{let n=e;for(;n&&n!==t;){if(me(n))return!0;n=n.parentElement}return!1},he=e=>{const t=window.getComputedStyle(e),n=parseFloat(t.getPropertyValue("animation-duration")||"0"),o=parseFloat(t.getPropertyValue("transition-duration")||"0");return n>0||o>0},fe=(e,t=!1)=>{const n=z();n&&ue(n)&&(t&&(n.style.transition="none",n.style.width="100%"),setTimeout(()=>{n.style.transition=`width ${e/1e3}s linear`,n.style.width="0%"},10))},ge=()=>{const e=z();if(!e)return;const t=parseInt(window.getComputedStyle(e).width);e.style.removeProperty("transition"),e.style.width="100%";const n=t/parseInt(window.getComputedStyle(e).width)*100;e.style.width=`${n}%`},ve=()=>"undefined"==typeof window||"undefined"==typeof document,be=`\n <div aria-labelledby="${d.title}" aria-describedby="${d["html-container"]}" class="${d.popup}" tabindex="-1">\n   <button type="button" class="${d.close}"></button>\n   <ul class="${d["progress-steps"]}"></ul>\n   <div class="${d.icon}"></div>\n   <img class="${d.image}" />\n   <h2 class="${d.title}" id="${d.title}"></h2>\n   <div class="${d["html-container"]}" id="${d["html-container"]}"></div>\n   <input class="${d.input}" id="${d.input}" />\n   <input type="file" class="${d.file}" />\n   <div class="${d.range}">\n     <input type="range" />\n     <output></output>\n   </div>\n   <select class="${d.select}" id="${d.select}"></select>\n   <div class="${d.radio}"></div>\n   <label class="${d.checkbox}">\n     <input type="checkbox" id="${d.checkbox}" />\n     <span class="${d.label}"></span>\n   </label>\n   <textarea class="${d.textarea}" id="${d.textarea}"></textarea>\n   <div class="${d["validation-message"]}" id="${d["validation-message"]}"></div>\n   <div class="${d.actions}">\n     <div class="${d.loader}"></div>\n     <button type="button" class="${d.confirm}"></button>\n     <button type="button" class="${d.deny}"></button>\n     <button type="button" class="${d.cancel}"></button>\n   </div>\n   <div class="${d.footer}"></div>\n   <div class="${d["timer-progress-bar-container"]}">\n     <div class="${d["timer-progress-bar"]}"></div>\n   </div>\n </div>\n`.replace(/(^|\n)\s*/g,""),ye=()=>{const e=k();return!!e&&(e.remove(),oe([document.documentElement,document.body],[d["no-backdrop"],d["toast-shown"],d["has-column"]]),!0)},_e=()=>{i.currentInstance&&i.currentInstance.resetValidationMessage()},xe=()=>{const e=$();if(!e)return;const t=re(e,d.input),n=re(e,d.file),o=e.querySelector(`.${d.range} input`),r=e.querySelector(`.${d.range} output`),a=re(e,d.select),i=e.querySelector(`.${d.checkbox} input`),s=re(e,d.textarea);t&&(t.oninput=_e),n&&(n.onchange=_e),a&&(a.onchange=_e),i&&(i.onchange=_e),s&&(s.oninput=_e),o&&r&&(o.oninput=()=>{_e(),r.value=o.value},o.onchange=()=>{_e(),r.value=o.value})},Ce=e=>{if("string"==typeof e){const t=document.querySelector(e);if(!t)throw new Error(`Target element "${e}" not found`);return t}return e},ke=e=>{const t=$();t&&(t.setAttribute("role",e.toast?"alert":"dialog"),t.setAttribute("aria-live",e.toast?"polite":"assertive"),e.toast||t.setAttribute("aria-modal","true"))},Ee=e=>{"rtl"===window.getComputedStyle(e).direction&&(ne(k(),d.rtl),i.isRTL=!0)},Ae=e=>{const t=ye();if(ve())return void h("SweetAlert2 requires document to initialize");const n=document.createElement("div");n.className=d.container,t&&ne(n,d["no-transition"]),Y(n,be),n.dataset.swal2Theme=e.theme;const o=Ce(e.target||"body");o.appendChild(n),e.topLayer&&(n.setAttribute("popover",""),n.showPopover()),ke(e),Ee(o),xe()},$e=(e,t)=>{e instanceof HTMLElement?t.appendChild(e):"object"==typeof e?Te(e,t):e&&Y(t,e)},Te=(e,t)=>{"jquery"in e?Se(t,e):Y(t,e.toString())},Se=(e,t)=>{if(e.textContent="",0 in t)for(let n=0;n in t;n++)e.appendChild(t[n].cloneNode(!0));else e.appendChild(t.cloneNode(!0))},Oe=(e,t)=>{const n=H(),o=V();n&&o&&(t.showConfirmButton||t.showDenyButton||t.showCancelButton?ie(n):se(n),X(n,t,"actions"),Pe(n,o,t),Y(o,t.loaderHtml||""),X(o,t,"loader"))};function Pe(e,t,n){const o=j(),r=M(),a=B();o&&r&&a&&(qe(o,"confirm",n),qe(r,"deny",n),qe(a,"cancel",n),Ne(o,r,a,n),n.reverseButtons&&(n.toast?(e.insertBefore(a,o),e.insertBefore(r,o)):(e.insertBefore(a,t),e.insertBefore(r,t),e.insertBefore(o,t))))}function Ne(e,t,n,o){o.buttonsStyling?(ne([e,t,n],d.styled),[[e,"confirm",o.confirmButtonColor],[t,"deny",o.denyButtonColor],[n,"cancel",o.cancelButtonColor]].forEach(([e,t,n])=>{n&&e.style.setProperty(`--swal2-${t}-button-background-color`,n),Le(e)})):oe([e,t,n],d.styled)}function Le(e){const t=window.getComputedStyle(e);if(t.getPropertyValue("--swal2-action-button-focus-box-shadow"))return;const n=t.backgroundColor.replace(/rgba?\((\d+), (\d+), (\d+).*/,"rgba($1, $2, $3, 0.5)");e.style.setProperty("--swal2-action-button-focus-box-shadow",t.getPropertyValue("--swal2-outline").replace(/ rgba\(.*/,` ${n}`))}function qe(e,t,n){const o=m(t);de(e,n[`show${o}Button`],"inline-block"),Y(e,n[`${t}ButtonText`]||""),e.setAttribute("aria-label",n[`${t}ButtonAriaLabel`]||""),e.className=d[t],X(e,n,`${t}Button`)}const je=(e,t)=>{const n=R();n&&(Y(n,t.closeButtonHtml||""),X(n,t,"closeButton"),de(n,t.showCloseButton),n.setAttribute("aria-label",t.closeButtonAriaLabel||""))},Be=(e,t)=>{const n=k();n&&(Me(n,t.backdrop),Ie(n,t.position),Ve(n,t.grow),X(n,t,"container"))};function Me(e,t){"string"==typeof t?e.style.background=t:t||ne([document.documentElement,document.body],d["no-backdrop"])}function Ie(e,t){t&&(t in d?ne(e,d[t]):(w('The "position" parameter is not valid, defaulting to "center"'),ne(e,d.center)))}function Ve(e,t){t&&ne(e,d[`grow-${t}`])}var He={innerParams:new WeakMap,domCache:new WeakMap,focusedElement:new WeakMap};const De=["input","file","range","select","radio","checkbox","textarea"],ze=(e,t)=>{const n=$();if(!n)return;const o=He.innerParams.get(e),r=!o||t.input!==o.input;De.forEach(e=>{const o=re(n,d[e]);o&&(Qe(e,t.inputAttributes),o.className=d[e],r&&se(o))}),t.input&&(r&&Re(t),Ue(t))},Re=e=>{if(!e.input)return;if(!Ge[e.input])return void h(`Unexpected type of input! Expected ${Object.keys(Ge).join(" | ")}, got "${e.input}"`);const t=Ye(e.input);if(!t)return;const n=Ge[e.input](t,e);ie(t),e.inputAutoFocus&&setTimeout(()=>{ee(n)})},Fe=e=>{for(const{name:t}of Array.from(e.attributes))["id","type","value","style"].includes(t)||e.removeAttribute(t)},Qe=(e,t)=>{const n=$();if(!n)return;const o=Z(n,e);if(o){Fe(o);for(const e in t)o.setAttribute(e,t[e])}},Ue=e=>{if(!e.input)return;const t=Ye(e.input);t&&X(t,e,"input")},We=(e,t)=>{!e.placeholder&&t.inputPlaceholder&&(e.placeholder=t.inputPlaceholder)},Je=(e,t,n)=>{if(n.inputLabel){const o=document.createElement("label"),r=d["input-label"];o.setAttribute("for",e.id),o.className=r,"object"==typeof n.customClass&&ne(o,n.customClass.inputLabel),o.innerText=n.inputLabel,t.insertAdjacentElement("beforebegin",o)}},Ye=e=>{const t=$();if(t)return re(t,d[e]||d.input)},Ke=(e,t)=>{["string","number"].includes(typeof t)?e.value=`${t}`:x(t)||w(`Unexpected type of inputValue! Expected "string", "number" or "Promise", got "${typeof t}"`)},Ge={};Ge.text=Ge.email=Ge.password=Ge.number=Ge.tel=Ge.url=Ge.search=Ge.date=Ge["datetime-local"]=Ge.time=Ge.week=Ge.month=(e,t)=>{const n=e;return Ke(n,t.inputValue),Je(n,n,t),We(n,t),n.type=t.input,n},Ge.file=(e,t)=>{const n=e;return Je(n,n,t),We(n,t),n},Ge.range=(e,t)=>{const n=e,o=n.querySelector("input"),r=n.querySelector("output");return o&&(Ke(o,t.inputValue),o.type=t.input,Je(o,e,t)),r&&Ke(r,t.inputValue),e},Ge.select=(e,t)=>{const n=e;if(n.textContent="",t.inputPlaceholder){const e=document.createElement("option");Y(e,t.inputPlaceholder),e.value="",e.disabled=!0,e.selected=!0,n.appendChild(e)}return Je(n,n,t),n},Ge.radio=e=>(e.textContent="",e),Ge.checkbox=(e,t)=>{const n=$();if(!n)throw new Error("Popup not found");const o=Z(n,"checkbox");if(!o)throw new Error("Checkbox input not found");o.value="1",o.checked=Boolean(t.inputValue);const r=e.querySelector("span");if(r){const e=t.inputPlaceholder||t.inputLabel;e&&Y(r,e)}return o},Ge.textarea=(e,t)=>{const n=e;Ke(n,t.inputValue),We(n,t),Je(n,n,t);const o=e=>parseInt(window.getComputedStyle(e).marginLeft)+parseInt(window.getComputedStyle(e).marginRight);return setTimeout(()=>{if("MutationObserver"in window){const e=$();if(!e)return;const r=parseInt(window.getComputedStyle(e).width);new MutationObserver(()=>{if(!document.body.contains(n))return;const e=n.offsetWidth+o(n),a=$();a&&(e>r?a.style.width=`${e}px`:ae(a,"width",t.width))}).observe(n,{attributes:!0,attributeFilter:["style"]})}}),n};const Xe=(e,t)=>{const n=P();n&&(le(n),X(n,t,"htmlContainer"),t.html?($e(t.html,n),ie(n,"block")):t.text?(n.textContent=t.text,ie(n,"block")):se(n),ze(e,t))},Ze=(e,t)=>{const n=D();n&&(le(n),de(n,Boolean(t.footer),"block"),t.footer&&$e(t.footer,n),X(n,t,"footer"))},et=(e,t)=>{const n=He.innerParams.get(e),o=T();if(o){if(n&&t.icon===n.icon)return at(o,t),void tt(o,t);if(t.icon||t.iconHtml){if(t.icon&&-1===Object.keys(u).indexOf(t.icon))return h(`Unknown icon! Expected "success", "error", "warning", "info" or "question", got "${t.icon}"`),void se(o);ie(o),at(o,t),tt(o,t),ne(o,t.showClass&&t.showClass.icon),window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",nt)}else se(o)}},tt=(e,t)=>{for(const[n,o]of Object.entries(u))t.icon!==n&&oe(e,o);ne(e,t.icon&&u[t.icon]),it(e,t),nt(),X(e,t,"icon")},nt=()=>{const e=$();if(!e)return;const t=window.getComputedStyle(e).getPropertyValue("background-color");e.querySelectorAll("[class^=swal2-success-circular-line], .swal2-success-fix").forEach(e=>{e.style.backgroundColor=t})},ot=e=>`\n  ${e.animation?'<div class="swal2-success-circular-line-left"></div>':""}\n  <span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span>\n  <div class="swal2-success-ring"></div>\n  ${e.animation?'<div class="swal2-success-fix"></div>':""}\n  ${e.animation?'<div class="swal2-success-circular-line-right"></div>':""}\n`,rt='\n  <span class="swal2-x-mark">\n    <span class="swal2-x-mark-line-left"></span>\n    <span class="swal2-x-mark-line-right"></span>\n  </span>\n',at=(e,t)=>{if(!t.icon&&!t.iconHtml)return;let n=e.innerHTML,o="";t.iconHtml?o=st(t.iconHtml):"success"===t.icon?(o=ot(t),n=n.replace(/ style=".*?"/g,"")):"error"===t.icon?o=rt:t.icon&&(o=st({question:"?",warning:"!",info:"i"}[t.icon])),n.trim()!==o.trim()&&Y(e,o)},it=(e,t)=>{if(t.iconColor){e.style.color=t.iconColor,e.style.borderColor=t.iconColor;for(const n of[".swal2-success-line-tip",".swal2-success-line-long",".swal2-x-mark-line-left",".swal2-x-mark-line-right"])ce(e,n,"background-color",t.iconColor);ce(e,".swal2-success-ring","border-color",t.iconColor)}},st=e=>`<div class="${d["icon-content"]}">${e}</div>`,lt=(e,t)=>{const n=N();n&&(t.imageUrl?(ie(n,""),n.setAttribute("src",t.imageUrl),n.setAttribute("alt",t.imageAlt||""),ae(n,"width",t.imageWidth),ae(n,"height",t.imageHeight),n.className=d.image,X(n,t,"image")):se(n))};let ct=!1,dt=0,ut=0,pt=0,mt=0;const wt=e=>{e.addEventListener("mousedown",ft),document.body.addEventListener("mousemove",gt),e.addEventListener("mouseup",vt),e.addEventListener("touchstart",ft),document.body.addEventListener("touchmove",gt),e.addEventListener("touchend",vt)},ht=e=>{e.removeEventListener("mousedown",ft),document.body.removeEventListener("mousemove",gt),e.removeEventListener("mouseup",vt),e.removeEventListener("touchstart",ft),document.body.removeEventListener("touchmove",gt),e.removeEventListener("touchend",vt)},ft=e=>{const t=$();if(!t)return;const n=T();if(e.target===t||n&&n.contains(e.target)){ct=!0;const n=bt(e);dt=n.clientX,ut=n.clientY,pt=parseInt(t.style.insetInlineStart)||0,mt=parseInt(t.style.insetBlockStart)||0,ne(t,"swal2-dragging")}},gt=e=>{const t=$();if(t&&ct){let{clientX:n,clientY:o}=bt(e);const r=n-dt;t.style.insetInlineStart=`${pt+(i.isRTL?-r:r)}px`,t.style.insetBlockStart=`${mt+(o-ut)}px`}},vt=()=>{const e=$();ct=!1,oe(e,"swal2-dragging")},bt=e=>{const t=e.type.startsWith("touch")?e.touches[0]:e;return{clientX:t.clientX,clientY:t.clientY}},yt=(e,t)=>{const n=k(),o=$();if(n&&o){if(t.toast){ae(n,"width",t.width),o.style.width="100%";const e=V();e&&o.insertBefore(e,T())}else ae(o,"width",t.width);ae(o,"padding",t.padding),t.color&&(o.style.color=t.color),t.background&&(o.style.background=t.background),se(q()),_t(o,t),t.draggable&&!t.toast?(ne(o,d.draggable),wt(o)):(oe(o,d.draggable),ht(o))}},_t=(e,t)=>{const n=t.showClass||{};e.className=`${d.popup} ${ue(e)?n.popup:""}`,t.toast?(ne([document.documentElement,document.body],d["toast-shown"]),ne(e,d.toast)):ne(e,d.modal),X(e,t,"popup"),"string"==typeof t.customClass&&ne(e,t.customClass),t.icon&&ne(e,d[`icon-${t.icon}`])},xt=(e,t)=>{const n=L();if(!n)return;const{progressSteps:o,currentProgressStep:r}=t;o&&0!==o.length&&void 0!==r?(ie(n),n.textContent="",r>=o.length&&w("Invalid currentProgressStep parameter, it should be less than progressSteps.length (currentProgressStep like JS arrays starts from 0)"),o.forEach((e,a)=>{const i=Ct(e);if(n.appendChild(i),a===r&&ne(i,d["active-progress-step"]),a!==o.length-1){const e=kt(t);n.appendChild(e)}})):se(n)},Ct=e=>{const t=document.createElement("li");return ne(t,d["progress-step"]),Y(t,e),t},kt=e=>{const t=document.createElement("li");return ne(t,d["progress-step-line"]),e.progressStepsDistance&&ae(t,"width",e.progressStepsDistance),t},Et=(e,t)=>{const n=O();n&&(le(n),de(n,Boolean(t.title||t.titleText),"block"),t.title&&$e(t.title,n),t.titleText&&(n.innerText=t.titleText),X(n,t,"title"))},At=(e,t)=>{var n;yt(e,t),Be(e,t),xt(e,t),et(e,t),lt(e,t),Et(e,t),je(e,t),Xe(e,t),Oe(e,t),Ze(e,t);const o=$();"function"==typeof t.didRender&&o&&t.didRender(o),null===(n=i.eventEmitter)||void 0===n||n.emit("didRender",o)},$t=()=>ue($()),Tt=()=>{var e;return null===(e=j())||void 0===e?void 0:e.click()},St=()=>{var e;return null===(e=M())||void 0===e?void 0:e.click()},Ot=()=>{var e;return null===(e=B())||void 0===e?void 0:e.click()},Pt=Object.freeze({cancel:"cancel",backdrop:"backdrop",close:"close",esc:"esc",timer:"timer"}),Nt=e=>{if(e.keydownTarget&&e.keydownHandlerAdded&&e.keydownHandler){const t=e.keydownHandler;e.keydownTarget.removeEventListener("keydown",t,{capture:e.keydownListenerCapture}),e.keydownHandlerAdded=!1}},Lt=(e,t,n)=>{if(Nt(e),!t.toast){const o=e=>Mt(t,e,n);e.keydownHandler=o;const r=t.keydownListenerCapture?window:$();if(r){e.keydownTarget=r,e.keydownListenerCapture=t.keydownListenerCapture;const n=o;e.keydownTarget.addEventListener("keydown",n,{capture:e.keydownListenerCapture}),e.keydownHandlerAdded=!0}}},qt=(e,t)=>{var n;const o=Q();return o.length?(-2===(e+=t)&&(e=o.length-1),e===o.length?e=0:-1===e&&(e=o.length-1),o[e].focus(),!(C()&&o[e]instanceof HTMLIFrameElement)):(null===(n=$())||void 0===n||n.focus(),!0)},jt=["ArrowRight","ArrowDown"],Bt=["ArrowLeft","ArrowUp"],Mt=(e,t,n)=>{e&&(t.isComposing||229===t.keyCode||(e.stopKeydownPropagation&&t.stopPropagation(),"Enter"===t.key?It(t,e):"Tab"===t.key?Vt(t):[...jt,...Bt].includes(t.key)?Ht(t.key):"Escape"===t.key&&Dt(t,e,n)))},It=(e,t)=>{if(!b(t.allowEnterKey))return;const n=$();if(!n||!t.input)return;const o=Z(n,t.input);if(e.target&&o&&e.target instanceof HTMLElement&&e.target.outerHTML===o.outerHTML){if(["textarea","file"].includes(t.input))return;Tt(),e.preventDefault()}},Vt=e=>{const t=e.target,n=Q().findIndex(e=>e===t);let o=!0;o=e.shiftKey?qt(n,-1):qt(n,1),e.stopPropagation(),o&&e.preventDefault()},Ht=e=>{const t=H(),n=j(),o=M(),r=B();if(!(t&&n&&o&&r))return;const a=[n,o,r];if(document.activeElement instanceof HTMLElement&&!a.includes(document.activeElement))return;const i=jt.includes(e)?"nextElementSibling":"previousElementSibling";let s=document.activeElement;if(s){for(let e=0;e<t.children.length;e++){if(s=s[i],!s)return;if(s instanceof HTMLButtonElement&&ue(s))break}s instanceof HTMLButtonElement&&s.focus()}},Dt=(e,t,n)=>{e.preventDefault(),b(t.allowEscapeKey)&&n(Pt.esc)};var zt={swalPromiseResolve:new WeakMap,swalPromiseReject:new WeakMap};const Rt=()=>{const e=k();Array.from(document.body.children).forEach(t=>{t.contains(e)||(t.hasAttribute("aria-hidden")&&t.setAttribute("data-previous-aria-hidden",t.getAttribute("aria-hidden")||""),t.setAttribute("aria-hidden","true"))})},Ft=()=>{Array.from(document.body.children).forEach(e=>{e.hasAttribute("data-previous-aria-hidden")?(e.setAttribute("aria-hidden",e.getAttribute("data-previous-aria-hidden")||""),e.removeAttribute("data-previous-aria-hidden")):e.removeAttribute("aria-hidden")})},Qt="undefined"!=typeof window&&Boolean(window.GestureEvent),Ut=Qt&&/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream,Wt=()=>{if(Qt&&!K(document.body,d.iosfix)){const e=document.body.scrollTop;document.body.style.top=-1*e+"px",ne(document.body,d.iosfix),Jt()}},Jt=()=>{const e=k();if(!e)return;let t;e.ontouchstart=e=>{t=Yt(e)},e.ontouchmove=e=>{t&&(e.preventDefault(),e.stopPropagation())}},Yt=e=>{const t=e.target,n=k(),o=P();return!(!n||!o||Kt(e)||Gt(e)||t!==n&&(me(n)||!(t instanceof HTMLElement)||we(t,o)||"INPUT"===t.tagName||"TEXTAREA"===t.tagName||me(o)&&o.contains(t)))},Kt=e=>Boolean(e.touches&&e.touches.length&&"stylus"===e.touches[0].touchType),Gt=e=>e.touches&&e.touches.length>1,Xt=()=>{if(K(document.body,d.iosfix)){const e=parseInt(document.body.style.top,10);oe(document.body,d.iosfix),document.body.style.top="",document.body.scrollTop=-1*e}},Zt=()=>{const e=document.createElement("div");e.className=d["scrollbar-measure"],document.body.appendChild(e);const t=e.getBoundingClientRect().width-e.clientWidth;return document.body.removeChild(e),t};let en=null;const tn=e=>{null===en&&(document.body.scrollHeight>window.innerHeight||"scroll"===e)&&(en=parseInt(window.getComputedStyle(document.body).getPropertyValue("padding-right")),document.body.style.paddingRight=`${en+Zt()}px`)},nn=()=>{null!==en&&(document.body.style.paddingRight=`${en}px`,en=null)};function on(e,t,n,o){W()?mn(e,o):(l(n).then(()=>mn(e,o)),Nt(i)),Qt?(t.setAttribute("style","display:none !important"),t.removeAttribute("class"),t.innerHTML=""):t.remove(),U()&&(nn(),Xt(),Ft()),rn()}function rn(){oe([document.documentElement,document.body],[d.shown,d["height-auto"],d["no-backdrop"],d["toast-shown"]])}function an(e){e=dn(e);const t=zt.swalPromiseResolve.get(this),n=sn(this);this.isAwaitingPromise?e.isDismissed||(cn(this),t(e)):n&&t(e)}const sn=e=>{const t=$();if(!t)return!1;const n=He.innerParams.get(e);if(!n||K(t,n.hideClass.popup))return!1;oe(t,n.showClass.popup),ne(t,n.hideClass.popup);const o=k();return oe(o,n.showClass.backdrop),ne(o,n.hideClass.backdrop),un(e,t,n),!0};function ln(e){const t=zt.swalPromiseReject.get(this);cn(this),t&&t(e)}const cn=e=>{e.isAwaitingPromise&&(delete e.isAwaitingPromise,He.innerParams.get(e)||e._destroy())},dn=e=>void 0===e?{isConfirmed:!1,isDenied:!1,isDismissed:!0}:Object.assign({isConfirmed:!1,isDenied:!1,isDismissed:!1},e),un=(e,t,n)=>{var o;const r=k(),a=he(t);"function"==typeof n.willClose&&n.willClose(t),null===(o=i.eventEmitter)||void 0===o||o.emit("willClose",t),a&&r?pn(e,t,r,Boolean(n.returnFocus),n.didClose):r&&on(e,r,Boolean(n.returnFocus),n.didClose)},pn=(e,t,n,o,r)=>{i.swalCloseEventFinishedCallback=on.bind(null,e,n,o,r);const a=function(e){var n;e.target===t&&(null===(n=i.swalCloseEventFinishedCallback)||void 0===n||n.call(i),delete i.swalCloseEventFinishedCallback,t.removeEventListener("animationend",a),t.removeEventListener("transitionend",a))};t.addEventListener("animationend",a),t.addEventListener("transitionend",a)},mn=(e,t)=>{setTimeout(()=>{var n;"function"==typeof t&&t.bind(e.params)(),null===(n=i.eventEmitter)||void 0===n||n.emit("didClose"),e._destroy&&e._destroy()})},wn=e=>{let t=$();if(t||new gr,t=$(),!t)return;const n=V();W()?se(T()):hn(t,e),ie(n),t.setAttribute("data-loading","true"),t.setAttribute("aria-busy","true"),t.focus()},hn=(e,t)=>{const n=H(),o=V();n&&o&&(!t&&ue(j())&&(t=j()),ie(n),t&&(se(t),o.setAttribute("data-button-to-replace",t.className),n.insertBefore(o,t)),ne([e,n],d.loading))},fn=(e,t)=>{"select"===t.input||"radio"===t.input?_n(e,t):["text","email","number","tel","textarea"].some(e=>e===t.input)&&(y(t.inputValue)||x(t.inputValue))&&(wn(j()),xn(e,t))},gn=(e,t)=>{const n=e.getInput();if(!n)return null;switch(t.input){case"checkbox":return vn(n);case"radio":return bn(n);case"file":return yn(n);default:return t.inputAutoTrim?n.value.trim():n.value}},vn=e=>e.checked?1:0,bn=e=>e.checked?e.value:null,yn=e=>e.files&&e.files.length?null!==e.getAttribute("multiple")?e.files:e.files[0]:null,_n=(e,t)=>{const n=$();if(!n)return;const o=e=>{"select"===t.input?Cn(n,En(e),t):"radio"===t.input&&kn(n,En(e),t)};y(t.inputOptions)||x(t.inputOptions)?(wn(j()),_(t.inputOptions).then(t=>{e.hideLoading(),o(t)})):"object"==typeof t.inputOptions?o(t.inputOptions):h("Unexpected type of inputOptions! Expected object, Map or Promise, got "+typeof t.inputOptions)},xn=(e,t)=>{const n=e.getInput();n&&(se(n),_(t.inputValue).then(o=>{n.value="number"===t.input?`${parseFloat(o)||0}`:`${o}`,ie(n),n.focus(),e.hideLoading()}).catch(t=>{h(`Error in inputValue promise: ${t}`),n.value="",ie(n),n.focus(),e.hideLoading()}))};function Cn(e,t,n){const o=re(e,d.select);if(!o)return;const r=(e,t,o)=>{const r=document.createElement("option");r.value=o,Y(r,t),r.selected=An(o,n.inputValue),e.appendChild(r)};t.forEach(e=>{const t=e[0],n=e[1];if(Array.isArray(n)){const e=document.createElement("optgroup");e.label=t,e.disabled=!1,o.appendChild(e),n.forEach(t=>r(e,t[1],t[0]))}else r(o,n,t)}),o.focus()}function kn(e,t,n){const o=re(e,d.radio);if(!o)return;t.forEach(e=>{const t=e[0],r=e[1],a=document.createElement("input"),i=document.createElement("label");a.type="radio",a.name=d.radio,a.value=t,An(t,n.inputValue)&&(a.checked=!0);const s=document.createElement("span");Y(s,r),s.className=d.label,i.appendChild(a),i.appendChild(s),o.appendChild(i)});const r=o.querySelectorAll("input");r.length&&r[0].focus()}const En=e=>(e instanceof Map?Array.from(e):Object.entries(e)).map(([e,t])=>[e,"object"==typeof t?En(t):t]),An=(e,t)=>Boolean(t)&&null!=t&&t.toString()===e.toString(),$n=e=>{const t=He.innerParams.get(e);e.disableButtons(),t.input?On(e,"confirm"):jn(e,!0)},Tn=e=>{const t=He.innerParams.get(e);e.disableButtons(),t.returnInputValueOnDeny?On(e,"deny"):Nn(e,!1)},Sn=(e,t)=>{e.disableButtons(),t(Pt.cancel)},On=(e,t)=>{const n=He.innerParams.get(e);if(!n.input)return void h(`The "input" parameter is needed to be set when using returnInputValueOn${m(t)}`);const o=e.getInput(),r=gn(e,n);n.inputValidator?Pn(e,r,t):o&&!o.checkValidity()?(e.enableButtons(),e.showValidationMessage(n.validationMessage||o.validationMessage)):"deny"===t?Nn(e,r):jn(e,r)},Pn=(e,t,n)=>{const o=He.innerParams.get(e);e.disableInput(),Promise.resolve().then(()=>_(o.inputValidator(t,o.validationMessage))).then(o=>{e.enableButtons(),e.enableInput(),o?e.showValidationMessage(o):"deny"===n?Nn(e,t):jn(e,t)})},Nn=(e,t)=>{const n=He.innerParams.get(e);n.showLoaderOnDeny&&wn(M()),n.preDeny?(e.isAwaitingPromise=!0,Promise.resolve().then(()=>_(n.preDeny(t,n.validationMessage))).then(n=>{!1===n?(e.hideLoading(),cn(e)):e.close({isDenied:!0,value:void 0===n?t:n})}).catch(t=>qn(e,t))):e.close({isDenied:!0,value:t})},Ln=(e,t)=>{e.close({isConfirmed:!0,value:t})},qn=(e,t)=>{e.rejectPromise(t)},jn=(e,t)=>{const n=He.innerParams.get(e);n.showLoaderOnConfirm&&wn(),n.preConfirm?(e.resetValidationMessage(),e.isAwaitingPromise=!0,Promise.resolve().then(()=>_(n.preConfirm(t,n.validationMessage))).then(n=>{ue(q())||!1===n?(e.hideLoading(),cn(e)):Ln(e,void 0===n?t:n)}).catch(t=>qn(e,t))):Ln(e,t)};function Bn(){const e=He.innerParams.get(this);if(!e)return;const t=He.domCache.get(this);se(t.loader),W()?e.icon&&ie(T()):Mn(t),oe([t.popup,t.actions],d.loading),t.popup.removeAttribute("aria-busy"),t.popup.removeAttribute("data-loading"),this.enableButtons()}const Mn=e=>{const t=e.loader.getAttribute("data-button-to-replace"),n=t?e.popup.getElementsByClassName(t):[];n.length?ie(n[0],"inline-block"):pe()&&se(e.actions)};function In(){const e=He.innerParams.get(this),t=He.domCache.get(this);return t?Z(t.popup,e.input):null}function Vn(e,t,n){const o=He.domCache.get(e);t.forEach(e=>{o[e].disabled=n})}function Hn(e,t){const n=$();n&&e&&("radio"===e.type?n.querySelectorAll(`[name="${d.radio}"]`).forEach(e=>{e.disabled=t}):e.disabled=t)}function Dn(){Vn(this,["confirmButton","denyButton","cancelButton"],!1);const e=He.focusedElement.get(this);e instanceof HTMLElement&&document.activeElement===document.body&&e.focus(),He.focusedElement.delete(this)}function zn(){He.focusedElement.set(this,document.activeElement),Vn(this,["confirmButton","denyButton","cancelButton"],!0)}function Rn(){Hn(this.getInput(),!1)}function Fn(){Hn(this.getInput(),!0)}function Qn(e){const t=He.domCache.get(this),n=He.innerParams.get(this);Y(t.validationMessage,e),t.validationMessage.className=d["validation-message"],n.customClass&&n.customClass.validationMessage&&ne(t.validationMessage,n.customClass.validationMessage),ie(t.validationMessage);const o=this.getInput();o&&(o.setAttribute("aria-invalid","true"),o.setAttribute("aria-describedby",d["validation-message"]),ee(o),ne(o,d.inputerror))}function Un(){const e=He.domCache.get(this);e.validationMessage&&se(e.validationMessage);const t=this.getInput();t&&(t.removeAttribute("aria-invalid"),t.removeAttribute("aria-describedby"),oe(t,d.inputerror))}const Wn={title:"",titleText:"",text:"",html:"",footer:"",icon:void 0,iconColor:void 0,iconHtml:void 0,template:void 0,toast:!1,draggable:!1,animation:!0,theme:"light",showClass:{popup:"swal2-show",backdrop:"swal2-backdrop-show",icon:"swal2-icon-show"},hideClass:{popup:"swal2-hide",backdrop:"swal2-backdrop-hide",icon:"swal2-icon-hide"},customClass:{},target:"body",color:void 0,backdrop:!0,heightAuto:!0,allowOutsideClick:!0,allowEscapeKey:!0,allowEnterKey:!0,stopKeydownPropagation:!0,keydownListenerCapture:!1,showConfirmButton:!0,showDenyButton:!1,showCancelButton:!1,preConfirm:void 0,preDeny:void 0,confirmButtonText:"OK",confirmButtonAriaLabel:"",confirmButtonColor:void 0,denyButtonText:"No",denyButtonAriaLabel:"",denyButtonColor:void 0,cancelButtonText:"Cancel",cancelButtonAriaLabel:"",cancelButtonColor:void 0,buttonsStyling:!0,reverseButtons:!1,focusConfirm:!0,focusDeny:!1,focusCancel:!1,returnFocus:!0,showCloseButton:!1,closeButtonHtml:"&times;",closeButtonAriaLabel:"Close this dialog",loaderHtml:"",showLoaderOnConfirm:!1,showLoaderOnDeny:!1,imageUrl:void 0,imageWidth:void 0,imageHeight:void 0,imageAlt:"",timer:void 0,timerProgressBar:!1,width:void 0,padding:void 0,background:void 0,input:void 0,inputPlaceholder:"",inputLabel:"",inputValue:"",inputOptions:{},inputAutoFocus:!0,inputAutoTrim:!0,inputAttributes:{},inputValidator:void 0,returnInputValueOnDeny:!1,validationMessage:void 0,grow:!1,position:"center",progressSteps:[],currentProgressStep:void 0,progressStepsDistance:void 0,willOpen:void 0,didOpen:void 0,didRender:void 0,willClose:void 0,didClose:void 0,didDestroy:void 0,scrollbarPadding:!0,topLayer:!1},Jn=["allowEscapeKey","allowOutsideClick","background","buttonsStyling","cancelButtonAriaLabel","cancelButtonColor","cancelButtonText","closeButtonAriaLabel","closeButtonHtml","color","confirmButtonAriaLabel","confirmButtonColor","confirmButtonText","currentProgressStep","customClass","denyButtonAriaLabel","denyButtonColor","denyButtonText","didClose","didDestroy","draggable","footer","hideClass","html","icon","iconColor","iconHtml","imageAlt","imageHeight","imageUrl","imageWidth","preConfirm","preDeny","progressSteps","returnFocus","reverseButtons","showCancelButton","showCloseButton","showConfirmButton","showDenyButton","text","title","titleText","theme","willClose"],Yn={allowEnterKey:void 0},Kn=["allowOutsideClick","allowEnterKey","backdrop","draggable","focusConfirm","focusDeny","focusCancel","returnFocus","heightAuto","keydownListenerCapture"],Gn=e=>Object.prototype.hasOwnProperty.call(Wn,e),Xn=e=>-1!==Jn.indexOf(e),Zn=e=>Yn[e],eo=e=>{Gn(e)||w(`Unknown parameter "${e}"`)},to=e=>{Kn.includes(e)&&w(`The parameter "${e}" is incompatible with toasts`)},no=e=>{const t=Zn(e);t&&v(e,t)},oo=e=>{!1===e.backdrop&&e.allowOutsideClick&&w('"allowOutsideClick" parameter requires `backdrop` parameter to be set to `true`'),e.theme&&!["light","dark","auto","minimal","borderless","bootstrap-4","bootstrap-4-light","bootstrap-4-dark","bootstrap-5","bootstrap-5-light","bootstrap-5-dark","material-ui","material-ui-light","material-ui-dark","embed-iframe","bulma","bulma-light","bulma-dark"].includes(e.theme)&&w(`Invalid theme "${e.theme}"`);for(const t in e)eo(t),e.toast&&to(t),no(t)};function ro(e){const t=k(),n=$(),o=He.innerParams.get(this);if(!n||K(n,o.hideClass.popup))return void w("You're trying to update the closed or closing popup, that won't work. Use the update() method in preConfirm parameter or show a new popup.");const r=ao(e),a=Object.assign({},o,r);oo(a),t&&(t.dataset.swal2Theme=a.theme),At(this,a),He.innerParams.set(this,a),Object.defineProperties(this,{params:{value:Object.assign({},this.params,e),writable:!1,enumerable:!0}})}const ao=e=>{const t={};return Object.keys(e).forEach(n=>{if(Xn(n)){const o=e;t[n]=o[n]}else w(`Invalid parameter to update: ${n}`)}),t};function io(){var e;const t=He.domCache.get(this),n=He.innerParams.get(this);n?(t.popup&&i.swalCloseEventFinishedCallback&&(i.swalCloseEventFinishedCallback(),delete i.swalCloseEventFinishedCallback),"function"==typeof n.didDestroy&&n.didDestroy(),null===(e=i.eventEmitter)||void 0===e||e.emit("didDestroy"),so(this)):lo(this)}const so=e=>{lo(e),delete e.params,delete i.keydownHandler,delete i.keydownTarget,delete i.currentInstance},lo=e=>{e.isAwaitingPromise?(co(He,e),e.isAwaitingPromise=!0):(co(zt,e),co(He,e),delete e.isAwaitingPromise,delete e.disableButtons,delete e.enableButtons,delete e.getInput,delete e.disableInput,delete e.enableInput,delete e.hideLoading,delete e.disableLoading,delete e.showValidationMessage,delete e.resetValidationMessage,delete e.close,delete e.closePopup,delete e.closeModal,delete e.closeToast,delete e.rejectPromise,delete e.update,delete e._destroy)},co=(e,t)=>{for(const n in e)e[n].delete(t)};var uo=Object.freeze({__proto__:null,_destroy:io,close:an,closeModal:an,closePopup:an,closeToast:an,disableButtons:zn,disableInput:Fn,disableLoading:Bn,enableButtons:Dn,enableInput:Rn,getInput:In,handleAwaitingPromise:cn,hideLoading:Bn,rejectPromise:ln,resetValidationMessage:Un,showValidationMessage:Qn,update:ro});const po=(e,t,n)=>{e.toast?mo(e,t,n):(fo(t),go(t),vo(e,t,n))},mo=(e,t,n)=>{t.popup.onclick=()=>{e&&(wo(e)||e.timer||e.input)||n(Pt.close)}},wo=e=>Boolean(e.showConfirmButton||e.showDenyButton||e.showCancelButton||e.showCloseButton);let ho=!1;const fo=e=>{e.popup.onmousedown=()=>{e.container.onmouseup=function(t){e.container.onmouseup=()=>{},t.target===e.container&&(ho=!0)}}},go=e=>{e.container.onmousedown=t=>{t.target===e.container&&t.preventDefault(),e.popup.onmouseup=function(t){e.popup.onmouseup=()=>{},(t.target===e.popup||t.target instanceof HTMLElement&&e.popup.contains(t.target))&&(ho=!0)}}},vo=(e,t,n)=>{t.container.onclick=o=>{ho?ho=!1:o.target===t.container&&b(e.allowOutsideClick)&&n(Pt.backdrop)}},bo=e=>"object"==typeof e&&null!==e&&"jquery"in e,yo=e=>e instanceof Element||bo(e),_o=e=>{const t={};return"object"!=typeof e[0]||yo(e[0])?["title","html","icon"].forEach((n,o)=>{const r=e[o];"string"==typeof r||yo(r)?t[n]=r:void 0!==r&&h(`Unexpected type of ${n}! Expected "string" or "Element", got ${typeof r}`)}):Object.assign(t,e[0]),t};function xo(...e){return new this(...e)}function Co(e){class t extends(this){_main(t,n){return super._main(t,Object.assign({},e,n))}}return t}const ko=()=>i.timeout&&i.timeout.getTimerLeft(),Eo=()=>{if(i.timeout)return ge(),i.timeout.stop()},Ao=()=>{if(i.timeout){const e=i.timeout.start();return fe(e),e}},$o=()=>{const e=i.timeout;return e&&(e.running?Eo():Ao())},To=e=>{if(i.timeout){const t=i.timeout.increase(e);return fe(t,!0),t}},So=()=>Boolean(i.timeout&&i.timeout.isRunning());let Oo=!1;const Po={};function No(e="data-swal-template"){Po[e]=this,Oo||(document.body.addEventListener("click",Lo),Oo=!0)}const Lo=e=>{for(let t=e.target;t&&t!==document;t=t.parentNode)for(const e in Po){const n=t.getAttribute&&t.getAttribute(e);if(n)return void Po[e].fire({template:n})}};class qo{constructor(){this.events={}}_getHandlersByEventName(e){return void 0===this.events[e]&&(this.events[e]=[]),this.events[e]}on(e,t){const n=this._getHandlersByEventName(e);n.includes(t)||n.push(t)}once(e,t){const n=(...o)=>{this.removeListener(e,n),t.apply(this,o)};this.on(e,n)}emit(e,...t){this._getHandlersByEventName(e).forEach(e=>{try{e.apply(this,t)}catch(e){console.error(e)}})}removeListener(e,t){const n=this._getHandlersByEventName(e),o=n.indexOf(t);o>-1&&n.splice(o,1)}removeAllListeners(e){void 0!==this.events[e]&&(this.events[e].length=0)}reset(){this.events={}}}i.eventEmitter=new qo;const jo=(e,t)=>{i.eventEmitter&&i.eventEmitter.on(e,t)},Bo=(e,t)=>{i.eventEmitter&&i.eventEmitter.once(e,t)},Mo=(e,t)=>{i.eventEmitter&&(e?t?i.eventEmitter.removeListener(e,t):i.eventEmitter.removeAllListeners(e):i.eventEmitter.reset())};var Io=Object.freeze({__proto__:null,argsToParams:_o,bindClickHandler:No,clickCancel:Ot,clickConfirm:Tt,clickDeny:St,enableLoading:wn,fire:xo,getActions:H,getCancelButton:B,getCloseButton:R,getConfirmButton:j,getContainer:k,getDenyButton:M,getFocusableElements:Q,getFooter:D,getHtmlContainer:P,getIcon:T,getIconContent:S,getImage:N,getInputLabel:I,getLoader:V,getPopup:$,getProgressSteps:L,getTimerLeft:ko,getTimerProgressBar:z,getTitle:O,getValidationMessage:q,increaseTimer:To,isDeprecatedParameter:Zn,isLoading:J,isTimerRunning:So,isUpdatableParameter:Xn,isValidParameter:Gn,isVisible:$t,mixin:Co,off:Mo,on:jo,once:Bo,resumeTimer:Ao,showLoading:wn,stopTimer:Eo,toggleTimer:$o});class Vo{constructor(e,t){this.callback=e,this.remaining=t,this.running=!1,this.start()}start(){return this.running||(this.running=!0,this.started=new Date,this.id=setTimeout(this.callback,this.remaining)),this.remaining}stop(){return this.started&&this.running&&(this.running=!1,clearTimeout(this.id),this.remaining-=(new Date).getTime()-this.started.getTime()),this.remaining}increase(e){const t=this.running;return t&&this.stop(),this.remaining+=e,t&&this.start(),this.remaining}getTimerLeft(){return this.running&&(this.stop(),this.start()),this.remaining}isRunning(){return this.running}}const Ho=["swal-title","swal-html","swal-footer"],Do=e=>{const t="string"==typeof e.template?document.querySelector(e.template):e.template;if(!t)return{};const n=t.content;return Yo(n),Object.assign(zo(n),Ro(n),Fo(n),Qo(n),Uo(n),Wo(n),Jo(n,Ho))},zo=e=>{const t={};return Array.from(e.querySelectorAll("swal-param")).forEach(e=>{Ko(e,["name","value"]);const n=e.getAttribute("name"),o=e.getAttribute("value");n&&o&&(n in Wn&&"boolean"==typeof Wn[n]?t[n]="false"!==o:n in Wn&&"object"==typeof Wn[n]?t[n]=JSON.parse(o):t[n]=o)}),t},Ro=e=>{const t={};return Array.from(e.querySelectorAll("swal-function-param")).forEach(e=>{const n=e.getAttribute("name"),o=e.getAttribute("value");n&&o&&(t[n]=new Function(`return ${o}`)())}),t},Fo=e=>{const t={};return Array.from(e.querySelectorAll("swal-button")).forEach(e=>{Ko(e,["type","color","aria-label"]);const n=e.getAttribute("type");if(!n||!["confirm","cancel","deny"].includes(n))return;t[`${n}ButtonText`]=e.innerHTML,t[`show${m(n)}Button`]=!0;const o=e.getAttribute("color");null!==o&&(t[`${n}ButtonColor`]=o);const r=e.getAttribute("aria-label");null!==r&&(t[`${n}ButtonAriaLabel`]=r)}),t},Qo=e=>{const t={},n=e.querySelector("swal-image");if(n){Ko(n,["src","width","height","alt"]);const e=n.getAttribute("src");null!==e&&(t.imageUrl=e||void 0);const o=n.getAttribute("width");null!==o&&(t.imageWidth=o||void 0);const r=n.getAttribute("height");null!==r&&(t.imageHeight=r||void 0);const a=n.getAttribute("alt");null!==a&&(t.imageAlt=a||void 0)}return t},Uo=e=>{const t={},n=e.querySelector("swal-icon");return n&&(Ko(n,["type","color"]),n.hasAttribute("type")&&(t.icon=n.getAttribute("type")),n.hasAttribute("color")&&(t.iconColor=n.getAttribute("color")),t.iconHtml=n.innerHTML),t},Wo=e=>{const t={},n=e.querySelector("swal-input");n&&(Ko(n,["type","label","placeholder","value"]),t.input=n.getAttribute("type")||"text",n.hasAttribute("label")&&(t.inputLabel=n.getAttribute("label")),n.hasAttribute("placeholder")&&(t.inputPlaceholder=n.getAttribute("placeholder")),n.hasAttribute("value")&&(t.inputValue=n.getAttribute("value")));const o=Array.from(e.querySelectorAll("swal-input-option"));return o.length&&(t.inputOptions={},o.forEach(e=>{Ko(e,["value"]);const n=e.getAttribute("value");if(!n)return;const o=e.innerHTML;t.inputOptions[n]=o})),t},Jo=(e,t)=>{const n={};for(const o in t){const r=t[o],a=e.querySelector(r);a&&(Ko(a,[]),n[r.replace(/^swal-/,"")]=a.innerHTML.trim())}return n},Yo=e=>{const t=Ho.concat(["swal-param","swal-function-param","swal-button","swal-image","swal-icon","swal-input","swal-input-option"]);Array.from(e.children).forEach(e=>{const n=e.tagName.toLowerCase();t.includes(n)||w(`Unrecognized element <${n}>`)})},Ko=(e,t)=>{Array.from(e.attributes).forEach(n=>{-1===t.indexOf(n.name)&&w([`Unrecognized attribute "${n.name}" on <${e.tagName.toLowerCase()}>.`,t.length?`Allowed attributes are: ${t.join(", ")}`:"To set the value, use HTML within the element."])})},Go=10,Xo=e=>{var t,n;const o=k(),r=$();if(!o||!r)return;"function"==typeof e.willOpen&&e.willOpen(r),null===(t=i.eventEmitter)||void 0===t||t.emit("willOpen",r);const a=window.getComputedStyle(document.body).overflowY;if(nr(o,r,e),setTimeout(()=>{er(o,r)},Go),U()&&(tr(o,void 0!==e.scrollbarPadding&&e.scrollbarPadding,a),Rt()),Ut&&!1===e.backdrop&&r.scrollHeight>o.clientHeight&&(o.style.pointerEvents="auto"),W()||i.previousActiveElement||(i.previousActiveElement=document.activeElement),"function"==typeof e.didOpen){const t=e.didOpen;setTimeout(()=>t(r))}null===(n=i.eventEmitter)||void 0===n||n.emit("didOpen",r)},Zo=e=>{const t=$();if(!t||e.target!==t)return;const n=k();n&&(t.removeEventListener("animationend",Zo),t.removeEventListener("transitionend",Zo),n.style.overflowY="auto",oe(n,d["no-transition"]))},er=(e,t)=>{he(t)?(e.style.overflowY="hidden",t.addEventListener("animationend",Zo),t.addEventListener("transitionend",Zo)):e.style.overflowY="auto"},tr=(e,t,n)=>{Wt(),t&&"hidden"!==n&&tn(n),setTimeout(()=>{e.scrollTop=0})},nr=(e,t,n)=>{var o;null!==(o=n.showClass)&&void 0!==o&&o.backdrop&&ne(e,n.showClass.backdrop),n.animation?(t.style.setProperty("opacity","0","important"),ie(t,"grid"),setTimeout(()=>{var e;null!==(e=n.showClass)&&void 0!==e&&e.popup&&ne(t,n.showClass.popup),t.style.removeProperty("opacity")},Go)):ie(t,"grid"),ne([document.documentElement,document.body],d.shown),n.heightAuto&&n.backdrop&&!n.toast&&ne([document.documentElement,document.body],d["height-auto"])};var or={email:(e,t)=>/^[a-zA-Z0-9.+_'-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9-]+$/.test(e)?Promise.resolve():Promise.resolve(t||"Invalid email address"),url:(e,t)=>/^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-z]{2,63}\b([-a-zA-Z0-9@:%_+.~#?&/=]*)$/.test(e)?Promise.resolve():Promise.resolve(t||"Invalid URL")};function rr(e){e.inputValidator||("email"===e.input&&(e.inputValidator=or.email),"url"===e.input&&(e.inputValidator=or.url))}function ar(e){(!e.target||"string"==typeof e.target&&!document.querySelector(e.target)||"string"!=typeof e.target&&!e.target.appendChild)&&(w('Target parameter is not valid, defaulting to "body"'),e.target="body")}function ir(e){rr(e),e.showLoaderOnConfirm&&!e.preConfirm&&w("showLoaderOnConfirm is set to true, but preConfirm is not defined.\nshowLoaderOnConfirm should be used together with preConfirm, see usage example:\nhttps://sweetalert2.github.io/#ajax-request"),ar(e),"string"==typeof e.title&&(e.title=e.title.split("\n").join("<br />")),Ae(e)}let sr;var lr=new WeakMap;class cr{constructor(...e){if(o(this,lr,Promise.resolve({isConfirmed:!1,isDenied:!1,isDismissed:!0})),"undefined"==typeof window)return;sr=this;const t=Object.freeze(this.constructor.argsToParams(e));this.params=t,this.isAwaitingPromise=!1,r(lr,this,this._main(sr.params))}_main(e,t={}){if(oo(Object.assign({},t,e)),i.currentInstance){const e=zt.swalPromiseResolve.get(i.currentInstance),{isAwaitingPromise:t}=i.currentInstance;i.currentInstance._destroy(),t||e({isDismissed:!0}),U()&&Ft()}i.currentInstance=sr;const n=ur(e,t);ir(n),Object.freeze(n),i.timeout&&(i.timeout.stop(),delete i.timeout),clearTimeout(i.restoreFocusTimeout);const o=pr(sr);return At(sr,n),He.innerParams.set(sr,n),dr(sr,o,n)}then(e){return n(lr,this).then(e)}finally(e){return n(lr,this).finally(e)}}const dr=(e,t,n)=>new Promise((o,r)=>{const a=t=>{e.close({isDismissed:!0,dismiss:t,isConfirmed:!1,isDenied:!1})};zt.swalPromiseResolve.set(e,o),zt.swalPromiseReject.set(e,r),t.confirmButton.onclick=()=>{$n(e)},t.denyButton.onclick=()=>{Tn(e)},t.cancelButton.onclick=()=>{Sn(e,a)},t.closeButton.onclick=()=>{a(Pt.close)},po(n,t,a),Lt(i,n,a),fn(e,n),Xo(n),mr(i,n,a),wr(t,n),setTimeout(()=>{t.container.scrollTop=0})}),ur=(e,t)=>{const n=Do(e),o=Object.assign({},Wn,t,n,e);return o.showClass=Object.assign({},Wn.showClass,o.showClass),o.hideClass=Object.assign({},Wn.hideClass,o.hideClass),!1===o.animation&&(o.showClass={backdrop:"swal2-noanimation"},o.hideClass={}),o},pr=e=>{const t={popup:$(),container:k(),actions:H(),confirmButton:j(),denyButton:M(),cancelButton:B(),loader:V(),closeButton:R(),validationMessage:q(),progressSteps:L()};return He.domCache.set(e,t),t},mr=(e,t,n)=>{const o=z();se(o),t.timer&&(e.timeout=new Vo(()=>{n("timer"),delete e.timeout},t.timer),t.timerProgressBar&&o&&(ie(o),X(o,t,"timerProgressBar"),setTimeout(()=>{e.timeout&&e.timeout.running&&fe(t.timer)})))},wr=(e,t)=>{if(!t.toast)return b(t.allowEnterKey)?void(hr(e)||fr(e,t)||qt(-1,1)):(v("allowEnterKey","preConfirm: () => false"),void e.popup.focus())},hr=e=>{const t=Array.from(e.popup.querySelectorAll("[autofocus]"));for(const e of t)if(e instanceof HTMLElement&&ue(e))return e.focus(),!0;return!1},fr=(e,t)=>t.focusDeny&&ue(e.denyButton)?(e.denyButton.focus(),!0):t.focusCancel&&ue(e.cancelButton)?(e.cancelButton.focus(),!0):!(!t.focusConfirm||!ue(e.confirmButton)||(e.confirmButton.focus(),0));cr.prototype.disableButtons=zn,cr.prototype.enableButtons=Dn,cr.prototype.getInput=In,cr.prototype.disableInput=Fn,cr.prototype.enableInput=Rn,cr.prototype.hideLoading=Bn,cr.prototype.disableLoading=Bn,cr.prototype.showValidationMessage=Qn,cr.prototype.resetValidationMessage=Un,cr.prototype.close=an,cr.prototype.closePopup=an,cr.prototype.closeModal=an,cr.prototype.closeToast=an,cr.prototype.rejectPromise=ln,cr.prototype.update=ro,cr.prototype._destroy=io,Object.assign(cr,Io),Object.keys(uo).forEach(e=>{cr[e]=function(...t){if(sr&&sr[e])return sr[e](...t)}}),cr.DismissReason=Pt,cr.version="11.26.25";const gr=cr;return gr.default=gr,gr}(),void 0!==this&&this.Sweetalert2&&(this.swal=this.sweetAlert=this.Swal=this.SweetAlert=this.Sweetalert2),"undefined"!=typeof document&&function(e,t){var n=e.createElement("style");if(e.getElementsByTagName("head")[0].appendChild(n),n.styleSheet)n.styleSheet.disabled||(n.styleSheet.cssText=t);else try{n.innerHTML=t}catch(e){n.innerText=t}}(document,':root{--swal2-outline: 0 0 0 3px rgba(100, 150, 200, 0.5);--swal2-container-padding: 0.625em;--swal2-backdrop: rgba(0, 0, 0, 0.4);--swal2-backdrop-transition: background-color 0.15s;--swal2-width: 32em;--swal2-padding: 0 0 1.25em;--swal2-border: none;--swal2-border-radius: 0.3125rem;--swal2-background: white;--swal2-color: #545454;--swal2-show-animation: swal2-show 0.3s;--swal2-hide-animation: swal2-hide 0.15s forwards;--swal2-icon-zoom: 1;--swal2-title-padding: 0.8em 1em 0;--swal2-html-container-padding: 1em 1.6em 0.3em;--swal2-input-border: 1px solid #d9d9d9;--swal2-input-border-radius: 0.1875em;--swal2-input-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.06), 0 0 0 3px transparent;--swal2-input-background: transparent;--swal2-input-transition: border-color 0.2s, box-shadow 0.2s;--swal2-input-hover-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.06), 0 0 0 3px transparent;--swal2-input-focus-border: 1px solid #b4dbed;--swal2-input-focus-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.06), 0 0 0 3px rgba(100, 150, 200, 0.5);--swal2-progress-step-background: #add8e6;--swal2-validation-message-background: #f0f0f0;--swal2-validation-message-color: #666;--swal2-footer-border-color: #eee;--swal2-footer-background: transparent;--swal2-footer-color: inherit;--swal2-timer-progress-bar-background: rgba(0, 0, 0, 0.3);--swal2-close-button-position: initial;--swal2-close-button-inset: auto;--swal2-close-button-font-size: 2.5em;--swal2-close-button-color: #ccc;--swal2-close-button-transition: color 0.2s, box-shadow 0.2s;--swal2-close-button-outline: initial;--swal2-close-button-box-shadow: inset 0 0 0 3px transparent;--swal2-close-button-focus-box-shadow: inset var(--swal2-outline);--swal2-close-button-hover-transform: none;--swal2-actions-justify-content: center;--swal2-actions-width: auto;--swal2-actions-margin: 1.25em auto 0;--swal2-actions-padding: 0;--swal2-actions-border-radius: 0;--swal2-actions-background: transparent;--swal2-action-button-transition: background-color 0.2s, box-shadow 0.2s;--swal2-action-button-hover: black 10%;--swal2-action-button-active: black 10%;--swal2-confirm-button-box-shadow: none;--swal2-confirm-button-border-radius: 0.25em;--swal2-confirm-button-background-color: #7066e0;--swal2-confirm-button-color: #fff;--swal2-deny-button-box-shadow: none;--swal2-deny-button-border-radius: 0.25em;--swal2-deny-button-background-color: #dc3741;--swal2-deny-button-color: #fff;--swal2-cancel-button-box-shadow: none;--swal2-cancel-button-border-radius: 0.25em;--swal2-cancel-button-background-color: #6e7881;--swal2-cancel-button-color: #fff;--swal2-toast-show-animation: swal2-toast-show 0.5s;--swal2-toast-hide-animation: swal2-toast-hide 0.1s forwards;--swal2-toast-border: none;--swal2-toast-box-shadow: 0 0 1px hsl(0deg 0% 0% / 0.075), 0 1px 2px hsl(0deg 0% 0% / 0.075), 1px 2px 4px hsl(0deg 0% 0% / 0.075), 1px 3px 8px hsl(0deg 0% 0% / 0.075), 2px 4px 16px hsl(0deg 0% 0% / 0.075)}[data-swal2-theme=dark]{--swal2-dark-theme-black: #19191a;--swal2-dark-theme-white: #e1e1e1;--swal2-background: var(--swal2-dark-theme-black);--swal2-color: var(--swal2-dark-theme-white);--swal2-footer-border-color: #555;--swal2-input-background: color-mix(in srgb, var(--swal2-dark-theme-black), var(--swal2-dark-theme-white) 10%);--swal2-validation-message-background: color-mix( in srgb, var(--swal2-dark-theme-black), var(--swal2-dark-theme-white) 10% );--swal2-validation-message-color: var(--swal2-dark-theme-white);--swal2-timer-progress-bar-background: rgba(255, 255, 255, 0.7)}@media(prefers-color-scheme: dark){[data-swal2-theme=auto]{--swal2-dark-theme-black: #19191a;--swal2-dark-theme-white: #e1e1e1;--swal2-background: var(--swal2-dark-theme-black);--swal2-color: var(--swal2-dark-theme-white);--swal2-footer-border-color: #555;--swal2-input-background: color-mix(in srgb, var(--swal2-dark-theme-black), var(--swal2-dark-theme-white) 10%);--swal2-validation-message-background: color-mix( in srgb, var(--swal2-dark-theme-black), var(--swal2-dark-theme-white) 10% );--swal2-validation-message-color: var(--swal2-dark-theme-white);--swal2-timer-progress-bar-background: rgba(255, 255, 255, 0.7)}}body.swal2-shown:not(.swal2-no-backdrop,.swal2-toast-shown){overflow:hidden}body.swal2-height-auto{height:auto !important}body.swal2-no-backdrop .swal2-container{background-color:rgba(0,0,0,0) !important;pointer-events:none}body.swal2-no-backdrop .swal2-container .swal2-popup{pointer-events:auto}body.swal2-no-backdrop .swal2-container .swal2-modal{box-shadow:0 0 10px var(--swal2-backdrop)}body.swal2-toast-shown .swal2-container{box-sizing:border-box;width:360px;max-width:100%;background-color:rgba(0,0,0,0);pointer-events:none}body.swal2-toast-shown .swal2-container.swal2-top{inset:0 auto auto 50%;transform:translateX(-50%)}body.swal2-toast-shown .swal2-container.swal2-top-end,body.swal2-toast-shown .swal2-container.swal2-top-right{inset:0 0 auto auto}body.swal2-toast-shown .swal2-container.swal2-top-start,body.swal2-toast-shown .swal2-container.swal2-top-left{inset:0 auto auto 0}body.swal2-toast-shown .swal2-container.swal2-center-start,body.swal2-toast-shown .swal2-container.swal2-center-left{inset:50% auto auto 0;transform:translateY(-50%)}body.swal2-toast-shown .swal2-container.swal2-center{inset:50% auto auto 50%;transform:translate(-50%, -50%)}body.swal2-toast-shown .swal2-container.swal2-center-end,body.swal2-toast-shown .swal2-container.swal2-center-right{inset:50% 0 auto auto;transform:translateY(-50%)}body.swal2-toast-shown .swal2-container.swal2-bottom-start,body.swal2-toast-shown .swal2-container.swal2-bottom-left{inset:auto auto 0 0}body.swal2-toast-shown .swal2-container.swal2-bottom{inset:auto auto 0 50%;transform:translateX(-50%)}body.swal2-toast-shown .swal2-container.swal2-bottom-end,body.swal2-toast-shown .swal2-container.swal2-bottom-right{inset:auto 0 0 auto}@media print{body.swal2-shown:not(.swal2-no-backdrop,.swal2-toast-shown){overflow-y:scroll !important}body.swal2-shown:not(.swal2-no-backdrop,.swal2-toast-shown)>[aria-hidden=true]{display:none}body.swal2-shown:not(.swal2-no-backdrop,.swal2-toast-shown) .swal2-container{position:static !important}}div:where(.swal2-container){display:grid;position:fixed;z-index:1060;inset:0;box-sizing:border-box;grid-template-areas:"top-start     top            top-end" "center-start  center         center-end" "bottom-start  bottom-center  bottom-end";grid-template-rows:minmax(min-content, auto) minmax(min-content, auto) minmax(min-content, auto);height:100%;padding:var(--swal2-container-padding);overflow-x:hidden;transition:var(--swal2-backdrop-transition);-webkit-overflow-scrolling:touch}div:where(.swal2-container).swal2-backdrop-show,div:where(.swal2-container).swal2-noanimation{background:var(--swal2-backdrop)}div:where(.swal2-container).swal2-backdrop-hide{background:rgba(0,0,0,0) !important}div:where(.swal2-container).swal2-top-start,div:where(.swal2-container).swal2-center-start,div:where(.swal2-container).swal2-bottom-start{grid-template-columns:minmax(0, 1fr) auto auto}div:where(.swal2-container).swal2-top,div:where(.swal2-container).swal2-center,div:where(.swal2-container).swal2-bottom{grid-template-columns:auto minmax(0, 1fr) auto}div:where(.swal2-container).swal2-top-end,div:where(.swal2-container).swal2-center-end,div:where(.swal2-container).swal2-bottom-end{grid-template-columns:auto auto minmax(0, 1fr)}div:where(.swal2-container).swal2-top-start>.swal2-popup{align-self:start}div:where(.swal2-container).swal2-top>.swal2-popup{grid-column:2;place-self:start center}div:where(.swal2-container).swal2-top-end>.swal2-popup,div:where(.swal2-container).swal2-top-right>.swal2-popup{grid-column:3;place-self:start end}div:where(.swal2-container).swal2-center-start>.swal2-popup,div:where(.swal2-container).swal2-center-left>.swal2-popup{grid-row:2;align-self:center}div:where(.swal2-container).swal2-center>.swal2-popup{grid-column:2;grid-row:2;place-self:center center}div:where(.swal2-container).swal2-center-end>.swal2-popup,div:where(.swal2-container).swal2-center-right>.swal2-popup{grid-column:3;grid-row:2;place-self:center end}div:where(.swal2-container).swal2-bottom-start>.swal2-popup,div:where(.swal2-container).swal2-bottom-left>.swal2-popup{grid-column:1;grid-row:3;align-self:end}div:where(.swal2-container).swal2-bottom>.swal2-popup{grid-column:2;grid-row:3;place-self:end center}div:where(.swal2-container).swal2-bottom-end>.swal2-popup,div:where(.swal2-container).swal2-bottom-right>.swal2-popup{grid-column:3;grid-row:3;place-self:end end}div:where(.swal2-container).swal2-grow-row>.swal2-popup,div:where(.swal2-container).swal2-grow-fullscreen>.swal2-popup{grid-column:1/4;width:100%}div:where(.swal2-container).swal2-grow-column>.swal2-popup,div:where(.swal2-container).swal2-grow-fullscreen>.swal2-popup{grid-row:1/4;align-self:stretch}div:where(.swal2-container).swal2-no-transition{transition:none !important}div:where(.swal2-container)[popover]{width:auto;border:0}div:where(.swal2-container) div:where(.swal2-popup){display:none;position:relative;box-sizing:border-box;grid-template-columns:minmax(0, 100%);width:var(--swal2-width);max-width:100%;padding:var(--swal2-padding);border:var(--swal2-border);border-radius:var(--swal2-border-radius);background:var(--swal2-background);color:var(--swal2-color);font-family:inherit;font-size:1rem}div:where(.swal2-container) div:where(.swal2-popup):focus{outline:none}div:where(.swal2-container) div:where(.swal2-popup).swal2-loading{overflow-y:hidden}div:where(.swal2-container) div:where(.swal2-popup).swal2-draggable{cursor:grab}div:where(.swal2-container) div:where(.swal2-popup).swal2-draggable div:where(.swal2-icon){cursor:grab}div:where(.swal2-container) div:where(.swal2-popup).swal2-dragging{cursor:grabbing}div:where(.swal2-container) div:where(.swal2-popup).swal2-dragging div:where(.swal2-icon){cursor:grabbing}div:where(.swal2-container) h2:where(.swal2-title){position:relative;max-width:100%;margin:0;padding:var(--swal2-title-padding);color:inherit;font-size:1.875em;font-weight:600;text-align:center;text-transform:none;overflow-wrap:break-word;cursor:initial}div:where(.swal2-container) div:where(.swal2-actions){display:flex;z-index:1;box-sizing:border-box;flex-wrap:wrap;align-items:center;justify-content:var(--swal2-actions-justify-content);width:var(--swal2-actions-width);margin:var(--swal2-actions-margin);padding:var(--swal2-actions-padding);border-radius:var(--swal2-actions-border-radius);background:var(--swal2-actions-background)}div:where(.swal2-container) div:where(.swal2-loader){display:none;align-items:center;justify-content:center;width:2.2em;height:2.2em;margin:0 1.875em;animation:swal2-rotate-loading 1.5s linear 0s infinite normal;border-width:.25em;border-style:solid;border-radius:100%;border-color:#2778c4 rgba(0,0,0,0) #2778c4 rgba(0,0,0,0)}div:where(.swal2-container) button:where(.swal2-styled){margin:.3125em;padding:.625em 1.1em;transition:var(--swal2-action-button-transition);border:none;box-shadow:0 0 0 3px rgba(0,0,0,0);font-weight:500}div:where(.swal2-container) button:where(.swal2-styled):not([disabled]){cursor:pointer}div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm){border-radius:var(--swal2-confirm-button-border-radius);background:initial;background-color:var(--swal2-confirm-button-background-color);box-shadow:var(--swal2-confirm-button-box-shadow);color:var(--swal2-confirm-button-color);font-size:1em}div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm):hover{background-color:color-mix(in srgb, var(--swal2-confirm-button-background-color), var(--swal2-action-button-hover))}div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm):active{background-color:color-mix(in srgb, var(--swal2-confirm-button-background-color), var(--swal2-action-button-active))}div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-deny){border-radius:var(--swal2-deny-button-border-radius);background:initial;background-color:var(--swal2-deny-button-background-color);box-shadow:var(--swal2-deny-button-box-shadow);color:var(--swal2-deny-button-color);font-size:1em}div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-deny):hover{background-color:color-mix(in srgb, var(--swal2-deny-button-background-color), var(--swal2-action-button-hover))}div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-deny):active{background-color:color-mix(in srgb, var(--swal2-deny-button-background-color), var(--swal2-action-button-active))}div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-cancel){border-radius:var(--swal2-cancel-button-border-radius);background:initial;background-color:var(--swal2-cancel-button-background-color);box-shadow:var(--swal2-cancel-button-box-shadow);color:var(--swal2-cancel-button-color);font-size:1em}div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-cancel):hover{background-color:color-mix(in srgb, var(--swal2-cancel-button-background-color), var(--swal2-action-button-hover))}div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-cancel):active{background-color:color-mix(in srgb, var(--swal2-cancel-button-background-color), var(--swal2-action-button-active))}div:where(.swal2-container) button:where(.swal2-styled):focus-visible{outline:none;box-shadow:var(--swal2-action-button-focus-box-shadow)}div:where(.swal2-container) button:where(.swal2-styled)[disabled]:not(.swal2-loading){opacity:.4}div:where(.swal2-container) button:where(.swal2-styled)::-moz-focus-inner{border:0}div:where(.swal2-container) div:where(.swal2-footer){margin:1em 0 0;padding:1em 1em 0;border-top:1px solid var(--swal2-footer-border-color);background:var(--swal2-footer-background);color:var(--swal2-footer-color);font-size:1em;text-align:center;cursor:initial}div:where(.swal2-container) .swal2-timer-progress-bar-container{position:absolute;right:0;bottom:0;left:0;grid-column:auto !important;overflow:hidden;border-bottom-right-radius:var(--swal2-border-radius);border-bottom-left-radius:var(--swal2-border-radius)}div:where(.swal2-container) div:where(.swal2-timer-progress-bar){width:100%;height:.25em;background:var(--swal2-timer-progress-bar-background)}div:where(.swal2-container) img:where(.swal2-image){max-width:100%;margin:2em auto 1em;cursor:initial}div:where(.swal2-container) button:where(.swal2-close){position:var(--swal2-close-button-position);inset:var(--swal2-close-button-inset);z-index:2;align-items:center;justify-content:center;width:1.2em;height:1.2em;margin-top:0;margin-right:0;margin-bottom:-1.2em;padding:0;overflow:hidden;transition:var(--swal2-close-button-transition);border:none;border-radius:var(--swal2-border-radius);outline:var(--swal2-close-button-outline);background:rgba(0,0,0,0);color:var(--swal2-close-button-color);font-family:monospace;font-size:var(--swal2-close-button-font-size);cursor:pointer;justify-self:end}div:where(.swal2-container) button:where(.swal2-close):hover{transform:var(--swal2-close-button-hover-transform);background:rgba(0,0,0,0);color:#f27474}div:where(.swal2-container) button:where(.swal2-close):focus-visible{outline:none;box-shadow:var(--swal2-close-button-focus-box-shadow)}div:where(.swal2-container) button:where(.swal2-close)::-moz-focus-inner{border:0}div:where(.swal2-container) div:where(.swal2-html-container){z-index:1;justify-content:center;margin:0;padding:var(--swal2-html-container-padding);overflow:auto;color:inherit;font-size:1.125em;font-weight:normal;line-height:normal;text-align:center;overflow-wrap:break-word;word-break:break-word;cursor:initial}div:where(.swal2-container) input:where(.swal2-input),div:where(.swal2-container) input:where(.swal2-file),div:where(.swal2-container) textarea:where(.swal2-textarea),div:where(.swal2-container) select:where(.swal2-select),div:where(.swal2-container) div:where(.swal2-radio),div:where(.swal2-container) label:where(.swal2-checkbox){margin:1em 2em 3px}div:where(.swal2-container) input:where(.swal2-input),div:where(.swal2-container) input:where(.swal2-file),div:where(.swal2-container) textarea:where(.swal2-textarea){box-sizing:border-box;width:auto;transition:var(--swal2-input-transition);border:var(--swal2-input-border);border-radius:var(--swal2-input-border-radius);background:var(--swal2-input-background);box-shadow:var(--swal2-input-box-shadow);color:inherit;font-size:1.125em}div:where(.swal2-container) input:where(.swal2-input).swal2-inputerror,div:where(.swal2-container) input:where(.swal2-file).swal2-inputerror,div:where(.swal2-container) textarea:where(.swal2-textarea).swal2-inputerror{border-color:#f27474 !important;box-shadow:0 0 2px #f27474 !important}div:where(.swal2-container) input:where(.swal2-input):hover,div:where(.swal2-container) input:where(.swal2-file):hover,div:where(.swal2-container) textarea:where(.swal2-textarea):hover{box-shadow:var(--swal2-input-hover-box-shadow)}div:where(.swal2-container) input:where(.swal2-input):focus,div:where(.swal2-container) input:where(.swal2-file):focus,div:where(.swal2-container) textarea:where(.swal2-textarea):focus{border:var(--swal2-input-focus-border);outline:none;box-shadow:var(--swal2-input-focus-box-shadow)}div:where(.swal2-container) input:where(.swal2-input)::placeholder,div:where(.swal2-container) input:where(.swal2-file)::placeholder,div:where(.swal2-container) textarea:where(.swal2-textarea)::placeholder{color:#ccc}div:where(.swal2-container) .swal2-range{margin:1em 2em 3px;background:var(--swal2-background)}div:where(.swal2-container) .swal2-range input{width:80%}div:where(.swal2-container) .swal2-range output{width:20%;color:inherit;font-weight:600;text-align:center}div:where(.swal2-container) .swal2-range input,div:where(.swal2-container) .swal2-range output{height:2.625em;padding:0;font-size:1.125em;line-height:2.625em}div:where(.swal2-container) .swal2-input{height:2.625em;padding:0 .75em}div:where(.swal2-container) .swal2-file{width:75%;margin-right:auto;margin-left:auto;background:var(--swal2-input-background);font-size:1.125em}div:where(.swal2-container) .swal2-textarea{height:6.75em;padding:.75em}div:where(.swal2-container) .swal2-select{min-width:50%;max-width:100%;padding:.375em .625em;background:var(--swal2-input-background);color:inherit;font-size:1.125em}div:where(.swal2-container) .swal2-radio,div:where(.swal2-container) .swal2-checkbox{align-items:center;justify-content:center;background:var(--swal2-background);color:inherit}div:where(.swal2-container) .swal2-radio label,div:where(.swal2-container) .swal2-checkbox label{margin:0 .6em;font-size:1.125em}div:where(.swal2-container) .swal2-radio input,div:where(.swal2-container) .swal2-checkbox input{flex-shrink:0;margin:0 .4em}div:where(.swal2-container) label:where(.swal2-input-label){display:flex;justify-content:center;margin:1em auto 0}div:where(.swal2-container) div:where(.swal2-validation-message){align-items:center;justify-content:center;margin:1em 0 0;padding:.625em;overflow:hidden;background:var(--swal2-validation-message-background);color:var(--swal2-validation-message-color);font-size:1em;font-weight:300}div:where(.swal2-container) div:where(.swal2-validation-message)::before{content:"!";display:inline-block;width:1.5em;min-width:1.5em;height:1.5em;margin:0 .625em;border-radius:50%;background-color:#f27474;color:#fff;font-weight:600;line-height:1.5em;text-align:center}div:where(.swal2-container) .swal2-progress-steps{flex-wrap:wrap;align-items:center;max-width:100%;margin:1.25em auto;padding:0;background:rgba(0,0,0,0);font-weight:600}div:where(.swal2-container) .swal2-progress-steps li{display:inline-block;position:relative}div:where(.swal2-container) .swal2-progress-steps .swal2-progress-step{z-index:20;flex-shrink:0;width:2em;height:2em;border-radius:2em;background:#2778c4;color:#fff;line-height:2em;text-align:center}div:where(.swal2-container) .swal2-progress-steps .swal2-progress-step.swal2-active-progress-step{background:#2778c4}div:where(.swal2-container) .swal2-progress-steps .swal2-progress-step.swal2-active-progress-step~.swal2-progress-step{background:var(--swal2-progress-step-background);color:#fff}div:where(.swal2-container) .swal2-progress-steps .swal2-progress-step.swal2-active-progress-step~.swal2-progress-step-line{background:var(--swal2-progress-step-background)}div:where(.swal2-container) .swal2-progress-steps .swal2-progress-step-line{z-index:10;flex-shrink:0;width:2.5em;height:.4em;margin:0 -1px;background:#2778c4}div:where(.swal2-icon){position:relative;box-sizing:content-box;justify-content:center;width:5em;height:5em;margin:2.5em auto .6em;zoom:var(--swal2-icon-zoom);border:.25em solid rgba(0,0,0,0);border-radius:50%;border-color:#000;font-family:inherit;line-height:5em;cursor:default;user-select:none}div:where(.swal2-icon) .swal2-icon-content{display:flex;align-items:center;font-size:3.75em}div:where(.swal2-icon).swal2-error{border-color:#f27474;color:#f27474}div:where(.swal2-icon).swal2-error .swal2-x-mark{position:relative;flex-grow:1}div:where(.swal2-icon).swal2-error [class^=swal2-x-mark-line]{display:block;position:absolute;top:2.3125em;width:2.9375em;height:.3125em;border-radius:.125em;background-color:#f27474}div:where(.swal2-icon).swal2-error [class^=swal2-x-mark-line][class$=left]{left:1.0625em;transform:rotate(45deg)}div:where(.swal2-icon).swal2-error [class^=swal2-x-mark-line][class$=right]{right:1em;transform:rotate(-45deg)}div:where(.swal2-icon).swal2-error.swal2-icon-show{animation:swal2-animate-error-icon .5s}div:where(.swal2-icon).swal2-error.swal2-icon-show .swal2-x-mark{animation:swal2-animate-error-x-mark .5s}div:where(.swal2-icon).swal2-warning{border-color:#f8bb86;color:#f8bb86}div:where(.swal2-icon).swal2-warning.swal2-icon-show{animation:swal2-animate-error-icon .5s}div:where(.swal2-icon).swal2-warning.swal2-icon-show .swal2-icon-content{animation:swal2-animate-i-mark .5s}div:where(.swal2-icon).swal2-info{border-color:#3fc3ee;color:#3fc3ee}div:where(.swal2-icon).swal2-info.swal2-icon-show{animation:swal2-animate-error-icon .5s}div:where(.swal2-icon).swal2-info.swal2-icon-show .swal2-icon-content{animation:swal2-animate-i-mark .8s}div:where(.swal2-icon).swal2-question{border-color:#87adbd;color:#87adbd}div:where(.swal2-icon).swal2-question.swal2-icon-show{animation:swal2-animate-error-icon .5s}div:where(.swal2-icon).swal2-question.swal2-icon-show .swal2-icon-content{animation:swal2-animate-question-mark .8s}div:where(.swal2-icon).swal2-success{border-color:#a5dc86;color:#a5dc86}div:where(.swal2-icon).swal2-success [class^=swal2-success-circular-line]{position:absolute;width:3.75em;height:7.5em;border-radius:50%}div:where(.swal2-icon).swal2-success [class^=swal2-success-circular-line][class$=left]{top:-0.4375em;left:-2.0635em;transform:rotate(-45deg);transform-origin:3.75em 3.75em;border-radius:7.5em 0 0 7.5em}div:where(.swal2-icon).swal2-success [class^=swal2-success-circular-line][class$=right]{top:-0.6875em;left:1.875em;transform:rotate(-45deg);transform-origin:0 3.75em;border-radius:0 7.5em 7.5em 0}div:where(.swal2-icon).swal2-success .swal2-success-ring{position:absolute;z-index:2;top:-0.25em;left:-0.25em;box-sizing:content-box;width:100%;height:100%;border:.25em solid rgba(165,220,134,.3);border-radius:50%}div:where(.swal2-icon).swal2-success .swal2-success-fix{position:absolute;z-index:1;top:.5em;left:1.625em;width:.4375em;height:5.625em;transform:rotate(-45deg)}div:where(.swal2-icon).swal2-success [class^=swal2-success-line]{display:block;position:absolute;z-index:2;height:.3125em;border-radius:.125em;background-color:#a5dc86}div:where(.swal2-icon).swal2-success [class^=swal2-success-line][class$=tip]{top:2.875em;left:.8125em;width:1.5625em;transform:rotate(45deg)}div:where(.swal2-icon).swal2-success [class^=swal2-success-line][class$=long]{top:2.375em;right:.5em;width:2.9375em;transform:rotate(-45deg)}div:where(.swal2-icon).swal2-success.swal2-icon-show .swal2-success-line-tip{animation:swal2-animate-success-line-tip .75s}div:where(.swal2-icon).swal2-success.swal2-icon-show .swal2-success-line-long{animation:swal2-animate-success-line-long .75s}div:where(.swal2-icon).swal2-success.swal2-icon-show .swal2-success-circular-line-right{animation:swal2-rotate-success-circular-line 4.25s ease-in}[class^=swal2]{-webkit-tap-highlight-color:rgba(0,0,0,0)}.swal2-show{animation:var(--swal2-show-animation)}.swal2-hide{animation:var(--swal2-hide-animation)}.swal2-noanimation{transition:none}.swal2-scrollbar-measure{position:absolute;top:-9999px;width:50px;height:50px;overflow:scroll}.swal2-rtl .swal2-close{margin-right:initial;margin-left:0}.swal2-rtl .swal2-timer-progress-bar{right:0;left:auto}.swal2-toast{box-sizing:border-box;grid-column:1/4 !important;grid-row:1/4 !important;grid-template-columns:min-content auto min-content;padding:1em;overflow-y:hidden;border:var(--swal2-toast-border);background:var(--swal2-background);box-shadow:var(--swal2-toast-box-shadow);pointer-events:auto}.swal2-toast>*{grid-column:2}.swal2-toast h2:where(.swal2-title){margin:.5em 1em;padding:0;font-size:1em;text-align:initial}.swal2-toast .swal2-loading{justify-content:center}.swal2-toast input:where(.swal2-input){height:2em;margin:.5em;font-size:1em}.swal2-toast .swal2-validation-message{font-size:1em}.swal2-toast div:where(.swal2-footer){margin:.5em 0 0;padding:.5em 0 0;font-size:.8em}.swal2-toast button:where(.swal2-close){grid-column:3/3;grid-row:1/99;align-self:center;width:.8em;height:.8em;margin:0;font-size:2em}.swal2-toast div:where(.swal2-html-container){margin:.5em 1em;padding:0;overflow:initial;font-size:1em;text-align:initial}.swal2-toast div:where(.swal2-html-container):empty{padding:0}.swal2-toast .swal2-loader{grid-column:1;grid-row:1/99;align-self:center;width:2em;height:2em;margin:.25em}.swal2-toast .swal2-icon{grid-column:1;grid-row:1/99;align-self:center;width:2em;min-width:2em;height:2em;margin:0 .5em 0 0}.swal2-toast .swal2-icon .swal2-icon-content{display:flex;align-items:center;font-size:1.8em;font-weight:bold}.swal2-toast .swal2-icon.swal2-success .swal2-success-ring{width:2em;height:2em}.swal2-toast .swal2-icon.swal2-error [class^=swal2-x-mark-line]{top:.875em;width:1.375em}.swal2-toast .swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=left]{left:.3125em}.swal2-toast .swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=right]{right:.3125em}.swal2-toast div:where(.swal2-actions){justify-content:flex-start;height:auto;margin:0;margin-top:.5em;padding:0 .5em}.swal2-toast button:where(.swal2-styled){margin:.25em .5em;padding:.4em .6em;font-size:1em}.swal2-toast .swal2-success{border-color:#a5dc86}.swal2-toast .swal2-success [class^=swal2-success-circular-line]{position:absolute;width:1.6em;height:3em;border-radius:50%}.swal2-toast .swal2-success [class^=swal2-success-circular-line][class$=left]{top:-0.8em;left:-0.5em;transform:rotate(-45deg);transform-origin:2em 2em;border-radius:4em 0 0 4em}.swal2-toast .swal2-success [class^=swal2-success-circular-line][class$=right]{top:-0.25em;left:.9375em;transform-origin:0 1.5em;border-radius:0 4em 4em 0}.swal2-toast .swal2-success .swal2-success-ring{width:2em;height:2em}.swal2-toast .swal2-success .swal2-success-fix{top:0;left:.4375em;width:.4375em;height:2.6875em}.swal2-toast .swal2-success [class^=swal2-success-line]{height:.3125em}.swal2-toast .swal2-success [class^=swal2-success-line][class$=tip]{top:1.125em;left:.1875em;width:.75em}.swal2-toast .swal2-success [class^=swal2-success-line][class$=long]{top:.9375em;right:.1875em;width:1.375em}.swal2-toast .swal2-success.swal2-icon-show .swal2-success-line-tip{animation:swal2-toast-animate-success-line-tip .75s}.swal2-toast .swal2-success.swal2-icon-show .swal2-success-line-long{animation:swal2-toast-animate-success-line-long .75s}.swal2-toast.swal2-show{animation:var(--swal2-toast-show-animation)}.swal2-toast.swal2-hide{animation:var(--swal2-toast-hide-animation)}@keyframes swal2-show{0%{transform:translate3d(0, -50px, 0) scale(0.9);opacity:0}100%{transform:translate3d(0, 0, 0) scale(1);opacity:1}}@keyframes swal2-hide{0%{transform:translate3d(0, 0, 0) scale(1);opacity:1}100%{transform:translate3d(0, -50px, 0) scale(0.9);opacity:0}}@keyframes swal2-animate-success-line-tip{0%{top:1.1875em;left:.0625em;width:0}54%{top:1.0625em;left:.125em;width:0}70%{top:2.1875em;left:-0.375em;width:3.125em}84%{top:3em;left:1.3125em;width:1.0625em}100%{top:2.8125em;left:.8125em;width:1.5625em}}@keyframes swal2-animate-success-line-long{0%{top:3.375em;right:2.875em;width:0}65%{top:3.375em;right:2.875em;width:0}84%{top:2.1875em;right:0;width:3.4375em}100%{top:2.375em;right:.5em;width:2.9375em}}@keyframes swal2-rotate-success-circular-line{0%{transform:rotate(-45deg)}5%{transform:rotate(-45deg)}12%{transform:rotate(-405deg)}100%{transform:rotate(-405deg)}}@keyframes swal2-animate-error-x-mark{0%{margin-top:1.625em;transform:scale(0.4);opacity:0}50%{margin-top:1.625em;transform:scale(0.4);opacity:0}80%{margin-top:-0.375em;transform:scale(1.15)}100%{margin-top:0;transform:scale(1);opacity:1}}@keyframes swal2-animate-error-icon{0%{transform:rotateX(100deg);opacity:0}100%{transform:rotateX(0deg);opacity:1}}@keyframes swal2-rotate-loading{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}@keyframes swal2-animate-question-mark{0%{transform:rotateY(-360deg)}100%{transform:rotateY(0)}}@keyframes swal2-animate-i-mark{0%{transform:rotateZ(45deg);opacity:0}25%{transform:rotateZ(-25deg);opacity:.4}50%{transform:rotateZ(15deg);opacity:.8}75%{transform:rotateZ(-5deg);opacity:1}100%{transform:rotateX(0);opacity:1}}@keyframes swal2-toast-show{0%{transform:translateY(-0.625em) rotateZ(2deg)}33%{transform:translateY(0) rotateZ(-2deg)}66%{transform:translateY(0.3125em) rotateZ(2deg)}100%{transform:translateY(0) rotateZ(0deg)}}@keyframes swal2-toast-hide{100%{transform:rotateZ(1deg);opacity:0}}@keyframes swal2-toast-animate-success-line-tip{0%{top:.5625em;left:.0625em;width:0}54%{top:.125em;left:.125em;width:0}70%{top:.625em;left:-0.25em;width:1.625em}84%{top:1.0625em;left:.75em;width:.5em}100%{top:1.125em;left:.1875em;width:.75em}}@keyframes swal2-toast-animate-success-line-long{0%{top:1.625em;right:1.375em;width:0}65%{top:1.25em;right:.9375em;width:0}84%{top:.9375em;right:0;width:1.125em}100%{top:.9375em;right:.1875em;width:1.375em}}')}},n={};function o(e){var r=n[e];if(void 0!==r)return r.exports;var a=n[e]={exports:{}};return t[e].call(a.exports,a,a.exports,o),a.exports}o.m=t,e=[],o.O=(t,n,r,a)=>{if(!n){var i=1/0;for(d=0;d<e.length;d++){for(var[n,r,a]=e[d],s=!0,l=0;l<n.length;l++)(!1&a||i>=a)&&Object.keys(o.O).every(e=>o.O[e](n[l]))?n.splice(l--,1):(s=!1,a<i&&(i=a));if(s){e.splice(d--,1);var c=r();void 0!==c&&(t=c)}}return t}a=a||0;for(var d=e.length;d>0&&e[d-1][2]>a;d--)e[d]=e[d-1];e[d]=[n,r,a]},o.n=e=>{var t=e&&e.__esModule?()=>e.default:()=>e;return o.d(t,{a:t}),t},o.d=(e,t)=>{for(var n in t)o.o(t,n)&&!o.o(e,n)&&Object.defineProperty(e,n,{enumerable:!0,get:t[n]})},o.o=(e,t)=>Object.prototype.hasOwnProperty.call(e,t),(()=>{var e={536:0,192:0};o.O.j=t=>0===e[t];var t=(t,n)=>{var r,a,[i,s,l]=n,c=0;if(i.some(t=>0!==e[t])){for(r in s)o.o(s,r)&&(o.m[r]=s[r]);if(l)var d=l(o)}for(t&&t(n);c<i.length;c++)a=i[c],o.o(e,a)&&e[a]&&e[a][0](),e[a]=0;return o.O(d)},n=self.webpackChunkwidget=self.webpackChunkwidget||[];n.forEach(t.bind(null,0)),n.push=t.bind(null,n.push.bind(n))})(),o.O(void 0,[192],()=>o(894));var r=o.O(void 0,[192],()=>o(94));r=o.O(r)})();
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./resources/js/events.js":
+/*!********************************!*\
+  !*** ./resources/js/events.js ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   AddPaymentInfoEvent: () => (/* binding */ AddPaymentInfoEvent),
+/* harmony export */   AddShippingInfoEvent: () => (/* binding */ AddShippingInfoEvent),
+/* harmony export */   AddToCartEvent: () => (/* binding */ AddToCartEvent),
+/* harmony export */   AddToWishlistEvent: () => (/* binding */ AddToWishlistEvent),
+/* harmony export */   AddressValidatedEvent: () => (/* binding */ AddressValidatedEvent),
+/* harmony export */   BeginCheckoutEvent: () => (/* binding */ BeginCheckoutEvent),
+/* harmony export */   CouponAppliedEvent: () => (/* binding */ CouponAppliedEvent),
+/* harmony export */   CouponRemovedEvent: () => (/* binding */ CouponRemovedEvent),
+/* harmony export */   EcommerceEvent: () => (/* binding */ EcommerceEvent),
+/* harmony export */   GenerateLeadEvent: () => (/* binding */ GenerateLeadEvent),
+/* harmony export */   InitEvent: () => (/* binding */ InitEvent),
+/* harmony export */   LoginEvent: () => (/* binding */ LoginEvent),
+/* harmony export */   NewsletterSignupEvent: () => (/* binding */ NewsletterSignupEvent),
+/* harmony export */   OrderCancelledEvent: () => (/* binding */ OrderCancelledEvent),
+/* harmony export */   OrderExportedEvent: () => (/* binding */ OrderExportedEvent),
+/* harmony export */   ProductReviewSubmittedEvent: () => (/* binding */ ProductReviewSubmittedEvent),
+/* harmony export */   PurchaseEvent: () => (/* binding */ PurchaseEvent),
+/* harmony export */   QuantityChangeEvent: () => (/* binding */ QuantityChangeEvent),
+/* harmony export */   QuantityRemovedEvent: () => (/* binding */ QuantityRemovedEvent),
+/* harmony export */   RefundEvent: () => (/* binding */ RefundEvent),
+/* harmony export */   RemoveFromCartEvent: () => (/* binding */ RemoveFromCartEvent),
+/* harmony export */   RemoveFromWishlistEvent: () => (/* binding */ RemoveFromWishlistEvent),
+/* harmony export */   RequestQuoteEvent: () => (/* binding */ RequestQuoteEvent),
+/* harmony export */   SearchEvent: () => (/* binding */ SearchEvent),
+/* harmony export */   SelectItemEvent: () => (/* binding */ SelectItemEvent),
+/* harmony export */   SelectPromotionEvent: () => (/* binding */ SelectPromotionEvent),
+/* harmony export */   SignUpEvent: () => (/* binding */ SignUpEvent),
+/* harmony export */   SystemEvent: () => (/* binding */ SystemEvent),
+/* harmony export */   ViewCartEvent: () => (/* binding */ ViewCartEvent),
+/* harmony export */   ViewItemEvent: () => (/* binding */ ViewItemEvent),
+/* harmony export */   ViewItemListEvent: () => (/* binding */ ViewItemListEvent),
+/* harmony export */   ViewPromotionEvent: () => (/* binding */ ViewPromotionEvent)
+/* harmony export */ });
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _callSuper(t, o, e) { return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e)); }
+function _possibleConstructorReturn(t, e) { if (e && ("object" == _typeof(e) || "function" == typeof e)) return e; if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined"); return _assertThisInitialized(t); }
+function _assertThisInitialized(e) { if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); return e; }
+function _inherits(t, e) { if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function"); t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && _setPrototypeOf(t, e); }
+function _wrapNativeSuper(t) { var r = "function" == typeof Map ? new Map() : void 0; return _wrapNativeSuper = function _wrapNativeSuper(t) { if (null === t || !_isNativeFunction(t)) return t; if ("function" != typeof t) throw new TypeError("Super expression must either be null or a function"); if (void 0 !== r) { if (r.has(t)) return r.get(t); r.set(t, Wrapper); } function Wrapper() { return _construct(t, arguments, _getPrototypeOf(this).constructor); } return Wrapper.prototype = Object.create(t.prototype, { constructor: { value: Wrapper, enumerable: !1, writable: !0, configurable: !0 } }), _setPrototypeOf(Wrapper, t); }, _wrapNativeSuper(t); }
+function _construct(t, e, r) { if (_isNativeReflectConstruct()) return Reflect.construct.apply(null, arguments); var o = [null]; o.push.apply(o, e); var p = new (t.bind.apply(t, o))(); return r && _setPrototypeOf(p, r.prototype), p; }
+function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
+function _isNativeFunction(t) { try { return -1 !== Function.toString.call(t).indexOf("[native code]"); } catch (n) { return "function" == typeof t; } }
+function _setPrototypeOf(t, e) { return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) { return t.__proto__ = e, t; }, _setPrototypeOf(t, e); }
+function _getPrototypeOf(t) { return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) { return t.__proto__ || Object.getPrototypeOf(t); }, _getPrototypeOf(t); }
+/**
+ * events.js
+ *
+ * Standardized E-commerce Event Library
+ * Event names follow GA4 naming conventions where possible.
+ */
+
+/*
+|--------------------------------------------------------------------------
+| Abstract Event Class
+|--------------------------------------------------------------------------
+*/
+
+var SystemEvent = /*#__PURE__*/function (_CustomEvent) {
+  function SystemEvent(type) {
+    var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    _classCallCheck(this, SystemEvent);
+    return _callSuper(this, SystemEvent, [type, {
+      detail: data
+    }]);
+  }
+  _inherits(SystemEvent, _CustomEvent);
+  return _createClass(SystemEvent);
+}(/*#__PURE__*/_wrapNativeSuper(CustomEvent));
+var EcommerceEvent = /*#__PURE__*/function (_CustomEvent2) {
+  function EcommerceEvent(type) {
+    var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    _classCallCheck(this, EcommerceEvent);
+    return _callSuper(this, EcommerceEvent, [type, {
+      detail: data,
+      bubbles: true,
+      composed: true
+    }]);
+  }
+  _inherits(EcommerceEvent, _CustomEvent2);
+  return _createClass(EcommerceEvent);
+}(/*#__PURE__*/_wrapNativeSuper(CustomEvent));
+
+/*
+|--------------------------------------------------------------------------
+| System Events
+|--------------------------------------------------------------------------
+*/
+
+var InitEvent = /*#__PURE__*/function (_SystemEvent) {
+  function InitEvent(data) {
+    _classCallCheck(this, InitEvent);
+    console.log("Amplify Initialized...");
+    return _callSuper(this, InitEvent, [InitEvent.EVENT_NAME, data]);
+  }
+  _inherits(InitEvent, _SystemEvent);
+  return _createClass(InitEvent);
+}(SystemEvent);
+_defineProperty(InitEvent, "EVENT_NAME", 'amplify.init');
+var QuantityChangeEvent = /*#__PURE__*/function (_SystemEvent2) {
+  function QuantityChangeEvent(data) {
+    _classCallCheck(this, QuantityChangeEvent);
+    return _callSuper(this, QuantityChangeEvent, [QuantityChangeEvent.EVENT_NAME, data]);
+  }
+  _inherits(QuantityChangeEvent, _SystemEvent2);
+  return _createClass(QuantityChangeEvent);
+}(SystemEvent);
+_defineProperty(QuantityChangeEvent, "EVENT_NAME", 'qty_change');
+var QuantityRemovedEvent = /*#__PURE__*/function (_SystemEvent3) {
+  function QuantityRemovedEvent(data) {
+    _classCallCheck(this, QuantityRemovedEvent);
+    return _callSuper(this, QuantityRemovedEvent, [QuantityRemovedEvent.EVENT_NAME, data]);
+  }
+  _inherits(QuantityRemovedEvent, _SystemEvent3);
+  return _createClass(QuantityRemovedEvent);
+}(SystemEvent);
+
+/*
+|--------------------------------------------------------------------------
+| Product Discovery Events
+|--------------------------------------------------------------------------
+*/
+_defineProperty(QuantityRemovedEvent, "EVENT_NAME", 'qty_removed');
+var ViewItemListEvent = /*#__PURE__*/function (_EcommerceEvent) {
+  function ViewItemListEvent(data) {
+    _classCallCheck(this, ViewItemListEvent);
+    return _callSuper(this, ViewItemListEvent, [ViewItemListEvent.EVENT_NAME, data]);
+  }
+  _inherits(ViewItemListEvent, _EcommerceEvent);
+  return _createClass(ViewItemListEvent);
+}(EcommerceEvent);
+_defineProperty(ViewItemListEvent, "EVENT_NAME", 'view_item_list');
+var SelectItemEvent = /*#__PURE__*/function (_EcommerceEvent2) {
+  function SelectItemEvent(data) {
+    _classCallCheck(this, SelectItemEvent);
+    return _callSuper(this, SelectItemEvent, [SelectItemEvent.EVENT_NAME, data]);
+  }
+  _inherits(SelectItemEvent, _EcommerceEvent2);
+  return _createClass(SelectItemEvent);
+}(EcommerceEvent);
+_defineProperty(SelectItemEvent, "EVENT_NAME", 'select_item');
+var ViewItemEvent = /*#__PURE__*/function (_EcommerceEvent3) {
+  function ViewItemEvent(data) {
+    _classCallCheck(this, ViewItemEvent);
+    return _callSuper(this, ViewItemEvent, [ViewItemEvent.EVENT_NAME, data]);
+  }
+  _inherits(ViewItemEvent, _EcommerceEvent3);
+  return _createClass(ViewItemEvent);
+}(EcommerceEvent);
+_defineProperty(ViewItemEvent, "EVENT_NAME", 'view_item');
+var SearchEvent = /*#__PURE__*/function (_EcommerceEvent4) {
+  function SearchEvent(data) {
+    _classCallCheck(this, SearchEvent);
+    return _callSuper(this, SearchEvent, [SearchEvent.EVENT_NAME, data]);
+  }
+  _inherits(SearchEvent, _EcommerceEvent4);
+  return _createClass(SearchEvent);
+}(EcommerceEvent);
+
+/*
+|--------------------------------------------------------------------------
+| Cart Events
+|--------------------------------------------------------------------------
+*/
+_defineProperty(SearchEvent, "EVENT_NAME", 'search');
+var AddToCartEvent = /*#__PURE__*/function (_EcommerceEvent5) {
+  function AddToCartEvent(data) {
+    _classCallCheck(this, AddToCartEvent);
+    return _callSuper(this, AddToCartEvent, [AddToCartEvent.EVENT_NAME, data]);
+  }
+  _inherits(AddToCartEvent, _EcommerceEvent5);
+  return _createClass(AddToCartEvent);
+}(EcommerceEvent);
+_defineProperty(AddToCartEvent, "EVENT_NAME", 'add_to_cart');
+var RemoveFromCartEvent = /*#__PURE__*/function (_EcommerceEvent6) {
+  function RemoveFromCartEvent(data) {
+    _classCallCheck(this, RemoveFromCartEvent);
+    return _callSuper(this, RemoveFromCartEvent, [RemoveFromCartEvent.EVENT_NAME, data]);
+  }
+  _inherits(RemoveFromCartEvent, _EcommerceEvent6);
+  return _createClass(RemoveFromCartEvent);
+}(EcommerceEvent);
+_defineProperty(RemoveFromCartEvent, "EVENT_NAME", 'remove_from_cart');
+var ViewCartEvent = /*#__PURE__*/function (_EcommerceEvent7) {
+  function ViewCartEvent(data) {
+    _classCallCheck(this, ViewCartEvent);
+    return _callSuper(this, ViewCartEvent, [ViewCartEvent.EVENT_NAME, data]);
+  }
+  _inherits(ViewCartEvent, _EcommerceEvent7);
+  return _createClass(ViewCartEvent);
+}(EcommerceEvent);
+
+/*
+|--------------------------------------------------------------------------
+| Checkout Events
+|--------------------------------------------------------------------------
+*/
+_defineProperty(ViewCartEvent, "EVENT_NAME", 'view_cart');
+var BeginCheckoutEvent = /*#__PURE__*/function (_EcommerceEvent8) {
+  function BeginCheckoutEvent(data) {
+    _classCallCheck(this, BeginCheckoutEvent);
+    return _callSuper(this, BeginCheckoutEvent, [BeginCheckoutEvent.EVENT_NAME, data]);
+  }
+  _inherits(BeginCheckoutEvent, _EcommerceEvent8);
+  return _createClass(BeginCheckoutEvent);
+}(EcommerceEvent);
+_defineProperty(BeginCheckoutEvent, "EVENT_NAME", 'begin_checkout');
+var AddShippingInfoEvent = /*#__PURE__*/function (_EcommerceEvent9) {
+  function AddShippingInfoEvent(data) {
+    _classCallCheck(this, AddShippingInfoEvent);
+    return _callSuper(this, AddShippingInfoEvent, [AddShippingInfoEvent.EVENT_NAME, data]);
+  }
+  _inherits(AddShippingInfoEvent, _EcommerceEvent9);
+  return _createClass(AddShippingInfoEvent);
+}(EcommerceEvent);
+_defineProperty(AddShippingInfoEvent, "EVENT_NAME", 'add_shipping_info');
+var RequestQuoteEvent = /*#__PURE__*/function (_EcommerceEvent0) {
+  function RequestQuoteEvent(data) {
+    _classCallCheck(this, RequestQuoteEvent);
+    return _callSuper(this, RequestQuoteEvent, [RequestQuoteEvent.EVENT_NAME, data]);
+  }
+  _inherits(RequestQuoteEvent, _EcommerceEvent0);
+  return _createClass(RequestQuoteEvent);
+}(EcommerceEvent);
+_defineProperty(RequestQuoteEvent, "EVENT_NAME", 'request_quote');
+var AddPaymentInfoEvent = /*#__PURE__*/function (_EcommerceEvent1) {
+  function AddPaymentInfoEvent(data) {
+    _classCallCheck(this, AddPaymentInfoEvent);
+    return _callSuper(this, AddPaymentInfoEvent, [AddPaymentInfoEvent.EVENT_NAME, data]);
+  }
+  _inherits(AddPaymentInfoEvent, _EcommerceEvent1);
+  return _createClass(AddPaymentInfoEvent);
+}(EcommerceEvent);
+_defineProperty(AddPaymentInfoEvent, "EVENT_NAME", 'add_payment_info');
+var PurchaseEvent = /*#__PURE__*/function (_EcommerceEvent10) {
+  function PurchaseEvent(data) {
+    _classCallCheck(this, PurchaseEvent);
+    return _callSuper(this, PurchaseEvent, [PurchaseEvent.EVENT_NAME, data]);
+  }
+  _inherits(PurchaseEvent, _EcommerceEvent10);
+  return _createClass(PurchaseEvent);
+}(EcommerceEvent);
+_defineProperty(PurchaseEvent, "EVENT_NAME", 'purchase');
+var RefundEvent = /*#__PURE__*/function (_EcommerceEvent11) {
+  function RefundEvent(data) {
+    _classCallCheck(this, RefundEvent);
+    return _callSuper(this, RefundEvent, [RefundEvent.EVENT_NAME, data]);
+  }
+  _inherits(RefundEvent, _EcommerceEvent11);
+  return _createClass(RefundEvent);
+}(EcommerceEvent);
+
+/*
+|--------------------------------------------------------------------------
+| Customer Events
+|--------------------------------------------------------------------------
+*/
+_defineProperty(RefundEvent, "EVENT_NAME", 'refund');
+var LoginEvent = /*#__PURE__*/function (_EcommerceEvent12) {
+  function LoginEvent(data) {
+    _classCallCheck(this, LoginEvent);
+    return _callSuper(this, LoginEvent, [LoginEvent.EVENT_NAME, data]);
+  }
+  _inherits(LoginEvent, _EcommerceEvent12);
+  return _createClass(LoginEvent);
+}(EcommerceEvent);
+_defineProperty(LoginEvent, "EVENT_NAME", 'login');
+var SignUpEvent = /*#__PURE__*/function (_EcommerceEvent13) {
+  function SignUpEvent(data) {
+    _classCallCheck(this, SignUpEvent);
+    return _callSuper(this, SignUpEvent, [SignUpEvent.EVENT_NAME, data]);
+  }
+  _inherits(SignUpEvent, _EcommerceEvent13);
+  return _createClass(SignUpEvent);
+}(EcommerceEvent);
+_defineProperty(SignUpEvent, "EVENT_NAME", 'sign_up');
+var GenerateLeadEvent = /*#__PURE__*/function (_EcommerceEvent14) {
+  function GenerateLeadEvent(data) {
+    _classCallCheck(this, GenerateLeadEvent);
+    return _callSuper(this, GenerateLeadEvent, [GenerateLeadEvent.EVENT_NAME, data]);
+  }
+  _inherits(GenerateLeadEvent, _EcommerceEvent14);
+  return _createClass(GenerateLeadEvent);
+}(EcommerceEvent);
+
+/*
+|--------------------------------------------------------------------------
+| Promotion Events
+|--------------------------------------------------------------------------
+*/
+_defineProperty(GenerateLeadEvent, "EVENT_NAME", 'generate_lead');
+var ViewPromotionEvent = /*#__PURE__*/function (_EcommerceEvent15) {
+  function ViewPromotionEvent(data) {
+    _classCallCheck(this, ViewPromotionEvent);
+    return _callSuper(this, ViewPromotionEvent, [ViewPromotionEvent.EVENT_NAME, data]);
+  }
+  _inherits(ViewPromotionEvent, _EcommerceEvent15);
+  return _createClass(ViewPromotionEvent);
+}(EcommerceEvent);
+_defineProperty(ViewPromotionEvent, "EVENT_NAME", 'view_promotion');
+var SelectPromotionEvent = /*#__PURE__*/function (_EcommerceEvent16) {
+  function SelectPromotionEvent(data) {
+    _classCallCheck(this, SelectPromotionEvent);
+    return _callSuper(this, SelectPromotionEvent, [SelectPromotionEvent.EVENT_NAME, data]);
+  }
+  _inherits(SelectPromotionEvent, _EcommerceEvent16);
+  return _createClass(SelectPromotionEvent);
+}(EcommerceEvent);
+
+/*
+|--------------------------------------------------------------------------
+| Wishlist Events
+|--------------------------------------------------------------------------
+*/
+_defineProperty(SelectPromotionEvent, "EVENT_NAME", 'select_promotion');
+var AddToWishlistEvent = /*#__PURE__*/function (_EcommerceEvent17) {
+  function AddToWishlistEvent(data) {
+    _classCallCheck(this, AddToWishlistEvent);
+    return _callSuper(this, AddToWishlistEvent, [AddToWishlistEvent.EVENT_NAME, data]);
+  }
+  _inherits(AddToWishlistEvent, _EcommerceEvent17);
+  return _createClass(AddToWishlistEvent);
+}(EcommerceEvent);
+_defineProperty(AddToWishlistEvent, "EVENT_NAME", 'add_to_wishlist');
+var RemoveFromWishlistEvent = /*#__PURE__*/function (_EcommerceEvent18) {
+  function RemoveFromWishlistEvent(data) {
+    _classCallCheck(this, RemoveFromWishlistEvent);
+    return _callSuper(this, RemoveFromWishlistEvent, [RemoveFromWishlistEvent.EVENT_NAME, data]);
+  }
+  _inherits(RemoveFromWishlistEvent, _EcommerceEvent18);
+  return _createClass(RemoveFromWishlistEvent);
+}(EcommerceEvent);
+
+/*
+|--------------------------------------------------------------------------
+| Marketing Events
+|--------------------------------------------------------------------------
+*/
+_defineProperty(RemoveFromWishlistEvent, "EVENT_NAME", 'remove_from_wishlist');
+var NewsletterSignupEvent = /*#__PURE__*/function (_EcommerceEvent19) {
+  function NewsletterSignupEvent(data) {
+    _classCallCheck(this, NewsletterSignupEvent);
+    return _callSuper(this, NewsletterSignupEvent, [NewsletterSignupEvent.EVENT_NAME, data]);
+  }
+  _inherits(NewsletterSignupEvent, _EcommerceEvent19);
+  return _createClass(NewsletterSignupEvent);
+}(EcommerceEvent);
+_defineProperty(NewsletterSignupEvent, "EVENT_NAME", 'newsletter_signup');
+var CouponAppliedEvent = /*#__PURE__*/function (_EcommerceEvent20) {
+  function CouponAppliedEvent(data) {
+    _classCallCheck(this, CouponAppliedEvent);
+    return _callSuper(this, CouponAppliedEvent, [CouponAppliedEvent.EVENT_NAME, data]);
+  }
+  _inherits(CouponAppliedEvent, _EcommerceEvent20);
+  return _createClass(CouponAppliedEvent);
+}(EcommerceEvent);
+_defineProperty(CouponAppliedEvent, "EVENT_NAME", 'coupon_applied');
+var CouponRemovedEvent = /*#__PURE__*/function (_EcommerceEvent21) {
+  function CouponRemovedEvent(data) {
+    _classCallCheck(this, CouponRemovedEvent);
+    return _callSuper(this, CouponRemovedEvent, [CouponRemovedEvent.EVENT_NAME, data]);
+  }
+  _inherits(CouponRemovedEvent, _EcommerceEvent21);
+  return _createClass(CouponRemovedEvent);
+}(EcommerceEvent);
+
+/*
+|--------------------------------------------------------------------------
+| Review Events
+|--------------------------------------------------------------------------
+*/
+_defineProperty(CouponRemovedEvent, "EVENT_NAME", 'coupon_removed');
+var ProductReviewSubmittedEvent = /*#__PURE__*/function (_EcommerceEvent22) {
+  function ProductReviewSubmittedEvent(data) {
+    _classCallCheck(this, ProductReviewSubmittedEvent);
+    return _callSuper(this, ProductReviewSubmittedEvent, [ProductReviewSubmittedEvent.EVENT_NAME, data]);
+  }
+  _inherits(ProductReviewSubmittedEvent, _EcommerceEvent22);
+  return _createClass(ProductReviewSubmittedEvent);
+}(EcommerceEvent);
+
+/*
+|--------------------------------------------------------------------------
+| Customer Address Events
+|--------------------------------------------------------------------------
+*/
+_defineProperty(ProductReviewSubmittedEvent, "EVENT_NAME", 'product_review_submitted');
+var AddressValidatedEvent = /*#__PURE__*/function (_EcommerceEvent23) {
+  function AddressValidatedEvent(data) {
+    _classCallCheck(this, AddressValidatedEvent);
+    return _callSuper(this, AddressValidatedEvent, [AddressValidatedEvent.EVENT_NAME, data]);
+  }
+  _inherits(AddressValidatedEvent, _EcommerceEvent23);
+  return _createClass(AddressValidatedEvent);
+}(EcommerceEvent);
+
+/*
+|--------------------------------------------------------------------------
+| Order Events
+|--------------------------------------------------------------------------
+*/
+_defineProperty(AddressValidatedEvent, "EVENT_NAME", 'address_validated');
+var OrderCancelledEvent = /*#__PURE__*/function (_EcommerceEvent24) {
+  function OrderCancelledEvent(data) {
+    _classCallCheck(this, OrderCancelledEvent);
+    return _callSuper(this, OrderCancelledEvent, [OrderCancelledEvent.EVENT_NAME, data]);
+  }
+  _inherits(OrderCancelledEvent, _EcommerceEvent24);
+  return _createClass(OrderCancelledEvent);
+}(EcommerceEvent);
+_defineProperty(OrderCancelledEvent, "EVENT_NAME", 'order_cancelled');
+var OrderExportedEvent = /*#__PURE__*/function (_EcommerceEvent25) {
+  function OrderExportedEvent(data) {
+    _classCallCheck(this, OrderExportedEvent);
+    return _callSuper(this, OrderExportedEvent, [OrderExportedEvent.EVENT_NAME, data]);
+  }
+  _inherits(OrderExportedEvent, _EcommerceEvent25);
+  return _createClass(OrderExportedEvent);
+}(EcommerceEvent);
+_defineProperty(OrderExportedEvent, "EVENT_NAME", 'order_exported');
+
+/***/ }),
+
+/***/ "./resources/js/modules/media-query.js":
+/*!*********************************************!*\
+  !*** ./resources/js/modules/media-query.js ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   MediaQuery: () => (/* binding */ MediaQuery)
+/* harmony export */ });
+function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+var MediaQuery = {
+  Amplify: {},
+  breakpoints: {
+    wide: 1440,
+    desktop: 1200,
+    laptop: 991,
+    tablet: 768,
+    mobile: 567
+  },
+  init: function init(amplify) {
+    this.breakpoints = amplify.config.screen.breakpoints;
+    if (!sessionStorage.getItem('screen_initialized')) {
+      sessionStorage.setItem('screen_initialized', '1');
+      window.location.replace(window.location.href);
+    } else {
+      this.setCookie();
+    }
+    this.updateCookie();
+    return this;
+  },
+  updateCookie: function updateCookie() {
+    window.addEventListener('resize', function () {
+      Amplify.MediaQuery.setCookie();
+    });
+  },
+  setCookie: function setCookie() {
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+    document.cookie = "mw=".concat(width, "; path=/; SameSite=Lax");
+    document.cookie = "md=".concat(height, "; path=/; SameSite=Lax");
+  },
+  get width() {
+    return window.innerWidth;
+  },
+  screen: function screen() {
+    var width = this.width;
+    for (var _i = 0, _Object$entries = Object.entries(this.breakpoints); _i < _Object$entries.length; _i++) {
+      var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+        name = _Object$entries$_i[0],
+        minWidth = _Object$entries$_i[1];
+      if (width >= minWidth) {
+        return name;
+      }
+    }
+    return 'mobile';
+  },
+  isDesktop: function isDesktop() {
+    return this.screen() === 'desktop';
+  },
+  isLaptop: function isLaptop() {
+    return this.screen() === 'laptop';
+  },
+  isTablet: function isTablet() {
+    return this.screen() === 'tablet';
+  },
+  isMobile: function isMobile() {
+    return this.screen() === 'mobile';
+  }
+};
+
+/***/ }),
+
+/***/ "./resources/js/modules/quick-order.js":
+/*!*********************************************!*\
+  !*** ./resources/js/modules/quick-order.js ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   QuickOrder: () => (/* binding */ QuickOrder)
+/* harmony export */ });
+var QuickOrder = {
+  initialized: false,
+  limit: 0,
+  from: 0,
+  pendingRequests: 0,
+  root: null,
+  Amplify: {},
+  init: function init(amplify) {
+    this.Amplify = amplify;
+    if (this.initialized) {
+      return;
+    }
+    this.root = document.querySelector('.x-quick-order');
+    if (!this.root) {
+      return;
+    }
+    this.initialized = true;
+    this.limit = 0;
+    this.from = 0;
+    this.pendingRequests = 0;
+    this.addProduct(true);
+    this.bindEvents();
+    return this;
+  },
+  config: function config() {
+    var _document$querySelect;
+    var el = this.root || document.querySelector('.x-quick-order');
+    var data = el ? el.dataset : {};
+    return {
+      warehouseCode: data.warehouseCode || '',
+      warehouseName: data.warehouseName || '',
+      checkQty: parseInt(data.checkQty || '0', 10) === 1,
+      uploadUrl: data.uploadUrl || '',
+      lookupUrl: data.lookupUrl || '',
+      csrf: data.csrf || ((_document$querySelect = document.querySelector('meta[name="csrf-token"]')) === null || _document$querySelect === void 0 ? void 0 : _document$querySelect.getAttribute('content')) || '',
+      addToOrderLabel: data.addToOrderLabel || 'Add to Order',
+      uploadLabel: data.uploadLabel || 'Upload',
+      filePlaceholder: data.filePlaceholder || 'Choose a CSV, XLS, or XLSX file',
+      pressEnterHint: data.pressEnterHint || 'Press Enter to add'
+    };
+  },
+  bindEvents: function bindEvents() {
+    var _this = this;
+    var tbody = document.getElementById('quick_order_tbody');
+    var fileInput = document.getElementById('quick_order_file');
+    var uploadBtn = document.getElementById('upload_btn');
+    var addToOrderBtn = document.getElementById('add_to_order_btn');
+    tbody === null || tbody === void 0 || tbody.addEventListener('keydown', function (event) {
+      if (!event.target.matches('input[name="product_code[]"]')) {
+        return;
+      }
+      if (event.key === 'Enter' || event.keyCode === 13) {
+        event.preventDefault();
+        _this.lookupProductByCode(event.target);
+      }
+    });
+    tbody === null || tbody === void 0 || tbody.addEventListener('input', function (event) {
+      if (event.target.matches('input[name="product_code[]"]')) {
+        _this.handleProductCodeInput(event.target);
+      }
+    });
+    tbody === null || tbody === void 0 || tbody.addEventListener('click', function (event) {
+      var removeBtn = event.target.closest('[data-quick-order-remove]');
+      if (removeBtn) {
+        event.preventDefault();
+        _this.removeProduct(removeBtn);
+      }
+    });
+    fileInput === null || fileInput === void 0 || fileInput.addEventListener('change', function (event) {
+      _this.readQuickOrderFile(event.target);
+    });
+    uploadBtn === null || uploadBtn === void 0 || uploadBtn.addEventListener('click', function (event) {
+      event.preventDefault();
+      _this.uploadQuickOrderFile();
+    });
+    addToOrderBtn === null || addToOrderBtn === void 0 || addToOrderBtn.addEventListener('click', function (event) {
+      event.preventDefault();
+      _this.addToOrder();
+    });
+  },
+  spinnerHtml: function spinnerHtml(label) {
+    return '<span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>' + label;
+  },
+  refreshActionButtons: function refreshActionButtons() {
+    var isBusy = this.pendingRequests > 0;
+    var addedCount = $('#quick_order_tbody tr.added_products').filter(function () {
+      return $(this).find('input[name="product_code[]"]').val().trim() !== '';
+    }).length;
+    $('#add_to_order_btn').prop('disabled', isBusy || addedCount === 0);
+    $('#upload_btn').prop('disabled', isBusy);
+    $('#quick_order_file').prop('disabled', isBusy);
+  },
+  setBusy: function setBusy(isStarting, message) {
+    this.pendingRequests += isStarting ? 1 : -1;
+    if (this.pendingRequests < 0) {
+      this.pendingRequests = 0;
+    }
+    if (this.pendingRequests > 0 && message) {
+      $('#quick_order_status').text(message).removeClass('d-none');
+    }
+    if (this.pendingRequests === 0) {
+      $('#quick_order_status').text('').addClass('d-none');
+    }
+    this.refreshActionButtons();
+  },
+  setRowLoading: function setRowLoading(index, isLoading) {
+    var row = $('#added_products_' + index);
+    var codeInput = $('#product_code_' + index);
+    row.toggleClass('quick-order-row-loading', isLoading);
+    row.data('fetching', isLoading);
+    codeInput.prop('disabled', isLoading);
+    if (isLoading) {
+      $('#product_name_' + index).html('<span class="text-muted d-inline-flex align-items-center">' + this.spinnerHtml('Fetching product...') + '</span>');
+      $('#product_code_error_' + index).text('');
+      $('#product_code_hint_' + index).addClass('d-none');
+    }
+  },
+  escapeHtml: function escapeHtml(value) {
+    return String(value || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  },
+  getRowIndexFromCodeInput: function getRowIndexFromCodeInput(element) {
+    return String($(element).attr('id').replace('product_code_', ''));
+  },
+  normalizeProductCode: function normalizeProductCode(code) {
+    return String(code || '').trim().toUpperCase();
+  },
+  getResolvedCode: function getResolvedCode(index) {
+    return this.normalizeProductCode($('#product_code_' + index).data('resolvedCode'));
+  },
+  setResolvedCode: function setResolvedCode(index, code) {
+    $('#product_code_' + index).data('resolvedCode', this.normalizeProductCode(code));
+    $('#product_code_hint_' + index).remove();
+  },
+  clearResolvedCode: function clearResolvedCode(index) {
+    $('#product_code_' + index).removeData('resolvedCode');
+    var hasProduct = $('#product_id_' + index).val() !== '';
+    if (hasProduct) {
+      $('#product_code_hint_' + index).remove();
+      return;
+    }
+    if ($('#product_code_hint_' + index).length === 0) {
+      $('#product_code_' + index).after("<small class=\"quick-order-code-hint text-muted\" id=\"product_code_hint_".concat(index, "\">").concat(this.config().pressEnterHint, "</small>"));
+    }
+  },
+  productCodeFieldHtml: function productCodeFieldHtml(index, value, options) {
+    var opts = options || {};
+    var errorText = opts.error ? this.escapeHtml(opts.error) : '';
+    var hintHtml = opts.alreadyAdded ? '' : "<small class=\"quick-order-code-hint text-muted\" id=\"product_code_hint_".concat(index, "\">").concat(this.config().pressEnterHint, "</small>");
+    return "<input type=\"text\" aria-label=\"Product code\" autocomplete=\"off\"\n                    id=\"product_code_".concat(index, "\" placeholder=\"Enter product code\"\n                    name=\"product_code[]\" class=\"form-control form-control-sm\"\n                    value=\"").concat(this.escapeHtml(value), "\">\n                ").concat(hintHtml, "\n                <small class=\"text-danger\" id=\"product_code_error_").concat(index, "\">").concat(errorText, "</small>");
+  },
+  productRowHtml: function productRowHtml(index, product) {
+    var qty = product['qty'] !== undefined && product['qty'] !== '' ? product['qty'] : 1;
+    return "<tr class=\"added_products\" id=\"added_products_".concat(index, "\">\n            <td class=\"quick-order-code-col\">\n                <input type=\"hidden\" id=\"product_id_").concat(index, "\" value=\"").concat(this.escapeHtml(product['product_id']), "\" name=\"product_id[]\" />\n                <input type=\"hidden\" id=\"product_back_order_").concat(index, "\" value=\"").concat(this.escapeHtml(product['product_back_order']), "\" name=\"product_back_order[]\" />\n                ").concat(this.productCodeFieldHtml(index, product['product_code'], {
+      alreadyAdded: true,
+      error: product['error']
+    }), "\n            </td>\n            <td>\n                <span id=\"product_name_").concat(index, "\">").concat(this.escapeHtml(product['product_name'] || '-'), "</span>\n            </td>\n            <td class=\"warehouse text-center align-middle\">\n                ").concat(this.createWarehouse(product.ERP, index), "\n            </td>\n            <td class=\"text-center align-middle\">\n                <input type=\"number\" aria-label=\"Quantity\" placeholder=\"Quantity\" name=\"qty[]\" value=\"").concat(this.escapeHtml(qty), "\" min=\"1\" max=\"\" id=\"qty_").concat(index, "\" class=\"form-control form-control-sm mx-auto\" style=\"width: 110px;\">\n                <small class=\"text-danger\" id=\"qty_error_").concat(index, "\"></small>\n            </td>\n            ").concat(this.removeButtonCell(false), "\n        </tr>");
+  },
+  handleProductCodeInput: function handleProductCodeInput(element) {
+    var index = this.getRowIndexFromCodeInput(element);
+    var current = this.normalizeProductCode($(element).val());
+    var resolved = this.getResolvedCode(index);
+    $('#product_code_error_' + index).text('');
+    if (resolved === '' || current === resolved) {
+      return;
+    }
+    $('#product_id_' + index).val('');
+    $('#product_back_order_' + index).val('');
+    $('#product_name_' + index).text('-');
+    $('#qty_error_' + index).text('');
+    $("#added_products_".concat(index, " .warehouse")).html(this.createWarehouse([], index));
+    this.clearResolvedCode(index);
+  },
+  focusProductCode: function focusProductCode(index) {
+    var input = $('#product_code_' + index);
+    if (input.length) {
+      input.trigger('focus');
+    }
+  },
+  readQuickOrderFile: function readQuickOrderFile(file) {
+    var selectedFile = file.files && file.files[0];
+    $('#quick_order_file_label').text(selectedFile ? selectedFile.name : this.config().filePlaceholder);
+  },
+  uploadQuickOrderFile: function uploadQuickOrderFile() {
+    var _$$,
+      _this2 = this;
+    $('#error_div').empty();
+    var file = (_$$ = $('#quick_order_file')[0]) === null || _$$ === void 0 ? void 0 : _$$.files[0];
+    if (file === undefined) {
+      ShowNotification('error', 'Quick Order', 'Please select a file to upload');
+      return;
+    }
+    var formData = new FormData();
+    formData.append('file', file);
+    formData.append('_token', this.config().csrf);
+    $.ajax({
+      url: this.config().uploadUrl,
+      type: 'POST',
+      data: formData,
+      processData: false,
+      contentType: false,
+      beforeSend: function beforeSend() {
+        $('#upload_btn').html(_this2.spinnerHtml('Uploading file...'));
+        _this2.setBusy(true, 'Uploading spreadsheet and fetching products...');
+      },
+      success: function success(response) {
+        if (!response.success) {
+          ShowNotification('error', 'Quick Order', response.message);
+          return;
+        }
+        var products = response.data;
+        var productsArray = Object.keys(products).map(function (key) {
+          return products[key];
+        });
+        if (response.message !== '') {
+          $('#error_div').removeClass('d-none').html(response.message);
+        } else {
+          $('#error_div').addClass('d-none').html('');
+        }
+        if (productsArray.length === 0) {
+          return;
+        }
+        var lastRow = $('#quick_order_tbody tr.added_products').last();
+        var lastIsEntryRow = lastRow.length > 0 && lastRow.find('input[name="product_id[]"]').val() === '';
+        var addedCount = 0;
+        var skippedCount = 0;
+        productsArray.forEach(function (product) {
+          if (_this2.findExistingProductRow(product['product_code'])) {
+            skippedCount += 1;
+            return;
+          }
+          var index = _this2.limit;
+          _this2.limit += 1;
+          _this2.from = index;
+          var rowHtml = _this2.productRowHtml(index, product);
+          if (lastIsEntryRow) {
+            lastRow.before(rowHtml);
+          } else {
+            $('#quick_order_tbody').append(rowHtml);
+          }
+          _this2.setMaxQty(index);
+          if (product['product_id']) {
+            _this2.setResolvedCode(index, product['product_code']);
+          }
+          addedCount += 1;
+        });
+        if (!lastIsEntryRow) {
+          _this2.addProduct();
+        }
+        _this2.updateAddedProductCount();
+        $('#quick_order_file').val('');
+        $('#quick_order_file_label').text(_this2.config().filePlaceholder);
+        if (addedCount > 0) {
+          ShowNotification('success', 'Quick Order', 'File uploaded successfully');
+        }
+        if (skippedCount > 0) {
+          ShowNotification('info', 'Quick Order', skippedCount === 1 ? '1 product from the file was already in the list and was skipped.' : skippedCount + ' products from the file were already in the list and were skipped.');
+        }
+        if (addedCount === 0 && skippedCount === 0) {
+          ShowNotification('info', 'Quick Order', 'No new products were added from the file.');
+        }
+      },
+      error: function error(xhr) {
+        var message = 'Something went wrong while uploading the file.';
+        if (xhr.responseJSON && xhr.responseJSON.message) {
+          message = xhr.responseJSON.message;
+        }
+        if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.message) {
+          $('#error_div').html(xhr.responseJSON.message);
+        }
+        ShowNotification('error', 'Quick Order', message);
+      },
+      complete: function complete() {
+        $('#upload_btn').html(_this2.config().uploadLabel);
+        _this2.setBusy(false);
+      }
+    });
+  },
+  getCustomerWarehouse: function getCustomerWarehouse(warehouses) {
+    var _this3 = this;
+    var warehouseList = warehouses || [];
+    var customerWarehouse = warehouseList.find(function (warehouse) {
+      return String(warehouse.WarehouseID) === String(_this3.config().warehouseCode);
+    });
+    return customerWarehouse || {
+      WarehouseID: this.config().warehouseCode,
+      WarehouseName: this.config().warehouseName,
+      QuantityAvailable: ''
+    };
+  },
+  setMaxQty: function setMaxQty(index) {
+    var quantity = $('#warehouse_' + index).data('quantity');
+    var qtyInput = $('#qty_' + index);
+    var available = parseFloat(quantity);
+    var allowsBackorder = $('#product_back_order_' + index).val() === 'Y';
+    if (!allowsBackorder && Number.isFinite(available) && available > 0) {
+      qtyInput.attr('max', available);
+      return;
+    }
+    qtyInput.removeAttr('max');
+  },
+  createWarehouse: function createWarehouse(warehouses, index) {
+    var warehouse = this.getCustomerWarehouse(warehouses);
+    var quantityAvailable = warehouse.QuantityAvailable;
+    var available = parseFloat(quantityAvailable);
+    var availabilityHtml = '';
+    if (quantityAvailable !== '' && quantityAvailable !== undefined && quantityAvailable !== null) {
+      if (Number.isFinite(available) && available > 0) {
+        availabilityHtml = "<div class=\"text-muted small\">".concat(quantityAvailable, " available</div>");
+      } else {
+        availabilityHtml = "<div class=\"text-danger small\">0 available \xB7 Backorder</div>";
+      }
+    }
+    return "<input type=\"hidden\" name=\"product_warehouse_code[]\" id=\"warehouse_".concat(index, "\" value=\"").concat(warehouse.WarehouseID || '', "\" data-quantity=\"").concat(quantityAvailable, "\">\n            <div class=\"font-weight-bold\">").concat(warehouse.WarehouseName || '—', "</div>\n            ").concat(availabilityHtml, "\n            <small class=\"text-danger\" id=\"warehouse_error_").concat(index, "\"></small>");
+  },
+  removeButtonCell: function removeButtonCell(hidden) {
+    var hiddenClass = hidden ? ' d-none' : '';
+    return "<td class=\"text-center align-middle\" style=\"width: 70px\">\n            <button type=\"button\" class=\"btn btn-sm m-0 px-2".concat(hiddenClass, "\" data-toggle=\"tooltip\" title=\"Remove\" data-quick-order-remove>\n                <i class=\"icon-cross text-danger font-weight-bold\"></i>\n            </button>\n        </td>");
+  },
+  findExistingProductRow: function findExistingProductRow(productCode, excludeIndex) {
+    var _this4 = this;
+    var normalizedCode = this.normalizeProductCode(productCode);
+    var existingRow = null;
+    $('#quick_order_tbody tr.added_products').each(function (_, rowEl) {
+      var row = $(rowEl);
+      var rowIndex = String(row.attr('id').split('_').pop());
+      if (rowIndex === String(excludeIndex)) {
+        return;
+      }
+      var rowId = row.find('input[name="product_id[]"]').val();
+      var rowCode = _this4.normalizeProductCode(row.find('input[name="product_code[]"]').val());
+      if (rowId && rowCode !== '' && rowCode === normalizedCode) {
+        existingRow = row;
+        return false;
+      }
+    });
+    return existingRow;
+  },
+  resetProductRow: function resetProductRow(index) {
+    $('#product_id_' + index).val('');
+    $('#product_back_order_' + index).val('');
+    $('#product_code_' + index).val('');
+    $('#product_name_' + index).text('-');
+    $('#product_code_error_' + index).text('');
+    $('#qty_' + index).val('');
+    $('#qty_error_' + index).text('');
+    $("#added_products_".concat(index, " .warehouse")).html(this.createWarehouse([], index));
+    $("#added_products_".concat(index, " td button")).addClass('d-none');
+    this.clearResolvedCode(index);
+  },
+  notifyProductAlreadyAdded: function notifyProductAlreadyAdded(currentIndex, productCode) {
+    var currentRow = $('#added_products_' + currentIndex);
+    var isLastRow = currentRow.is($('#quick_order_tbody tr.added_products').last());
+    if (isLastRow) {
+      this.resetProductRow(currentIndex);
+      this.focusProductCode(currentIndex);
+    } else {
+      currentRow.remove();
+    }
+    this.updateAddedProductCount();
+    ShowNotification('info', 'Quick Order', productCode + ' is already added to the list.');
+  },
+  updateAddedProductCount: function updateAddedProductCount() {
+    var addedCount = $('#quick_order_tbody tr.added_products').filter(function () {
+      return $(this).find('input[name="product_code[]"]').val().trim() !== '';
+    }).length;
+    $('#added_product_count').text(addedCount > 0 ? addedCount + ' Products added' : '');
+    this.refreshActionButtons();
+  },
+  addProduct: function addProduct(shouldFocus) {
+    if ($('#no_product_tr').length > 0) {
+      $('#no_product_tr').remove();
+    }
+    this.from = this.limit;
+    this.limit += 1;
+    var html = '';
+    for (var i = this.from; i < this.limit; i++) {
+      html += " <tr class=\"added_products\" id=\"added_products_".concat(i, "\">\n                        <td class=\"quick-order-code-col\">\n                            <input type=\"hidden\" id=\"product_id_").concat(i, "\" value=\"\" name=\"product_id[]\" />\n                            <input type=\"hidden\" id=\"product_back_order_").concat(i, "\" value=\"\" name=\"product_back_order[]\" />\n                            ").concat(this.productCodeFieldHtml(i, '', {
+        alreadyAdded: false
+      }), "\n                        </td>\n                        <td>\n                            <span id=\"product_name_").concat(i, "\">-</span>\n                        </td>\n                        <td class=\"warehouse text-center align-middle\">\n                            ").concat(this.createWarehouse([], i), "\n                        </td>\n                        <td class=\"text-center align-middle\">\n                            <input type=\"number\" aria-label=\"Quantity\" placeholder=\"Quantity\" name=\"qty[]\" value=\"\" min=\"0\" max=\"\"\n                                    onkeypress=\"return event.charCode >= 48\"\n                                    id=\"qty_").concat(i, "\"\n                                    class=\"form-control form-control-sm mx-auto\" style=\"width: 110px;\">\n                            <small class=\"text-danger\" id=\"qty_error_").concat(i, "\"></small>\n                        </td>\n                        ").concat(this.removeButtonCell(true), "\n                    </tr>");
+    }
+    $('#quick_order_tbody').append(html);
+    this.updateAddedProductCount();
+    if (shouldFocus) {
+      this.focusProductCode(this.from);
+    }
+  },
+  promptRemoveButton: function promptRemoveButton(index) {
+    $("#added_products_".concat(index, " td button")).removeClass('d-none');
+  },
+  removeProduct: function removeProduct(element) {
+    $(element).closest('tr').remove();
+    ShowNotification('success', 'Quick Order', 'Product removed successfully');
+    this.updateAddedProductCount();
+    if ($('#quick_order_tbody tr').length === 0) {
+      this.showNoProductsFound();
+    }
+  },
+  lookupProductByCode: function lookupProductByCode(element) {
+    var _this5 = this;
+    var productCode = $(element).val();
+    var index = this.getRowIndexFromCodeInput(element);
+    var normalized = this.normalizeProductCode(productCode);
+    if (normalized === '') {
+      return;
+    }
+    if (normalized.length < 3) {
+      $('#product_code_error_' + index).text('Enter at least 3 characters, then press Enter');
+      return;
+    }
+    if ($('#added_products_' + index).data('fetching')) {
+      return;
+    }
+    if (this.getResolvedCode(index) === normalized && $('#product_id_' + index).val() !== '') {
+      return;
+    }
+    var existingRow = this.findExistingProductRow(productCode, index);
+    if (existingRow) {
+      this.notifyProductAlreadyAdded(index, productCode);
+      return;
+    }
+    $.ajax({
+      url: this.config().lookupUrl,
+      type: 'POST',
+      data: {
+        product_code: productCode,
+        _token: this.config().csrf
+      },
+      beforeSend: function beforeSend() {
+        _this5.setRowLoading(index, true);
+        _this5.setBusy(true);
+      },
+      success: function success(response) {
+        if (response.success == true) {
+          var duplicateRow = _this5.findExistingProductRow(productCode, index);
+          if (duplicateRow) {
+            _this5.notifyProductAlreadyAdded(index, productCode);
+            return;
+          }
+          $('#product_id_' + index).val(response.data.product_id);
+          $('#product_back_order_' + index).val(response.data.product_back_order);
+          $('#product_name_' + index).text(response.data.product_name);
+          $('#product_code_error_' + index).text('');
+          _this5.setResolvedCode(index, productCode);
+          if (!$('#qty_' + index).val()) {
+            $('#qty_' + index).val(1);
+          }
+          _this5.selectWarehouseForSingleProduct(response.data, index);
+          if ($('#quick_order_tbody tr').last().find('input[name="product_code[]"]').val() != '') {
+            _this5.addProduct();
+            _this5.promptRemoveButton(index);
+          }
+        } else {
+          $('#product_name_' + index).text(response.data.product_name || 'N/A');
+          $('#product_code_error_' + index).text(response.data.error);
+          $("#added_products_".concat(index, " .warehouse")).html(_this5.createWarehouse([], index));
+        }
+      },
+      error: function error() {
+        $('#product_name_' + index).text('-');
+        $('#product_code_error_' + index).text('Unable to fetch this product. Please try again.');
+        ShowNotification('error', 'Quick Order', 'Unable to fetch product details.');
+      },
+      complete: function complete() {
+        _this5.setRowLoading(index, false);
+        _this5.setBusy(false);
+      }
+    });
+  },
+  selectWarehouseForSingleProduct: function selectWarehouseForSingleProduct(product, index) {
+    $("#added_products_".concat(index, " .warehouse")).html(this.createWarehouse((product === null || product === void 0 ? void 0 : product.ERP) || [], index));
+    this.setMaxQty(index);
+  },
+  showNoProductsFound: function showNoProductsFound() {
+    $('#quick_order_tbody').empty();
+    this.addProduct();
+  },
+  addToOrder: function addToOrder() {
+    var _this6 = this;
+    var products = [];
+    var validationError = false;
+    var quickOrderLink = $('#quick-order-link').data('link');
+    if ($('#quick_order_tbody tr').length > 0 && $('#quick_order_tbody tr#no_product_tr').length === 0) {
+      $('#quick_order_tbody tr').each(function (_, element) {
+        var productCode = $(element).find('input[name="product_code[]"]').val();
+        var productId = $(element).find('input[name="product_id[]"]').val();
+        var qty = $(element).find('input[name="qty[]"]').val();
+        var warehouse = $(element).find('input[name="product_warehouse_code[]"]').val();
+        var id = $(element).attr('id').split('_')[2];
+        var maxQty = $(element).find('input[name="product_warehouse_code[]"]').data('quantity');
+        if (productCode.trim() !== '' && qty.trim() !== '') {
+          $('#product_code_error_' + id).text('');
+          $('#qty_error_' + id).text('');
+          $('#warehouse_error_' + id).text('');
+          products.push({
+            product_code: productCode,
+            product_id: productId,
+            qty: qty,
+            product_warehouse_code: warehouse
+          });
+          var allowsBackorder = $(element).find('input[name="product_back_order[]"]').val() === 'Y';
+          var availableQty = parseFloat(maxQty);
+          var orderedQty = parseFloat(qty);
+          var shouldEnforceLimit = _this6.config().checkQty && !allowsBackorder && Number.isFinite(availableQty) && availableQty > 0 && Number.isFinite(orderedQty) && orderedQty > availableQty;
+          if (shouldEnforceLimit) {
+            $('#qty_error_' + id).text('Quantity exceeds available inventory');
+            validationError = true;
+          }
+        } else if (productCode.trim() !== '') {
+          if (qty.trim() === '') {
+            $('#qty_error_' + id).text('Quantity is required');
+          } else {
+            $('#qty_error_' + id).text('');
+          }
+          validationError = true;
+        } else {
+          $('#product_code_error_' + id).text('');
+        }
+      });
+      if (validationError) {
+        ShowNotification('error', 'Quick Order', 'Please fix the highlighted rows before adding to order.');
+        return;
+      }
+      if (products.length === 0) {
+        ShowNotification('error', 'Quick Order', 'Please add at least one product');
+        return;
+      }
+      $.ajax({
+        url: quickOrderLink,
+        type: 'POST',
+        data: {
+          products: products,
+          _token: this.config().csrf
+        },
+        beforeSend: function beforeSend() {
+          $('#add_to_order_btn').html(_this6.spinnerHtml('Adding to order...'));
+          _this6.setBusy(true, 'Adding products to your order...');
+        },
+        success: function success(response) {
+          if (response.success) {
+            _this6.showNoProductsFound();
+            _this6.updateAddedProductCount();
+            ShowNotification('success', 'Quick Order', response.message);
+            setTimeout(function () {
+              Amplify.loadCartDropdown();
+            }, 1000);
+          } else {
+            ShowNotification('error', 'Quick Order', response.message);
+          }
+        },
+        error: function error(xhr) {
+          var message = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Unable to add products to your order. Please try again.';
+          ShowNotification('error', 'Quick Order', message);
+        },
+        complete: function complete() {
+          $('#add_to_order_btn').html(_this6.config().addToOrderLabel);
+          _this6.setBusy(false);
+        }
+      });
+    } else {
+      ShowNotification('error', 'Quick Order', 'Please add at least one product');
+    }
+  }
+};
+function bootQuickOrder() {
+  var _window$Amplify;
+  (_window$Amplify = window.Amplify) === null || _window$Amplify === void 0 || (_window$Amplify = _window$Amplify.QuickOrder) === null || _window$Amplify === void 0 || _window$Amplify.init();
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bootQuickOrder);
+} else {
+  bootQuickOrder();
+}
+
+/***/ }),
+
+/***/ "./resources/js/modules/recently-viewed.js":
+/*!*************************************************!*\
+  !*** ./resources/js/modules/recently-viewed.js ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   RecentlyViewed: () => (/* binding */ RecentlyViewed)
+/* harmony export */ });
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+var RecentlyViewed = {
+  init: function init(amplify) {
+    if (this.isEnabled()) {
+      this.mergeGuestHistory();
+      this.initProductDetailTracking();
+      this.initCarouselWidgets();
+      this.initPageWidgets();
+    }
+    return this;
+  },
+  storageKey: function storageKey() {
+    var _Amplify$config$url;
+    return Amplify.config.recentlyViewedStorageKey || ((_Amplify$config$url = Amplify.config.url) === null || _Amplify$config$url === void 0 ? void 0 : _Amplify$config$url.recentlyViewedStorageKey) || 'amplify-rv';
+  },
+  maxItems: function maxItems() {
+    var _Amplify$config$url2;
+    return parseInt(Amplify.config.recentlyViewedMaxItems || ((_Amplify$config$url2 = Amplify.config.url) === null || _Amplify$config$url2 === void 0 ? void 0 : _Amplify$config$url2.recentlyViewedMaxItems) || 20, 10);
+  },
+  isEnabled: function isEnabled() {
+    var _Amplify$config$recen, _Amplify$config$url3;
+    var enabled = (_Amplify$config$recen = Amplify.config.recentlyViewedEnabled) !== null && _Amplify$config$recen !== void 0 ? _Amplify$config$recen : (_Amplify$config$url3 = Amplify.config.url) === null || _Amplify$config$url3 === void 0 ? void 0 : _Amplify$config$url3.recentlyViewedEnabled;
+    return enabled !== false;
+  },
+  isAuthenticated: function isAuthenticated() {
+    return Amplify.config.isCustomerAuthenticated === true;
+  },
+  urls: function urls() {
+    var _Amplify$config$url4;
+    return ((_Amplify$config$url4 = Amplify.config.url) === null || _Amplify$config$url4 === void 0 ? void 0 : _Amplify$config$url4.recentlyViewed) || {};
+  },
+  getAll: function getAll() {
+    try {
+      var stored = window.localStorage.getItem(this.storageKey());
+      var parsed = stored ? JSON.parse(stored) : [];
+      return Array.isArray(parsed) ? parsed.map(function (id) {
+        return parseInt(id, 10);
+      }).filter(Boolean) : [];
+    } catch (error) {
+      return [];
+    }
+  },
+  save: function save(ids) {
+    window.localStorage.setItem(this.storageKey(), JSON.stringify(ids.slice(0, this.maxItems())));
+  },
+  add: function add(productId) {
+    productId = parseInt(productId, 10);
+    if (!productId) {
+      return this.getAll();
+    }
+    var ids = this.getAll().filter(function (id) {
+      return id !== productId;
+    });
+    ids.unshift(productId);
+    this.save(ids);
+    return ids;
+  },
+  remove: function remove(productId) {
+    productId = parseInt(productId, 10);
+    var ids = this.getAll().filter(function (id) {
+      return id !== productId;
+    });
+    this.save(ids);
+    return ids;
+  },
+  clearStorage: function clearStorage() {
+    window.localStorage.removeItem(this.storageKey());
+  },
+  record: function record(productId) {
+    if (!this.isEnabled()) {
+      return;
+    }
+    productId = parseInt(productId, 10);
+    if (!productId) {
+      return;
+    }
+    if (this.isAuthenticated()) {
+      return;
+    }
+    this.add(productId);
+  },
+  mergeGuestHistory: function mergeGuestHistory() {
+    var _this = this;
+    if (!this.isEnabled() || !this.isAuthenticated()) {
+      return;
+    }
+    var productIds = this.getAll();
+    if (!productIds.length || !this.urls().merge) {
+      return;
+    }
+    $.ajax({
+      url: this.urls().merge,
+      method: 'POST',
+      dataType: 'json',
+      data: {
+        product_ids: productIds,
+        _token: this.getCsrfTokenFromMeta()
+      }
+    }).done(function (response) {
+      if (response !== null && response !== void 0 && response.success) {
+        _this.clearStorage();
+      }
+    });
+  },
+  parseSettings: function parseSettings(raw) {
+    try {
+      return raw ? JSON.parse(raw) : {};
+    } catch (error) {
+      return {};
+    }
+  },
+  buildRequestSettings: function buildRequestSettings() {
+    var settings = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    return {
+      layout: settings.layout || 'card',
+      products_limit: settings.productsLimit,
+      show_cart_btn: settings.showCartBtn,
+      cart_button_label: settings.cartButtonLabel,
+      detail_button_label: settings.detailButtonLabel,
+      show_price: settings.showPrice,
+      show_guest_price: settings.showGuestPrice,
+      show_top_discount_badge: settings.showTopDiscountBadge,
+      show_order_list: settings.showOrderList,
+      order_list_label: settings.orderListLabel,
+      show_navigation: settings.showNavigation,
+      slider_item_gap: settings.sliderItemGap,
+      display_product_code: settings.displayProductCode,
+      display_short_description: settings.displayShortDescription,
+      display_manufacturer: settings.displayManufacturer,
+      allow_remove: settings.allowRemove === true
+    };
+  },
+  fetchProducts: function fetchProducts(settings) {
+    var productIds = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+    var ids = productIds || this.getAll();
+    if (!ids.length || !this.urls().products) {
+      return $.Deferred().resolve({
+        success: true,
+        count: 0,
+        html: ''
+      }).promise();
+    }
+    var data = _objectSpread(_objectSpread({
+      product_ids: ids
+    }, this.buildRequestSettings(settings)), {}, {
+      _token: this.getCsrfTokenFromMeta()
+    });
+    return $.ajax({
+      url: this.urls().products,
+      method: 'POST',
+      dataType: 'json',
+      data: data
+    });
+  },
+  getCsrfTokenFromMeta: function getCsrfTokenFromMeta() {
+    return $('meta[name="csrf-token"]').attr('content') || '';
+  },
+  mountCarousel: function mountCarousel($carousel, html) {
+    if (!html) {
+      $carousel.closest('.recently-viewed-section').addClass('d-none');
+      return;
+    }
+    var section = $carousel.closest('.recently-viewed-section');
+    section.removeClass('d-none');
+    $carousel.removeClass('d-none');
+    $carousel.trigger('destroy.owl.carousel');
+    $carousel.html(html);
+    if (typeof window.initOwlCarousel === 'function') {
+      window.initOwlCarousel($carousel);
+    } else if ($carousel.data('owl.carousel')) {
+      $carousel.owlCarousel('refresh');
+    } else {
+      $carousel.owlCarousel(JSON.parse($carousel.attr('data-owl-carousel') || '{}'));
+    }
+  },
+  initCarouselWidgets: function initCarouselWidgets() {
+    var _this2 = this;
+    document.querySelectorAll('[data-recently-viewed-widget="carousel"]').forEach(function (widget) {
+      if (widget.dataset.recentlyViewedLoaded === '1') {
+        return;
+      }
+      var settings = _this2.parseSettings(widget.dataset.recentlyViewedSettings || '{}');
+      var isAuthenticated = widget.dataset.recentlyViewedAuthenticated === '1';
+      if (isAuthenticated && widget.querySelector('.owl-carousel .grid-item')) {
+        widget.dataset.recentlyViewedLoaded = '1';
+        return;
+      }
+      if (!isAuthenticated) {
+        widget.dataset.recentlyViewedLoaded = '1';
+        var $carousel = $(widget).find('.recently-viewed-guest-carousel');
+        _this2.fetchProducts(settings).done(function (response) {
+          if (response !== null && response !== void 0 && response.html) {
+            _this2.mountCarousel($carousel, response.html);
+          } else {
+            _this2.mountCarousel($carousel, '');
+          }
+        }).fail(function () {
+          widget.dataset.recentlyViewedLoaded = '0';
+        });
+      }
+    });
+  },
+  initPageWidgets: function initPageWidgets() {
+    var _this3 = this;
+    document.querySelectorAll('[data-recently-viewed-widget="page"]').forEach(function (widget) {
+      _this3.bindPageActions(widget);
+      if (widget.dataset.recentlyViewedAuthenticated === '1') {
+        return;
+      }
+      if (widget.dataset.recentlyViewedLoaded === '1') {
+        return;
+      }
+      widget.dataset.recentlyViewedLoaded = '1';
+      var settings = _this3.parseSettings(widget.dataset.recentlyViewedSettings || '{}');
+      var ids = _this3.getAll();
+      var grid = widget.querySelector('.recently-viewed-guest-grid');
+      var guestPage = widget.querySelector('.recently-viewed-guest-page');
+      var emptyState = widget.querySelector('.recently-viewed-guest-empty');
+      var clearButton = widget.querySelector('.recently-viewed-clear-btn');
+      if (!ids.length) {
+        guestPage === null || guestPage === void 0 || guestPage.classList.add('d-none');
+        emptyState === null || emptyState === void 0 || emptyState.classList.remove('d-none');
+        clearButton === null || clearButton === void 0 || clearButton.classList.add('d-none');
+        return;
+      }
+      _this3.fetchProducts(settings, ids).done(function (response) {
+        if (!(response !== null && response !== void 0 && response.html) || !grid) {
+          guestPage === null || guestPage === void 0 || guestPage.classList.add('d-none');
+          emptyState === null || emptyState === void 0 || emptyState.classList.remove('d-none');
+          clearButton === null || clearButton === void 0 || clearButton.classList.add('d-none');
+          return;
+        }
+        grid.innerHTML = response.html;
+        guestPage === null || guestPage === void 0 || guestPage.classList.remove('d-none');
+        emptyState === null || emptyState === void 0 || emptyState.classList.add('d-none');
+        clearButton === null || clearButton === void 0 || clearButton.classList.remove('d-none');
+        _this3.bindPageActions(widget);
+      }).fail(function () {
+        widget.dataset.recentlyViewedLoaded = '0';
+      });
+    });
+  },
+  bindPageActions: function bindPageActions(widget) {
+    var _this4 = this;
+    widget.querySelectorAll('.recently-viewed-remove-btn').forEach(function (button) {
+      if (button.dataset.bound === '1') {
+        return;
+      }
+      button.dataset.bound = '1';
+      button.addEventListener('click', function () {
+        var productId = parseInt(button.dataset.productId, 10);
+        if (!productId) {
+          return;
+        }
+        if (_this4.isAuthenticated()) {
+          $.ajax({
+            url: "".concat(_this4.urls().destroy, "/").concat(productId),
+            method: 'DELETE',
+            dataType: 'json'
+          }).done(function (response) {
+            if (response !== null && response !== void 0 && response.success) {
+              var _button$closest;
+              (_button$closest = button.closest('.recently-viewed-grid-item')) === null || _button$closest === void 0 || _button$closest.remove();
+              Amplify.notify('success', response.message);
+            }
+          });
+        } else {
+          var _button$closest2;
+          _this4.remove(productId);
+          (_button$closest2 = button.closest('.recently-viewed-grid-item')) === null || _button$closest2 === void 0 || _button$closest2.remove();
+          _this4.initPageWidgets();
+        }
+      });
+    });
+    widget.querySelectorAll('.recently-viewed-clear-btn').forEach(function (button) {
+      if (button.dataset.bound === '1') {
+        return;
+      }
+      button.dataset.bound = '1';
+      button.addEventListener('click', function () {
+        swal.fire({
+          title: 'Clear recently viewed?',
+          text: 'This will remove all recently viewed products from your history.',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Clear All',
+          cancelButtonText: 'Cancel'
+        }).then(function (result) {
+          if (!result.isConfirmed) {
+            return;
+          }
+          if (_this4.isAuthenticated()) {
+            $.ajax({
+              url: _this4.urls().clear,
+              method: 'DELETE',
+              dataType: 'json'
+            }).done(function (response) {
+              if (response !== null && response !== void 0 && response.success) {
+                window.location.reload();
+              }
+            });
+          } else {
+            _this4.clearStorage();
+            window.location.reload();
+          }
+        });
+      });
+    });
+  },
+  initProductDetailTracking: function initProductDetailTracking() {
+    var _this5 = this;
+    document.querySelectorAll('[data-recently-viewed-product-id]').forEach(function (element) {
+      _this5.record(element.dataset.recentlyViewedProductId);
+    });
+  }
+};
+
+/***/ }),
+
+/***/ "./resources/js/widgets.js":
+/*!*********************************!*\
+  !*** ./resources/js/widgets.js ***!
+  \*********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _events_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./events.js */ "./resources/js/events.js");
+/* harmony import */ var _modules_quick_order_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/quick-order.js */ "./resources/js/modules/quick-order.js");
+/* harmony import */ var _modules_media_query_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/media-query.js */ "./resources/js/modules/media-query.js");
+/* harmony import */ var _modules_recently_viewed__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/recently-viewed */ "./resources/js/modules/recently-viewed.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+
+
+
+
+
+window.swal = sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().mixin({
+  theme: 'bootstrap-4-light',
+  showCloseButton: true,
+  // buttonsStyling: false,
+  customClass: {
+    confirmButton: 'btn btn-danger',
+    cancelButton: 'btn btn-outline-secondary'
+  }
+});
+window.Amplify = {
+  modules: {
+    QuickOrder: _modules_quick_order_js__WEBPACK_IMPORTED_MODULE_2__.QuickOrder,
+    MediaQuery: _modules_media_query_js__WEBPACK_IMPORTED_MODULE_3__.MediaQuery,
+    RecentlyViewed: _modules_recently_viewed__WEBPACK_IMPORTED_MODULE_4__.RecentlyViewed
+  },
+  config: {
+    env: 'production',
+    name: 'Amplify',
+    debug: false,
+    currency: 'USD',
+    language: 'en',
+    dateFormat: 'dd/mm/yyyy',
+    dateTimeFormat: 'dd/mm/yyyy',
+    allowGuestPrice: false,
+    authenticated: false,
+    cart: {},
+    url: {
+      carts: '/carts',
+      favourites: '/favourites',
+      orderLists: '/order-lists',
+      orderExport: '/orders/export'
+    }
+  },
+  cart: {},
+  initialized: false,
+  /**
+   * Register an Amplify module.
+   */
+  register: function register(name, module) {
+    if (this.modules[name]) {
+      console.warn("Amplify module \"".concat(name, "\" is already registered."));
+      return this;
+    }
+    this.modules[name] = module;
+
+    // Initialize immediately if Amplify is already initialized.
+    if (this.initialized) {
+      this.initializeModule(name, module);
+    }
+    return this;
+  },
+  initializeModule: function initializeModule(name, module) {
+    if (typeof module.init !== 'function') {
+      console.error("Amplify module \"".concat(name, "\" is missing an init() function."));
+      return false;
+    }
+    if (this.hasOwnProperty(name)) {
+      console.error("Amplify has a reserved property name \"".concat(name, "\"."));
+      return false;
+    }
+    try {
+      this[name] = module.init(this);
+      if (this.config.debug) {
+        console.log("".concat(name, " module initialized."));
+      }
+      return true;
+    } catch (error) {
+      console.error("Failed to initialize Amplify module \"".concat(name, "\"."), error);
+      return false;
+    }
+  },
+  initModules: function initModules() {
+    for (var _i = 0, _Object$entries = Object.entries(this.modules); _i < _Object$entries.length; _i++) {
+      var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+        name = _Object$entries$_i[0],
+        module = _Object$entries$_i[1];
+      this.initializeModule(name, module);
+    }
+  },
+  init: function init(config) {
+    this.config = config;
+    this.initModules();
+    window.dispatchEvent(new _events_js__WEBPACK_IMPORTED_MODULE_1__.InitEvent(this.config));
+  },
+  clientCode: function clientCode() {
+    return atob(this.config.client.split('').reverse().join(''));
+  },
+  cartUrl: function cartUrl() {
+    var append = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+    return this.config.url.carts + append;
+  },
+  cartItemRemoveUrl: function cartItemRemoveUrl() {
+    return '/carts/remove/cart_item_id';
+  },
+  maxCartItemQuantity: function maxCartItemQuantity() {
+    return this.config.cart.maxQuantity;
+  },
+  favouritesCreateUrl: function favouritesCreateUrl() {
+    return this.config.url.favourites;
+  },
+  orderListUrl: function orderListUrl() {
+    return this.config.url.orderLists;
+  },
+  orderExportUrl: function orderExportUrl() {
+    return this.config.url.orderExport;
+  },
+  productNotAvailableMessage: function productNotAvailableMessage(code) {
+    return "".concat(this.config.cart.notAvailableMsg).replace('__product_code__', code).toString();
+  },
+  isHtml: function isHtml(text) {
+    return new DOMParser().parseFromString(text, 'text/html').body.children.length > 0;
+  },
+  isNumeric: function isNumeric(value) {
+    return /^-?\d+(\.\d+)?$/.test(value);
+  },
+  getCart: function getCart() {
+    if (!this.cart) {
+      $.ajax({
+        url: this.cartUrl('/show'),
+        method: 'GET',
+        dataType: 'json',
+        headers: {
+          Accept: 'application/json'
+        },
+        success: function success(response) {
+          Amplify.cart = response;
+        },
+        error: function error(xhr) {
+          var _xhr$responseJSON$mes;
+          console.error((_xhr$responseJSON$mes = xhr.responseJSON.message) !== null && _xhr$responseJSON$mes !== void 0 ? _xhr$responseJSON$mes : xhr.statusText, 'Cart');
+        }
+      });
+    }
+    return this.cart;
+  },
+  /**
+   * The function validate if the customer is logged in
+   * return bool
+   */
+  authenticated: function authenticated() {
+    return this.config.authenticated;
+  },
+  /**
+   * This function fires a popup notification on top right corner
+   * @param type
+   * @param message
+   * @param title
+   * @param options
+   */
+  notify: function notify() {
+    var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'info';
+    var message = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Your message here!';
+    var title = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'Notification';
+    var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+    var allowedTypes = ['success', 'error', 'warning', 'info', 'question'];
+    if (!allowedTypes.includes(type)) {
+      alert("The ".concat(type, " type is not allowed. Allowed types: ").concat(allowedTypes));
+    }
+    var toast = window.swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 2500,
+      timerProgressBar: true,
+      didOpen: function didOpen(t) {
+        t.onmouseenter = (sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().stopTimer);
+        t.onmouseleave = (sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().resumeTimer);
+      },
+      padding: '0.25em 0.75em'
+    });
+    toast.fire(_objectSpread({
+      icon: type,
+      title: title,
+      html: message
+    }, options));
+  },
+  /**
+   * The function fires a confirmation popup that ask for confirmation
+   * and trigger a action when confirmed.
+   * @param question
+   * @param title
+   * @param confirmBtnText
+   * @param options
+   * @returns {Promise<SweetAlertResult<Awaited<any>>>}
+   */
+  confirm: function confirm() {
+    var question = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'You won\'t be able to revert this!';
+    var title = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Are you sure?';
+    var confirmBtnText = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+    var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+    var confirmAlert = window.swal.mixin({
+      icon: 'warning',
+      showCancelButton: true,
+      showConfirmButton: true,
+      showLoaderOnConfirm: true,
+      allowOutsideClick: false,
+      padding: '1em'
+    });
+    return confirmAlert.fire(_objectSpread({
+      title: title,
+      html: question,
+      confirmButtonText: confirmBtnText
+    }, options));
+  },
+  alert: function alert() {
+    var message = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'This action is not allowed';
+    var title = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Alert';
+    var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    return this.confirm(message, title, '', _objectSpread({
+      icon: 'warning',
+      showConfirmButton: true,
+      showLoaderOnConfirm: false,
+      showCancelButton: false,
+      confirmButtonText: 'Okay',
+      customClass: {
+        confirmButton: 'btn btn-outline-secondary'
+      },
+      willOpen: function willOpen() {
+        return document.querySelector('.swal2-actions').style.justifyContent = 'center';
+      }
+    }, options));
+  },
+  /**
+   * This function handle the custom part number add, update and remove operation.
+   *
+   * @param element
+   * @param inputId
+   */
+  syncCustomPartNumber: function syncCustomPartNumber(element, inputId) {
+    var input = document.getElementById(inputId);
+    var button = element;
+    var actionLink = button.dataset.route;
+    var productId = button.dataset.productId;
+    var oldValue = input.dataset.current.toString();
+    var uom = input.dataset.uom.toString();
+    var newValue = input.value.toString();
+    if (!this.authenticated()) {
+      this.notify('warning', 'You need to be logged in to access this feature.', 'Customer Part Number');
+      return;
+    }
+    if (!oldValue && !newValue) {
+      this.notify('warning', 'This field is required', 'Customer Part Number');
+      return;
+    }
+
+    //current exist and new empty
+    if (oldValue) {
+      this.confirm('Are you sure you want to remove this part number?', 'Customer Part Number', 'Remove', {
+        preConfirm: function () {
+          var _preConfirm = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
+            return _regenerator().w(function (_context) {
+              while (1) switch (_context.n) {
+                case 0:
+                  _context.n = 1;
+                  return $.ajax({
+                    url: actionLink,
+                    type: 'DELETE',
+                    data: {
+                      product_id: productId,
+                      customer_product_uom: uom,
+                      customer_product_code: oldValue
+                    },
+                    success: function success(result) {
+                      input.dataset.current = false;
+                      return result;
+                    },
+                    error: function error(xhr) {
+                      var _xhr$responseJSON$mes2;
+                      sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().showValidationMessage("<p>".concat((_xhr$responseJSON$mes2 = xhr.responseJSON.message) !== null && _xhr$responseJSON$mes2 !== void 0 ? _xhr$responseJSON$mes2 : xhr.statusText, "</p>"));
+                      sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().hideLoading();
+                    }
+                  });
+                case 1:
+                  return _context.a(2, _context.v);
+              }
+            }, _callee);
+          }));
+          function preConfirm() {
+            return _preConfirm.apply(this, arguments);
+          }
+          return preConfirm;
+        }(),
+        allowOutsideClick: function allowOutsideClick() {
+          return !sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().isLoading();
+        }
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          Amplify.notify('warning', result.value.message, 'Customer Part Number');
+          input.value = '';
+          input.dataset.current = '';
+          button.innerHTML = 'Add';
+        }
+      })["catch"](function (error) {
+        return console.error(error);
+      });
+    } else {
+      $.ajax({
+        url: actionLink,
+        type: 'POST',
+        data: {
+          product_id: productId,
+          customer_product_uom: uom,
+          customer_product_code: newValue
+        },
+        success: function success(response) {
+          Amplify.notify('success', response.message, 'Customer Part Number');
+          input.dataset.current = newValue;
+          button.innerHTML = 'Delete';
+        },
+        error: function error(xhr) {
+          var _xhr$responseJSON$mes3;
+          Amplify.alert((_xhr$responseJSON$mes3 = xhr.responseJSON.message) !== null && _xhr$responseJSON$mes3 !== void 0 ? _xhr$responseJSON$mes3 : xhr.statusText, 'Customer Part Number');
+        }
+      });
+    }
+  },
+  /**
+   * This function handle the clear cart option.
+   * @param element
+   */
+  clearCart: function clearCart(element) {
+    var _this = this;
+    this.confirm('Are you sure to remove all items from shopping cart?', 'Cart', 'Confirm', {
+      preConfirm: function () {
+        var _preConfirm2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
+          return _regenerator().w(function (_context2) {
+            while (1) switch (_context2.n) {
+              case 0:
+                _context2.n = 1;
+                return $.ajax({
+                  url: _this.cartUrl(),
+                  type: 'DELETE',
+                  data: {},
+                  header: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                  },
+                  success: function success(result) {
+                    return result;
+                  },
+                  error: function error(xhr) {
+                    var _xhr$responseJSON$mes4;
+                    sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().showValidationMessage("<p>".concat((_xhr$responseJSON$mes4 = xhr.responseJSON.message) !== null && _xhr$responseJSON$mes4 !== void 0 ? _xhr$responseJSON$mes4 : xhr.statusText, "</p>"));
+                    sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().hideLoading();
+                  }
+                });
+              case 1:
+                return _context2.a(2, _context2.v);
+            }
+          }, _callee2);
+        }));
+        function preConfirm() {
+          return _preConfirm2.apply(this, arguments);
+        }
+        return preConfirm;
+      }(),
+      allowOutsideClick: function allowOutsideClick() {
+        return !sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().isLoading();
+      }
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        var _result$value;
+        Amplify.notify('success', result.value.message, 'Cart');
+        window.dispatchEvent(new _events_js__WEBPACK_IMPORTED_MODULE_1__.RemoveFromCartEvent((_result$value = result.value) === null || _result$value === void 0 || (_result$value = _result$value.data) === null || _result$value === void 0 ? void 0 : _result$value.items));
+        setTimeout(function () {
+          var _window$location = window.location,
+            origin = _window$location.origin,
+            pathname = _window$location.pathname;
+          window.location.replace(origin + pathname);
+        }, 2000);
+      }
+    })["catch"](function (error) {
+      return console.error(error);
+    });
+  },
+  discardQtyChange: function discardQtyChange(event) {
+    var selector = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'input[data-quantity]';
+    document.querySelectorAll(selector).forEach(function (el) {
+      return el.value = el.dataset.quantity;
+    });
+    this.handleQuantityChange(selector, 'input');
+  },
+  renderCartItemBadge: function renderCartItemBadge(count) {
+    if (count.length > 0) {
+      $('.total_cart_items').text(count);
+      $('.total_cart_items').removeClass('d-none');
+    } else {
+      $('.total_cart_items').text(count);
+      $('.total_cart_items').addClass('d-none');
+    }
+  },
+  removeCartItem: function removeCartItem(cartItemId) {
+    var redirect = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+    var actionLink = this.cartItemRemoveUrl().replace('cart_item_id', cartItemId);
+    return this.confirm('Are you sure to remove this item from cart?', 'Cart', 'Remove', {
+      preConfirm: function () {
+        var _preConfirm3 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
+          return _regenerator().w(function (_context3) {
+            while (1) switch (_context3.n) {
+              case 0:
+                _context3.n = 1;
+                return $.ajax({
+                  url: actionLink,
+                  type: 'DELETE',
+                  data: {},
+                  header: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                  },
+                  success: function success(result) {
+                    return result;
+                  },
+                  error: function error(xhr) {
+                    var _xhr$responseJSON$mes5;
+                    sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().showValidationMessage("<p>".concat((_xhr$responseJSON$mes5 = xhr.responseJSON.message) !== null && _xhr$responseJSON$mes5 !== void 0 ? _xhr$responseJSON$mes5 : xhr.statusText, "</p>"));
+                    sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().hideLoading();
+                  }
+                });
+              case 1:
+                return _context3.a(2, _context3.v);
+            }
+          }, _callee3);
+        }));
+        function preConfirm() {
+          return _preConfirm3.apply(this, arguments);
+        }
+        return preConfirm;
+      }(),
+      allowOutsideClick: function allowOutsideClick() {
+        return !sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().isLoading();
+      }
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        var _result$value$data$it, _result$value2, _result$value$data$to, _result$value3;
+        Amplify.notify('success', result.value.message, 'Cart');
+        window.dispatchEvent(new CustomEvent('qty-removed'));
+        window.dispatchEvent(new _events_js__WEBPACK_IMPORTED_MODULE_1__.RemoveFromCartEvent((_result$value$data$it = (_result$value2 = result.value) === null || _result$value2 === void 0 || (_result$value2 = _result$value2.data) === null || _result$value2 === void 0 ? void 0 : _result$value2.items) !== null && _result$value$data$it !== void 0 ? _result$value$data$it : []));
+        Amplify.renderCartItemBadge((_result$value$data$to = (_result$value3 = result.value) === null || _result$value3 === void 0 || (_result$value3 = _result$value3.data) === null || _result$value3 === void 0 ? void 0 : _result$value3.total) !== null && _result$value$data$to !== void 0 ? _result$value$data$to : '');
+      }
+    })["catch"](function (error) {
+      return console.error(error);
+    });
+  },
+  updateCartItem: function updateCartItem(e, target, cartItemId) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!this.handleQuantityChange(target, 'input')) {
+      return;
+    }
+    var targetElement = document.querySelector(target);
+    var quantity = targetElement.value;
+    var actionLink = this.cartUrl();
+    var warehouseCode = targetElement.dataset.warehouseCode;
+    var productCode = targetElement.dataset.productCode;
+    swal.fire({
+      title: 'Cart',
+      icon: 'warning',
+      backdrop: true,
+      showCancelButton: false,
+      text: "Updating ".concat(productCode, "'s information in cart..."),
+      confirmButtonText: 'Okay',
+      customClass: {
+        confirmButton: 'btn btn-outline-secondary'
+      },
+      willOpen: function willOpen() {
+        return document.querySelector('.swal2-actions').style.justifyContent = 'center';
+      },
+      didOpen: function didOpen() {
+        return $.ajax({
+          beforeSend: function beforeSend() {
+            return sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().showLoading();
+          },
+          url: actionLink,
+          type: 'PATCH',
+          data: {
+            products: [{
+              id: cartItemId,
+              qty: Number(quantity),
+              product_code: productCode,
+              product_warehouse_code: warehouseCode
+            }]
+          },
+          header: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          success: function success(result) {
+            if (result.success) {
+              sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().close();
+              Amplify.notify('success', result.message, 'Cart');
+              setTimeout(function () {
+                var _window$location2 = window.location,
+                  origin = _window$location2.origin,
+                  pathname = _window$location2.pathname;
+                window.location.replace(origin + pathname);
+              }, 2000);
+            }
+          },
+          error: function error(xhr) {
+            var _xhr$responseJSON$mes6;
+            sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().showValidationMessage("<p>".concat((_xhr$responseJSON$mes6 = xhr.responseJSON.message) !== null && _xhr$responseJSON$mes6 !== void 0 ? _xhr$responseJSON$mes6 : xhr.statusText, "</p>"));
+            sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().hideLoading();
+          }
+        });
+      },
+      allowOutsideClick: function allowOutsideClick() {
+        return !sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().isLoading();
+      }
+    });
+  },
+  updateCart: function updateCart(e) {
+    var _this2 = this;
+    e.preventDefault();
+    e.stopPropagation();
+    var itemChanged = [];
+    document.querySelectorAll('#cart-summary input[data-quantity]').forEach(function (input) {
+      var currentValue = input.value;
+      var originalValue = input.dataset.quantity;
+      if (currentValue !== originalValue) {
+        itemChanged.push({
+          id: Number(input.id.replace('cart-item-', '')),
+          qty: Number(currentValue),
+          product_code: input.dataset.productCode,
+          product_warehouse_code: input.dataset.warehouseCode
+        });
+      }
+    });
+    if (itemChanged.length === 0) {
+      return;
+    }
+    swal.fire({
+      title: 'Cart',
+      icon: 'warning',
+      backdrop: true,
+      showCancelButton: false,
+      text: "Updating product information in cart...",
+      confirmButtonText: 'Okay',
+      customClass: {
+        confirmButton: 'btn btn-outline-secondary'
+      },
+      willOpen: function willOpen() {
+        return document.querySelector('.swal2-actions').style.justifyContent = 'center';
+      },
+      didOpen: function didOpen() {
+        return $.ajax({
+          beforeSend: function beforeSend() {
+            return sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().showLoading();
+          },
+          url: _this2.cartUrl(),
+          type: 'PATCH',
+          data: {
+            products: itemChanged
+          },
+          header: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          success: function success(result) {
+            if (result.success) {
+              sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().close();
+              Amplify.notify('success', result.message, 'Cart');
+              setTimeout(function () {
+                var _window$location3 = window.location,
+                  origin = _window$location3.origin,
+                  pathname = _window$location3.pathname;
+                window.location.replace(origin + pathname);
+              }, 2000);
+            }
+          },
+          error: function error(xhr) {
+            var _xhr$responseJSON$mes7;
+            sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().showValidationMessage("<p>".concat((_xhr$responseJSON$mes7 = xhr.responseJSON.message) !== null && _xhr$responseJSON$mes7 !== void 0 ? _xhr$responseJSON$mes7 : xhr.statusText, "</p>"));
+            sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().hideLoading();
+          }
+        });
+      },
+      allowOutsideClick: function allowOutsideClick() {
+        return !sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().isLoading();
+      }
+    });
+  },
+  /**
+   * This function load the current items and display in cart summary
+   * table
+   */
+  loadCartSummary: function loadCartSummary() {
+    var _this3 = this;
+    return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
+      return _regenerator().w(function (_context4) {
+        while (1) switch (_context4.n) {
+          case 0:
+            window.addEventListener('qty-change', function (event) {
+              var container = document.querySelector('div.x-cart-summary');
+              Amplify.listenQtyChangeOnCartSummary(event, container.dataset.updateStyle);
+            });
+            window.addEventListener('qty-removed', function (event) {
+              return Amplify.loadCartSummary();
+            });
+            _context4.n = 1;
+            return $.ajax({
+              beforeSend: function beforeSend() {
+                $('#cart-preloader').show();
+                $('#cart-skeleton').hide();
+                $('#cart-summary').hide();
+              },
+              url: _this3.cartUrl('/show'),
+              method: 'GET',
+              dataType: 'json',
+              headers: {
+                Accept: 'application/json'
+              },
+              success: function success(response) {
+                Amplify.cart = response;
+                $('#cart-preloader').hide();
+                $('#cart-item-summary').empty();
+                if (response.data.products.length > 0) {
+                  $("#cart-skeleton").hide();
+                  $("#cart-summary").show();
+                  $(response.data.products).each(function (index, item) {
+                    var layout = Amplify.renderCartSummaryItemRow(item, index);
+                    $('#cart-item-summary').append(layout);
+                  });
+                } else {
+                  $("#cart-skeleton").show();
+                  $("#cart-summary").hide();
+                }
+                $('#order-subtotal').text(response.data.sub_total);
+              },
+              error: function error(xhr) {
+                var _xhr$responseJSON$mes8;
+                Amplify.cart = null;
+                Amplify.alert((_xhr$responseJSON$mes8 = xhr.responseJSON.message) !== null && _xhr$responseJSON$mes8 !== void 0 ? _xhr$responseJSON$mes8 : xhr.statusText, 'Cart');
+              }
+            }).done(function () {
+              return Amplify.attachQuantityInputEvents();
+            });
+          case 1:
+            return _context4.a(2);
+        }
+      }, _callee4);
+    }))();
+  },
+  renderCartSummaryItemRow: function renderCartSummaryItemRow(product, index) {
+    var _product$additional_i, _product$additional_i2, _product$additional_i3, _product$additional_i4;
+    var template = $('#cart-single-item-template').html();
+    var mapper = {
+      '{serial}': index + 1,
+      '{cart_item_id}': product.id,
+      '{code}': product.product_code,
+      '{warehouse}': product.warehouse_name,
+      '{warehouse_code}': product.product_warehouse_code,
+      '{name}': product.product_name,
+      '{description}': product.short_description,
+      '{manufacturer}': product.manufacturer_name,
+      '{quantity}': product.qty,
+      '{unit_price}': product.price,
+      '{subtotal}': product.subtotal,
+      '{image}': product.product_image,
+      '{uom}': product.uom,
+      '{actions}': JSON.stringify(product),
+      '{url}': product.url,
+      '{min_qty}': (_product$additional_i = product === null || product === void 0 || (_product$additional_i2 = product.additional_info) === null || _product$additional_i2 === void 0 ? void 0 : _product$additional_i2.minimum_quantity) !== null && _product$additional_i !== void 0 ? _product$additional_i : 1,
+      '{qty_interval}': (_product$additional_i3 = product === null || product === void 0 || (_product$additional_i4 = product.additional_info) === null || _product$additional_i4 === void 0 ? void 0 : _product$additional_i4.quantity_interval) !== null && _product$additional_i3 !== void 0 ? _product$additional_i3 : 1,
+      '{note}': product.note,
+      '{ncnr_msg}': product.ncnr_msg,
+      '{ship_restriction}': product.ship_restriction,
+      '{error}': product.error
+    };
+    return stringReplaceArray(Object.keys(mapper), Object.values(mapper), template);
+  },
+  /**
+   * This function load the current cart items from backend
+   * @returns {Promise<void>}
+   */
+  loadCartDropdown: function loadCartDropdown() {
+    var _this4 = this;
+    return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5() {
+      return _regenerator().w(function (_context5) {
+        while (1) switch (_context5.n) {
+          case 0:
+            _context5.n = 1;
+            return $.ajax(_this4.cartUrl('/show'), {
+              beforeSend: function beforeSend() {
+                return Amplify.renderEmptyCart('/vendor/widget/img/loading.gif', true);
+              },
+              method: 'GET',
+              dataType: 'json',
+              headers: {
+                Accept: 'application/json'
+              },
+              success: function (res) {
+                var _this5 = this;
+                this.cart = res;
+                $('.cart-dropdown').empty();
+                if (res.data.products.length > 0) {
+                  $("#cart-menu-subtotal").show();
+                  $('.total_cart_items').text(res.data.item_count);
+                  $('.total_cart_items').removeClass('d-none');
+                  res.data.products.forEach(function (product, index) {
+                    $('.cart-dropdown').append("\n                        <div class=\"dropdown-product-item\" id=\"cart_products_".concat(index, "\">\n                        <span class=\"dropdown-product-remove\" onclick=\"Amplify.removeCartItem(").concat(product.id, ")\">\n                            <i class=\"icon-cross\"></i>\n                        </span>\n                        <a class=\"dropdown-product-thumb\"\n                           href=\"").concat(product.url, "\">\n                            <img src=\"").concat(product.product_image, "\"\n                                onerror=\"this.onerror=null; this.src=FALLBACK_IMG_SRC;\"\n                                alt=\"Product\">\n                        </a>\n                        <div class=\"dropdown-product-info\">\n                            <a class=\"dropdown-product-title\" href=\"").concat(product.url, "\">\n                                ").concat(product.product_name, "\n                            </a>\n                            <span class=\"dropdown-product-details\" style=\"font-size: 90%; font-weight: bold\">").concat(_this5.clientCode() === 'STV' ? "".concat(product.qty, " @ ").concat(product.price, "/").concat(product.uom, " = ").concat(product.subtotal) : "".concat(product.qty, " x ").concat(product.price, " = ").concat(product.subtotal), "</span>\n                        </div>\n                    </div>"));
+                  });
+                  $('.total_cart_amount').text(res.data.sub_total);
+                } else {
+                  this.renderEmptyCart();
+                }
+              }.bind(Amplify),
+              error: function error(xhr, status) {
+                _this4.cart = null;
+                _this4.renderEmptyCart();
+              }
+            });
+          case 1:
+            return _context5.a(2);
+        }
+      }, _callee5);
+    }))();
+  },
+  renderEmptyCart: function renderEmptyCart() {
+    var imageUrl = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '/assets/img/empty_cart.png';
+    var loading = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+    $('.cart-dropdown').empty();
+    $("#cart-menu-subtotal").hide();
+    $('.total_cart_items').text(0);
+    $('.total_cart_amount').text('$0.00');
+    $('.total_cart_items').addClass('d-none');
+    var className = loading ? 'loading' : 'loaded';
+    $('.cart-dropdown').append("\n        <div id=\"cart_items\" class=\"".concat(className, "\">\n            <img src=\"").concat(imageUrl, "\" class=\"img-fluid\" alt=\"No items in cart\"/>\n        </div>\n    "));
+  },
+  attachQuantityInputEvents: function attachQuantityInputEvents() {
+    document.querySelectorAll('input.item-quantity').forEach(function (input) {
+      input.addEventListener('input', function () {
+        var value = this.value;
+
+        // Remove invalid characters
+        value = value.replace(/[^0-9.]/g, '');
+
+        // Allow only one dot
+        var parts = value.split('.');
+        if (parts.length > 2) {
+          value = parts[0] + '.' + parts.slice(1).join('');
+        }
+        this.value = value;
+        Amplify.handleQuantityChange('#' + this.id, 'input');
+      });
+      input.addEventListener('keydown', function (e) {
+        var allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'];
+        if (e.key === 'ArrowUp') {
+          Amplify.handleQuantityChange('#' + e.target.id, 'increment');
+        }
+        if (e.key === 'ArrowDown') {
+          Amplify.handleQuantityChange('#' + e.target.id, 'decrement');
+        }
+        if (allowedKeys.includes(e.key) || e.key >= '0' && e.key <= '9' || e.key === '.' && !this.value.includes('.')) {
+          return;
+        }
+        e.preventDefault();
+      });
+    });
+  },
+  /**
+   * The function handle quantity update and quantity value validation
+   *
+   * @param target
+   * @param action
+   */
+  handleQuantityChange: function handleQuantityChange(target, action) {
+    var targetElement = document.querySelector(target);
+    var productCode = targetElement.dataset.productCode;
+    if (!['decrement', 'input', 'increment'].includes(action)) {
+      this.alert("Invalid Quantity Change action [".concat(action, "]."), 'Cart');
+    }
+    if (!targetElement) {
+      this.alert("Target input element not found in ".concat(target), 'Cart');
+      return false;
+    }
+    targetElement.max = this.maxCartItemQuantity();
+    var minOrderQty = targetElement.dataset.minOrderQty;
+    if (!this.isNumeric(minOrderQty)) {
+      this.alert(this.productNotAvailableMessage(productCode), 'Cart');
+      return false;
+    }
+    minOrderQty = parseFloat(minOrderQty);
+    if (!minOrderQty) {
+      this.alert("Target input element [".concat(target, "] doesn't have \"data-min-order-qty\" attribute set or is empty."), 'Cart');
+      return false;
+    }
+    targetElement.min = minOrderQty;
+    var qtyInterval = targetElement.dataset.qtyInterval;
+    if (!this.isNumeric(qtyInterval)) {
+      this.alert("You entered an invalid quantity. Product ".concat(productCode, " requires a quantity between 1 and ").concat(this.maxCartItemQuantity(), "."), 'Cart');
+      return false;
+    }
+    qtyInterval = parseFloat(qtyInterval);
+    if (!qtyInterval) {
+      this.alert("Target input element [".concat(target, "] doesn't have \"data-qty-interval\" attribute set or is empty."), 'Cart');
+      return false;
+    }
+    targetElement.step = qtyInterval;
+    var quantity = Number(targetElement.value);
+    if (quantity <= 0 || quantity >= this.maxCartItemQuantity()) {
+      this.alert("You entered an invalid quantity. Product ".concat(productCode, " requires a quantity between ").concat(minOrderQty, " and ").concat(this.maxCartItemQuantity(), "."), 'Cart');
+      targetElement.value = minOrderQty;
+      return false;
+    }
+    switch (action) {
+      case 'decrement':
+        {
+          var newValue = quantity - qtyInterval;
+          if (newValue < minOrderQty) {
+            this.alert("Product ".concat(productCode, " requires a minimum order of ").concat(minOrderQty, " quantity. You entered ").concat(newValue, "."), 'Cart');
+            return false;
+          }
+          targetElement.value = newValue;
+          break;
+        }
+      case 'increment':
+        {
+          var _newValue = quantity + qtyInterval;
+          if (_newValue > this.maxCartItemQuantity()) {
+            this.alert("Product ".concat(productCode, " requires a maximum order quantity of ").concat(this.maxCartItemQuantity(), ". You entered ").concat(_newValue, "."), 'Cart');
+            return false;
+          }
+          targetElement.value = _newValue;
+          break;
+        }
+      default:
+        {
+          if (quantity < minOrderQty) {
+            this.alert("Product ".concat(productCode, " requires a minimum order quantity of ").concat(minOrderQty, ". You entered ").concat(quantity, "."), 'Cart');
+            targetElement.value = minOrderQty;
+            return false;
+          }
+          if (quantity > this.maxCartItemQuantity()) {
+            this.alert("Product ".concat(productCode, " requires a maximum order quantity of ").concat(this.maxCartItemQuantity(), ". You entered ").concat(quantity, "."), 'Cart');
+            targetElement.value = minOrderQty;
+            return false;
+          }
+          break;
+        }
+    }
+    if (targetElement.value.length > 0 && this.verifyQuantityInterval(targetElement.value, qtyInterval) === false) {
+      this.alert("Product ".concat(productCode, " requires a order pack(s) of ").concat(qtyInterval, ". You entered ").concat(targetElement.value, "."), 'Cart');
+      targetElement.value = this.toNearestQtyInterval(targetElement.value, qtyInterval);
+      return false;
+    }
+    window.dispatchEvent(new CustomEvent('qty-change', {
+      detail: {
+        target: targetElement,
+        quantity: Number(targetElement.value),
+        id: targetElement.id,
+        changed: targetElement.value !== targetElement.dataset.quantity
+      }
+    }));
+    return true;
+  },
+  verifyQuantityInterval: function verifyQuantityInterval(value, interval) {
+    if (interval <= 0) return false;
+    return Math.abs(value % interval) < 1e-10;
+  },
+  toNearestQtyInterval: function toNearestQtyInterval(value, interval) {
+    if (interval === 0) return value;
+    return Math.ceil(value / interval) * interval;
+  },
+  listenQtyChangeOnCartSummary: function listenQtyChangeOnCartSummary(event) {
+    var updateStyle = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'bulk';
+    var _event$detail = event.detail,
+      changed = _event$detail.changed,
+      id = _event$detail.id;
+    if (updateStyle === 'line') {
+      var cartId = id.replace('cart-item-', '');
+      if (changed) {
+        $("#update-button-".concat(cartId)).show();
+        $("#discard-button-".concat(cartId)).show();
+      } else {
+        $("#update-button-".concat(cartId)).hide();
+        $("#discard-button-".concat(cartId)).hide();
+      }
+    }
+    var hasAnyChange = false;
+    document.querySelectorAll('#cart-summary input[data-quantity]').forEach(function (input) {
+      if (input.value !== input.dataset.quantity) {
+        hasAnyChange = true;
+      }
+    });
+    hasAnyChange ? $("#checkout-btn").hide() : $("#checkout-btn").show();
+    if (updateStyle === 'bulk') {
+      hasAnyChange ? $('#quantity-update-actions').removeClass('d-none') : $('#quantity-update-actions').addClass('d-none');
+    }
+  },
+  /**
+   * The function create a shopping list from product and cart and order and invoice, etc.
+   * @param sourceId
+   * @param source
+   * @param title
+   */
+  addToNewOrderList: function addToNewOrderList(sourceId) {
+    var source = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'product';
+    var title = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'Order List';
+    if (!this.authenticated()) {
+      this.alert('You need to be logged in to access this feature.', title);
+      return;
+    }
+    this.confirm('Create a new ' + title.toLowerCase() + ' & add item on it', title, 'Save', {
+      icon: undefined,
+      input: "text",
+      inputPlaceholder: 'Enter name',
+      inputAttributes: {
+        required: true,
+        max: "255",
+        maxlength: "255",
+        autocorrect: "on"
+      },
+      customClass: {
+        confirmButton: 'btn btn-primary',
+        cancelButton: 'btn btn-outline-secondary'
+      },
+      preConfirm: function () {
+        var _preConfirm4 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee6() {
+          var payload, _t;
+          return _regenerator().w(function (_context6) {
+            while (1) switch (_context6.p = _context6.n) {
+              case 0:
+                _context6.p = 0;
+                payload = {
+                  type: source,
+                  list_id: null,
+                  list_name: $('#swal2-input').val(),
+                  list_type: $('#swal2-select').val(),
+                  list_desc: $('#swal2-textarea').val(),
+                  title: title
+                };
+                payload[source + '_id'] = sourceId;
+                _context6.n = 1;
+                return $.ajax({
+                  url: Amplify.orderListUrl(),
+                  type: 'POST',
+                  data: JSON.stringify(payload),
+                  contentType: 'application/json; charset=UTF-8',
+                  headers: {
+                    Accept: 'application/json'
+                  },
+                  success: function success(result) {
+                    return result;
+                  },
+                  error: function error(xhr) {
+                    var _xhr$responseJSON$mes9;
+                    sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().showValidationMessage("<p>".concat((_xhr$responseJSON$mes9 = xhr.responseJSON.message) !== null && _xhr$responseJSON$mes9 !== void 0 ? _xhr$responseJSON$mes9 : xhr.statusText, "</p>"));
+                    sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().hideLoading();
+                  }
+                });
+              case 1:
+                return _context6.a(2, _context6.v);
+              case 2:
+                _context6.p = 2;
+                _t = _context6.v;
+                return _context6.a(2, false);
+            }
+          }, _callee6, null, [[0, 2]]);
+        }));
+        function preConfirm() {
+          return _preConfirm4.apply(this, arguments);
+        }
+        return preConfirm;
+      }(),
+      allowOutsideClick: function allowOutsideClick() {
+        return !sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().isLoading();
+      },
+      willOpen: function willOpen() {
+        $.get('/api/list-types', function (result) {
+          $.each(result.data, function (index, item) {
+            $('#swal2-select').append('<option value="' + index + '">' + item + '</option>');
+          });
+          if (result.count >= 2) {
+            $('#swal2-select').css({
+              'display': 'flex'
+            }).addClass('swal2-input');
+          } else {
+            $('#swal2-select').css({
+              'display': 'none'
+            }).addClass('swal2-input');
+            var firstValue = Object.keys(result.data)[0];
+            $('#swal2-select').val(firstValue).trigger('change');
+          }
+        });
+      },
+      didOpen: function didOpen() {
+        $('#swal2-textarea').css('display', 'flex').attr('placeholder', 'Enter description');
+      }
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        Amplify.notify('success', result.value.message, title);
+      }
+    })["catch"](function (error) {
+      return console.error(error);
+    });
+    return true;
+  },
+  /**
+   *
+   * The function add a item(product/cart/order/invoice) to an exists order list
+   * @param listId
+   * @param sourceId
+   * @param source
+   * @param title
+   */
+  addToExistingOrderList: function addToExistingOrderList(listId, sourceId) {
+    var _this6 = this;
+    var source = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'product';
+    var title = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'Order List';
+    if (!this.authenticated()) {
+      this.alert('You need to be logged in to access this feature.', title);
+      return;
+    }
+    this.confirm('Add item to existing ' + title.toLowerCase(), title, 'Save', {
+      icon: undefined,
+      input: "text",
+      inputPlaceholder: 'Enter Quantity',
+      customClass: {
+        confirmButton: 'btn btn-primary',
+        cancelButton: 'btn btn-outline-secondary'
+      },
+      inputValidator: function inputValidator(value) {
+        if (!value) {
+          return "The quantity is required";
+        }
+        if (isNaN(value)) {
+          return "The quantity is not a number";
+        }
+        if (Number(value) <= 0) {
+          return "The quantity cannot to be less than 0";
+        }
+        if (Number(value) >= _this6.maxCartItemQuantity()) {
+          return "The quantity cannot to be greater than " + _this6.maxCartItemQuantity();
+        }
+      },
+      preConfirm: function () {
+        var _preConfirm5 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee7(value) {
+          var payload, _t2;
+          return _regenerator().w(function (_context7) {
+            while (1) switch (_context7.p = _context7.n) {
+              case 0:
+                _context7.p = 0;
+                payload = {
+                  type: source,
+                  list_id: listId,
+                  is_shopping_list: 1,
+                  list_type: null,
+                  title: title
+                };
+                payload[source + '_id'] = sourceId;
+                if (source === 'product') {
+                  payload['product_qty'] = value;
+                }
+                _context7.n = 1;
+                return $.ajax({
+                  url: Amplify.orderListUrl(),
+                  type: 'POST',
+                  data: JSON.stringify(payload),
+                  contentType: 'application/json; charset=UTF-8',
+                  headers: {
+                    Accept: 'application/json'
+                  },
+                  success: function success(result) {
+                    return result;
+                  },
+                  error: function error(xhr) {
+                    var _xhr$responseJSON$mes0;
+                    sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().showValidationMessage("<p>".concat((_xhr$responseJSON$mes0 = xhr.responseJSON.message) !== null && _xhr$responseJSON$mes0 !== void 0 ? _xhr$responseJSON$mes0 : xhr.statusText, "</p>"));
+                    sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().hideLoading();
+                  }
+                });
+              case 1:
+                return _context7.a(2, _context7.v);
+              case 2:
+                _context7.p = 2;
+                _t2 = _context7.v;
+                return _context7.a(2, false);
+            }
+          }, _callee7, null, [[0, 2]]);
+        }));
+        function preConfirm(_x) {
+          return _preConfirm5.apply(this, arguments);
+        }
+        return preConfirm;
+      }(),
+      allowOutsideClick: function allowOutsideClick() {
+        return !sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().isLoading();
+      }
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        Amplify.notify('success', result.value.message, 'Shopping List');
+      }
+    })["catch"](function (error) {
+      return console.error(error);
+    });
+    return true;
+  },
+  manageOrderList: function manageOrderList(element, title) {
+    var id = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+    this.confirm(id == null ? 'Create a new ' : 'Update existing ' + title.toLowerCase(), title, 'Save', {
+      icon: undefined,
+      input: "text",
+      inputPlaceholder: 'Enter name',
+      inputAttributes: {
+        required: true,
+        max: "255",
+        maxlength: "255",
+        autocorrect: "on"
+      },
+      customClass: {
+        confirmButton: 'btn btn-primary',
+        cancelButton: 'btn btn-outline-secondary'
+      },
+      preConfirm: function () {
+        var _preConfirm6 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee8() {
+          var _t3;
+          return _regenerator().w(function (_context8) {
+            while (1) switch (_context8.p = _context8.n) {
+              case 0:
+                _context8.p = 0;
+                _context8.n = 1;
+                return $.ajax(element.dataset.action, {
+                  type: 'PATCH',
+                  data: JSON.stringify({
+                    name: $('#swal2-input').val(),
+                    list_type: $('#swal2-select').val(),
+                    description: $('#swal2-textarea').val(),
+                    title: title
+                  }),
+                  contentType: 'application/json; charset=UTF-8',
+                  headers: {
+                    Accept: 'application/json'
+                  },
+                  success: function success(result) {
+                    return result;
+                  },
+                  error: function error(xhr) {
+                    var _xhr$responseJSON$mes1, _xhr$responseJSON;
+                    sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().showValidationMessage("<p>".concat((_xhr$responseJSON$mes1 = (_xhr$responseJSON = xhr.responseJSON) === null || _xhr$responseJSON === void 0 ? void 0 : _xhr$responseJSON.message) !== null && _xhr$responseJSON$mes1 !== void 0 ? _xhr$responseJSON$mes1 : xhr.statusText, "</p>"));
+                    sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().hideLoading();
+                  }
+                });
+              case 1:
+                return _context8.a(2, _context8.v);
+              case 2:
+                _context8.p = 2;
+                _t3 = _context8.v;
+                return _context8.a(2, false);
+            }
+          }, _callee8, null, [[0, 2]]);
+        }));
+        function preConfirm() {
+          return _preConfirm6.apply(this, arguments);
+        }
+        return preConfirm;
+      }(),
+      allowOutsideClick: function allowOutsideClick() {
+        return !sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().isLoading();
+      },
+      willOpen: function willOpen() {
+        $.get('/api/list-types', function (result) {
+          $.each(result.data, function (index, item) {
+            $('#swal2-select').append('<option value="' + index + '">' + item + '</option>');
+          });
+        }).then(function () {
+          $.ajax(element.dataset.action, {
+            type: 'GET',
+            contentType: 'application/json; charset=UTF-8',
+            headers: {
+              Accept: 'application/json'
+            },
+            success: function success(result) {
+              var orderList = result.data;
+              $('#swal2-textarea').val(orderList.description).trigger('change');
+              $('#swal2-input').val(orderList.name).trigger('change');
+              $('#swal2-select').val(orderList.list_type).trigger('change');
+            }
+          });
+        });
+      },
+      didOpen: function didOpen() {
+        $('#swal2-select').css({
+          'display': 'flex'
+        }).addClass('swal2-input');
+        $('#swal2-textarea').css('display', 'flex').attr('placeholder', 'Enter description');
+      }
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        Amplify.notify('success', result.value.message, title);
+      }
+      setTimeout(function () {
+        var _window$location4 = window.location,
+          origin = _window$location4.origin,
+          pathname = _window$location4.pathname;
+        window.location.replace(origin + pathname);
+      }, 2000);
+    });
+  },
+  addSingleItemToCart: function addSingleItemToCart(cartElement, quantityTarget) {
+    var _arguments = arguments,
+      _this7 = this;
+    return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee9() {
+      var extras, defaultContent, quantityElement, _document$querySelect, _document$querySelect2, warehouse, options, cartItem, page;
+      return _regenerator().w(function (_context9) {
+        while (1) switch (_context9.n) {
+          case 0:
+            extras = _arguments.length > 2 && _arguments[2] !== undefined ? _arguments[2] : {};
+            defaultContent = cartElement.innerHTML;
+            quantityElement = document.querySelector(quantityTarget);
+            cartElement.disabled = true;
+            cartElement.innerHTML = '<i class="icon-loader spinner"></i> Processing...';
+            if (!_this7.handleQuantityChange(quantityTarget, 'input')) {
+              _context9.n = 1;
+              break;
+            }
+            warehouse = cartElement.dataset.warehouse;
+            options = JSON.parse(cartElement.dataset.options);
+            cartItem = {
+              product_code: options.code,
+              product_warehouse_code: warehouse,
+              qty: quantityElement.value
+            }; // if (typeof options.source_type != 'undefined') {
+            //     cartItem.source_type = options.source_type;
+            // }
+            //
+            // if (typeof options.source_type != 'undefined') {
+            //     cartItem.source_type = options.source_type;
+            // }
+            page = (_document$querySelect = (_document$querySelect2 = document.querySelector('meta[name="category"]')) === null || _document$querySelect2 === void 0 ? void 0 : _document$querySelect2.content) !== null && _document$querySelect !== void 0 ? _document$querySelect : 'static';
+            _context9.n = 1;
+            return $.ajax(_this7.cartUrl(), {
+              beforeSend: function beforeSend() {
+                return Amplify.renderEmptyCart('/assets/img/preloader.gif', true);
+              },
+              method: 'POST',
+              dataType: 'json',
+              data: {
+                products: [cartItem]
+              },
+              headers: {
+                Accept: 'application/json',
+                ContentType: 'application/json'
+              },
+              success: function success(res) {
+                var _res$data$items, _res$data, _res$data$total, _res$data2;
+                Amplify.notify('success', res.message, 'Cart');
+                window.dispatchEvent(new _events_js__WEBPACK_IMPORTED_MODULE_1__.AddToCartEvent({
+                  page: page,
+                  items: (_res$data$items = res === null || res === void 0 || (_res$data = res.data) === null || _res$data === void 0 ? void 0 : _res$data.items) !== null && _res$data$items !== void 0 ? _res$data$items : []
+                }));
+                Amplify.renderCartItemBadge((_res$data$total = (_res$data2 = res.data) === null || _res$data2 === void 0 ? void 0 : _res$data2.total) !== null && _res$data$total !== void 0 ? _res$data$total : '');
+              },
+              error: function error(xhr) {
+                var _xhr$responseJSON$mes10, _xhr$responseJSON2;
+                Amplify.alert((_xhr$responseJSON$mes10 = (_xhr$responseJSON2 = xhr.responseJSON) === null || _xhr$responseJSON2 === void 0 ? void 0 : _xhr$responseJSON2.message) !== null && _xhr$responseJSON$mes10 !== void 0 ? _xhr$responseJSON$mes10 : 'Something went wrong. Please try again later.', 'Cart');
+              }
+            }).always(function () {
+              cartElement.innerHTML = defaultContent;
+              cartElement.disabled = false;
+            });
+          case 1:
+            cartElement.innerHTML = defaultContent;
+            cartElement.disabled = false;
+          case 2:
+            return _context9.a(2);
+        }
+      }, _callee9);
+    }))();
+  },
+  addMultipleItemToCart: function addMultipleItemToCart(cartElement, formTarget) {
+    var _this8 = this;
+    var extras = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    var defaultContent = cartElement.innerHTML;
+    cartElement.disabled = true;
+    cartElement.innerHTML = '<i class="icon-loader spinner"></i> Processing...';
+    swal.fire({
+      title: 'Cart',
+      icon: 'info',
+      backdrop: true,
+      showCancelButton: false,
+      text: "Adding Items to Cart...",
+      confirmButtonText: 'Okay',
+      customClass: {
+        confirmButton: 'btn btn-outline-secondary'
+      },
+      willOpen: function willOpen() {
+        return document.querySelector('.swal2-actions').style.justifyContent = 'center';
+      },
+      didOpen: function didOpen() {
+        try {
+          var _document$querySelect3, _document$querySelect4;
+          var page = (_document$querySelect3 = (_document$querySelect4 = document.querySelector('meta[name="category"]')) === null || _document$querySelect4 === void 0 ? void 0 : _document$querySelect4.content) !== null && _document$querySelect3 !== void 0 ? _document$querySelect3 : 'static';
+          return $.ajax(_this8.cartUrl(), {
+            beforeSend: function beforeSend() {
+              sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().showLoading();
+              $('span[id^="product-"][id$="-error"]').each(function (index, element) {
+                var match = this.id.match(/product-(\d+)-error/);
+                if (match) {
+                  var key = match[1];
+                  $("input#product-code-".concat(key)).removeClass('is-invalid');
+                }
+                $(element).empty();
+              });
+            },
+            method: 'POST',
+            data: $("form".concat(formTarget)).serialize(),
+            processData: false,
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            success: function success(response) {
+              if (response.success) {
+                var _response$data$items, _response$data, _response$data$total, _response$data2;
+                Amplify.notify('success', response.message, 'Cart');
+                window.dispatchEvent(new _events_js__WEBPACK_IMPORTED_MODULE_1__.AddToCartEvent({
+                  page: page,
+                  items: (_response$data$items = response === null || response === void 0 || (_response$data = response.data) === null || _response$data === void 0 ? void 0 : _response$data.items) !== null && _response$data$items !== void 0 ? _response$data$items : []
+                }));
+                Amplify.renderCartItemBadge((_response$data$total = response === null || response === void 0 || (_response$data2 = response.data) === null || _response$data2 === void 0 ? void 0 : _response$data2.total) !== null && _response$data$total !== void 0 ? _response$data$total : '');
+                setTimeout(function () {
+                  var _window$location5 = window.location,
+                    origin = _window$location5.origin,
+                    pathname = _window$location5.pathname;
+                  window.location.replace(origin + pathname);
+                }, 2000);
+              }
+            },
+            error: function error(xhr) {
+              var _xhr$responseJSON3;
+              var response = (_xhr$responseJSON3 = xhr.responseJSON) !== null && _xhr$responseJSON3 !== void 0 ? _xhr$responseJSON3 : {};
+              if (xhr.status === 400) {
+                $.each(response.errors, function (key, messages) {
+                  var message = messages.join('<br>');
+                  $("input#product-code-".concat(key)).addClass('is-invalid');
+                  $("#product-".concat(key, "-error")).html(message);
+                });
+              }
+              sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().showValidationMessage("<p>".concat(response.message, "</p>"));
+              sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().hideLoading();
+            }
+          });
+        } catch (err) {
+          console.error(err);
+          return false;
+        }
+      },
+      allowOutsideClick: function allowOutsideClick() {
+        return !sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().isLoading();
+      }
+    }).then(function () {
+      cartElement.innerHTML = defaultContent;
+      cartElement.disabled = false;
+    });
+    cartElement.innerHTML = defaultContent;
+    cartElement.disabled = false;
+  },
+  /**
+   * This confirmation modal only sent request on DELETE method
+   * also follow the standard api response.
+   *
+   * @param target
+   * @param title
+   * @param payload
+   * @param redirect
+   * @param question
+   */
+  deleteConfirmation: function deleteConfirmation(target, title) {
+    var payload = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    var redirect = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
+    var question = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 'Are you sure to delete this item?';
+    var actionLink = target.dataset.action;
+    if (!actionLink) {
+      this.alert('There is no action link in the target element.<br>Please add `data-action` attribute to the target element.');
+      return;
+    }
+    this.confirm(question, title, 'Delete', {
+      preConfirm: function () {
+        var _preConfirm7 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee0() {
+          return _regenerator().w(function (_context0) {
+            while (1) switch (_context0.n) {
+              case 0:
+                _context0.n = 1;
+                return $.ajax({
+                  url: actionLink,
+                  type: 'DELETE',
+                  dataType: 'json',
+                  data: payload,
+                  header: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                  },
+                  success: function success(result) {
+                    return result;
+                  },
+                  error: function error(xhr) {
+                    var _xhr$responseJSON$mes11;
+                    sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().showValidationMessage("<p>".concat((_xhr$responseJSON$mes11 = xhr.responseJSON.message) !== null && _xhr$responseJSON$mes11 !== void 0 ? _xhr$responseJSON$mes11 : xhr.statusText, "</p>"));
+                    sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().hideLoading();
+                  }
+                });
+              case 1:
+                return _context0.a(2, _context0.v);
+            }
+          }, _callee0);
+        }));
+        function preConfirm() {
+          return _preConfirm7.apply(this, arguments);
+        }
+        return preConfirm;
+      }(),
+      allowOutsideClick: function allowOutsideClick() {
+        return !window.swal.isLoading();
+      }
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        Amplify.notify('success', result.value.message, title);
+        if (redirect) {
+          setTimeout(function () {
+            var _window$location6 = window.location,
+              origin = _window$location6.origin,
+              pathname = _window$location6.pathname;
+            window.location.replace(origin + pathname);
+          }, 2000);
+        }
+      }
+    })["catch"](function (error) {
+      return console.error(error);
+    });
+  },
+  filterFaqList: function filterFaqList(trigger) {
+    trigger.each(function () {
+      var self = $(this),
+        target = self.data('filter-list'),
+        search = self.find('input[type=text]'),
+        filters = self.find('input[type=radio]'),
+        list = $(target).find('.list-group-item');
+
+      // Search
+      search.keyup(function () {
+        var searchQuery = search.val();
+        list.each(function () {
+          var text = $(this).text().toLowerCase();
+          text.indexOf(searchQuery.toLowerCase()) === 0 ? $(this).show() : $(this).hide();
+        });
+      });
+
+      // Filters
+      filters.on('click', function (e) {
+        var targetItem = $(this).val();
+        if (targetItem !== 'all') {
+          list.hide();
+          $('[data-filter-item=' + targetItem + ']').show();
+        } else {
+          list.show();
+        }
+      });
+    });
+  },
+  shopCategories: function shopCategories() {
+    var categoryToggle = $('.widget-categories .has-children > a');
+    function closeCategorySubmenu() {
+      categoryToggle.parent().removeClass('expanded');
+    }
+    categoryToggle.on('click', function (e) {
+      if ($(e.target).parent().is('.expanded')) {
+        closeCategorySubmenu();
+      } else {
+        closeCategorySubmenu();
+        $(this).parent().addClass('expanded');
+      }
+    });
+  },
+  // Gallery (Photoswipe)
+  //------------------------------------------------------------------------------
+  initPhotoSwipeFromDOM: function initPhotoSwipeFromDOM() {
+    var gallerySelector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '.gallery-wrapper';
+    var PHOTOSWIPE_MIN_LONG_EDGE = 1600;
+    var PHOTOSWIPE_FALLBACK_WIDTH = 1600;
+    var PHOTOSWIPE_FALLBACK_HEIGHT = 1200;
+
+    // PhotoSwipe will not upscale slides smaller than the viewport, so a 210x45
+    // badge sits as a tiny overlay on the previous large image. Keep aspect ratio
+    // but give every slide a large enough layout size to fill the lightbox.
+    var normalizePhotoSwipeSize = function normalizePhotoSwipeSize(width, height) {
+      var w = parseInt(width, 10) || 0;
+      var h = parseInt(height, 10) || 0;
+      if (w < 1 || h < 1) {
+        return {
+          w: PHOTOSWIPE_FALLBACK_WIDTH,
+          h: PHOTOSWIPE_FALLBACK_HEIGHT
+        };
+      }
+      var longEdge = Math.max(w, h);
+      if (longEdge < PHOTOSWIPE_MIN_LONG_EDGE) {
+        var scale = PHOTOSWIPE_MIN_LONG_EDGE / longEdge;
+        w = Math.round(w * scale);
+        h = Math.round(h * scale);
+      }
+      return {
+        w: w,
+        h: h
+      };
+    };
+    var photoSwipeSizeFromLink = function photoSwipeSizeFromLink(linkEl) {
+      var sizeAttr = linkEl.getAttribute('data-size');
+      if (sizeAttr && sizeAttr.indexOf('x') !== -1) {
+        var parts = sizeAttr.split('x');
+        if (parseInt(parts[0], 10) > 0 && parseInt(parts[1], 10) > 0) {
+          return normalizePhotoSwipeSize(parts[0], parts[1]);
+        }
+      }
+      var imgEl = linkEl.querySelector('img');
+      return normalizePhotoSwipeSize(imgEl && imgEl.naturalWidth, imgEl && imgEl.naturalHeight);
+    };
+
+    // parse slide data (url, title, size ...) from DOM elements
+    // (children of gallerySelector)
+    var parseThumbnailElements = function parseThumbnailElements(el) {
+      var thumbElements = $(el).find('.gallery-item:not(.isotope-hidden)').get(),
+        numNodes = thumbElements.length,
+        items = [],
+        figureEl,
+        linkEl,
+        item;
+      for (var i = 0; i < numNodes; i++) {
+        figureEl = thumbElements[i]; // <figure> element
+
+        // include only element nodes
+        if (figureEl.nodeType !== 1) {
+          continue;
+        }
+        linkEl = figureEl.children[0]; // <a> element
+
+        // create slide object
+        if ($(linkEl).data('type') === 'video') {
+          item = {
+            html: $(linkEl).data('video')
+          };
+        } else {
+          var size = photoSwipeSizeFromLink(linkEl);
+          item = {
+            src: linkEl.getAttribute('href'),
+            w: size.w,
+            h: size.h
+          };
+        }
+        if (figureEl.children.length > 1) {
+          item.title = $(figureEl).find('.caption').html();
+        }
+        if (linkEl.children.length > 0) {
+          item.msrc = linkEl.children[0].getAttribute('src');
+        }
+        item.el = figureEl; // save link to element for getThumbBoundsFn
+        items.push(item);
+      }
+      return items;
+    };
+
+    // find nearest parent element
+    var closest = function closest(el, fn) {
+      return el && (fn(el) ? el : closest(el.parentNode, fn));
+    };
+    function hasClass(element, cls) {
+      return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
+    }
+
+    // triggers when user clicks on thumbnail
+    var onThumbnailsClick = function onThumbnailsClick(e) {
+      e = e || window.event;
+      e.preventDefault ? e.preventDefault() : e.returnValue = false;
+      var eTarget = e.target || e.srcElement;
+
+      // find root element of slide
+      var clickedListItem = closest(eTarget, function (el) {
+        return hasClass(el, 'gallery-item');
+      });
+      if (!clickedListItem) {
+        return;
+      }
+
+      // find index of clicked item by looping through all child nodes
+      // alternatively, you may define index via data- attribute
+      var clickedGallery = clickedListItem.closest('.gallery-wrapper'),
+        childNodes = $(clickedListItem.closest('.gallery-wrapper')).find('.gallery-item:not(.isotope-hidden)').get(),
+        numChildNodes = childNodes.length,
+        nodeIndex = 0,
+        index;
+      for (var i = 0; i < numChildNodes; i++) {
+        if (childNodes[i].nodeType !== 1) {
+          continue;
+        }
+        if (childNodes[i] === clickedListItem) {
+          index = nodeIndex;
+          break;
+        }
+        nodeIndex++;
+      }
+      if (index >= 0) {
+        // open PhotoSwipe if valid index found
+        openPhotoSwipe(index, clickedGallery);
+      }
+      return false;
+    };
+
+    // parse picture index and gallery index from URL (#&pid=1&gid=2)
+    var photoswipeParseHash = function photoswipeParseHash() {
+      var hash = window.location.hash.substring(1),
+        params = {};
+      if (hash.length < 5) {
+        return params;
+      }
+      var vars = hash.split('&');
+      for (var i = 0; i < vars.length; i++) {
+        if (!vars[i]) {
+          continue;
+        }
+        var pair = vars[i].split('=');
+        if (pair.length < 2) {
+          continue;
+        }
+        params[pair[0]] = pair[1];
+      }
+      if (params.gid) {
+        params.gid = parseInt(params.gid, 10);
+      }
+      return params;
+    };
+    var openPhotoSwipe = function openPhotoSwipe(index, galleryElement, disableAnimation, fromURL) {
+      var pswpElement = document.querySelectorAll('.pswp')[0],
+        gallery,
+        options,
+        items;
+      items = parseThumbnailElements(galleryElement);
+
+      // define options (if needed)
+      options = {
+        closeOnScroll: false,
+        // Owl already owns hashes like #item-3; PhotoSwipe history would fight that.
+        history: false,
+        focus: false,
+        // Off-screen Owl slides report bogus thumb bounds and leave zoom leftovers.
+        showHideOpacity: true,
+        galleryUID: galleryElement.getAttribute('data-pswp-uid')
+      };
+
+      // PhotoSwipe opened from URL
+      if (fromURL) {
+        if (options.galleryPIDs) {
+          // parse real index when custom PIDs are used
+          // http://photoswipe.com/documentation/faq.html#custom-pid-in-url
+          for (var j = 0; j < items.length; j++) {
+            if (items[j].pid == index) {
+              options.index = j;
+              break;
+            }
+          }
+        } else {
+          // in URL indexes start from 1
+          options.index = parseInt(index, 10) - 1;
+        }
+      } else {
+        options.index = parseInt(index, 10);
+      }
+
+      // exit if index not found
+      if (isNaN(options.index)) {
+        return;
+      }
+      if (disableAnimation) {
+        options.showAnimationDuration = 0;
+      }
+
+      // Pass data to PhotoSwipe and initialize it
+      gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
+      gallery.init();
+      gallery.listen('gettingData', function (index, item) {
+        if (item.html || item._sizeLoading || !item.src) {
+          return;
+        }
+        item._sizeLoading = true;
+        var preload = new Image();
+        preload.onload = function () {
+          var loadedSize = normalizePhotoSwipeSize(preload.naturalWidth, preload.naturalHeight);
+          if (item.w === loadedSize.w && item.h === loadedSize.h) {
+            return;
+          }
+          item.w = loadedSize.w;
+          item.h = loadedSize.h;
+          gallery.invalidateCurrItems();
+          gallery.updateSize(true);
+        };
+        preload.src = item.src;
+      });
+      gallery.listen('afterChange', function () {
+        gallery.updateSize(true);
+      });
+      gallery.listen('beforeChange', function () {
+        var currItem = $(gallery.currItem.container);
+        $('.pswp__video').removeClass('active');
+        currItem.find('.pswp__video').addClass('active');
+        $('.pswp__video').each(function () {
+          if (!$(this).hasClass('active')) {
+            $(this).attr('src', $(this).attr('src'));
+          }
+        });
+      });
+      gallery.listen('close', function () {
+        $('.pswp__video').each(function () {
+          $(this).attr('src', $(this).attr('src'));
+        });
+      });
+    };
+
+    // loop through all gallery elements and bind events
+    var galleryElements = document.querySelectorAll(gallerySelector);
+    for (var i = 0, l = galleryElements.length; i < l; i++) {
+      galleryElements[i].setAttribute('data-pswp-uid', i + 1);
+      galleryElements[i].onclick = onThumbnailsClick;
+    }
+
+    // Parse URL and open gallery if it contains #&pid=3&gid=1
+    var hashData = photoswipeParseHash();
+    if (hashData.pid && hashData.gid) {
+      openPhotoSwipe(hashData.pid, galleryElements[hashData.gid - 1], true, true);
+    }
+  },
+  productSlider: function productSlider(target) {
+    var $productCarousel = $(target);
+    var syncProductGalleryThumbs = function syncProductGalleryThumbs(e) {
+      var $carousel = $(e.target);
+      var $gallery = $carousel.closest('.product-gallery');
+      if (!$gallery.length) {
+        return;
+      }
+      var index = e.item.index;
+      $gallery.find('[data-gallery-index]').removeClass('active');
+      $gallery.find('[data-gallery-index="' + index + '"]').addClass('active');
+    };
+
+    // Theme scripts may already have initialized this carousel.
+    if ($productCarousel.data('owl.carousel')) {
+      $productCarousel.on('translate.owl.carousel translated.owl.carousel', syncProductGalleryThumbs);
+      return;
+    }
+    $productCarousel.owlCarousel({
+      items: 1,
+      loop: false,
+      dots: false,
+      autoRefresh: false,
+      URLhashListener: false,
+      onTranslate: syncProductGalleryThumbs
+    });
+  },
+  thumbnailCarousel: function thumbnailCarousel(target) {
+    var $thumbs = $(target);
+    if (!$thumbs.length) {
+      return;
+    }
+    $thumbs.on('click', '[data-gallery-index]', function (event) {
+      event.preventDefault();
+      var index = parseInt(this.getAttribute('data-gallery-index'), 10);
+      if (Number.isNaN(index)) {
+        return;
+      }
+      var $gallery = $thumbs.closest('.product-gallery');
+      var $main = $gallery.find('.product-carousel');
+      $thumbs.find('[data-gallery-index]').removeClass('active');
+      $(this).addClass('active');
+      if ($main.data('owl.carousel')) {
+        $main.trigger('to.owl.carousel', [index, 200, true]);
+      }
+    });
+  },
+  // Submit cart as quote
+  submitCartAsQuote: function submitCartAsQuote(submitQuoteBtn) {
+    var _submitQuoteBtn$datas, _submitQuoteBtn$datas2, _submitQuoteBtn$datas3;
+    // Prevent multiple submissions
+    if (submitQuoteBtn.dataset.submitting === 'true') {
+      return;
+    }
+    var submitUrl = submitQuoteBtn.dataset.url;
+    var redirectUrl = (_submitQuoteBtn$datas = submitQuoteBtn.dataset.backtoshop) !== null && _submitQuoteBtn$datas !== void 0 ? _submitQuoteBtn$datas : window.location.href;
+    var noteLabel = (_submitQuoteBtn$datas2 = submitQuoteBtn.dataset.noteLabel) !== null && _submitQuoteBtn$datas2 !== void 0 ? _submitQuoteBtn$datas2 : 'Comments';
+    var notePlaceholder = (_submitQuoteBtn$datas3 = submitQuoteBtn.dataset.notePlaceholder) !== null && _submitQuoteBtn$datas3 !== void 0 ? _submitQuoteBtn$datas3 : 'Enter comments';
+    if (!submitUrl) {
+      return;
+    }
+    var noteFieldHtml = "\n            <div class=\"form-group text-left mb-0\">\n                <label for=\"quote-order-notes\" class=\"font-weight-bold\">".concat(noteLabel, "</label>\n                <textarea\n                    id=\"quote-order-notes\"\n                    class=\"form-control\"\n                    rows=\"3\"\n                    placeholder=\"").concat(notePlaceholder, "\"\n                ></textarea>\n            </div>\n        ");
+    Amplify.confirm('', 'Quotation', 'Submit', {
+      html: noteFieldHtml,
+      cancelButtonText: 'Cancel',
+      customClass: {
+        confirmButton: 'btn btn-primary',
+        cancelButton: 'btn btn-outline-secondary'
+      },
+      preConfirm: function preConfirm() {
+        var _document$getElementB, _document$getElementB2;
+        var orderNotes = (_document$getElementB = (_document$getElementB2 = document.getElementById('quote-order-notes')) === null || _document$getElementB2 === void 0 ? void 0 : _document$getElementB2.value) !== null && _document$getElementB !== void 0 ? _document$getElementB : '';
+        submitQuoteBtn.dataset.submitting = 'true';
+        return $.ajax({
+          url: submitUrl,
+          method: 'POST',
+          data: {
+            order_notes: orderNotes
+          }
+        }).then(function (data) {
+          submitQuoteBtn.dataset.submitting = 'false';
+          if (data !== null && data !== void 0 && data.success) {
+            window.dispatchEvent(new _events_js__WEBPACK_IMPORTED_MODULE_1__.RequestQuoteEvent({
+              quote_number: data.order_number,
+              items: data.items
+            }));
+            Amplify.confirm(data.message, 'Quotation', 'Continue Shopping', {
+              icon: 'success',
+              cancelButtonText: 'Review Quotation',
+              customClass: {
+                actions: 'w-100 d-flex justify-content-center',
+                confirmButton: 'btn btn-primary',
+                cancelButton: 'btn btn-secondary'
+              }
+            }).then(function (result) {
+              if (result.isConfirmed) {
+                window.location.href = redirectUrl;
+                return;
+              }
+              if (result.isDismissed) {
+                window.location.href = result.dismiss === 'cancel' ? data.redirect_to || redirectUrl : redirectUrl;
+              }
+            });
+          }
+          return data;
+        })["catch"](function (err) {
+          var _ref, _response$message;
+          submitQuoteBtn.dataset.submitting = 'false';
+          var response = err.responseJSON || err.response;
+          Amplify.alert((_ref = (_response$message = response === null || response === void 0 ? void 0 : response.message) !== null && _response$message !== void 0 ? _response$message : response === null || response === void 0 ? void 0 : response.statusText) !== null && _ref !== void 0 ? _ref : 'Something went wrong', 'Quotation', {
+            icon: 'error'
+          });
+          throw err;
+        });
+      }
+    });
+  },
+  exportOrders: function exportOrders(event, element) {
+    var _element$dataset$mime;
+    event.preventDefault();
+    event.stopPropagation();
+    var entries = parseInt(element.dataset.entries);
+    var threshold = parseInt(element.dataset.threshold);
+    var mime = (_element$dataset$mime = element.dataset.mime) !== null && _element$dataset$mime !== void 0 ? _element$dataset$mime : 'Xlsx';
+    var message = entries > threshold ? 'Exporting a large number of entries will take time.  The report will be sent to your registered email address.' : entries == 1 ? "Exporting one entry. Do you want to proceed?" : "Exporting ".concat(entries, " entries. Do you want to proceed?");
+    this.confirm(message, 'Orders', 'Export', {
+      customClass: {
+        confirmButton: 'btn btn-primary',
+        cancelButton: 'btn btn-outline-secondary'
+      },
+      preConfirm: function () {
+        var _preConfirm8 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee1() {
+          var _t4;
+          return _regenerator().w(function (_context1) {
+            while (1) switch (_context1.p = _context1.n) {
+              case 0:
+                _context1.p = 0;
+                _context1.n = 1;
+                return $.ajax(Amplify.orderExportUrl(), {
+                  type: 'POST',
+                  data: JSON.stringify({
+                    entries: entries,
+                    threshold: threshold,
+                    mime: mime,
+                    filters: window.location.search.substring(1)
+                  }),
+                  contentType: 'application/json; charset=UTF-8',
+                  headers: {
+                    Accept: 'application/json'
+                  },
+                  success: function success(result) {
+                    return result;
+                  },
+                  error: function error(xhr) {
+                    var _xhr$responseJSON$mes12;
+                    sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().showValidationMessage("<p>".concat((_xhr$responseJSON$mes12 = xhr.responseJSON.message) !== null && _xhr$responseJSON$mes12 !== void 0 ? _xhr$responseJSON$mes12 : xhr.statusText, "</p>"));
+                    sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().hideLoading();
+                  }
+                });
+              case 1:
+                return _context1.a(2, _context1.v);
+              case 2:
+                _context1.p = 2;
+                _t4 = _context1.v;
+                console.error(_t4);
+                return _context1.a(2, false);
+            }
+          }, _callee1, null, [[0, 2]]);
+        }));
+        function preConfirm() {
+          return _preConfirm8.apply(this, arguments);
+        }
+        return preConfirm;
+      }()
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        Amplify.notify(result.value.success ? 'success' : 'error', result.value.message, 'Orders');
+        var response = result.value.data;
+        if (!response || !response.content) {
+          return;
+        }
+        var byteCharacters = atob(response.content);
+        var byteNumbers = new Array(byteCharacters.length);
+        for (var i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        var byteArray = new Uint8Array(byteNumbers);
+        var blob = new Blob([byteArray], {
+          type: response.mime
+        });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = response.filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      }
+    })["catch"](function (err) {
+      console.error(err);
+    });
+  },
+  compareProducts: function compareProducts(target, product, action) {
+    var _target$innerHTML,
+      _this9 = this;
+    var attach = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+    var defaultContent = (_target$innerHTML = target === null || target === void 0 ? void 0 : target.innerHTML) !== null && _target$innerHTML !== void 0 ? _target$innerHTML : '';
+    $.ajax(this.config.url.productCompare, {
+      beforeSend: function beforeSend() {
+        target.innerHTML = '<i class="icon-loader spinner"></i> Processing...';
+        if (action === 'list') {
+          document.querySelector(attach).innerHTML = '';
+        }
+      },
+      method: "POST",
+      dataType: "json",
+      data: {
+        product: product !== null && product !== void 0 ? product : null,
+        action: action
+      },
+      success: function success(response) {
+        if (action === 'list') {
+          document.querySelector(attach).innerHTML = response.data.html;
+        } else {
+          _this9.alert(response.message, 'Product Comparison', {
+            icon: response.success === true ? 'success' : 'error',
+            timer: 2500,
+            timerProgressBar: true
+          });
+        }
+      },
+      error: function error(xhr) {
+        var _xhr$responseJSON$mes13, _xhr$responseJSON4;
+        _this9.alert((_xhr$responseJSON$mes13 = (_xhr$responseJSON4 = xhr.responseJSON) === null || _xhr$responseJSON4 === void 0 ? void 0 : _xhr$responseJSON4.message) !== null && _xhr$responseJSON$mes13 !== void 0 ? _xhr$responseJSON$mes13 : 'Something went wrong. Please try again later.', 'Product Comparison', {
+          timer: 2500,
+          timerProgressBar: true
+        });
+      }
+    }).always(function () {
+      target.innerHTML = defaultContent;
+    });
+  },
+  acceptCookie: function acceptCookie() {
+    window.localStorage.setItem('consented', 'true');
+    $('#cookie-consent-modal').modal('hide');
+  }
+};
+
+/***/ }),
+
+/***/ "./resources/scss/widgets.scss":
+/*!*************************************!*\
+  !*** ./resources/scss/widgets.scss ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/dist/sweetalert2.all.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/sweetalert2/dist/sweetalert2.all.js ***!
+  \**********************************************************/
+/***/ (function(module) {
+
+/*!
+* sweetalert2 v11.26.25
+* Released under the MIT License.
+*/
+(function (global, factory) {
+   true ? module.exports = factory() :
+  0;
+})(this, (function () { 'use strict';
+
+  function _assertClassBrand(e, t, n) {
+    if ("function" == typeof e ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
+    throw new TypeError("Private element is not present on this object");
+  }
+  function _checkPrivateRedeclaration(e, t) {
+    if (t.has(e)) throw new TypeError("Cannot initialize the same private elements twice on an object");
+  }
+  function _classPrivateFieldGet2(s, a) {
+    return s.get(_assertClassBrand(s, a));
+  }
+  function _classPrivateFieldInitSpec(e, t, a) {
+    _checkPrivateRedeclaration(e, t), t.set(e, a);
+  }
+  function _classPrivateFieldSet2(s, a, r) {
+    return s.set(_assertClassBrand(s, a), r), r;
+  }
+
+  const RESTORE_FOCUS_TIMEOUT = 100;
+
+  /** @type {GlobalState} */
+  const globalState = {};
+  const focusPreviousActiveElement = () => {
+    if (globalState.previousActiveElement instanceof HTMLElement) {
+      globalState.previousActiveElement.focus();
+      globalState.previousActiveElement = null;
+    } else if (document.body) {
+      document.body.focus();
+    }
+  };
+
+  /**
+   * Restore previous active (focused) element
+   *
+   * @param {boolean} returnFocus
+   * @returns {Promise<void>}
+   */
+  const restoreActiveElement = returnFocus => {
+    return new Promise(resolve => {
+      if (!returnFocus) {
+        return resolve();
+      }
+      const x = window.scrollX;
+      const y = window.scrollY;
+      globalState.restoreFocusTimeout = setTimeout(() => {
+        focusPreviousActiveElement();
+        resolve();
+      }, RESTORE_FOCUS_TIMEOUT); // issues/900
+
+      window.scrollTo(x, y);
+    });
+  };
+
+  const swalPrefix = 'swal2-';
+
+  /**
+   * @typedef {Record<SwalClass, string>} SwalClasses
+   */
+
+  /**
+   * @typedef {'success' | 'warning' | 'info' | 'question' | 'error'} SwalIcon
+   * @typedef {Record<SwalIcon, string>} SwalIcons
+   */
+
+  /** @type {SwalClass[]} */
+  const classNames = ['container', 'shown', 'height-auto', 'iosfix', 'popup', 'modal', 'no-backdrop', 'no-transition', 'toast', 'toast-shown', 'show', 'hide', 'close', 'title', 'html-container', 'actions', 'confirm', 'deny', 'cancel', 'footer', 'icon', 'icon-content', 'image', 'input', 'file', 'range', 'select', 'radio', 'checkbox', 'label', 'textarea', 'inputerror', 'input-label', 'validation-message', 'progress-steps', 'active-progress-step', 'progress-step', 'progress-step-line', 'loader', 'loading', 'styled', 'top', 'top-start', 'top-end', 'top-left', 'top-right', 'center', 'center-start', 'center-end', 'center-left', 'center-right', 'bottom', 'bottom-start', 'bottom-end', 'bottom-left', 'bottom-right', 'grow-row', 'grow-column', 'grow-fullscreen', 'rtl', 'timer-progress-bar', 'timer-progress-bar-container', 'scrollbar-measure', 'icon-success', 'icon-warning', 'icon-info', 'icon-question', 'icon-error', 'draggable', 'dragging'];
+  const swalClasses = classNames.reduce((acc, className) => {
+    acc[className] = swalPrefix + className;
+    return acc;
+  }, /** @type {SwalClasses} */{});
+
+  /** @type {SwalIcon[]} */
+  const icons = ['success', 'warning', 'info', 'question', 'error'];
+  const iconTypes = icons.reduce((acc, icon) => {
+    acc[icon] = swalPrefix + icon;
+    return acc;
+  }, /** @type {SwalIcons} */{});
+
+  const consolePrefix = 'SweetAlert2:';
+
+  /**
+   * Capitalize the first letter of a string
+   *
+   * @param {string} str
+   * @returns {string}
+   */
+  const capitalizeFirstLetter = str => str.charAt(0).toUpperCase() + str.slice(1);
+
+  /**
+   * Standardize console warnings
+   *
+   * @param {string | string[]} message
+   */
+  const warn = message => {
+    console.warn(`${consolePrefix} ${typeof message === 'object' ? message.join(' ') : message}`);
+  };
+
+  /**
+   * Standardize console errors
+   *
+   * @param {string} message
+   */
+  const error = message => {
+    console.error(`${consolePrefix} ${message}`);
+  };
+
+  /**
+   * Private global state for `warnOnce`
+   *
+   * @type {string[]}
+   * @private
+   */
+  const previousWarnOnceMessages = [];
+
+  /**
+   * Show a console warning, but only if it hasn't already been shown
+   *
+   * @param {string} message
+   */
+  const warnOnce = message => {
+    if (!previousWarnOnceMessages.includes(message)) {
+      previousWarnOnceMessages.push(message);
+      warn(message);
+    }
+  };
+
+  /**
+   * Show a one-time console warning about deprecated params/methods
+   *
+   * @param {string} deprecatedParam
+   * @param {string?} useInstead
+   */
+  const warnAboutDeprecation = (deprecatedParam, useInstead = null) => {
+    warnOnce(`"${deprecatedParam}" is deprecated and will be removed in the next major release.${useInstead ? ` Use "${useInstead}" instead.` : ''}`);
+  };
+
+  /**
+   * If `arg` is a function, call it (with no arguments or context) and return the result.
+   * Otherwise, just pass the value through
+   *
+   * @param {(() => *) | *} arg
+   * @returns {*}
+   */
+  const callIfFunction = arg => typeof arg === 'function' ? arg() : arg;
+
+  /**
+   * @param {*} arg
+   * @returns {boolean}
+   */
+  const hasToPromiseFn = arg => arg && typeof arg.toPromise === 'function';
+
+  /**
+   * @param {*} arg
+   * @returns {Promise<*>}
+   */
+  const asPromise = arg => hasToPromiseFn(arg) ? arg.toPromise() : Promise.resolve(arg);
+
+  /**
+   * @param {*} arg
+   * @returns {boolean}
+   */
+  const isPromise = arg => arg && Promise.resolve(arg) === arg;
+
+  /**
+   * @returns {boolean}
+   */
+  const isFirefox = () => navigator.userAgent.includes('Firefox');
+
+  /**
+   * Gets the popup container which contains the backdrop and the popup itself.
+   *
+   * @returns {HTMLElement | null}
+   */
+  const getContainer = () => document.body.querySelector(`.${swalClasses.container}`);
+
+  /**
+   * @param {string} selectorString
+   * @returns {HTMLElement | null}
+   */
+  const elementBySelector = selectorString => {
+    const container = getContainer();
+    return container ? container.querySelector(selectorString) : null;
+  };
+
+  /**
+   * @param {string} className
+   * @returns {HTMLElement | null}
+   */
+  const elementByClass = className => {
+    return elementBySelector(`.${className}`);
+  };
+
+  /**
+   * @returns {HTMLElement | null}
+   */
+  const getPopup = () => elementByClass(swalClasses.popup);
+
+  /**
+   * @returns {HTMLElement | null}
+   */
+  const getIcon = () => elementByClass(swalClasses.icon);
+
+  /**
+   * @returns {HTMLElement | null}
+   */
+  const getIconContent = () => elementByClass(swalClasses['icon-content']);
+
+  /**
+   * @returns {HTMLElement | null}
+   */
+  const getTitle = () => elementByClass(swalClasses.title);
+
+  /**
+   * @returns {HTMLElement | null}
+   */
+  const getHtmlContainer = () => elementByClass(swalClasses['html-container']);
+
+  /**
+   * @returns {HTMLElement | null}
+   */
+  const getImage = () => elementByClass(swalClasses.image);
+
+  /**
+   * @returns {HTMLElement | null}
+   */
+  const getProgressSteps = () => elementByClass(swalClasses['progress-steps']);
+
+  /**
+   * @returns {HTMLElement | null}
+   */
+  const getValidationMessage = () => elementByClass(swalClasses['validation-message']);
+
+  /**
+   * @returns {HTMLButtonElement | null}
+   */
+  const getConfirmButton = () => (/** @type {HTMLButtonElement} */elementBySelector(`.${swalClasses.actions} .${swalClasses.confirm}`));
+
+  /**
+   * @returns {HTMLButtonElement | null}
+   */
+  const getCancelButton = () => (/** @type {HTMLButtonElement} */elementBySelector(`.${swalClasses.actions} .${swalClasses.cancel}`));
+
+  /**
+   * @returns {HTMLButtonElement | null}
+   */
+  const getDenyButton = () => (/** @type {HTMLButtonElement} */elementBySelector(`.${swalClasses.actions} .${swalClasses.deny}`));
+
+  /**
+   * @returns {HTMLElement | null}
+   */
+  const getInputLabel = () => elementByClass(swalClasses['input-label']);
+
+  /**
+   * @returns {HTMLElement | null}
+   */
+  const getLoader = () => elementBySelector(`.${swalClasses.loader}`);
+
+  /**
+   * @returns {HTMLElement | null}
+   */
+  const getActions = () => elementByClass(swalClasses.actions);
+
+  /**
+   * @returns {HTMLElement | null}
+   */
+  const getFooter = () => elementByClass(swalClasses.footer);
+
+  /**
+   * @returns {HTMLElement | null}
+   */
+  const getTimerProgressBar = () => elementByClass(swalClasses['timer-progress-bar']);
+
+  /**
+   * @returns {HTMLElement | null}
+   */
+  const getCloseButton = () => elementByClass(swalClasses.close);
+
+  // https://github.com/jkup/focusable/blob/master/index.js
+  const focusable = `
+  a[href],
+  area[href],
+  input:not([disabled]),
+  select:not([disabled]),
+  textarea:not([disabled]),
+  button:not([disabled]),
+  iframe,
+  object,
+  embed,
+  [tabindex="0"],
+  [contenteditable],
+  audio[controls],
+  video[controls],
+  summary
+`;
+  /**
+   * @returns {HTMLElement[]}
+   */
+  const getFocusableElements = () => {
+    const popup = getPopup();
+    if (!popup) {
+      return [];
+    }
+    /** @type {NodeListOf<HTMLElement>} */
+    const focusableElementsWithTabindex = popup.querySelectorAll('[tabindex]:not([tabindex="-1"]):not([tabindex="0"])');
+    const focusableElementsWithTabindexSorted = Array.from(focusableElementsWithTabindex)
+    // sort according to tabindex
+    .sort((a, b) => {
+      const tabindexA = parseInt(a.getAttribute('tabindex') || '0');
+      const tabindexB = parseInt(b.getAttribute('tabindex') || '0');
+      if (tabindexA > tabindexB) {
+        return 1;
+      } else if (tabindexA < tabindexB) {
+        return -1;
+      }
+      return 0;
+    });
+
+    /** @type {NodeListOf<HTMLElement>} */
+    const otherFocusableElements = popup.querySelectorAll(focusable);
+    const otherFocusableElementsFiltered = Array.from(otherFocusableElements).filter(el => el.getAttribute('tabindex') !== '-1');
+    return [...new Set(focusableElementsWithTabindexSorted.concat(otherFocusableElementsFiltered))].filter(el => isVisible$1(el));
+  };
+
+  /**
+   * @returns {boolean}
+   */
+  const isModal = () => {
+    return hasClass(document.body, swalClasses.shown) && !hasClass(document.body, swalClasses['toast-shown']) && !hasClass(document.body, swalClasses['no-backdrop']);
+  };
+
+  /**
+   * @returns {boolean}
+   */
+  const isToast = () => {
+    const popup = getPopup();
+    if (!popup) {
+      return false;
+    }
+    return hasClass(popup, swalClasses.toast);
+  };
+
+  /**
+   * @returns {boolean}
+   */
+  const isLoading = () => {
+    const popup = getPopup();
+    if (!popup) {
+      return false;
+    }
+    return popup.hasAttribute('data-loading');
+  };
+
+  /**
+   * Securely set innerHTML of an element
+   * https://github.com/sweetalert2/sweetalert2/issues/1926
+   *
+   * @param {HTMLElement} elem
+   * @param {string} html
+   */
+  const setInnerHtml = (elem, html) => {
+    elem.textContent = '';
+    if (html) {
+      const parser = new DOMParser();
+      const parsed = parser.parseFromString(html, `text/html`);
+      const head = parsed.querySelector('head');
+      if (head) {
+        Array.from(head.childNodes).forEach(child => {
+          elem.appendChild(child);
+        });
+      }
+      const body = parsed.querySelector('body');
+      if (body) {
+        Array.from(body.childNodes).forEach(child => {
+          if (child instanceof HTMLVideoElement || child instanceof HTMLAudioElement) {
+            elem.appendChild(child.cloneNode(true)); // https://github.com/sweetalert2/sweetalert2/issues/2507
+          } else {
+            elem.appendChild(child);
+          }
+        });
+      }
+    }
+  };
+
+  /**
+   * @param {HTMLElement} elem
+   * @param {string} className
+   * @returns {boolean}
+   */
+  const hasClass = (elem, className) => {
+    if (!className) {
+      return false;
+    }
+    return className.split(/\s+/).every(cls => elem.classList.contains(cls));
+  };
+
+  /**
+   * @param {HTMLElement} elem
+   * @param {SweetAlertOptions} params
+   */
+  const removeCustomClasses = (elem, params) => {
+    Array.from(elem.classList).forEach(className => {
+      if (!Object.values(swalClasses).includes(className) && !Object.values(iconTypes).includes(className) && !Object.values(params.showClass || {}).includes(className)) {
+        elem.classList.remove(className);
+      }
+    });
+  };
+
+  /**
+   * @param {HTMLElement} elem
+   * @param {SweetAlertOptions} params
+   * @param {string} className
+   */
+  const applyCustomClass = (elem, params, className) => {
+    removeCustomClasses(elem, params);
+    if (!params.customClass) {
+      return;
+    }
+    const customClass = params.customClass[(/** @type {keyof SweetAlertCustomClass} */className)];
+    if (!customClass) {
+      return;
+    }
+    if (typeof customClass !== 'string' && !customClass.forEach) {
+      warn(`Invalid type of customClass.${className}! Expected string or iterable object, got "${typeof customClass}"`);
+      return;
+    }
+    addClass(elem, customClass);
+  };
+
+  /**
+   * @param {HTMLElement} popup
+   * @param {import('./renderers/renderInput').InputClass | SweetAlertInput} inputClass
+   * @returns {HTMLInputElement | null}
+   */
+  const getInput$1 = (popup, inputClass) => {
+    if (!inputClass) {
+      return null;
+    }
+    switch (inputClass) {
+      case 'select':
+      case 'textarea':
+      case 'file':
+        return popup.querySelector(`.${swalClasses.popup} > .${swalClasses[inputClass]}`);
+      case 'checkbox':
+        return popup.querySelector(`.${swalClasses.popup} > .${swalClasses.checkbox} input`);
+      case 'radio':
+        return popup.querySelector(`.${swalClasses.popup} > .${swalClasses.radio} input:checked`) || popup.querySelector(`.${swalClasses.popup} > .${swalClasses.radio} input:first-child`);
+      case 'range':
+        return popup.querySelector(`.${swalClasses.popup} > .${swalClasses.range} input`);
+      default:
+        return popup.querySelector(`.${swalClasses.popup} > .${swalClasses.input}`);
+    }
+  };
+
+  /**
+   * @param {HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement} input
+   */
+  const focusInput = input => {
+    input.focus();
+
+    // place cursor at end of text in text input
+    if (input.type !== 'file') {
+      // http://stackoverflow.com/a/2345915
+      const val = input.value;
+      input.value = '';
+      input.value = val;
+    }
+  };
+
+  /**
+   * @param {HTMLElement | HTMLElement[] | null} target
+   * @param {string | string[] | readonly string[] | undefined} classList
+   * @param {boolean} condition
+   */
+  const toggleClass = (target, classList, condition) => {
+    if (!target || !classList) {
+      return;
+    }
+    const classes = typeof classList === 'string' ? classList.split(/\s+/).filter(Boolean) : classList;
+    const targets = Array.isArray(target) ? target : [target];
+    targets.forEach(elem => {
+      classes.forEach(className => {
+        if (condition) {
+          elem.classList.add(className);
+        } else {
+          elem.classList.remove(className);
+        }
+      });
+    });
+  };
+
+  /**
+   * @param {HTMLElement | HTMLElement[] | null} target
+   * @param {string | string[] | readonly string[] | undefined} classList
+   */
+  const addClass = (target, classList) => {
+    toggleClass(target, classList, true);
+  };
+
+  /**
+   * @param {HTMLElement | HTMLElement[] | null} target
+   * @param {string | string[] | readonly string[] | undefined} classList
+   */
+  const removeClass = (target, classList) => {
+    toggleClass(target, classList, false);
+  };
+
+  /**
+   * Get direct child of an element by class name
+   *
+   * @param {HTMLElement} elem
+   * @param {string} className
+   * @returns {HTMLElement | undefined}
+   */
+  const getDirectChildByClass = (elem, className) => (/** @type {HTMLElement | undefined} */
+  Array.from(elem.children).find(child => child instanceof HTMLElement && hasClass(child, className)));
+
+  /**
+   * @param {HTMLElement} elem
+   * @param {string} property
+   * @param {string | number | null | undefined} value
+   */
+  const applyNumericalStyle = (elem, property, value) => {
+    if (value === `${parseInt(`${value}`)}`) {
+      value = parseInt(value);
+    }
+    if (value || value === 0) {
+      elem.style.setProperty(property, typeof value === 'number' ? `${value}px` : (/** @type {string} */value));
+    } else {
+      elem.style.removeProperty(property);
+    }
+  };
+
+  /**
+   * @param {HTMLElement | null} elem
+   * @param {string} display
+   */
+  const show = (elem, display = 'flex') => {
+    if (!elem) {
+      return;
+    }
+    elem.style.display = display;
+  };
+
+  /**
+   * @param {HTMLElement | null} elem
+   */
+  const hide = elem => {
+    if (!elem) {
+      return;
+    }
+    elem.style.display = 'none';
+  };
+
+  /**
+   * @param {HTMLElement | null} elem
+   * @param {string} display
+   */
+  const showWhenInnerHtmlPresent = (elem, display = 'block') => {
+    if (!elem) {
+      return;
+    }
+    new MutationObserver(() => {
+      toggle(elem, elem.innerHTML, display);
+    }).observe(elem, {
+      childList: true,
+      subtree: true
+    });
+  };
+
+  /**
+   * @param {HTMLElement} parent
+   * @param {string} selector
+   * @param {string} property
+   * @param {string} value
+   */
+  const setStyle = (parent, selector, property, value) => {
+    /** @type {HTMLElement | null} */
+    const el = parent.querySelector(selector);
+    if (el) {
+      el.style.setProperty(property, value);
+    }
+  };
+
+  /**
+   * @param {HTMLElement} elem
+   * @param {boolean | string | null | undefined} condition
+   * @param {string} display
+   */
+  const toggle = (elem, condition, display = 'flex') => {
+    if (condition) {
+      show(elem, display);
+    } else {
+      hide(elem);
+    }
+  };
+
+  /**
+   * borrowed from jquery $(elem).is(':visible') implementation
+   *
+   * @param {HTMLElement | null} elem
+   * @returns {boolean}
+   */
+  const isVisible$1 = elem => Boolean(elem && (elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length));
+
+  /**
+   * @returns {boolean}
+   */
+  const allButtonsAreHidden = () => !isVisible$1(getConfirmButton()) && !isVisible$1(getDenyButton()) && !isVisible$1(getCancelButton());
+
+  /**
+   * @param {HTMLElement} elem
+   * @returns {boolean}
+   */
+  const isScrollable = elem => Boolean(elem.scrollHeight > elem.clientHeight);
+
+  /**
+   * @param {HTMLElement} element
+   * @param {HTMLElement} stopElement
+   * @returns {boolean}
+   */
+  const selfOrParentIsScrollable = (element, stopElement) => {
+    let parent = /** @type {HTMLElement | null} */element;
+    while (parent && parent !== stopElement) {
+      if (isScrollable(parent)) {
+        return true;
+      }
+      parent = parent.parentElement;
+    }
+    return false;
+  };
+
+  /**
+   * borrowed from https://stackoverflow.com/a/46352119
+   *
+   * @param {HTMLElement} elem
+   * @returns {boolean}
+   */
+  const hasCssAnimation = elem => {
+    const style = window.getComputedStyle(elem);
+    const animDuration = parseFloat(style.getPropertyValue('animation-duration') || '0');
+    const transDuration = parseFloat(style.getPropertyValue('transition-duration') || '0');
+    return animDuration > 0 || transDuration > 0;
+  };
+
+  /**
+   * @param {number} timer
+   * @param {boolean} reset
+   */
+  const animateTimerProgressBar = (timer, reset = false) => {
+    const timerProgressBar = getTimerProgressBar();
+    if (!timerProgressBar) {
+      return;
+    }
+    if (isVisible$1(timerProgressBar)) {
+      if (reset) {
+        timerProgressBar.style.transition = 'none';
+        timerProgressBar.style.width = '100%';
+      }
+      setTimeout(() => {
+        timerProgressBar.style.transition = `width ${timer / 1000}s linear`;
+        timerProgressBar.style.width = '0%';
+      }, 10);
+    }
+  };
+  const stopTimerProgressBar = () => {
+    const timerProgressBar = getTimerProgressBar();
+    if (!timerProgressBar) {
+      return;
+    }
+    const timerProgressBarWidth = parseInt(window.getComputedStyle(timerProgressBar).width);
+    timerProgressBar.style.removeProperty('transition');
+    timerProgressBar.style.width = '100%';
+    const timerProgressBarFullWidth = parseInt(window.getComputedStyle(timerProgressBar).width);
+    const timerProgressBarPercent = timerProgressBarWidth / timerProgressBarFullWidth * 100;
+    timerProgressBar.style.width = `${timerProgressBarPercent}%`;
+  };
+
+  /**
+   * Detect Node env
+   *
+   * @returns {boolean}
+   */
+  const isNodeEnv = () => typeof window === 'undefined' || typeof document === 'undefined';
+
+  const sweetHTML = `
+ <div aria-labelledby="${swalClasses.title}" aria-describedby="${swalClasses['html-container']}" class="${swalClasses.popup}" tabindex="-1">
+   <button type="button" class="${swalClasses.close}"></button>
+   <ul class="${swalClasses['progress-steps']}"></ul>
+   <div class="${swalClasses.icon}"></div>
+   <img class="${swalClasses.image}" />
+   <h2 class="${swalClasses.title}" id="${swalClasses.title}"></h2>
+   <div class="${swalClasses['html-container']}" id="${swalClasses['html-container']}"></div>
+   <input class="${swalClasses.input}" id="${swalClasses.input}" />
+   <input type="file" class="${swalClasses.file}" />
+   <div class="${swalClasses.range}">
+     <input type="range" />
+     <output></output>
+   </div>
+   <select class="${swalClasses.select}" id="${swalClasses.select}"></select>
+   <div class="${swalClasses.radio}"></div>
+   <label class="${swalClasses.checkbox}">
+     <input type="checkbox" id="${swalClasses.checkbox}" />
+     <span class="${swalClasses.label}"></span>
+   </label>
+   <textarea class="${swalClasses.textarea}" id="${swalClasses.textarea}"></textarea>
+   <div class="${swalClasses['validation-message']}" id="${swalClasses['validation-message']}"></div>
+   <div class="${swalClasses.actions}">
+     <div class="${swalClasses.loader}"></div>
+     <button type="button" class="${swalClasses.confirm}"></button>
+     <button type="button" class="${swalClasses.deny}"></button>
+     <button type="button" class="${swalClasses.cancel}"></button>
+   </div>
+   <div class="${swalClasses.footer}"></div>
+   <div class="${swalClasses['timer-progress-bar-container']}">
+     <div class="${swalClasses['timer-progress-bar']}"></div>
+   </div>
+ </div>
+`.replace(/(^|\n)\s*/g, '');
+
+  /**
+   * @returns {boolean}
+   */
+  const resetOldContainer = () => {
+    const oldContainer = getContainer();
+    if (!oldContainer) {
+      return false;
+    }
+    oldContainer.remove();
+    removeClass([document.documentElement, document.body], [swalClasses['no-backdrop'], swalClasses['toast-shown'],
+    // @ts-ignore: 'has-column' is not defined in swalClasses but may be set dynamically
+    swalClasses['has-column']]);
+    return true;
+  };
+  const resetValidationMessage$1 = () => {
+    if (globalState.currentInstance) {
+      globalState.currentInstance.resetValidationMessage();
+    }
+  };
+  const addInputChangeListeners = () => {
+    const popup = getPopup();
+    if (!popup) {
+      return;
+    }
+    const input = getDirectChildByClass(popup, swalClasses.input);
+    const file = getDirectChildByClass(popup, swalClasses.file);
+    /** @type {HTMLInputElement | null} */
+    const range = popup.querySelector(`.${swalClasses.range} input`);
+    /** @type {HTMLOutputElement | null} */
+    const rangeOutput = popup.querySelector(`.${swalClasses.range} output`);
+    const select = getDirectChildByClass(popup, swalClasses.select);
+    /** @type {HTMLInputElement | null} */
+    const checkbox = popup.querySelector(`.${swalClasses.checkbox} input`);
+    const textarea = getDirectChildByClass(popup, swalClasses.textarea);
+    if (input) {
+      input.oninput = resetValidationMessage$1;
+    }
+    if (file) {
+      file.onchange = resetValidationMessage$1;
+    }
+    if (select) {
+      select.onchange = resetValidationMessage$1;
+    }
+    if (checkbox) {
+      checkbox.onchange = resetValidationMessage$1;
+    }
+    if (textarea) {
+      textarea.oninput = resetValidationMessage$1;
+    }
+    if (range && rangeOutput) {
+      range.oninput = () => {
+        resetValidationMessage$1();
+        rangeOutput.value = range.value;
+      };
+      range.onchange = () => {
+        resetValidationMessage$1();
+        rangeOutput.value = range.value;
+      };
+    }
+  };
+
+  /**
+   * @param {string | HTMLElement} target
+   * @returns {HTMLElement}
+   */
+  const getTarget = target => {
+    if (typeof target === 'string') {
+      const element = document.querySelector(target);
+      if (!element) {
+        throw new Error(`Target element "${target}" not found`);
+      }
+      return /** @type {HTMLElement} */element;
+    }
+    return target;
+  };
+
+  /**
+   * @param {SweetAlertOptions} params
+   */
+  const setupAccessibility = params => {
+    const popup = getPopup();
+    if (!popup) {
+      return;
+    }
+    popup.setAttribute('role', params.toast ? 'alert' : 'dialog');
+    popup.setAttribute('aria-live', params.toast ? 'polite' : 'assertive');
+    if (!params.toast) {
+      popup.setAttribute('aria-modal', 'true');
+    }
+  };
+
+  /**
+   * @param {HTMLElement} targetElement
+   */
+  const setupRTL = targetElement => {
+    if (window.getComputedStyle(targetElement).direction === 'rtl') {
+      addClass(getContainer(), swalClasses.rtl);
+      globalState.isRTL = true;
+    }
+  };
+
+  /**
+   * Add modal + backdrop to DOM
+   *
+   * @param {SweetAlertOptions} params
+   */
+  const init = params => {
+    // Clean up the old popup container if it exists
+    const oldContainerExisted = resetOldContainer();
+    if (isNodeEnv()) {
+      error('SweetAlert2 requires document to initialize');
+      return;
+    }
+    const container = document.createElement('div');
+    container.className = swalClasses.container;
+    if (oldContainerExisted) {
+      addClass(container, swalClasses['no-transition']);
+    }
+    setInnerHtml(container, sweetHTML);
+    container.dataset['swal2Theme'] = params.theme;
+    const targetElement = getTarget(params.target || 'body');
+    targetElement.appendChild(container);
+    if (params.topLayer) {
+      container.setAttribute('popover', '');
+      container.showPopover();
+    }
+    setupAccessibility(params);
+    setupRTL(targetElement);
+    addInputChangeListeners();
+  };
+
+  /**
+   * @param {HTMLElement | object | string} param
+   * @param {HTMLElement} target
+   */
+  const parseHtmlToContainer = (param, target) => {
+    // DOM element
+    if (param instanceof HTMLElement) {
+      target.appendChild(param);
+    }
+
+    // Object
+    else if (typeof param === 'object') {
+      handleObject(param, target);
+    }
+
+    // Plain string
+    else if (param) {
+      setInnerHtml(target, param);
+    }
+  };
+
+  /**
+   * @param {object} param
+   * @param {HTMLElement} target
+   */
+  const handleObject = (param, target) => {
+    // JQuery element(s)
+    if ('jquery' in param) {
+      handleJqueryElem(target, param);
+    }
+
+    // For other objects use their string representation
+    else {
+      setInnerHtml(target, param.toString());
+    }
+  };
+
+  /**
+   * @param {HTMLElement} target
+   * @param {any} elem
+   */
+  const handleJqueryElem = (target, elem) => {
+    target.textContent = '';
+    if (0 in elem) {
+      for (let i = 0; i in elem; i++) {
+        target.appendChild(elem[i].cloneNode(true));
+      }
+    } else {
+      target.appendChild(elem.cloneNode(true));
+    }
+  };
+
+  /**
+   * @param {SweetAlert} instance
+   * @param {SweetAlertOptions} params
+   */
+  const renderActions = (instance, params) => {
+    const actions = getActions();
+    const loader = getLoader();
+    if (!actions || !loader) {
+      return;
+    }
+
+    // Actions (buttons) wrapper
+    if (!params.showConfirmButton && !params.showDenyButton && !params.showCancelButton) {
+      hide(actions);
+    } else {
+      show(actions);
+    }
+
+    // Custom class
+    applyCustomClass(actions, params, 'actions');
+
+    // Render all the buttons
+    renderButtons(actions, loader, params);
+
+    // Loader
+    setInnerHtml(loader, params.loaderHtml || '');
+    applyCustomClass(loader, params, 'loader');
+  };
+
+  /**
+   * @param {HTMLElement} actions
+   * @param {HTMLElement} loader
+   * @param {SweetAlertOptions} params
+   */
+  function renderButtons(actions, loader, params) {
+    const confirmButton = getConfirmButton();
+    const denyButton = getDenyButton();
+    const cancelButton = getCancelButton();
+    if (!confirmButton || !denyButton || !cancelButton) {
+      return;
+    }
+
+    // Render buttons
+    renderButton(confirmButton, 'confirm', params);
+    renderButton(denyButton, 'deny', params);
+    renderButton(cancelButton, 'cancel', params);
+    handleButtonsStyling(confirmButton, denyButton, cancelButton, params);
+    if (params.reverseButtons) {
+      if (params.toast) {
+        actions.insertBefore(cancelButton, confirmButton);
+        actions.insertBefore(denyButton, confirmButton);
+      } else {
+        actions.insertBefore(cancelButton, loader);
+        actions.insertBefore(denyButton, loader);
+        actions.insertBefore(confirmButton, loader);
+      }
+    }
+  }
+
+  /**
+   * @param {HTMLElement} confirmButton
+   * @param {HTMLElement} denyButton
+   * @param {HTMLElement} cancelButton
+   * @param {SweetAlertOptions} params
+   */
+  function handleButtonsStyling(confirmButton, denyButton, cancelButton, params) {
+    if (!params.buttonsStyling) {
+      removeClass([confirmButton, denyButton, cancelButton], swalClasses.styled);
+      return;
+    }
+    addClass([confirmButton, denyButton, cancelButton], swalClasses.styled);
+
+    // Apply custom background colors and outline colors to action buttons
+    /** @type {[HTMLElement, string, string | undefined][]} */
+    const buttons = [[confirmButton, 'confirm', params.confirmButtonColor], [denyButton, 'deny', params.denyButtonColor], [cancelButton, 'cancel', params.cancelButtonColor]];
+    buttons.forEach(([button, type, color]) => {
+      if (color) {
+        button.style.setProperty(`--swal2-${type}-button-background-color`, color);
+      }
+      applyOutlineColor(button);
+    });
+  }
+
+  /**
+   * @param {HTMLElement} button
+   */
+  function applyOutlineColor(button) {
+    const buttonStyle = window.getComputedStyle(button);
+    if (buttonStyle.getPropertyValue('--swal2-action-button-focus-box-shadow')) {
+      // If the button already has a custom outline color, no need to change it
+      return;
+    }
+    const outlineColor = buttonStyle.backgroundColor.replace(/rgba?\((\d+), (\d+), (\d+).*/, 'rgba($1, $2, $3, 0.5)');
+    button.style.setProperty('--swal2-action-button-focus-box-shadow', buttonStyle.getPropertyValue('--swal2-outline').replace(/ rgba\(.*/, ` ${outlineColor}`));
+  }
+
+  /**
+   * @param {HTMLElement} button
+   * @param {'confirm' | 'deny' | 'cancel'} buttonType
+   * @param {SweetAlertOptions} params
+   */
+  function renderButton(button, buttonType, params) {
+    const buttonName = /** @type {'Confirm' | 'Deny' | 'Cancel'} */capitalizeFirstLetter(buttonType);
+    toggle(button, params[`show${buttonName}Button`], 'inline-block');
+    setInnerHtml(button, params[`${buttonType}ButtonText`] || ''); // Set caption text
+    button.setAttribute('aria-label', params[`${buttonType}ButtonAriaLabel`] || ''); // ARIA label
+
+    // Add buttons custom classes
+    button.className = swalClasses[buttonType];
+    applyCustomClass(button, params, `${buttonType}Button`);
+  }
+
+  /**
+   * @param {SweetAlert} instance
+   * @param {SweetAlertOptions} params
+   */
+  const renderCloseButton = (instance, params) => {
+    const closeButton = getCloseButton();
+    if (!closeButton) {
+      return;
+    }
+    setInnerHtml(closeButton, params.closeButtonHtml || '');
+
+    // Custom class
+    applyCustomClass(closeButton, params, 'closeButton');
+    toggle(closeButton, params.showCloseButton);
+    closeButton.setAttribute('aria-label', params.closeButtonAriaLabel || '');
+  };
+
+  /**
+   * @param {SweetAlert} instance
+   * @param {SweetAlertOptions} params
+   */
+  const renderContainer = (instance, params) => {
+    const container = getContainer();
+    if (!container) {
+      return;
+    }
+    handleBackdropParam(container, params.backdrop);
+    handlePositionParam(container, params.position);
+    handleGrowParam(container, params.grow);
+
+    // Custom class
+    applyCustomClass(container, params, 'container');
+  };
+
+  /**
+   * @param {HTMLElement} container
+   * @param {SweetAlertOptions['backdrop']} backdrop
+   */
+  function handleBackdropParam(container, backdrop) {
+    if (typeof backdrop === 'string') {
+      container.style.background = backdrop;
+    } else if (!backdrop) {
+      addClass([document.documentElement, document.body], swalClasses['no-backdrop']);
+    }
+  }
+
+  /**
+   * @param {HTMLElement} container
+   * @param {SweetAlertOptions['position']} position
+   */
+  function handlePositionParam(container, position) {
+    if (!position) {
+      return;
+    }
+    if (position in swalClasses) {
+      addClass(container, swalClasses[position]);
+    } else {
+      warn('The "position" parameter is not valid, defaulting to "center"');
+      addClass(container, swalClasses.center);
+    }
+  }
+
+  /**
+   * @param {HTMLElement} container
+   * @param {SweetAlertOptions['grow']} grow
+   */
+  function handleGrowParam(container, grow) {
+    if (!grow) {
+      return;
+    }
+    addClass(container, swalClasses[`grow-${grow}`]);
+  }
+
+  /**
+   * This module contains `WeakMap`s for each effectively-"private  property" that a `Swal` has.
+   * For example, to set the private property "foo" of `this` to "bar", you can `privateProps.foo.set(this, 'bar')`
+   * This is the approach that Babel will probably take to implement private methods/fields
+   *   https://github.com/tc39/proposal-private-methods
+   *   https://github.com/babel/babel/pull/7555
+   * Once we have the changes from that PR in Babel, and our core class fits reasonable in *one module*
+   *   then we can use that language feature.
+   */
+
+  var privateProps = {
+    innerParams: new WeakMap(),
+    domCache: new WeakMap(),
+    focusedElement: new WeakMap()
+  };
+
+  /// <reference path="../../../../sweetalert2.d.ts"/>
+
+
+  /** @type {InputClass[]} */
+  const inputClasses = ['input', 'file', 'range', 'select', 'radio', 'checkbox', 'textarea'];
+
+  /**
+   * @param {SweetAlert} instance
+   * @param {SweetAlertOptions} params
+   */
+  const renderInput = (instance, params) => {
+    const popup = getPopup();
+    if (!popup) {
+      return;
+    }
+    const innerParams = privateProps.innerParams.get(instance);
+    const rerender = !innerParams || params.input !== innerParams.input;
+    inputClasses.forEach(inputClass => {
+      const inputContainer = getDirectChildByClass(popup, swalClasses[inputClass]);
+      if (!inputContainer) {
+        return;
+      }
+
+      // set attributes
+      setAttributes(inputClass, params.inputAttributes);
+
+      // set class
+      inputContainer.className = swalClasses[inputClass];
+      if (rerender) {
+        hide(inputContainer);
+      }
+    });
+    if (params.input) {
+      if (rerender) {
+        showInput(params);
+      }
+      // set custom class
+      setCustomClass(params);
+    }
+  };
+
+  /**
+   * @param {SweetAlertOptions} params
+   */
+  const showInput = params => {
+    if (!params.input) {
+      return;
+    }
+    if (!renderInputType[params.input]) {
+      error(`Unexpected type of input! Expected ${Object.keys(renderInputType).join(' | ')}, got "${params.input}"`);
+      return;
+    }
+    const inputContainer = getInputContainer(params.input);
+    if (!inputContainer) {
+      return;
+    }
+    const input = renderInputType[params.input](inputContainer, params);
+    show(inputContainer);
+
+    // input autofocus
+    if (params.inputAutoFocus) {
+      setTimeout(() => {
+        focusInput(input);
+      });
+    }
+  };
+
+  /**
+   * @param {HTMLInputElement} input
+   */
+  const removeAttributes = input => {
+    for (const {
+      name
+    } of Array.from(input.attributes)) {
+      if (!['id', 'type', 'value', 'style'].includes(name)) {
+        input.removeAttribute(name);
+      }
+    }
+  };
+
+  /**
+   * @param {InputClass} inputClass
+   * @param {SweetAlertOptions['inputAttributes']} inputAttributes
+   */
+  const setAttributes = (inputClass, inputAttributes) => {
+    const popup = getPopup();
+    if (!popup) {
+      return;
+    }
+    const input = getInput$1(popup, inputClass);
+    if (!input) {
+      return;
+    }
+    removeAttributes(input);
+    for (const attr in inputAttributes) {
+      input.setAttribute(attr, inputAttributes[attr]);
+    }
+  };
+
+  /**
+   * @param {SweetAlertOptions} params
+   */
+  const setCustomClass = params => {
+    if (!params.input) {
+      return;
+    }
+    const inputContainer = getInputContainer(params.input);
+    if (inputContainer) {
+      applyCustomClass(inputContainer, params, 'input');
+    }
+  };
+
+  /**
+   * @param {HTMLInputElement | HTMLTextAreaElement} input
+   * @param {SweetAlertOptions} params
+   */
+  const setInputPlaceholder = (input, params) => {
+    if (!input.placeholder && params.inputPlaceholder) {
+      input.placeholder = params.inputPlaceholder;
+    }
+  };
+
+  /**
+   * @param {Input} input
+   * @param {Input} prependTo
+   * @param {SweetAlertOptions} params
+   */
+  const setInputLabel = (input, prependTo, params) => {
+    if (params.inputLabel) {
+      const label = document.createElement('label');
+      const labelClass = swalClasses['input-label'];
+      label.setAttribute('for', input.id);
+      label.className = labelClass;
+      if (typeof params.customClass === 'object') {
+        addClass(label, params.customClass.inputLabel);
+      }
+      label.innerText = params.inputLabel;
+      prependTo.insertAdjacentElement('beforebegin', label);
+    }
+  };
+
+  /**
+   * @param {SweetAlertInput} inputType
+   * @returns {HTMLElement | undefined}
+   */
+  const getInputContainer = inputType => {
+    const popup = getPopup();
+    if (!popup) {
+      return;
+    }
+    return getDirectChildByClass(popup, swalClasses[(/** @type {SwalClass} */inputType)] || swalClasses.input);
+  };
+
+  /**
+   * @param {HTMLInputElement | HTMLOutputElement | HTMLTextAreaElement} input
+   * @param {SweetAlertOptions['inputValue']} inputValue
+   */
+  const checkAndSetInputValue = (input, inputValue) => {
+    if (['string', 'number'].includes(typeof inputValue)) {
+      input.value = `${inputValue}`;
+    } else if (!isPromise(inputValue)) {
+      warn(`Unexpected type of inputValue! Expected "string", "number" or "Promise", got "${typeof inputValue}"`);
+    }
+  };
+
+  /** @type {Record<SweetAlertInput, (input: Input | HTMLElement, params: SweetAlertOptions) => Input>} */
+  const renderInputType = {};
+
+  /**
+   * @param {Input | HTMLElement} input
+   * @param {SweetAlertOptions} params
+   * @returns {Input}
+   */
+  renderInputType.text = renderInputType.email = renderInputType.password = renderInputType.number = renderInputType.tel = renderInputType.url = renderInputType.search = renderInputType.date = renderInputType['datetime-local'] = renderInputType.time = renderInputType.week = renderInputType.month = /** @type {(input: Input | HTMLElement, params: SweetAlertOptions) => Input} */
+  (input, params) => {
+    // oxfmt-ignore
+    const inputElement = /** @type {HTMLInputElement} */input;
+    checkAndSetInputValue(inputElement, params.inputValue);
+    setInputLabel(inputElement, inputElement, params);
+    setInputPlaceholder(inputElement, params);
+    // oxfmt-ignore
+    inputElement.type = /** @type {string} */params.input;
+    return inputElement;
+  };
+
+  /**
+   * @param {Input | HTMLElement} input
+   * @param {SweetAlertOptions} params
+   * @returns {Input}
+   */
+  renderInputType.file = (input, params) => {
+    const inputElement = /** @type {HTMLInputElement} */input;
+    setInputLabel(inputElement, inputElement, params);
+    setInputPlaceholder(inputElement, params);
+    return inputElement;
+  };
+
+  /**
+   * @param {Input | HTMLElement} range
+   * @param {SweetAlertOptions} params
+   * @returns {Input}
+   */
+  renderInputType.range = (range, params) => {
+    const rangeContainer = /** @type {HTMLElement} */range;
+    const rangeInput = rangeContainer.querySelector('input');
+    const rangeOutput = rangeContainer.querySelector('output');
+    if (rangeInput) {
+      checkAndSetInputValue(rangeInput, params.inputValue);
+      rangeInput.type = /** @type {string} */params.input;
+      setInputLabel(rangeInput, /** @type {Input} */range, params);
+    }
+    if (rangeOutput) {
+      checkAndSetInputValue(rangeOutput, params.inputValue);
+    }
+    return /** @type {Input} */range;
+  };
+
+  /**
+   * @param {Input | HTMLElement} select
+   * @param {SweetAlertOptions} params
+   * @returns {Input}
+   */
+  renderInputType.select = (select, params) => {
+    const selectElement = /** @type {HTMLSelectElement} */select;
+    selectElement.textContent = '';
+    if (params.inputPlaceholder) {
+      const placeholder = document.createElement('option');
+      setInnerHtml(placeholder, params.inputPlaceholder);
+      placeholder.value = '';
+      placeholder.disabled = true;
+      placeholder.selected = true;
+      selectElement.appendChild(placeholder);
+    }
+    setInputLabel(selectElement, selectElement, params);
+    return selectElement;
+  };
+
+  /**
+   * @param {Input | HTMLElement} radio
+   * @returns {Input}
+   */
+  renderInputType.radio = radio => {
+    const radioElement = /** @type {HTMLElement} */radio;
+    radioElement.textContent = '';
+    return /** @type {Input} */radio;
+  };
+
+  /**
+   * @param {Input | HTMLElement} checkboxContainer
+   * @param {SweetAlertOptions} params
+   * @returns {Input}
+   */
+  renderInputType.checkbox = (checkboxContainer, params) => {
+    const popup = getPopup();
+    if (!popup) {
+      throw new Error('Popup not found');
+    }
+    const checkbox = getInput$1(popup, 'checkbox');
+    if (!checkbox) {
+      throw new Error('Checkbox input not found');
+    }
+    checkbox.value = '1';
+    checkbox.checked = Boolean(params.inputValue);
+    const containerElement = /** @type {HTMLElement} */checkboxContainer;
+    const label = containerElement.querySelector('span');
+    if (label) {
+      const placeholderOrLabel = params.inputPlaceholder || params.inputLabel;
+      if (placeholderOrLabel) {
+        setInnerHtml(label, placeholderOrLabel);
+      }
+    }
+    return checkbox;
+  };
+
+  /**
+   * @param {Input | HTMLElement} textarea
+   * @param {SweetAlertOptions} params
+   * @returns {Input}
+   */
+  renderInputType.textarea = (textarea, params) => {
+    const textareaElement = /** @type {HTMLTextAreaElement} */textarea;
+    checkAndSetInputValue(textareaElement, params.inputValue);
+    setInputPlaceholder(textareaElement, params);
+    setInputLabel(textareaElement, textareaElement, params);
+
+    /**
+     * @param {HTMLElement} el
+     * @returns {number}
+     */
+    const getMargin = el => parseInt(window.getComputedStyle(el).marginLeft) + parseInt(window.getComputedStyle(el).marginRight);
+
+    // https://github.com/sweetalert2/sweetalert2/issues/2291
+    setTimeout(() => {
+      // https://github.com/sweetalert2/sweetalert2/issues/1699
+      if ('MutationObserver' in window) {
+        const popup = getPopup();
+        if (!popup) {
+          return;
+        }
+        const initialPopupWidth = parseInt(window.getComputedStyle(popup).width);
+        const textareaResizeHandler = () => {
+          // check if texarea is still in document (i.e. popup wasn't closed in the meantime)
+          if (!document.body.contains(textareaElement)) {
+            return;
+          }
+          const textareaWidth = textareaElement.offsetWidth + getMargin(textareaElement);
+          const popupElement = getPopup();
+          if (popupElement) {
+            if (textareaWidth > initialPopupWidth) {
+              popupElement.style.width = `${textareaWidth}px`;
+            } else {
+              applyNumericalStyle(popupElement, 'width', params.width);
+            }
+          }
+        };
+        new MutationObserver(textareaResizeHandler).observe(textareaElement, {
+          attributes: true,
+          attributeFilter: ['style']
+        });
+      }
+    });
+    return textareaElement;
+  };
+
+  /**
+   * @param {SweetAlert} instance
+   * @param {SweetAlertOptions} params
+   */
+  const renderContent = (instance, params) => {
+    const htmlContainer = getHtmlContainer();
+    if (!htmlContainer) {
+      return;
+    }
+    showWhenInnerHtmlPresent(htmlContainer);
+    applyCustomClass(htmlContainer, params, 'htmlContainer');
+
+    // Content as HTML
+    if (params.html) {
+      parseHtmlToContainer(params.html, htmlContainer);
+      show(htmlContainer, 'block');
+    }
+
+    // Content as plain text
+    else if (params.text) {
+      htmlContainer.textContent = params.text;
+      show(htmlContainer, 'block');
+    }
+
+    // No content
+    else {
+      hide(htmlContainer);
+    }
+    renderInput(instance, params);
+  };
+
+  /**
+   * @param {SweetAlert} instance
+   * @param {SweetAlertOptions} params
+   */
+  const renderFooter = (instance, params) => {
+    const footer = getFooter();
+    if (!footer) {
+      return;
+    }
+    showWhenInnerHtmlPresent(footer);
+    toggle(footer, Boolean(params.footer), 'block');
+    if (params.footer) {
+      parseHtmlToContainer(params.footer, footer);
+    }
+
+    // Custom class
+    applyCustomClass(footer, params, 'footer');
+  };
+
+  /**
+   * @param {SweetAlert} instance
+   * @param {SweetAlertOptions} params
+   */
+  const renderIcon = (instance, params) => {
+    const innerParams = privateProps.innerParams.get(instance);
+    const icon = getIcon();
+    if (!icon) {
+      return;
+    }
+
+    // if the given icon already rendered, apply the styling without re-rendering the icon
+    if (innerParams && params.icon === innerParams.icon) {
+      // Custom or default content
+      setContent(icon, params);
+      applyStyles(icon, params);
+      return;
+    }
+    if (!params.icon && !params.iconHtml) {
+      hide(icon);
+      return;
+    }
+    if (params.icon && Object.keys(iconTypes).indexOf(params.icon) === -1) {
+      error(`Unknown icon! Expected "success", "error", "warning", "info" or "question", got "${params.icon}"`);
+      hide(icon);
+      return;
+    }
+    show(icon);
+
+    // Custom or default content
+    setContent(icon, params);
+    applyStyles(icon, params);
+
+    // Animate icon
+    addClass(icon, params.showClass && params.showClass.icon);
+
+    // Re-adjust the success icon on system theme change
+    const colorSchemeQueryList = window.matchMedia('(prefers-color-scheme: dark)');
+    colorSchemeQueryList.addEventListener('change', adjustSuccessIconBackgroundColor);
+  };
+
+  /**
+   * @param {HTMLElement} icon
+   * @param {SweetAlertOptions} params
+   */
+  const applyStyles = (icon, params) => {
+    for (const [iconType, iconClassName] of Object.entries(iconTypes)) {
+      if (params.icon !== iconType) {
+        removeClass(icon, iconClassName);
+      }
+    }
+    addClass(icon, params.icon && iconTypes[params.icon]);
+
+    // Icon color
+    setColor(icon, params);
+
+    // Success icon background color
+    adjustSuccessIconBackgroundColor();
+
+    // Custom class
+    applyCustomClass(icon, params, 'icon');
+  };
+
+  // Adjust success icon background color to match the popup background color
+  const adjustSuccessIconBackgroundColor = () => {
+    const popup = getPopup();
+    if (!popup) {
+      return;
+    }
+    const popupBackgroundColor = window.getComputedStyle(popup).getPropertyValue('background-color');
+    /** @type {NodeListOf<HTMLElement>} */
+    const successIconParts = popup.querySelectorAll('[class^=swal2-success-circular-line], .swal2-success-fix');
+    successIconParts.forEach(part => {
+      part.style.backgroundColor = popupBackgroundColor;
+    });
+  };
+
+  /**
+   *
+   * @param {SweetAlertOptions} params
+   * @returns {string}
+   */
+  const successIconHtml = params => `
+  ${params.animation ? '<div class="swal2-success-circular-line-left"></div>' : ''}
+  <span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span>
+  <div class="swal2-success-ring"></div>
+  ${params.animation ? '<div class="swal2-success-fix"></div>' : ''}
+  ${params.animation ? '<div class="swal2-success-circular-line-right"></div>' : ''}
+`;
+  const errorIconHtml = `
+  <span class="swal2-x-mark">
+    <span class="swal2-x-mark-line-left"></span>
+    <span class="swal2-x-mark-line-right"></span>
+  </span>
+`;
+
+  /**
+   * @param {HTMLElement} icon
+   * @param {SweetAlertOptions} params
+   */
+  const setContent = (icon, params) => {
+    if (!params.icon && !params.iconHtml) {
+      return;
+    }
+    let oldContent = icon.innerHTML;
+    let newContent = '';
+    if (params.iconHtml) {
+      newContent = iconContent(params.iconHtml);
+    } else if (params.icon === 'success') {
+      newContent = successIconHtml(params);
+      oldContent = oldContent.replace(/ style=".*?"/g, ''); // undo adjustSuccessIconBackgroundColor()
+    } else if (params.icon === 'error') {
+      newContent = errorIconHtml;
+    } else if (params.icon) {
+      const defaultIconHtml = {
+        question: '?',
+        warning: '!',
+        info: 'i'
+      };
+      newContent = iconContent(defaultIconHtml[params.icon]);
+    }
+    if (oldContent.trim() !== newContent.trim()) {
+      setInnerHtml(icon, newContent);
+    }
+  };
+
+  /**
+   * @param {HTMLElement} icon
+   * @param {SweetAlertOptions} params
+   */
+  const setColor = (icon, params) => {
+    if (!params.iconColor) {
+      return;
+    }
+    icon.style.color = params.iconColor;
+    icon.style.borderColor = params.iconColor;
+    for (const sel of ['.swal2-success-line-tip', '.swal2-success-line-long', '.swal2-x-mark-line-left', '.swal2-x-mark-line-right']) {
+      setStyle(icon, sel, 'background-color', params.iconColor);
+    }
+    setStyle(icon, '.swal2-success-ring', 'border-color', params.iconColor);
+  };
+
+  /**
+   * @param {string} content
+   * @returns {string}
+   */
+  const iconContent = content => `<div class="${swalClasses['icon-content']}">${content}</div>`;
+
+  /**
+   * @param {SweetAlert} instance
+   * @param {SweetAlertOptions} params
+   */
+  const renderImage = (instance, params) => {
+    const image = getImage();
+    if (!image) {
+      return;
+    }
+    if (!params.imageUrl) {
+      hide(image);
+      return;
+    }
+    show(image, '');
+
+    // Src, alt
+    image.setAttribute('src', params.imageUrl);
+    image.setAttribute('alt', params.imageAlt || '');
+
+    // Width, height
+    applyNumericalStyle(image, 'width', params.imageWidth);
+    applyNumericalStyle(image, 'height', params.imageHeight);
+
+    // Class
+    image.className = swalClasses.image;
+    applyCustomClass(image, params, 'image');
+  };
+
+  let dragging = false;
+  let mousedownX = 0;
+  let mousedownY = 0;
+  let initialX = 0;
+  let initialY = 0;
+
+  /**
+   * @param {HTMLElement} popup
+   */
+  const addDraggableListeners = popup => {
+    popup.addEventListener('mousedown', down);
+    document.body.addEventListener('mousemove', move);
+    popup.addEventListener('mouseup', up);
+    popup.addEventListener('touchstart', down);
+    document.body.addEventListener('touchmove', move);
+    popup.addEventListener('touchend', up);
+  };
+
+  /**
+   * @param {HTMLElement} popup
+   */
+  const removeDraggableListeners = popup => {
+    popup.removeEventListener('mousedown', down);
+    document.body.removeEventListener('mousemove', move);
+    popup.removeEventListener('mouseup', up);
+    popup.removeEventListener('touchstart', down);
+    document.body.removeEventListener('touchmove', move);
+    popup.removeEventListener('touchend', up);
+  };
+
+  /**
+   * @param {MouseEvent | TouchEvent} event
+   */
+  const down = event => {
+    const popup = getPopup();
+    if (!popup) {
+      return;
+    }
+    const icon = getIcon();
+    if (event.target === popup || icon && icon.contains(/** @type {HTMLElement} */event.target)) {
+      dragging = true;
+      const clientXY = getClientXY(event);
+      mousedownX = clientXY.clientX;
+      mousedownY = clientXY.clientY;
+      initialX = parseInt(popup.style.insetInlineStart) || 0;
+      initialY = parseInt(popup.style.insetBlockStart) || 0;
+      addClass(popup, 'swal2-dragging');
+    }
+  };
+
+  /**
+   * @param {MouseEvent | TouchEvent} event
+   */
+  const move = event => {
+    const popup = getPopup();
+    if (!popup) {
+      return;
+    }
+    if (dragging) {
+      let {
+        clientX,
+        clientY
+      } = getClientXY(event);
+      const deltaX = clientX - mousedownX;
+      // In RTL mode, negate the horizontal delta since insetInlineStart refers to the right edge
+      popup.style.insetInlineStart = `${initialX + (globalState.isRTL ? -deltaX : deltaX)}px`;
+      popup.style.insetBlockStart = `${initialY + (clientY - mousedownY)}px`;
+    }
+  };
+  const up = () => {
+    const popup = getPopup();
+    dragging = false;
+    removeClass(popup, 'swal2-dragging');
+  };
+
+  /**
+   * @param {MouseEvent | TouchEvent} event
+   * @returns {{ clientX: number, clientY: number }}
+   */
+  const getClientXY = event => {
+    const source = event.type.startsWith('touch') ? /** @type {TouchEvent} */event.touches[0] : (/** @type {MouseEvent} */event);
+    return {
+      clientX: source.clientX,
+      clientY: source.clientY
+    };
+  };
+
+  /**
+   * @param {SweetAlert} instance
+   * @param {SweetAlertOptions} params
+   */
+  const renderPopup = (instance, params) => {
+    const container = getContainer();
+    const popup = getPopup();
+    if (!container || !popup) {
+      return;
+    }
+
+    // Width
+    // https://github.com/sweetalert2/sweetalert2/issues/2170
+    if (params.toast) {
+      applyNumericalStyle(container, 'width', params.width);
+      popup.style.width = '100%';
+      const loader = getLoader();
+      if (loader) {
+        popup.insertBefore(loader, getIcon());
+      }
+    } else {
+      applyNumericalStyle(popup, 'width', params.width);
+    }
+
+    // Padding
+    applyNumericalStyle(popup, 'padding', params.padding);
+
+    // Color
+    if (params.color) {
+      popup.style.color = params.color;
+    }
+
+    // Background
+    if (params.background) {
+      popup.style.background = params.background;
+    }
+    hide(getValidationMessage());
+
+    // Classes
+    addClasses$1(popup, params);
+    if (params.draggable && !params.toast) {
+      addClass(popup, swalClasses.draggable);
+      addDraggableListeners(popup);
+    } else {
+      removeClass(popup, swalClasses.draggable);
+      removeDraggableListeners(popup);
+    }
+  };
+
+  /**
+   * @param {HTMLElement} popup
+   * @param {SweetAlertOptions} params
+   */
+  const addClasses$1 = (popup, params) => {
+    const showClass = params.showClass || {};
+    // Default Class + showClass when updating Swal.update({})
+    popup.className = `${swalClasses.popup} ${isVisible$1(popup) ? showClass.popup : ''}`;
+    if (params.toast) {
+      addClass([document.documentElement, document.body], swalClasses['toast-shown']);
+      addClass(popup, swalClasses.toast);
+    } else {
+      addClass(popup, swalClasses.modal);
+    }
+
+    // Custom class
+    applyCustomClass(popup, params, 'popup');
+    // TODO: remove in the next major
+    if (typeof params.customClass === 'string') {
+      addClass(popup, params.customClass);
+    }
+
+    // Icon class (#1842)
+    if (params.icon) {
+      addClass(popup, swalClasses[`icon-${params.icon}`]);
+    }
+  };
+
+  /**
+   * @param {SweetAlert} instance
+   * @param {SweetAlertOptions} params
+   */
+  const renderProgressSteps = (instance, params) => {
+    const progressStepsContainer = getProgressSteps();
+    if (!progressStepsContainer) {
+      return;
+    }
+    const {
+      progressSteps,
+      currentProgressStep
+    } = params;
+    if (!progressSteps || progressSteps.length === 0 || currentProgressStep === undefined) {
+      hide(progressStepsContainer);
+      return;
+    }
+    show(progressStepsContainer);
+    progressStepsContainer.textContent = '';
+    if (currentProgressStep >= progressSteps.length) {
+      warn('Invalid currentProgressStep parameter, it should be less than progressSteps.length ' + '(currentProgressStep like JS arrays starts from 0)');
+    }
+    progressSteps.forEach((step, index) => {
+      const stepEl = createStepElement(step);
+      progressStepsContainer.appendChild(stepEl);
+      if (index === currentProgressStep) {
+        addClass(stepEl, swalClasses['active-progress-step']);
+      }
+      if (index !== progressSteps.length - 1) {
+        const lineEl = createLineElement(params);
+        progressStepsContainer.appendChild(lineEl);
+      }
+    });
+  };
+
+  /**
+   * @param {string} step
+   * @returns {HTMLLIElement}
+   */
+  const createStepElement = step => {
+    const stepEl = document.createElement('li');
+    addClass(stepEl, swalClasses['progress-step']);
+    setInnerHtml(stepEl, step);
+    return stepEl;
+  };
+
+  /**
+   * @param {SweetAlertOptions} params
+   * @returns {HTMLLIElement}
+   */
+  const createLineElement = params => {
+    const lineEl = document.createElement('li');
+    addClass(lineEl, swalClasses['progress-step-line']);
+    if (params.progressStepsDistance) {
+      applyNumericalStyle(lineEl, 'width', params.progressStepsDistance);
+    }
+    return lineEl;
+  };
+
+  /**
+   * @param {SweetAlert} instance
+   * @param {SweetAlertOptions} params
+   */
+  const renderTitle = (instance, params) => {
+    const title = getTitle();
+    if (!title) {
+      return;
+    }
+    showWhenInnerHtmlPresent(title);
+    toggle(title, Boolean(params.title || params.titleText), 'block');
+    if (params.title) {
+      parseHtmlToContainer(params.title, title);
+    }
+    if (params.titleText) {
+      title.innerText = params.titleText;
+    }
+
+    // Custom class
+    applyCustomClass(title, params, 'title');
+  };
+
+  /**
+   * @param {SweetAlert} instance
+   * @param {SweetAlertOptions} params
+   */
+  const render = (instance, params) => {
+    var _globalState$eventEmi;
+    renderPopup(instance, params);
+    renderContainer(instance, params);
+    renderProgressSteps(instance, params);
+    renderIcon(instance, params);
+    renderImage(instance, params);
+    renderTitle(instance, params);
+    renderCloseButton(instance, params);
+    renderContent(instance, params);
+    renderActions(instance, params);
+    renderFooter(instance, params);
+    const popup = getPopup();
+    if (typeof params.didRender === 'function' && popup) {
+      params.didRender(popup);
+    }
+    (_globalState$eventEmi = globalState.eventEmitter) === null || _globalState$eventEmi === void 0 || _globalState$eventEmi.emit('didRender', popup);
+  };
+
+  /*
+   * Global function to determine if SweetAlert2 popup is shown
+   */
+  const isVisible = () => {
+    return isVisible$1(getPopup());
+  };
+
+  /*
+   * Global function to click 'Confirm' button
+   */
+  const clickConfirm = () => {
+    var _dom$getConfirmButton;
+    return (_dom$getConfirmButton = getConfirmButton()) === null || _dom$getConfirmButton === void 0 ? void 0 : _dom$getConfirmButton.click();
+  };
+
+  /*
+   * Global function to click 'Deny' button
+   */
+  const clickDeny = () => {
+    var _dom$getDenyButton;
+    return (_dom$getDenyButton = getDenyButton()) === null || _dom$getDenyButton === void 0 ? void 0 : _dom$getDenyButton.click();
+  };
+
+  /*
+   * Global function to click 'Cancel' button
+   */
+  const clickCancel = () => {
+    var _dom$getCancelButton;
+    return (_dom$getCancelButton = getCancelButton()) === null || _dom$getCancelButton === void 0 ? void 0 : _dom$getCancelButton.click();
+  };
+
+  /** @type {Record<DismissReason, DismissReason>} */
+  const DismissReason = Object.freeze({
+    cancel: 'cancel',
+    backdrop: 'backdrop',
+    close: 'close',
+    esc: 'esc',
+    timer: 'timer'
+  });
+
+  /**
+   * @param {GlobalState} globalState
+   */
+  const removeKeydownHandler = globalState => {
+    if (globalState.keydownTarget && globalState.keydownHandlerAdded && globalState.keydownHandler) {
+      const handler = /** @type {EventListenerOrEventListenerObject} */
+      /** @type {unknown} */globalState.keydownHandler;
+      globalState.keydownTarget.removeEventListener('keydown', handler, {
+        capture: globalState.keydownListenerCapture
+      });
+      globalState.keydownHandlerAdded = false;
+    }
+  };
+
+  /**
+   * @param {GlobalState} globalState
+   * @param {SweetAlertOptions} innerParams
+   * @param {(dismiss: DismissReason) => void} dismissWith
+   */
+  const addKeydownHandler = (globalState, innerParams, dismissWith) => {
+    removeKeydownHandler(globalState);
+    if (!innerParams.toast) {
+      /** @type {(this: HTMLElement, event: KeyboardEvent) => void} */
+      const handler = e => keydownHandler(innerParams, e, dismissWith);
+      globalState.keydownHandler = handler;
+      const target = innerParams.keydownListenerCapture ? window : getPopup();
+      if (target) {
+        globalState.keydownTarget = target;
+        globalState.keydownListenerCapture = innerParams.keydownListenerCapture;
+        const eventHandler = /** @type {EventListenerOrEventListenerObject} */ /** @type {unknown} */handler;
+        globalState.keydownTarget.addEventListener('keydown', eventHandler, {
+          capture: globalState.keydownListenerCapture
+        });
+        globalState.keydownHandlerAdded = true;
+      }
+    }
+  };
+
+  /**
+   * @param {number} index
+   * @param {number} increment
+   * @returns {boolean} shouldPreventDefault
+   */
+  const setFocus = (index, increment) => {
+    var _dom$getPopup;
+    const focusableElements = getFocusableElements();
+    // search for visible elements and select the next possible match
+    if (focusableElements.length) {
+      index = index + increment;
+
+      // shift + tab when .swal2-popup is focused
+      if (index === -2) {
+        index = focusableElements.length - 1;
+      }
+
+      // rollover to first item
+      if (index === focusableElements.length) {
+        index = 0;
+
+        // go to last item
+      } else if (index === -1) {
+        index = focusableElements.length - 1;
+      }
+      focusableElements[index].focus();
+
+      // don't prevent default for iframes (Firefox fix)
+      // https://github.com/sweetalert2/sweetalert2/issues/2931
+      if (isFirefox() && focusableElements[index] instanceof HTMLIFrameElement) {
+        return false;
+      }
+      return true;
+    }
+    // no visible focusable elements, focus the popup
+    (_dom$getPopup = getPopup()) === null || _dom$getPopup === void 0 || _dom$getPopup.focus();
+    return true;
+  };
+  const arrowKeysNextButton = ['ArrowRight', 'ArrowDown'];
+  const arrowKeysPreviousButton = ['ArrowLeft', 'ArrowUp'];
+
+  /**
+   * @param {SweetAlertOptions} innerParams
+   * @param {KeyboardEvent} event
+   * @param {(dismiss: DismissReason) => void} dismissWith
+   */
+  const keydownHandler = (innerParams, event, dismissWith) => {
+    if (!innerParams) {
+      return; // This instance has already been destroyed
+    }
+
+    // Ignore keydown during IME composition
+    // https://developer.mozilla.org/en-US/docs/Web/API/Document/keydown_event#ignoring_keydown_during_ime_composition
+    // https://github.com/sweetalert2/sweetalert2/issues/720
+    // https://github.com/sweetalert2/sweetalert2/issues/2406
+    if (event.isComposing || event.keyCode === 229) {
+      return;
+    }
+    if (innerParams.stopKeydownPropagation) {
+      event.stopPropagation();
+    }
+
+    // ENTER
+    if (event.key === 'Enter') {
+      handleEnter(event, innerParams);
+    }
+
+    // TAB
+    else if (event.key === 'Tab') {
+      handleTab(event);
+    }
+
+    // ARROWS - switch focus between buttons
+    else if ([...arrowKeysNextButton, ...arrowKeysPreviousButton].includes(event.key)) {
+      handleArrows(event.key);
+    }
+
+    // ESC
+    else if (event.key === 'Escape') {
+      handleEsc(event, innerParams, dismissWith);
+    }
+  };
+
+  /**
+   * @param {KeyboardEvent} event
+   * @param {SweetAlertOptions} innerParams
+   */
+  const handleEnter = (event, innerParams) => {
+    // https://github.com/sweetalert2/sweetalert2/issues/2386
+    if (!callIfFunction(innerParams.allowEnterKey)) {
+      return;
+    }
+    const popup = getPopup();
+    if (!popup || !innerParams.input) {
+      return;
+    }
+    const input = getInput$1(popup, innerParams.input);
+    if (event.target && input && event.target instanceof HTMLElement && event.target.outerHTML === input.outerHTML) {
+      if (['textarea', 'file'].includes(innerParams.input)) {
+        return; // do not submit
+      }
+      clickConfirm();
+      event.preventDefault();
+    }
+  };
+
+  /**
+   * @param {KeyboardEvent} event
+   */
+  const handleTab = event => {
+    const targetElement = event.target;
+    const focusableElements = getFocusableElements();
+    const btnIndex = focusableElements.findIndex(el => el === targetElement);
+
+    // don't prevent default for iframes (Firefox fix)
+    // https://github.com/sweetalert2/sweetalert2/issues/2931
+    let shouldPreventDefault = true;
+
+    // Cycle to the next button
+    if (!event.shiftKey) {
+      shouldPreventDefault = setFocus(btnIndex, 1);
+    }
+
+    // Cycle to the prev button
+    else {
+      shouldPreventDefault = setFocus(btnIndex, -1);
+    }
+    event.stopPropagation();
+    if (shouldPreventDefault) {
+      event.preventDefault();
+    }
+  };
+
+  /**
+   * @param {string} key
+   */
+  const handleArrows = key => {
+    const actions = getActions();
+    const confirmButton = getConfirmButton();
+    const denyButton = getDenyButton();
+    const cancelButton = getCancelButton();
+    if (!actions || !confirmButton || !denyButton || !cancelButton) {
+      return;
+    }
+    /** @type HTMLElement[] */
+    const buttons = [confirmButton, denyButton, cancelButton];
+    if (document.activeElement instanceof HTMLElement && !buttons.includes(document.activeElement)) {
+      return;
+    }
+    const sibling = arrowKeysNextButton.includes(key) ? 'nextElementSibling' : 'previousElementSibling';
+    let buttonToFocus = document.activeElement;
+    if (!buttonToFocus) {
+      return;
+    }
+    for (let i = 0; i < actions.children.length; i++) {
+      buttonToFocus = buttonToFocus[sibling];
+      if (!buttonToFocus) {
+        return;
+      }
+      if (buttonToFocus instanceof HTMLButtonElement && isVisible$1(buttonToFocus)) {
+        break;
+      }
+    }
+    if (buttonToFocus instanceof HTMLButtonElement) {
+      buttonToFocus.focus();
+    }
+  };
+
+  /**
+   * @param {KeyboardEvent} event
+   * @param {SweetAlertOptions} innerParams
+   * @param {(dismiss: DismissReason) => void} dismissWith
+   */
+  const handleEsc = (event, innerParams, dismissWith) => {
+    event.preventDefault();
+    if (callIfFunction(innerParams.allowEscapeKey)) {
+      dismissWith(DismissReason.esc);
+    }
+  };
+
+  /**
+   * This module contains `WeakMap`s for each effectively-"private  property" that a `Swal` has.
+   * For example, to set the private property "foo" of `this` to "bar", you can `privateProps.foo.set(this, 'bar')`
+   * This is the approach that Babel will probably take to implement private methods/fields
+   *   https://github.com/tc39/proposal-private-methods
+   *   https://github.com/babel/babel/pull/7555
+   * Once we have the changes from that PR in Babel, and our core class fits reasonable in *one module*
+   *   then we can use that language feature.
+   */
+
+  var privateMethods = {
+    swalPromiseResolve: new WeakMap(),
+    swalPromiseReject: new WeakMap()
+  };
+
+  // From https://developer.paciellogroup.com/blog/2018/06/the-current-state-of-modal-dialog-accessibility/
+  // Adding aria-hidden="true" to elements outside of the active modal dialog ensures that
+  // elements not within the active modal dialog will not be surfaced if a user opens a screen
+  // reader’s list of elements (headings, form controls, landmarks, etc.) in the document.
+
+  const setAriaHidden = () => {
+    const container = getContainer();
+    const bodyChildren = Array.from(document.body.children);
+    bodyChildren.forEach(el => {
+      if (el.contains(container)) {
+        return;
+      }
+      if (el.hasAttribute('aria-hidden')) {
+        el.setAttribute('data-previous-aria-hidden', el.getAttribute('aria-hidden') || '');
+      }
+      el.setAttribute('aria-hidden', 'true');
+    });
+  };
+  const unsetAriaHidden = () => {
+    const bodyChildren = Array.from(document.body.children);
+    bodyChildren.forEach(el => {
+      if (el.hasAttribute('data-previous-aria-hidden')) {
+        el.setAttribute('aria-hidden', el.getAttribute('data-previous-aria-hidden') || '');
+        el.removeAttribute('data-previous-aria-hidden');
+      } else {
+        el.removeAttribute('aria-hidden');
+      }
+    });
+  };
+
+  // @ts-ignore
+  const isSafariOrIOS = typeof window !== 'undefined' && Boolean(window.GestureEvent); // true for Safari desktop + all iOS browsers https://stackoverflow.com/a/70585394
+
+  // @ts-ignore
+  const isIOS = isSafariOrIOS && /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+  /**
+   * Fix iOS scrolling
+   * http://stackoverflow.com/q/39626302
+   */
+  const iOSfix = () => {
+    if (isSafariOrIOS && !hasClass(document.body, swalClasses.iosfix)) {
+      const offset = document.body.scrollTop;
+      document.body.style.top = `${offset * -1}px`;
+      addClass(document.body, swalClasses.iosfix);
+      lockBodyScroll();
+    }
+  };
+
+  /**
+   * https://github.com/sweetalert2/sweetalert2/issues/1246
+   */
+  const lockBodyScroll = () => {
+    const container = getContainer();
+    if (!container) {
+      return;
+    }
+    /** @type {boolean} */
+    let preventTouchMove;
+    /**
+     * @param {TouchEvent} event
+     */
+    container.ontouchstart = event => {
+      preventTouchMove = shouldPreventTouchMove(event);
+    };
+    /**
+     * @param {TouchEvent} event
+     */
+    container.ontouchmove = event => {
+      if (preventTouchMove) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    };
+  };
+
+  /**
+   * @param {TouchEvent} event
+   * @returns {boolean}
+   */
+  const shouldPreventTouchMove = event => {
+    const target = event.target;
+    const container = getContainer();
+    const htmlContainer = getHtmlContainer();
+    if (!container || !htmlContainer) {
+      return false;
+    }
+    if (isStylus(event) || isZoom(event)) {
+      return false;
+    }
+    if (target === container) {
+      return true;
+    }
+    if (!isScrollable(container) && target instanceof HTMLElement && !selfOrParentIsScrollable(target, htmlContainer) &&
+    // #2823
+    target.tagName !== 'INPUT' &&
+    // #1603
+    target.tagName !== 'TEXTAREA' &&
+    // #2266
+    !(isScrollable(htmlContainer) &&
+    // #1944
+    htmlContainer.contains(target))) {
+      return true;
+    }
+    return false;
+  };
+
+  /**
+   * https://github.com/sweetalert2/sweetalert2/issues/1786
+   *
+   * @param {TouchEvent} event
+   * @returns {boolean}
+   */
+  const isStylus = event => {
+    return Boolean(event.touches && event.touches.length &&
+    // @ts-ignore - touchType is not a standard property
+    event.touches[0].touchType === 'stylus');
+  };
+
+  /**
+   * https://github.com/sweetalert2/sweetalert2/issues/1891
+   *
+   * @param {TouchEvent} event
+   * @returns {boolean}
+   */
+  const isZoom = event => {
+    return event.touches && event.touches.length > 1;
+  };
+  const undoIOSfix = () => {
+    if (hasClass(document.body, swalClasses.iosfix)) {
+      const offset = parseInt(document.body.style.top, 10);
+      removeClass(document.body, swalClasses.iosfix);
+      document.body.style.top = '';
+      document.body.scrollTop = offset * -1;
+    }
+  };
+
+  /**
+   * Measure scrollbar width for padding body during modal show/hide
+   * https://github.com/twbs/bootstrap/blob/master/js/src/modal.js
+   *
+   * @returns {number}
+   */
+  const measureScrollbar = () => {
+    const scrollDiv = document.createElement('div');
+    scrollDiv.className = swalClasses['scrollbar-measure'];
+    document.body.appendChild(scrollDiv);
+    const scrollbarWidth = scrollDiv.getBoundingClientRect().width - scrollDiv.clientWidth;
+    document.body.removeChild(scrollDiv);
+    return scrollbarWidth;
+  };
+
+  /**
+   * Remember state in cases where opening and handling a modal will fiddle with it.
+   * @type {number | null}
+   */
+  let previousBodyPadding = null;
+
+  /**
+   * @param {string} initialBodyOverflow
+   */
+  const replaceScrollbarWithPadding = initialBodyOverflow => {
+    // for queues, do not do this more than once
+    if (previousBodyPadding !== null) {
+      return;
+    }
+    // if the body has overflow
+    if (document.body.scrollHeight > window.innerHeight || initialBodyOverflow === 'scroll' // https://github.com/sweetalert2/sweetalert2/issues/2663
+    ) {
+      // add padding so the content doesn't shift after removal of scrollbar
+      previousBodyPadding = parseInt(window.getComputedStyle(document.body).getPropertyValue('padding-right'));
+      document.body.style.paddingRight = `${previousBodyPadding + measureScrollbar()}px`;
+    }
+  };
+  const undoReplaceScrollbarWithPadding = () => {
+    if (previousBodyPadding !== null) {
+      document.body.style.paddingRight = `${previousBodyPadding}px`;
+      previousBodyPadding = null;
+    }
+  };
+
+  /**
+   * @param {SweetAlert} instance
+   * @param {HTMLElement} container
+   * @param {boolean} returnFocus
+   * @param {(() => void) | undefined} didClose
+   */
+  function removePopupAndResetState(instance, container, returnFocus, didClose) {
+    if (isToast()) {
+      triggerDidCloseAndDispose(instance, didClose);
+    } else {
+      restoreActiveElement(returnFocus).then(() => triggerDidCloseAndDispose(instance, didClose));
+      removeKeydownHandler(globalState);
+    }
+
+    // workaround for https://github.com/sweetalert2/sweetalert2/issues/2088
+    // for some reason removing the container in Safari will scroll the document to bottom
+    if (isSafariOrIOS) {
+      container.setAttribute('style', 'display:none !important');
+      container.removeAttribute('class');
+      container.innerHTML = '';
+    } else {
+      container.remove();
+    }
+    if (isModal()) {
+      undoReplaceScrollbarWithPadding();
+      undoIOSfix();
+      unsetAriaHidden();
+    }
+    removeBodyClasses();
+  }
+
+  /**
+   * Remove SweetAlert2 classes from body
+   */
+  function removeBodyClasses() {
+    removeClass([document.documentElement, document.body], [swalClasses.shown, swalClasses['height-auto'], swalClasses['no-backdrop'], swalClasses['toast-shown']]);
+  }
+
+  /**
+   * Instance method to close sweetAlert
+   *
+   * @param {SweetAlertResult | undefined} resolveValue
+   * @this {SweetAlert}
+   */
+  function close(resolveValue) {
+    resolveValue = prepareResolveValue(resolveValue);
+    const swalPromiseResolve = privateMethods.swalPromiseResolve.get(this);
+    const didClose = triggerClosePopup(this);
+    if (this.isAwaitingPromise) {
+      // A swal awaiting for a promise (after a click on Confirm or Deny) cannot be dismissed anymore #2335
+      if (!resolveValue.isDismissed) {
+        handleAwaitingPromise(this);
+        swalPromiseResolve(resolveValue);
+      }
+    } else if (didClose) {
+      // Resolve Swal promise
+      swalPromiseResolve(resolveValue);
+    }
+  }
+
+  /**
+   * @param {SweetAlert} instance
+   * @returns {boolean}
+   */
+  const triggerClosePopup = instance => {
+    const popup = getPopup();
+    if (!popup) {
+      return false;
+    }
+    const innerParams = privateProps.innerParams.get(instance);
+    if (!innerParams || hasClass(popup, innerParams.hideClass.popup)) {
+      return false;
+    }
+    removeClass(popup, innerParams.showClass.popup);
+    addClass(popup, innerParams.hideClass.popup);
+    const backdrop = getContainer();
+    removeClass(backdrop, innerParams.showClass.backdrop);
+    addClass(backdrop, innerParams.hideClass.backdrop);
+    handlePopupAnimation(instance, popup, innerParams);
+    return true;
+  };
+
+  /**
+   * @param {Error | string} error
+   * @this {SweetAlert}
+   */
+  function rejectPromise(error) {
+    const rejectPromise = privateMethods.swalPromiseReject.get(this);
+    handleAwaitingPromise(this);
+    if (rejectPromise) {
+      // Reject Swal promise
+      rejectPromise(error);
+    }
+  }
+
+  /**
+   * @param {SweetAlert} instance
+   */
+  const handleAwaitingPromise = instance => {
+    if (instance.isAwaitingPromise) {
+      // @ts-ignore
+      delete instance.isAwaitingPromise;
+      // The instance might have been previously partly destroyed, we must resume the destroy process in this case #2335
+      if (!privateProps.innerParams.get(instance)) {
+        instance._destroy();
+      }
+    }
+  };
+
+  /**
+   * @param {SweetAlertResult | undefined} resolveValue
+   * @returns {SweetAlertResult}
+   */
+  const prepareResolveValue = resolveValue => {
+    // When user calls Swal.close()
+    if (typeof resolveValue === 'undefined') {
+      return {
+        isConfirmed: false,
+        isDenied: false,
+        isDismissed: true
+      };
+    }
+    return Object.assign({
+      isConfirmed: false,
+      isDenied: false,
+      isDismissed: false
+    }, resolveValue);
+  };
+
+  /**
+   * @param {SweetAlert} instance
+   * @param {HTMLElement} popup
+   * @param {SweetAlertOptions} innerParams
+   */
+  const handlePopupAnimation = (instance, popup, innerParams) => {
+    var _globalState$eventEmi;
+    const container = getContainer();
+    // If animation is supported, animate
+    const animationIsSupported = hasCssAnimation(popup);
+    if (typeof innerParams.willClose === 'function') {
+      innerParams.willClose(popup);
+    }
+    (_globalState$eventEmi = globalState.eventEmitter) === null || _globalState$eventEmi === void 0 || _globalState$eventEmi.emit('willClose', popup);
+    if (animationIsSupported && container) {
+      animatePopup(instance, popup, container, Boolean(innerParams.returnFocus), innerParams.didClose);
+    } else if (container) {
+      // Otherwise, remove immediately
+      removePopupAndResetState(instance, container, Boolean(innerParams.returnFocus), innerParams.didClose);
+    }
+  };
+
+  /**
+   * @param {SweetAlert} instance
+   * @param {HTMLElement} popup
+   * @param {HTMLElement} container
+   * @param {boolean} returnFocus
+   * @param {(() => void) | undefined} didClose
+   */
+  const animatePopup = (instance, popup, container, returnFocus, didClose) => {
+    globalState.swalCloseEventFinishedCallback = removePopupAndResetState.bind(null, instance, container, returnFocus, didClose);
+    /**
+     * @param {AnimationEvent | TransitionEvent} e
+     */
+    const swalCloseAnimationFinished = function (e) {
+      if (e.target === popup) {
+        var _globalState$swalClos;
+        (_globalState$swalClos = globalState.swalCloseEventFinishedCallback) === null || _globalState$swalClos === void 0 || _globalState$swalClos.call(globalState);
+        delete globalState.swalCloseEventFinishedCallback;
+        popup.removeEventListener('animationend', swalCloseAnimationFinished);
+        popup.removeEventListener('transitionend', swalCloseAnimationFinished);
+      }
+    };
+    popup.addEventListener('animationend', swalCloseAnimationFinished);
+    popup.addEventListener('transitionend', swalCloseAnimationFinished);
+  };
+
+  /**
+   * @param {SweetAlert} instance
+   * @param {(() => void) | undefined} didClose
+   */
+  const triggerDidCloseAndDispose = (instance, didClose) => {
+    setTimeout(() => {
+      var _globalState$eventEmi2;
+      if (typeof didClose === 'function') {
+        didClose.bind(instance.params)();
+      }
+      (_globalState$eventEmi2 = globalState.eventEmitter) === null || _globalState$eventEmi2 === void 0 || _globalState$eventEmi2.emit('didClose');
+      // instance might have been destroyed already
+      if (instance._destroy) {
+        instance._destroy();
+      }
+    });
+  };
+
+  /**
+   * Shows loader (spinner), this is useful with AJAX requests.
+   * By default the loader be shown instead of the "Confirm" button.
+   *
+   * @param {HTMLButtonElement | null} [buttonToReplace]
+   */
+  const showLoading = buttonToReplace => {
+    let popup = getPopup();
+    if (!popup) {
+      new Swal();
+    }
+    popup = getPopup();
+    if (!popup) {
+      return;
+    }
+    const loader = getLoader();
+    if (isToast()) {
+      hide(getIcon());
+    } else {
+      replaceButton(popup, buttonToReplace);
+    }
+    show(loader);
+    popup.setAttribute('data-loading', 'true');
+    popup.setAttribute('aria-busy', 'true');
+    popup.focus();
+  };
+
+  /**
+   * @param {HTMLElement} popup
+   * @param {HTMLButtonElement | null} [buttonToReplace]
+   */
+  const replaceButton = (popup, buttonToReplace) => {
+    const actions = getActions();
+    const loader = getLoader();
+    if (!actions || !loader) {
+      return;
+    }
+    if (!buttonToReplace && isVisible$1(getConfirmButton())) {
+      buttonToReplace = getConfirmButton();
+    }
+    show(actions);
+    if (buttonToReplace) {
+      hide(buttonToReplace);
+      loader.setAttribute('data-button-to-replace', buttonToReplace.className);
+      actions.insertBefore(loader, buttonToReplace);
+    }
+    addClass([popup, actions], swalClasses.loading);
+  };
+
+  /**
+   * @param {SweetAlert} instance
+   * @param {SweetAlertOptions} params
+   */
+  const handleInputOptionsAndValue = (instance, params) => {
+    if (params.input === 'select' || params.input === 'radio') {
+      handleInputOptions(instance, params);
+    } else if (['text', 'email', 'number', 'tel', 'textarea'].some(i => i === params.input) && (hasToPromiseFn(params.inputValue) || isPromise(params.inputValue))) {
+      showLoading(getConfirmButton());
+      handleInputValue(instance, params);
+    }
+  };
+
+  /**
+   * @param {SweetAlert} instance
+   * @param {SweetAlertOptions} innerParams
+   * @returns {SweetAlertInputValue}
+   */
+  const getInputValue = (instance, innerParams) => {
+    const input = instance.getInput();
+    if (!input) {
+      return null;
+    }
+    switch (innerParams.input) {
+      case 'checkbox':
+        return getCheckboxValue(input);
+      case 'radio':
+        return getRadioValue(input);
+      case 'file':
+        return getFileValue(input);
+      default:
+        return innerParams.inputAutoTrim ? input.value.trim() : input.value;
+    }
+  };
+
+  /**
+   * @param {HTMLInputElement} input
+   * @returns {number}
+   */
+  const getCheckboxValue = input => input.checked ? 1 : 0;
+
+  /**
+   * @param {HTMLInputElement} input
+   * @returns {string | null}
+   */
+  const getRadioValue = input => input.checked ? input.value : null;
+
+  /**
+   * @param {HTMLInputElement} input
+   * @returns {FileList | File | null}
+   */
+  const getFileValue = input => input.files && input.files.length ? input.getAttribute('multiple') !== null ? input.files : input.files[0] : null;
+
+  /**
+   * @param {SweetAlert} instance
+   * @param {SweetAlertOptions} params
+   */
+  const handleInputOptions = (instance, params) => {
+    const popup = getPopup();
+    if (!popup) {
+      return;
+    }
+    /**
+     * @param {*} inputOptions
+     */
+    const processInputOptions = inputOptions => {
+      if (params.input === 'select') {
+        populateSelectOptions(popup, formatInputOptions(inputOptions), params);
+      } else if (params.input === 'radio') {
+        populateRadioOptions(popup, formatInputOptions(inputOptions), params);
+      }
+    };
+    if (hasToPromiseFn(params.inputOptions) || isPromise(params.inputOptions)) {
+      showLoading(getConfirmButton());
+      asPromise(params.inputOptions).then(inputOptions => {
+        instance.hideLoading();
+        processInputOptions(inputOptions);
+      });
+    } else if (typeof params.inputOptions === 'object') {
+      processInputOptions(params.inputOptions);
+    } else {
+      error(`Unexpected type of inputOptions! Expected object, Map or Promise, got ${typeof params.inputOptions}`);
+    }
+  };
+
+  /**
+   * @param {SweetAlert} instance
+   * @param {SweetAlertOptions} params
+   */
+  const handleInputValue = (instance, params) => {
+    const input = instance.getInput();
+    if (!input) {
+      return;
+    }
+    hide(input);
+    asPromise(params.inputValue).then(inputValue => {
+      input.value = params.input === 'number' ? `${parseFloat(inputValue) || 0}` : `${inputValue}`;
+      show(input);
+      input.focus();
+      instance.hideLoading();
+    }).catch(err => {
+      error(`Error in inputValue promise: ${err}`);
+      input.value = '';
+      show(input);
+      input.focus();
+      instance.hideLoading();
+    });
+  };
+
+  /**
+   * @param {HTMLElement} popup
+   * @param {InputOptionFlattened[]} inputOptions
+   * @param {SweetAlertOptions} params
+   */
+  function populateSelectOptions(popup, inputOptions, params) {
+    const select = getDirectChildByClass(popup, swalClasses.select);
+    if (!select) {
+      return;
+    }
+    /**
+     * @param {HTMLElement} parent
+     * @param {string} optionLabel
+     * @param {string} optionValue
+     */
+    const renderOption = (parent, optionLabel, optionValue) => {
+      const option = document.createElement('option');
+      option.value = optionValue;
+      setInnerHtml(option, optionLabel);
+      option.selected = isSelected(optionValue, params.inputValue);
+      parent.appendChild(option);
+    };
+    inputOptions.forEach(inputOption => {
+      const optionValue = inputOption[0];
+      const optionLabel = inputOption[1];
+      // <optgroup> spec:
+      // https://www.w3.org/TR/html401/interact/forms.html#h-17.6
+      // "...all OPTGROUP elements must be specified directly within a SELECT element (i.e., groups may not be nested)..."
+      // check whether this is a <optgroup>
+      if (Array.isArray(optionLabel)) {
+        // if it is an array, then it is an <optgroup>
+        const optgroup = document.createElement('optgroup');
+        optgroup.label = optionValue;
+        optgroup.disabled = false; // not configurable for now
+        select.appendChild(optgroup);
+        optionLabel.forEach(o => renderOption(optgroup, o[1], o[0]));
+      } else {
+        // case of <option>
+        renderOption(select, optionLabel, optionValue);
+      }
+    });
+    select.focus();
+  }
+
+  /**
+   * @param {HTMLElement} popup
+   * @param {InputOptionFlattened[]} inputOptions
+   * @param {SweetAlertOptions} params
+   */
+  function populateRadioOptions(popup, inputOptions, params) {
+    const radio = getDirectChildByClass(popup, swalClasses.radio);
+    if (!radio) {
+      return;
+    }
+    inputOptions.forEach(inputOption => {
+      const radioValue = inputOption[0];
+      const radioLabel = inputOption[1];
+      const radioInput = document.createElement('input');
+      const radioLabelElement = document.createElement('label');
+      radioInput.type = 'radio';
+      radioInput.name = swalClasses.radio;
+      radioInput.value = radioValue;
+      if (isSelected(radioValue, params.inputValue)) {
+        radioInput.checked = true;
+      }
+      const label = document.createElement('span');
+      setInnerHtml(label, radioLabel);
+      label.className = swalClasses.label;
+      radioLabelElement.appendChild(radioInput);
+      radioLabelElement.appendChild(label);
+      radio.appendChild(radioLabelElement);
+    });
+    const radios = radio.querySelectorAll('input');
+    if (radios.length) {
+      radios[0].focus();
+    }
+  }
+
+  /**
+   * Converts `inputOptions` into an array of `[value, label]`s
+   *
+   * @param {*} inputOptions
+   * @typedef {string[]} InputOptionFlattened
+   * @returns {InputOptionFlattened[]}
+   */
+  const formatInputOptions = inputOptions => {
+    const entries = inputOptions instanceof Map ? Array.from(inputOptions) : Object.entries(inputOptions);
+    return entries.map(([key, value]) => [key, typeof value === 'object' ? formatInputOptions(value) : value]); // case of <optgroup>
+  };
+
+  /**
+   * @param {string} optionValue
+   * @param {SweetAlertInputValue} inputValue
+   * @returns {boolean}
+   */
+  const isSelected = (optionValue, inputValue) => Boolean(inputValue) && inputValue != null && inputValue.toString() === optionValue.toString();
+
+  /**
+   * @param {SweetAlert} instance
+   */
+  const handleConfirmButtonClick = instance => {
+    const innerParams = privateProps.innerParams.get(instance);
+    instance.disableButtons();
+    if (innerParams.input) {
+      handleConfirmOrDenyWithInput(instance, 'confirm');
+    } else {
+      confirm(instance, true);
+    }
+  };
+
+  /**
+   * @param {SweetAlert} instance
+   */
+  const handleDenyButtonClick = instance => {
+    const innerParams = privateProps.innerParams.get(instance);
+    instance.disableButtons();
+    if (innerParams.returnInputValueOnDeny) {
+      handleConfirmOrDenyWithInput(instance, 'deny');
+    } else {
+      deny(instance, false);
+    }
+  };
+
+  /**
+   * @param {SweetAlert} instance
+   * @param {(dismiss: DismissReason) => void} dismissWith
+   */
+  const handleCancelButtonClick = (instance, dismissWith) => {
+    instance.disableButtons();
+    dismissWith(DismissReason.cancel);
+  };
+
+  /**
+   * @param {SweetAlert} instance
+   * @param {'confirm' | 'deny'} type
+   */
+  const handleConfirmOrDenyWithInput = (instance, type) => {
+    const innerParams = privateProps.innerParams.get(instance);
+    if (!innerParams.input) {
+      error(`The "input" parameter is needed to be set when using returnInputValueOn${capitalizeFirstLetter(type)}`);
+      return;
+    }
+    const input = instance.getInput();
+    const inputValue = getInputValue(instance, innerParams);
+    if (innerParams.inputValidator) {
+      handleInputValidator(instance, inputValue, type);
+    } else if (input && !input.checkValidity()) {
+      instance.enableButtons();
+      instance.showValidationMessage(innerParams.validationMessage || input.validationMessage);
+    } else if (type === 'deny') {
+      deny(instance, inputValue);
+    } else {
+      confirm(instance, inputValue);
+    }
+  };
+
+  /**
+   * @param {SweetAlert} instance
+   * @param {SweetAlertInputValue} inputValue
+   * @param {'confirm' | 'deny'} type
+   */
+  const handleInputValidator = (instance, inputValue, type) => {
+    const innerParams = privateProps.innerParams.get(instance);
+    instance.disableInput();
+    const validationPromise = Promise.resolve().then(() => asPromise(innerParams.inputValidator(inputValue, innerParams.validationMessage)));
+    validationPromise.then(validationMessage => {
+      instance.enableButtons();
+      instance.enableInput();
+      if (validationMessage) {
+        instance.showValidationMessage(validationMessage);
+      } else if (type === 'deny') {
+        deny(instance, inputValue);
+      } else {
+        confirm(instance, inputValue);
+      }
+    });
+  };
+
+  /**
+   * @param {SweetAlert} instance
+   * @param {*} value
+   */
+  const deny = (instance, value) => {
+    const innerParams = privateProps.innerParams.get(instance);
+    if (innerParams.showLoaderOnDeny) {
+      showLoading(getDenyButton());
+    }
+    if (innerParams.preDeny) {
+      instance.isAwaitingPromise = true; // Flagging the instance as awaiting a promise so it's own promise's reject/resolve methods doesn't get destroyed until the result from this preDeny's promise is received
+      const preDenyPromise = Promise.resolve().then(() => asPromise(innerParams.preDeny(value, innerParams.validationMessage)));
+      preDenyPromise.then(preDenyValue => {
+        if (preDenyValue === false) {
+          instance.hideLoading();
+          handleAwaitingPromise(instance);
+        } else {
+          instance.close(/** @type SweetAlertResult */{
+            isDenied: true,
+            value: typeof preDenyValue === 'undefined' ? value : preDenyValue
+          });
+        }
+      }).catch(error => rejectWith(instance, error));
+    } else {
+      instance.close(/** @type SweetAlertResult */{
+        isDenied: true,
+        value
+      });
+    }
+  };
+
+  /**
+   * @param {SweetAlert} instance
+   * @param {*} value
+   */
+  const succeedWith = (instance, value) => {
+    instance.close(/** @type SweetAlertResult */{
+      isConfirmed: true,
+      value
+    });
+  };
+
+  /**
+   *
+   * @param {SweetAlert} instance
+   * @param {string} error
+   */
+  const rejectWith = (instance, error) => {
+    instance.rejectPromise(error);
+  };
+
+  /**
+   *
+   * @param {SweetAlert} instance
+   * @param {*} value
+   */
+  const confirm = (instance, value) => {
+    const innerParams = privateProps.innerParams.get(instance);
+    if (innerParams.showLoaderOnConfirm) {
+      showLoading();
+    }
+    if (innerParams.preConfirm) {
+      instance.resetValidationMessage();
+      instance.isAwaitingPromise = true; // Flagging the instance as awaiting a promise so it's own promise's reject/resolve methods doesn't get destroyed until the result from this preConfirm's promise is received
+      const preConfirmPromise = Promise.resolve().then(() => asPromise(innerParams.preConfirm(value, innerParams.validationMessage)));
+      preConfirmPromise.then(preConfirmValue => {
+        if (isVisible$1(getValidationMessage()) || preConfirmValue === false) {
+          instance.hideLoading();
+          handleAwaitingPromise(instance);
+        } else {
+          succeedWith(instance, typeof preConfirmValue === 'undefined' ? value : preConfirmValue);
+        }
+      }).catch(error => rejectWith(instance, error));
+    } else {
+      succeedWith(instance, value);
+    }
+  };
+
+  /**
+   * Hides loader and shows back the button which was hidden by .showLoading()
+   * @this {SweetAlert}
+   */
+  function hideLoading() {
+    // do nothing if popup is closed
+    const innerParams = privateProps.innerParams.get(this);
+    if (!innerParams) {
+      return;
+    }
+    const domCache = privateProps.domCache.get(this);
+    hide(domCache.loader);
+    if (isToast()) {
+      if (innerParams.icon) {
+        show(getIcon());
+      }
+    } else {
+      showRelatedButton(domCache);
+    }
+    removeClass([domCache.popup, domCache.actions], swalClasses.loading);
+    domCache.popup.removeAttribute('aria-busy');
+    domCache.popup.removeAttribute('data-loading');
+    this.enableButtons();
+  }
+
+  /**
+   * @param {DomCache} domCache
+   */
+  const showRelatedButton = domCache => {
+    const dataButtonToReplace = domCache.loader.getAttribute('data-button-to-replace');
+    const buttonToReplace = dataButtonToReplace ? domCache.popup.getElementsByClassName(dataButtonToReplace) : [];
+    if (buttonToReplace.length) {
+      show(/** @type {HTMLElement} */buttonToReplace[0], 'inline-block');
+    } else if (allButtonsAreHidden()) {
+      hide(domCache.actions);
+    }
+  };
+
+  /**
+   * Gets the input DOM node, this method works with input parameter.
+   *
+   * @returns {HTMLInputElement | null}
+   * @this {SweetAlert}
+   */
+  function getInput() {
+    const innerParams = privateProps.innerParams.get(this);
+    const domCache = privateProps.domCache.get(this);
+    if (!domCache) {
+      return null;
+    }
+    return getInput$1(domCache.popup, innerParams.input);
+  }
+
+  /**
+   * @param {SweetAlert} instance
+   * @param {string[]} buttons
+   * @param {boolean} disabled
+   */
+  function setButtonsDisabled(instance, buttons, disabled) {
+    const domCache = privateProps.domCache.get(instance);
+    buttons.forEach(button => {
+      domCache[button].disabled = disabled;
+    });
+  }
+
+  /**
+   * @param {HTMLInputElement | null} input
+   * @param {boolean} disabled
+   */
+  function setInputDisabled(input, disabled) {
+    const popup = getPopup();
+    if (!popup || !input) {
+      return;
+    }
+    if (input.type === 'radio') {
+      /** @type {NodeListOf<HTMLInputElement>} */
+      const radios = popup.querySelectorAll(`[name="${swalClasses.radio}"]`);
+      radios.forEach(radio => {
+        radio.disabled = disabled;
+      });
+    } else {
+      input.disabled = disabled;
+    }
+  }
+
+  /**
+   * Enable all the buttons
+   * @this {SweetAlert}
+   */
+  function enableButtons() {
+    setButtonsDisabled(this, ['confirmButton', 'denyButton', 'cancelButton'], false);
+    const focusedElement = privateProps.focusedElement.get(this);
+    if (focusedElement instanceof HTMLElement && document.activeElement === document.body) {
+      focusedElement.focus();
+    }
+    privateProps.focusedElement.delete(this);
+  }
+
+  /**
+   * Disable all the buttons
+   * @this {SweetAlert}
+   */
+  function disableButtons() {
+    privateProps.focusedElement.set(this, document.activeElement);
+    setButtonsDisabled(this, ['confirmButton', 'denyButton', 'cancelButton'], true);
+  }
+
+  /**
+   * Enable the input field
+   * @this {SweetAlert}
+   */
+  function enableInput() {
+    setInputDisabled(this.getInput(), false);
+  }
+
+  /**
+   * Disable the input field
+   * @this {SweetAlert}
+   */
+  function disableInput() {
+    setInputDisabled(this.getInput(), true);
+  }
+
+  /**
+   * Show block with validation message
+   *
+   * @param {string} error
+   * @this {SweetAlert}
+   */
+  function showValidationMessage(error) {
+    const domCache = privateProps.domCache.get(this);
+    const params = privateProps.innerParams.get(this);
+    setInnerHtml(domCache.validationMessage, error);
+    domCache.validationMessage.className = swalClasses['validation-message'];
+    if (params.customClass && params.customClass.validationMessage) {
+      addClass(domCache.validationMessage, params.customClass.validationMessage);
+    }
+    show(domCache.validationMessage);
+    const input = this.getInput();
+    if (input) {
+      input.setAttribute('aria-invalid', 'true');
+      input.setAttribute('aria-describedby', swalClasses['validation-message']);
+      focusInput(input);
+      addClass(input, swalClasses.inputerror);
+    }
+  }
+
+  /**
+   * Hide block with validation message
+   *
+   * @this {SweetAlert}
+   */
+  function resetValidationMessage() {
+    const domCache = privateProps.domCache.get(this);
+    if (domCache.validationMessage) {
+      hide(domCache.validationMessage);
+    }
+    const input = this.getInput();
+    if (input) {
+      input.removeAttribute('aria-invalid');
+      input.removeAttribute('aria-describedby');
+      removeClass(input, swalClasses.inputerror);
+    }
+  }
+
+  const defaultParams = {
+    title: '',
+    titleText: '',
+    text: '',
+    html: '',
+    footer: '',
+    icon: undefined,
+    iconColor: undefined,
+    iconHtml: undefined,
+    template: undefined,
+    toast: false,
+    draggable: false,
+    animation: true,
+    theme: 'light',
+    showClass: {
+      popup: 'swal2-show',
+      backdrop: 'swal2-backdrop-show',
+      icon: 'swal2-icon-show'
+    },
+    hideClass: {
+      popup: 'swal2-hide',
+      backdrop: 'swal2-backdrop-hide',
+      icon: 'swal2-icon-hide'
+    },
+    customClass: {},
+    target: 'body',
+    color: undefined,
+    backdrop: true,
+    heightAuto: true,
+    allowOutsideClick: true,
+    allowEscapeKey: true,
+    allowEnterKey: true,
+    stopKeydownPropagation: true,
+    keydownListenerCapture: false,
+    showConfirmButton: true,
+    showDenyButton: false,
+    showCancelButton: false,
+    preConfirm: undefined,
+    preDeny: undefined,
+    confirmButtonText: 'OK',
+    confirmButtonAriaLabel: '',
+    confirmButtonColor: undefined,
+    denyButtonText: 'No',
+    denyButtonAriaLabel: '',
+    denyButtonColor: undefined,
+    cancelButtonText: 'Cancel',
+    cancelButtonAriaLabel: '',
+    cancelButtonColor: undefined,
+    buttonsStyling: true,
+    reverseButtons: false,
+    focusConfirm: true,
+    focusDeny: false,
+    focusCancel: false,
+    returnFocus: true,
+    showCloseButton: false,
+    closeButtonHtml: '&times;',
+    closeButtonAriaLabel: 'Close this dialog',
+    loaderHtml: '',
+    showLoaderOnConfirm: false,
+    showLoaderOnDeny: false,
+    imageUrl: undefined,
+    imageWidth: undefined,
+    imageHeight: undefined,
+    imageAlt: '',
+    timer: undefined,
+    timerProgressBar: false,
+    width: undefined,
+    padding: undefined,
+    background: undefined,
+    input: undefined,
+    inputPlaceholder: '',
+    inputLabel: '',
+    inputValue: '',
+    inputOptions: {},
+    inputAutoFocus: true,
+    inputAutoTrim: true,
+    inputAttributes: {},
+    inputValidator: undefined,
+    returnInputValueOnDeny: false,
+    validationMessage: undefined,
+    grow: false,
+    position: 'center',
+    progressSteps: [],
+    currentProgressStep: undefined,
+    progressStepsDistance: undefined,
+    willOpen: undefined,
+    didOpen: undefined,
+    didRender: undefined,
+    willClose: undefined,
+    didClose: undefined,
+    didDestroy: undefined,
+    scrollbarPadding: true,
+    topLayer: false
+  };
+  const updatableParams = ['allowEscapeKey', 'allowOutsideClick', 'background', 'buttonsStyling', 'cancelButtonAriaLabel', 'cancelButtonColor', 'cancelButtonText', 'closeButtonAriaLabel', 'closeButtonHtml', 'color', 'confirmButtonAriaLabel', 'confirmButtonColor', 'confirmButtonText', 'currentProgressStep', 'customClass', 'denyButtonAriaLabel', 'denyButtonColor', 'denyButtonText', 'didClose', 'didDestroy', 'draggable', 'footer', 'hideClass', 'html', 'icon', 'iconColor', 'iconHtml', 'imageAlt', 'imageHeight', 'imageUrl', 'imageWidth', 'preConfirm', 'preDeny', 'progressSteps', 'returnFocus', 'reverseButtons', 'showCancelButton', 'showCloseButton', 'showConfirmButton', 'showDenyButton', 'text', 'title', 'titleText', 'theme', 'willClose'];
+
+  /** @type {Record<string, string | undefined>} */
+  const deprecatedParams = {
+    allowEnterKey: undefined
+  };
+  const toastIncompatibleParams = ['allowOutsideClick', 'allowEnterKey', 'backdrop', 'draggable', 'focusConfirm', 'focusDeny', 'focusCancel', 'returnFocus', 'heightAuto', 'keydownListenerCapture'];
+
+  /**
+   * Is valid parameter
+   *
+   * @param {string} paramName
+   * @returns {boolean}
+   */
+  const isValidParameter = paramName => {
+    return Object.prototype.hasOwnProperty.call(defaultParams, paramName);
+  };
+
+  /**
+   * Is valid parameter for Swal.update() method
+   *
+   * @param {string} paramName
+   * @returns {boolean}
+   */
+  const isUpdatableParameter = paramName => {
+    return updatableParams.indexOf(paramName) !== -1;
+  };
+
+  /**
+   * Is deprecated parameter
+   *
+   * @param {string} paramName
+   * @returns {string | undefined}
+   */
+  const isDeprecatedParameter = paramName => {
+    return deprecatedParams[paramName];
+  };
+
+  /**
+   * @param {string} param
+   */
+  const checkIfParamIsValid = param => {
+    if (!isValidParameter(param)) {
+      warn(`Unknown parameter "${param}"`);
+    }
+  };
+
+  /**
+   * @param {string} param
+   */
+  const checkIfToastParamIsValid = param => {
+    if (toastIncompatibleParams.includes(param)) {
+      warn(`The parameter "${param}" is incompatible with toasts`);
+    }
+  };
+
+  /**
+   * @param {string} param
+   */
+  const checkIfParamIsDeprecated = param => {
+    const isDeprecated = isDeprecatedParameter(param);
+    if (isDeprecated) {
+      warnAboutDeprecation(param, isDeprecated);
+    }
+  };
+
+  /**
+   * Show relevant warnings for given params
+   *
+   * @param {SweetAlertOptions} params
+   */
+  const showWarningsForParams = params => {
+    if (params.backdrop === false && params.allowOutsideClick) {
+      warn('"allowOutsideClick" parameter requires `backdrop` parameter to be set to `true`');
+    }
+    if (params.theme && !['light', 'dark', 'auto', 'minimal', 'borderless', 'bootstrap-4', 'bootstrap-4-light', 'bootstrap-4-dark', 'bootstrap-5', 'bootstrap-5-light', 'bootstrap-5-dark', 'material-ui', 'material-ui-light', 'material-ui-dark', 'embed-iframe', 'bulma', 'bulma-light', 'bulma-dark'].includes(params.theme)) {
+      warn(`Invalid theme "${params.theme}"`);
+    }
+    for (const param in params) {
+      checkIfParamIsValid(param);
+      if (params.toast) {
+        checkIfToastParamIsValid(param);
+      }
+      checkIfParamIsDeprecated(param);
+    }
+  };
+
+  /**
+   * Updates popup parameters.
+   *
+   * @this {any}
+   * @param {SweetAlertOptions} params
+   */
+  function update(params) {
+    const container = getContainer();
+    const popup = getPopup();
+    const innerParams = privateProps.innerParams.get(this);
+    if (!popup || hasClass(popup, innerParams.hideClass.popup)) {
+      warn(`You're trying to update the closed or closing popup, that won't work. Use the update() method in preConfirm parameter or show a new popup.`);
+      return;
+    }
+    const validUpdatableParams = filterValidParams(params);
+    const updatedParams = Object.assign({}, innerParams, validUpdatableParams);
+    showWarningsForParams(updatedParams);
+    if (container) {
+      container.dataset['swal2Theme'] = updatedParams.theme;
+    }
+    render(this, updatedParams);
+    privateProps.innerParams.set(this, updatedParams);
+    Object.defineProperties(this, {
+      params: {
+        value: Object.assign({}, this.params, params),
+        writable: false,
+        enumerable: true
+      }
+    });
+  }
+
+  /**
+   * @param {SweetAlertOptions} params
+   * @returns {SweetAlertOptions}
+   */
+  const filterValidParams = params => {
+    /** @type {Record<string, any>} */
+    const validUpdatableParams = {};
+    Object.keys(params).forEach(param => {
+      if (isUpdatableParameter(param)) {
+        const typedParams = /** @type {Record<string, any>} */params;
+        validUpdatableParams[param] = typedParams[param];
+      } else {
+        warn(`Invalid parameter to update: ${param}`);
+      }
+    });
+    return validUpdatableParams;
+  };
+
+  /**
+   * Dispose the current SweetAlert2 instance
+   * @this {SweetAlert}
+   */
+  function _destroy() {
+    var _globalState$eventEmi;
+    const domCache = privateProps.domCache.get(this);
+    const innerParams = privateProps.innerParams.get(this);
+    if (!innerParams) {
+      disposeWeakMaps(this); // The WeakMaps might have been partly destroyed, we must recall it to dispose any remaining WeakMaps #2335
+      return; // This instance has already been destroyed
+    }
+
+    // Check if there is another Swal closing
+    if (domCache.popup && globalState.swalCloseEventFinishedCallback) {
+      globalState.swalCloseEventFinishedCallback();
+      delete globalState.swalCloseEventFinishedCallback;
+    }
+    if (typeof innerParams.didDestroy === 'function') {
+      innerParams.didDestroy();
+    }
+    (_globalState$eventEmi = globalState.eventEmitter) === null || _globalState$eventEmi === void 0 || _globalState$eventEmi.emit('didDestroy');
+    disposeSwal(this);
+  }
+
+  /**
+   * @param {SweetAlert} instance
+   */
+  const disposeSwal = instance => {
+    disposeWeakMaps(instance);
+    // Unset this.params so GC will dispose it (#1569)
+    // @ts-ignore
+    delete instance.params;
+    // Unset globalState props so GC will dispose globalState (#1569)
+    delete globalState.keydownHandler;
+    delete globalState.keydownTarget;
+    // Unset currentInstance
+    delete globalState.currentInstance;
+  };
+
+  /**
+   * @param {SweetAlert} instance
+   */
+  const disposeWeakMaps = instance => {
+    // If the current instance is awaiting a promise result, we keep the privateMethods to call them once the promise result is retrieved #2335
+    if (instance.isAwaitingPromise) {
+      unsetWeakMaps(privateProps, instance);
+      instance.isAwaitingPromise = true;
+    } else {
+      unsetWeakMaps(privateMethods, instance);
+      unsetWeakMaps(privateProps, instance);
+
+      // @ts-ignore
+      delete instance.isAwaitingPromise;
+      // Unset instance methods
+      // @ts-ignore
+      delete instance.disableButtons;
+      // @ts-ignore
+      delete instance.enableButtons;
+      // @ts-ignore
+      delete instance.getInput;
+      // @ts-ignore
+      delete instance.disableInput;
+      // @ts-ignore
+      delete instance.enableInput;
+      // @ts-ignore
+      delete instance.hideLoading;
+      // @ts-ignore
+      delete instance.disableLoading;
+      // @ts-ignore
+      delete instance.showValidationMessage;
+      // @ts-ignore
+      delete instance.resetValidationMessage;
+      // @ts-ignore
+      delete instance.close;
+      // @ts-ignore
+      delete instance.closePopup;
+      // @ts-ignore
+      delete instance.closeModal;
+      // @ts-ignore
+      delete instance.closeToast;
+      // @ts-ignore
+      delete instance.rejectPromise;
+      // @ts-ignore
+      delete instance.update;
+      // @ts-ignore
+      delete instance._destroy;
+    }
+  };
+
+  /**
+   * @param {Record<string, WeakMap<any, any>>} obj
+   * @param {SweetAlert} instance
+   */
+  const unsetWeakMaps = (obj, instance) => {
+    for (const i in obj) {
+      obj[i].delete(instance);
+    }
+  };
+
+  var instanceMethods = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    _destroy: _destroy,
+    close: close,
+    closeModal: close,
+    closePopup: close,
+    closeToast: close,
+    disableButtons: disableButtons,
+    disableInput: disableInput,
+    disableLoading: hideLoading,
+    enableButtons: enableButtons,
+    enableInput: enableInput,
+    getInput: getInput,
+    handleAwaitingPromise: handleAwaitingPromise,
+    hideLoading: hideLoading,
+    rejectPromise: rejectPromise,
+    resetValidationMessage: resetValidationMessage,
+    showValidationMessage: showValidationMessage,
+    update: update
+  });
+
+  /**
+   * @param {SweetAlertOptions} innerParams
+   * @param {DomCache} domCache
+   * @param {(dismiss: DismissReason) => void} dismissWith
+   */
+  const handlePopupClick = (innerParams, domCache, dismissWith) => {
+    if (innerParams.toast) {
+      handleToastClick(innerParams, domCache, dismissWith);
+    } else {
+      // Ignore click events that had mousedown on the popup but mouseup on the container
+      // This can happen when the user drags a slider
+      handleModalMousedown(domCache);
+
+      // Ignore click events that had mousedown on the container but mouseup on the popup
+      handleContainerMousedown(domCache);
+      handleModalClick(innerParams, domCache, dismissWith);
+    }
+  };
+
+  /**
+   * @param {SweetAlertOptions} innerParams
+   * @param {DomCache} domCache
+   * @param {(dismiss: DismissReason) => void} dismissWith
+   */
+  const handleToastClick = (innerParams, domCache, dismissWith) => {
+    // Closing toast by internal click
+    domCache.popup.onclick = () => {
+      if (innerParams && (isAnyButtonShown(innerParams) || innerParams.timer || innerParams.input)) {
+        return;
+      }
+      dismissWith(DismissReason.close);
+    };
+  };
+
+  /**
+   * @param {SweetAlertOptions} innerParams
+   * @returns {boolean}
+   */
+  const isAnyButtonShown = innerParams => {
+    return Boolean(innerParams.showConfirmButton || innerParams.showDenyButton || innerParams.showCancelButton || innerParams.showCloseButton);
+  };
+  let ignoreOutsideClick = false;
+
+  /**
+   * @param {DomCache} domCache
+   */
+  const handleModalMousedown = domCache => {
+    domCache.popup.onmousedown = () => {
+      domCache.container.onmouseup = function (e) {
+        domCache.container.onmouseup = () => {};
+        // We only check if the mouseup target is the container because usually it doesn't
+        // have any other direct children aside of the popup
+        if (e.target === domCache.container) {
+          ignoreOutsideClick = true;
+        }
+      };
+    };
+  };
+
+  /**
+   * @param {DomCache} domCache
+   */
+  const handleContainerMousedown = domCache => {
+    domCache.container.onmousedown = e => {
+      // prevent the modal text from being selected on double click on the container (allowOutsideClick: false)
+      if (e.target === domCache.container) {
+        e.preventDefault();
+      }
+      domCache.popup.onmouseup = function (e) {
+        domCache.popup.onmouseup = () => {};
+        // We also need to check if the mouseup target is a child of the popup
+        if (e.target === domCache.popup || e.target instanceof HTMLElement && domCache.popup.contains(e.target)) {
+          ignoreOutsideClick = true;
+        }
+      };
+    };
+  };
+
+  /**
+   * @param {SweetAlertOptions} innerParams
+   * @param {DomCache} domCache
+   * @param {(dismiss: DismissReason) => void} dismissWith
+   */
+  const handleModalClick = (innerParams, domCache, dismissWith) => {
+    domCache.container.onclick = e => {
+      if (ignoreOutsideClick) {
+        ignoreOutsideClick = false;
+        return;
+      }
+      if (e.target === domCache.container && callIfFunction(innerParams.allowOutsideClick)) {
+        dismissWith(DismissReason.backdrop);
+      }
+    };
+  };
+
+  /**
+   * @param {unknown} elem
+   * @returns {boolean}
+   */
+  const isJqueryElement = elem => typeof elem === 'object' && elem !== null && 'jquery' in elem;
+
+  /**
+   * @param {unknown} elem
+   * @returns {boolean}
+   */
+  const isElement = elem => elem instanceof Element || isJqueryElement(elem);
+
+  /**
+   * @param {ReadonlyArray<unknown>} args
+   * @returns {SweetAlertOptions}
+   */
+  const argsToParams = args => {
+    /** @type {Record<string, unknown>} */
+    const params = {};
+    if (typeof args[0] === 'object' && !isElement(args[0])) {
+      Object.assign(params, args[0]);
+    } else {
+      ['title', 'html', 'icon'].forEach((name, index) => {
+        const arg = args[index];
+        if (typeof arg === 'string' || isElement(arg)) {
+          params[name] = arg;
+        } else if (arg !== undefined) {
+          error(`Unexpected type of ${name}! Expected "string" or "Element", got ${typeof arg}`);
+        }
+      });
+    }
+    return /** @type {SweetAlertOptions} */params;
+  };
+
+  /**
+   * Main method to create a new SweetAlert2 popup
+   *
+   * @this {new (...args: any[]) => any}
+   * @param  {...SweetAlertOptions} args
+   * @returns {Promise<SweetAlertResult>}
+   */
+  function fire(...args) {
+    return new this(...args);
+  }
+
+  /**
+   * Returns an extended version of `Swal` containing `params` as defaults.
+   * Useful for reusing Swal configuration.
+   *
+   * For example:
+   *
+   * Before:
+   * const textPromptOptions = { input: 'text', showCancelButton: true }
+   * const {value: firstName} = await Swal.fire({ ...textPromptOptions, title: 'What is your first name?' })
+   * const {value: lastName} = await Swal.fire({ ...textPromptOptions, title: 'What is your last name?' })
+   *
+   * After:
+   * const TextPrompt = Swal.mixin({ input: 'text', showCancelButton: true })
+   * const {value: firstName} = await TextPrompt('What is your first name?')
+   * const {value: lastName} = await TextPrompt('What is your last name?')
+   *
+   * @param {SweetAlertOptions} mixinParams
+   * @returns {SweetAlert}
+   * @this {typeof import('../SweetAlert.js').SweetAlert}
+   */
+  function mixin(mixinParams) {
+    // @ts-ignore: 'this' refers to the SweetAlert constructor
+    class MixinSwal extends this {
+      /**
+       * @param {any} params
+       * @param {any} priorityMixinParams
+       */
+      _main(params, priorityMixinParams) {
+        return super._main(params, Object.assign({}, mixinParams, priorityMixinParams));
+      }
+    }
+    // @ts-ignore
+    return MixinSwal;
+  }
+
+  /**
+   * If `timer` parameter is set, returns number of milliseconds of timer remained.
+   * Otherwise, returns undefined.
+   *
+   * @returns {number | undefined}
+   */
+  const getTimerLeft = () => {
+    return globalState.timeout && globalState.timeout.getTimerLeft();
+  };
+
+  /**
+   * Stop timer. Returns number of milliseconds of timer remained.
+   * If `timer` parameter isn't set, returns undefined.
+   *
+   * @returns {number | undefined}
+   */
+  const stopTimer = () => {
+    if (globalState.timeout) {
+      stopTimerProgressBar();
+      return globalState.timeout.stop();
+    }
+  };
+
+  /**
+   * Resume timer. Returns number of milliseconds of timer remained.
+   * If `timer` parameter isn't set, returns undefined.
+   *
+   * @returns {number | undefined}
+   */
+  const resumeTimer = () => {
+    if (globalState.timeout) {
+      const remaining = globalState.timeout.start();
+      animateTimerProgressBar(remaining);
+      return remaining;
+    }
+  };
+
+  /**
+   * Resume timer. Returns number of milliseconds of timer remained.
+   * If `timer` parameter isn't set, returns undefined.
+   *
+   * @returns {number | undefined}
+   */
+  const toggleTimer = () => {
+    const timer = globalState.timeout;
+    return timer && (timer.running ? stopTimer() : resumeTimer());
+  };
+
+  /**
+   * Increase timer. Returns number of milliseconds of an updated timer.
+   * If `timer` parameter isn't set, returns undefined.
+   *
+   * @param {number} ms
+   * @returns {number | undefined}
+   */
+  const increaseTimer = ms => {
+    if (globalState.timeout) {
+      const remaining = globalState.timeout.increase(ms);
+      animateTimerProgressBar(remaining, true);
+      return remaining;
+    }
+  };
+
+  /**
+   * Check if timer is running. Returns true if timer is running
+   * or false if timer is paused or stopped.
+   * If `timer` parameter isn't set, returns undefined
+   *
+   * @returns {boolean}
+   */
+  const isTimerRunning = () => {
+    return Boolean(globalState.timeout && globalState.timeout.isRunning());
+  };
+
+  let bodyClickListenerAdded = false;
+  /** @type {Record<string, any>} */
+  const clickHandlers = {};
+
+  /**
+   * @this {any}
+   * @param {string} attr
+   */
+  function bindClickHandler(attr = 'data-swal-template') {
+    clickHandlers[attr] = this;
+    if (!bodyClickListenerAdded) {
+      document.body.addEventListener('click', bodyClickListener);
+      bodyClickListenerAdded = true;
+    }
+  }
+
+  /**
+   * @param {MouseEvent} event
+   */
+  const bodyClickListener = event => {
+    for (let el = /** @type {any} */event.target; el && el !== document; el = el.parentNode) {
+      for (const attr in clickHandlers) {
+        const template = el.getAttribute && el.getAttribute(attr);
+        if (template) {
+          clickHandlers[attr].fire({
+            template
+          });
+          return;
+        }
+      }
+    }
+  };
+
+  // Source: https://gist.github.com/mudge/5830382?permalink_comment_id=2691957#gistcomment-2691957
+
+  class EventEmitter {
+    constructor() {
+      /** @type {Events} */
+      this.events = {};
+    }
+
+    /**
+     * @param {string} eventName
+     * @returns {EventHandlers}
+     */
+    _getHandlersByEventName(eventName) {
+      if (typeof this.events[eventName] === 'undefined') {
+        // not Set because we need to keep the FIFO order
+        // https://github.com/sweetalert2/sweetalert2/pull/2763#discussion_r1748990334
+        this.events[eventName] = [];
+      }
+      return this.events[eventName];
+    }
+
+    /**
+     * @param {string} eventName
+     * @param {EventHandler} eventHandler
+     */
+    on(eventName, eventHandler) {
+      const currentHandlers = this._getHandlersByEventName(eventName);
+      if (!currentHandlers.includes(eventHandler)) {
+        currentHandlers.push(eventHandler);
+      }
+    }
+
+    /**
+     * @param {string} eventName
+     * @param {EventHandler} eventHandler
+     */
+    once(eventName, eventHandler) {
+      /**
+       * @param {...any} args
+       */
+      const onceFn = (...args) => {
+        this.removeListener(eventName, onceFn);
+        // @ts-ignore
+        eventHandler.apply(this, args);
+      };
+      this.on(eventName, onceFn);
+    }
+
+    /**
+     * @param {string} eventName
+     * @param {...any} args
+     */
+    emit(eventName, ...args) {
+      this._getHandlersByEventName(eventName).forEach(
+      /**
+       * @param {EventHandler} eventHandler
+       */
+      eventHandler => {
+        try {
+          // @ts-ignore
+          eventHandler.apply(this, args);
+        } catch (error) {
+          console.error(error);
+        }
+      });
+    }
+
+    /**
+     * @param {string} eventName
+     * @param {EventHandler} eventHandler
+     */
+    removeListener(eventName, eventHandler) {
+      const currentHandlers = this._getHandlersByEventName(eventName);
+      const index = currentHandlers.indexOf(eventHandler);
+      if (index > -1) {
+        currentHandlers.splice(index, 1);
+      }
+    }
+
+    /**
+     * @param {string} eventName
+     */
+    removeAllListeners(eventName) {
+      if (this.events[eventName] !== undefined) {
+        // https://github.com/sweetalert2/sweetalert2/pull/2763#discussion_r1749239222
+        this.events[eventName].length = 0;
+      }
+    }
+    reset() {
+      this.events = {};
+    }
+  }
+
+  globalState.eventEmitter = new EventEmitter();
+
+  /**
+   * @param {string} eventName
+   * @param {EventHandler} eventHandler
+   */
+  const on = (eventName, eventHandler) => {
+    if (globalState.eventEmitter) {
+      globalState.eventEmitter.on(eventName, eventHandler);
+    }
+  };
+
+  /**
+   * @param {string} eventName
+   * @param {EventHandler} eventHandler
+   */
+  const once = (eventName, eventHandler) => {
+    if (globalState.eventEmitter) {
+      globalState.eventEmitter.once(eventName, eventHandler);
+    }
+  };
+
+  /**
+   * @param {string} [eventName]
+   * @param {EventHandler} [eventHandler]
+   */
+  const off = (eventName, eventHandler) => {
+    if (!globalState.eventEmitter) {
+      return;
+    }
+
+    // Remove all handlers for all events
+    if (!eventName) {
+      globalState.eventEmitter.reset();
+      return;
+    }
+    if (eventHandler) {
+      // Remove a specific handler
+      globalState.eventEmitter.removeListener(eventName, eventHandler);
+    } else {
+      // Remove all handlers for a specific event
+      globalState.eventEmitter.removeAllListeners(eventName);
+    }
+  };
+
+  var staticMethods = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    argsToParams: argsToParams,
+    bindClickHandler: bindClickHandler,
+    clickCancel: clickCancel,
+    clickConfirm: clickConfirm,
+    clickDeny: clickDeny,
+    enableLoading: showLoading,
+    fire: fire,
+    getActions: getActions,
+    getCancelButton: getCancelButton,
+    getCloseButton: getCloseButton,
+    getConfirmButton: getConfirmButton,
+    getContainer: getContainer,
+    getDenyButton: getDenyButton,
+    getFocusableElements: getFocusableElements,
+    getFooter: getFooter,
+    getHtmlContainer: getHtmlContainer,
+    getIcon: getIcon,
+    getIconContent: getIconContent,
+    getImage: getImage,
+    getInputLabel: getInputLabel,
+    getLoader: getLoader,
+    getPopup: getPopup,
+    getProgressSteps: getProgressSteps,
+    getTimerLeft: getTimerLeft,
+    getTimerProgressBar: getTimerProgressBar,
+    getTitle: getTitle,
+    getValidationMessage: getValidationMessage,
+    increaseTimer: increaseTimer,
+    isDeprecatedParameter: isDeprecatedParameter,
+    isLoading: isLoading,
+    isTimerRunning: isTimerRunning,
+    isUpdatableParameter: isUpdatableParameter,
+    isValidParameter: isValidParameter,
+    isVisible: isVisible,
+    mixin: mixin,
+    off: off,
+    on: on,
+    once: once,
+    resumeTimer: resumeTimer,
+    showLoading: showLoading,
+    stopTimer: stopTimer,
+    toggleTimer: toggleTimer
+  });
+
+  class Timer {
+    /**
+     * @param {() => void} callback
+     * @param {number} delay
+     */
+    constructor(callback, delay) {
+      this.callback = callback;
+      this.remaining = delay;
+      this.running = false;
+      this.start();
+    }
+
+    /**
+     * @returns {number}
+     */
+    start() {
+      if (!this.running) {
+        this.running = true;
+        this.started = new Date();
+        this.id = setTimeout(this.callback, this.remaining);
+      }
+      return this.remaining;
+    }
+
+    /**
+     * @returns {number}
+     */
+    stop() {
+      if (this.started && this.running) {
+        this.running = false;
+        clearTimeout(this.id);
+        this.remaining -= new Date().getTime() - this.started.getTime();
+      }
+      return this.remaining;
+    }
+
+    /**
+     * @param {number} n
+     * @returns {number}
+     */
+    increase(n) {
+      const running = this.running;
+      if (running) {
+        this.stop();
+      }
+      this.remaining += n;
+      if (running) {
+        this.start();
+      }
+      return this.remaining;
+    }
+
+    /**
+     * @returns {number}
+     */
+    getTimerLeft() {
+      if (this.running) {
+        this.stop();
+        this.start();
+      }
+      return this.remaining;
+    }
+
+    /**
+     * @returns {boolean}
+     */
+    isRunning() {
+      return this.running;
+    }
+  }
+
+  const swalStringParams = ['swal-title', 'swal-html', 'swal-footer'];
+
+  /**
+   * @param {SweetAlertOptions} params
+   * @returns {SweetAlertOptions}
+   */
+  const getTemplateParams = params => {
+    const template = typeof params.template === 'string' ? (/** @type {HTMLTemplateElement} */document.querySelector(params.template)) : params.template;
+    if (!template) {
+      return {};
+    }
+    /** @type {DocumentFragment} */
+    const templateContent = template.content;
+    showWarningsForElements(templateContent);
+    const result = Object.assign(getSwalParams(templateContent), getSwalFunctionParams(templateContent), getSwalButtons(templateContent), getSwalImage(templateContent), getSwalIcon(templateContent), getSwalInput(templateContent), getSwalStringParams(templateContent, swalStringParams));
+    return result;
+  };
+
+  /**
+   * @param {DocumentFragment} templateContent
+   * @returns {Record<string, string | boolean | number>}
+   */
+  const getSwalParams = templateContent => {
+    /** @type {Record<string, string | boolean | number>} */
+    const result = {};
+    /** @type {HTMLElement[]} */
+    const swalParams = Array.from(templateContent.querySelectorAll('swal-param'));
+    swalParams.forEach(param => {
+      showWarningsForAttributes(param, ['name', 'value']);
+      const paramName = /** @type {keyof SweetAlertOptions} */param.getAttribute('name');
+      const value = param.getAttribute('value');
+      if (!paramName || !value) {
+        return;
+      }
+      if (paramName in defaultParams && typeof defaultParams[(/** @type {keyof typeof defaultParams} */paramName)] === 'boolean') {
+        result[paramName] = value !== 'false';
+      } else if (paramName in defaultParams && typeof defaultParams[(/** @type {keyof typeof defaultParams} */paramName)] === 'object') {
+        result[paramName] = JSON.parse(value);
+      } else {
+        result[paramName] = value;
+      }
+    });
+    return result;
+  };
+
+  /**
+   * @param {DocumentFragment} templateContent
+   * @returns {Record<string, () => void>}
+   */
+  const getSwalFunctionParams = templateContent => {
+    /** @type {Record<string, () => void>} */
+    const result = {};
+    /** @type {HTMLElement[]} */
+    const swalFunctions = Array.from(templateContent.querySelectorAll('swal-function-param'));
+    swalFunctions.forEach(param => {
+      const paramName = /** @type {keyof SweetAlertOptions} */param.getAttribute('name');
+      const value = param.getAttribute('value');
+      if (!paramName || !value) {
+        return;
+      }
+      result[paramName] = new Function(`return ${value}`)();
+    });
+    return result;
+  };
+
+  /**
+   * @param {DocumentFragment} templateContent
+   * @returns {Record<string, string | boolean>}
+   */
+  const getSwalButtons = templateContent => {
+    /** @type {Record<string, string | boolean>} */
+    const result = {};
+    /** @type {HTMLElement[]} */
+    const swalButtons = Array.from(templateContent.querySelectorAll('swal-button'));
+    swalButtons.forEach(button => {
+      showWarningsForAttributes(button, ['type', 'color', 'aria-label']);
+      const type = button.getAttribute('type');
+      if (!type || !['confirm', 'cancel', 'deny'].includes(type)) {
+        return;
+      }
+      result[`${type}ButtonText`] = button.innerHTML;
+      result[`show${capitalizeFirstLetter(type)}Button`] = true;
+      const color = button.getAttribute('color');
+      if (color !== null) {
+        result[`${type}ButtonColor`] = color;
+      }
+      const ariaLabel = button.getAttribute('aria-label');
+      if (ariaLabel !== null) {
+        result[`${type}ButtonAriaLabel`] = ariaLabel;
+      }
+    });
+    return result;
+  };
+
+  /**
+   * @param {DocumentFragment} templateContent
+   * @returns {Pick<SweetAlertOptions, 'imageUrl' | 'imageWidth' | 'imageHeight' | 'imageAlt'>}
+   */
+  const getSwalImage = templateContent => {
+    const result = {};
+    /** @type {HTMLElement | null} */
+    const image = templateContent.querySelector('swal-image');
+    if (image) {
+      showWarningsForAttributes(image, ['src', 'width', 'height', 'alt']);
+      // getAttribute returns null if attribute is absent; `|| undefined` converts empty string to undefined
+      const src = image.getAttribute('src');
+      if (src !== null) result.imageUrl = src || undefined;
+      const width = image.getAttribute('width');
+      if (width !== null) result.imageWidth = width || undefined;
+      const height = image.getAttribute('height');
+      if (height !== null) result.imageHeight = height || undefined;
+      const alt = image.getAttribute('alt');
+      if (alt !== null) result.imageAlt = alt || undefined;
+    }
+    return result;
+  };
+
+  /**
+   * @param {DocumentFragment} templateContent
+   * @returns {object}
+   */
+  const getSwalIcon = templateContent => {
+    const result = {};
+    /** @type {HTMLElement | null} */
+    const icon = templateContent.querySelector('swal-icon');
+    if (icon) {
+      showWarningsForAttributes(icon, ['type', 'color']);
+      if (icon.hasAttribute('type')) {
+        result.icon = icon.getAttribute('type');
+      }
+      if (icon.hasAttribute('color')) {
+        result.iconColor = icon.getAttribute('color');
+      }
+      result.iconHtml = icon.innerHTML;
+    }
+    return result;
+  };
+
+  /**
+   * @param {DocumentFragment} templateContent
+   * @returns {object}
+   */
+  const getSwalInput = templateContent => {
+    /** @type {Record<string, any>} */
+    const result = {};
+    /** @type {HTMLElement | null} */
+    const input = templateContent.querySelector('swal-input');
+    if (input) {
+      showWarningsForAttributes(input, ['type', 'label', 'placeholder', 'value']);
+      result.input = input.getAttribute('type') || 'text';
+      if (input.hasAttribute('label')) {
+        result.inputLabel = input.getAttribute('label');
+      }
+      if (input.hasAttribute('placeholder')) {
+        result.inputPlaceholder = input.getAttribute('placeholder');
+      }
+      if (input.hasAttribute('value')) {
+        result.inputValue = input.getAttribute('value');
+      }
+    }
+    /** @type {HTMLElement[]} */
+    const inputOptions = Array.from(templateContent.querySelectorAll('swal-input-option'));
+    if (inputOptions.length) {
+      result.inputOptions = {};
+      inputOptions.forEach(option => {
+        showWarningsForAttributes(option, ['value']);
+        const optionValue = option.getAttribute('value');
+        if (!optionValue) {
+          return;
+        }
+        const optionName = option.innerHTML;
+        result.inputOptions[optionValue] = optionName;
+      });
+    }
+    return result;
+  };
+
+  /**
+   * @param {DocumentFragment} templateContent
+   * @param {string[]} paramNames
+   * @returns {Record<string, string>}
+   */
+  const getSwalStringParams = (templateContent, paramNames) => {
+    /** @type {Record<string, string>} */
+    const result = {};
+    for (const i in paramNames) {
+      const paramName = paramNames[i];
+      /** @type {HTMLElement | null} */
+      const tag = templateContent.querySelector(paramName);
+      if (tag) {
+        showWarningsForAttributes(tag, []);
+        result[paramName.replace(/^swal-/, '')] = tag.innerHTML.trim();
+      }
+    }
+    return result;
+  };
+
+  /**
+   * @param {DocumentFragment} templateContent
+   */
+  const showWarningsForElements = templateContent => {
+    const allowedElements = swalStringParams.concat(['swal-param', 'swal-function-param', 'swal-button', 'swal-image', 'swal-icon', 'swal-input', 'swal-input-option']);
+    Array.from(templateContent.children).forEach(el => {
+      const tagName = el.tagName.toLowerCase();
+      if (!allowedElements.includes(tagName)) {
+        warn(`Unrecognized element <${tagName}>`);
+      }
+    });
+  };
+
+  /**
+   * @param {HTMLElement} el
+   * @param {string[]} allowedAttributes
+   */
+  const showWarningsForAttributes = (el, allowedAttributes) => {
+    Array.from(el.attributes).forEach(attribute => {
+      if (allowedAttributes.indexOf(attribute.name) === -1) {
+        warn([`Unrecognized attribute "${attribute.name}" on <${el.tagName.toLowerCase()}>.`, `${allowedAttributes.length ? `Allowed attributes are: ${allowedAttributes.join(', ')}` : 'To set the value, use HTML within the element.'}`]);
+      }
+    });
+  };
+
+  const SHOW_CLASS_TIMEOUT = 10;
+
+  /**
+   * Open popup, add necessary classes and styles, fix scrollbar
+   *
+   * @param {SweetAlertOptions} params
+   */
+  const openPopup = params => {
+    var _globalState$eventEmi, _globalState$eventEmi2;
+    const container = getContainer();
+    const popup = getPopup();
+    if (!container || !popup) {
+      return;
+    }
+    if (typeof params.willOpen === 'function') {
+      params.willOpen(popup);
+    }
+    (_globalState$eventEmi = globalState.eventEmitter) === null || _globalState$eventEmi === void 0 || _globalState$eventEmi.emit('willOpen', popup);
+    const bodyStyles = window.getComputedStyle(document.body);
+    const initialBodyOverflow = bodyStyles.overflowY;
+    addClasses(container, popup, params);
+
+    // scrolling is 'hidden' until animation is done, after that 'auto'
+    setTimeout(() => {
+      setScrollingVisibility(container, popup);
+    }, SHOW_CLASS_TIMEOUT);
+    if (isModal()) {
+      fixScrollContainer(container, params.scrollbarPadding !== undefined ? params.scrollbarPadding : false, initialBodyOverflow);
+      setAriaHidden();
+    }
+
+    // https://github.com/sweetalert2/sweetalert2/issues/2923
+    if (isIOS && params.backdrop === false && popup.scrollHeight > container.clientHeight) {
+      // remove pointer-events: none from container, it breaks scrolling tall popups in iOS
+      container.style.pointerEvents = 'auto';
+    }
+    if (!isToast() && !globalState.previousActiveElement) {
+      globalState.previousActiveElement = document.activeElement;
+    }
+    if (typeof params.didOpen === 'function') {
+      const didOpen = params.didOpen;
+      setTimeout(() => didOpen(popup));
+    }
+    (_globalState$eventEmi2 = globalState.eventEmitter) === null || _globalState$eventEmi2 === void 0 || _globalState$eventEmi2.emit('didOpen', popup);
+  };
+
+  /**
+   * @param {Event} event
+   */
+  const swalOpenAnimationFinished = event => {
+    const popup = getPopup();
+    if (!popup || event.target !== popup) {
+      return;
+    }
+    const container = getContainer();
+    if (!container) {
+      return;
+    }
+    popup.removeEventListener('animationend', swalOpenAnimationFinished);
+    popup.removeEventListener('transitionend', swalOpenAnimationFinished);
+    container.style.overflowY = 'auto';
+
+    // no-transition is added in init() in case one swal is opened right after another
+    removeClass(container, swalClasses['no-transition']);
+  };
+
+  /**
+   * @param {HTMLElement} container
+   * @param {HTMLElement} popup
+   */
+  const setScrollingVisibility = (container, popup) => {
+    if (hasCssAnimation(popup)) {
+      container.style.overflowY = 'hidden';
+      popup.addEventListener('animationend', swalOpenAnimationFinished);
+      popup.addEventListener('transitionend', swalOpenAnimationFinished);
+    } else {
+      container.style.overflowY = 'auto';
+    }
+  };
+
+  /**
+   * @param {HTMLElement} container
+   * @param {boolean} scrollbarPadding
+   * @param {string} initialBodyOverflow
+   */
+  const fixScrollContainer = (container, scrollbarPadding, initialBodyOverflow) => {
+    iOSfix();
+    if (scrollbarPadding && initialBodyOverflow !== 'hidden') {
+      replaceScrollbarWithPadding(initialBodyOverflow);
+    }
+
+    // sweetalert2/issues/1247
+    setTimeout(() => {
+      container.scrollTop = 0;
+    });
+  };
+
+  /**
+   * @param {HTMLElement} container
+   * @param {HTMLElement} popup
+   * @param {SweetAlertOptions} params
+   */
+  const addClasses = (container, popup, params) => {
+    var _params$showClass;
+    if ((_params$showClass = params.showClass) !== null && _params$showClass !== void 0 && _params$showClass.backdrop) {
+      addClass(container, params.showClass.backdrop);
+    }
+    if (params.animation) {
+      // this workaround with opacity is needed for https://github.com/sweetalert2/sweetalert2/issues/2059
+      popup.style.setProperty('opacity', '0', 'important');
+      show(popup, 'grid');
+      setTimeout(() => {
+        var _params$showClass2;
+        // Animate popup right after showing it
+        if ((_params$showClass2 = params.showClass) !== null && _params$showClass2 !== void 0 && _params$showClass2.popup) {
+          addClass(popup, params.showClass.popup);
+        }
+        // and remove the opacity workaround
+        popup.style.removeProperty('opacity');
+      }, SHOW_CLASS_TIMEOUT); // 10ms in order to fix #2062
+    } else {
+      show(popup, 'grid');
+    }
+    addClass([document.documentElement, document.body], swalClasses.shown);
+    if (params.heightAuto && params.backdrop && !params.toast) {
+      addClass([document.documentElement, document.body], swalClasses['height-auto']);
+    }
+  };
+
+  var defaultInputValidators = {
+    /**
+     * @param {string} string
+     * @param {string} [validationMessage]
+     * @returns {Promise<string | void>}
+     */
+    email: (string, validationMessage) => {
+      return /^[a-zA-Z0-9.+_'-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9-]+$/.test(string) ? Promise.resolve() : Promise.resolve(validationMessage || 'Invalid email address');
+    },
+    /**
+     * @param {string} string
+     * @param {string} [validationMessage]
+     * @returns {Promise<string | void>}
+     */
+    url: (string, validationMessage) => {
+      // taken from https://stackoverflow.com/a/3809435 with a small change from #1306 and #2013
+      return /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-z]{2,63}\b([-a-zA-Z0-9@:%_+.~#?&/=]*)$/.test(string) ? Promise.resolve() : Promise.resolve(validationMessage || 'Invalid URL');
+    }
+  };
+
+  /**
+   * @param {SweetAlertOptions} params
+   */
+  function setDefaultInputValidators(params) {
+    // Use default `inputValidator` for supported input types if not provided
+    if (params.inputValidator) {
+      return;
+    }
+    if (params.input === 'email') {
+      params.inputValidator = defaultInputValidators['email'];
+    }
+    if (params.input === 'url') {
+      params.inputValidator = defaultInputValidators['url'];
+    }
+  }
+
+  /**
+   * @param {SweetAlertOptions} params
+   */
+  function validateCustomTargetElement(params) {
+    // Determine if the custom target element is valid
+    if (!params.target || typeof params.target === 'string' && !document.querySelector(params.target) || typeof params.target !== 'string' && !params.target.appendChild) {
+      warn('Target parameter is not valid, defaulting to "body"');
+      params.target = 'body';
+    }
+  }
+
+  /**
+   * Set type, text and actions on popup
+   *
+   * @param {SweetAlertOptions} params
+   */
+  function setParameters(params) {
+    setDefaultInputValidators(params);
+
+    // showLoaderOnConfirm && preConfirm
+    if (params.showLoaderOnConfirm && !params.preConfirm) {
+      warn('showLoaderOnConfirm is set to true, but preConfirm is not defined.\n' + 'showLoaderOnConfirm should be used together with preConfirm, see usage example:\n' + 'https://sweetalert2.github.io/#ajax-request');
+    }
+    validateCustomTargetElement(params);
+
+    // Replace newlines with <br> in title
+    if (typeof params.title === 'string') {
+      params.title = params.title.split('\n').join('<br />');
+    }
+    init(params);
+  }
+
+  /** @type {SweetAlert} */
+  let currentInstance;
+  var _promise = /*#__PURE__*/new WeakMap();
+  class SweetAlert {
+    /**
+     * @param {...(SweetAlertOptions | string)} args
+     * @this {SweetAlert}
+     */
+    constructor(...args) {
+      /**
+       * @type {Promise<SweetAlertResult>}
+       */
+      _classPrivateFieldInitSpec(this, _promise, /** @type {Promise<SweetAlertResult>} */
+      Promise.resolve({
+        isConfirmed: false,
+        isDenied: false,
+        isDismissed: true
+      }));
+      // Prevent run in Node env
+      if (typeof window === 'undefined') {
+        return;
+      }
+      currentInstance = this;
+
+      // @ts-ignore
+      const outerParams = Object.freeze(this.constructor.argsToParams(args));
+
+      /** @type {Readonly<SweetAlertOptions>} */
+      this.params = outerParams;
+
+      /** @type {boolean} */
+      this.isAwaitingPromise = false;
+      _classPrivateFieldSet2(_promise, this, this._main(currentInstance.params));
+    }
+
+    /**
+     * @param {any} userParams
+     * @param {any} mixinParams
+     */
+    _main(userParams, mixinParams = {}) {
+      showWarningsForParams(Object.assign({}, mixinParams, userParams));
+      if (globalState.currentInstance) {
+        const swalPromiseResolve = privateMethods.swalPromiseResolve.get(globalState.currentInstance);
+        const {
+          isAwaitingPromise
+        } = globalState.currentInstance;
+        globalState.currentInstance._destroy();
+        if (!isAwaitingPromise) {
+          swalPromiseResolve({
+            isDismissed: true
+          });
+        }
+        if (isModal()) {
+          unsetAriaHidden();
+        }
+      }
+      globalState.currentInstance = currentInstance;
+      const innerParams = prepareParams(userParams, mixinParams);
+      setParameters(innerParams);
+      Object.freeze(innerParams);
+
+      // clear the previous timer
+      if (globalState.timeout) {
+        globalState.timeout.stop();
+        delete globalState.timeout;
+      }
+
+      // clear the restore focus timeout
+      clearTimeout(globalState.restoreFocusTimeout);
+      const domCache = populateDomCache(currentInstance);
+      render(currentInstance, innerParams);
+      privateProps.innerParams.set(currentInstance, innerParams);
+      return swalPromise(currentInstance, domCache, innerParams);
+    }
+
+    // `catch` cannot be the name of a module export, so we define our thenable methods here instead
+    /**
+     * @param {any} onFulfilled
+     */
+    // oxlint-disable-next-line unicorn/no-thenable
+    then(onFulfilled) {
+      return _classPrivateFieldGet2(_promise, this).then(onFulfilled);
+    }
+
+    /**
+     * @param {any} onFinally
+     */
+    finally(onFinally) {
+      return _classPrivateFieldGet2(_promise, this).finally(onFinally);
+    }
+  }
+
+  /**
+   * @param {SweetAlert} instance
+   * @param {DomCache} domCache
+   * @param {SweetAlertOptions} innerParams
+   * @returns {Promise<SweetAlertResult>}
+   */
+  const swalPromise = (instance, domCache, innerParams) => {
+    return new Promise((resolve, reject) => {
+      // functions to handle all closings/dismissals
+      /**
+       * @param {DismissReason} dismiss
+       */
+      const dismissWith = dismiss => {
+        instance.close({
+          isDismissed: true,
+          dismiss,
+          isConfirmed: false,
+          isDenied: false
+        });
+      };
+      privateMethods.swalPromiseResolve.set(instance, resolve);
+      privateMethods.swalPromiseReject.set(instance, reject);
+      domCache.confirmButton.onclick = () => {
+        handleConfirmButtonClick(instance);
+      };
+      domCache.denyButton.onclick = () => {
+        handleDenyButtonClick(instance);
+      };
+      domCache.cancelButton.onclick = () => {
+        handleCancelButtonClick(instance, dismissWith);
+      };
+      domCache.closeButton.onclick = () => {
+        dismissWith(DismissReason.close);
+      };
+      handlePopupClick(innerParams, domCache, dismissWith);
+      addKeydownHandler(globalState, innerParams, dismissWith);
+      handleInputOptionsAndValue(instance, innerParams);
+      openPopup(innerParams);
+      setupTimer(globalState, innerParams, dismissWith);
+      initFocus(domCache, innerParams);
+
+      // Scroll container to top on open (#1247, #1946)
+      setTimeout(() => {
+        domCache.container.scrollTop = 0;
+      });
+    });
+  };
+
+  /**
+   * @param {SweetAlertOptions} userParams
+   * @param {SweetAlertOptions} mixinParams
+   * @returns {SweetAlertOptions}
+   */
+  const prepareParams = (userParams, mixinParams) => {
+    const templateParams = getTemplateParams(userParams);
+    const params = Object.assign({}, defaultParams, mixinParams, templateParams, userParams); // precedence is described in #2131
+    params.showClass = Object.assign({}, defaultParams.showClass, params.showClass);
+    params.hideClass = Object.assign({}, defaultParams.hideClass, params.hideClass);
+    if (params.animation === false) {
+      params.showClass = {
+        backdrop: 'swal2-noanimation'
+      };
+      params.hideClass = {};
+    }
+    return params;
+  };
+
+  /**
+   * @param {SweetAlert} instance
+   * @returns {DomCache}
+   */
+  const populateDomCache = instance => {
+    const domCache = /** @type {DomCache} */{
+      popup: (/** @type {HTMLElement} */getPopup()),
+      container: (/** @type {HTMLElement} */getContainer()),
+      actions: (/** @type {HTMLElement} */getActions()),
+      confirmButton: (/** @type {HTMLElement} */getConfirmButton()),
+      denyButton: (/** @type {HTMLElement} */getDenyButton()),
+      cancelButton: (/** @type {HTMLElement} */getCancelButton()),
+      loader: (/** @type {HTMLElement} */getLoader()),
+      closeButton: (/** @type {HTMLElement} */getCloseButton()),
+      validationMessage: (/** @type {HTMLElement} */getValidationMessage()),
+      progressSteps: (/** @type {HTMLElement} */getProgressSteps())
+    };
+    privateProps.domCache.set(instance, domCache);
+    return domCache;
+  };
+
+  /**
+   * @param {GlobalState} globalState
+   * @param {SweetAlertOptions} innerParams
+   * @param {(dismiss: DismissReason) => void} dismissWith
+   */
+  const setupTimer = (globalState, innerParams, dismissWith) => {
+    const timerProgressBar = getTimerProgressBar();
+    hide(timerProgressBar);
+    if (innerParams.timer) {
+      globalState.timeout = new Timer(() => {
+        dismissWith('timer');
+        delete globalState.timeout;
+      }, innerParams.timer);
+      if (innerParams.timerProgressBar && timerProgressBar) {
+        show(timerProgressBar);
+        applyCustomClass(timerProgressBar, innerParams, 'timerProgressBar');
+        setTimeout(() => {
+          if (globalState.timeout && globalState.timeout.running) {
+            // timer can be already stopped or unset at this point
+            animateTimerProgressBar(/** @type {number} */innerParams.timer);
+          }
+        });
+      }
+    }
+  };
+
+  /**
+   * Initialize focus in the popup:
+   *
+   * 1. If `toast` is `true`, don't steal focus from the document.
+   * 2. Else if there is an [autofocus] element, focus it.
+   * 3. Else if `focusConfirm` is `true` and confirm button is visible, focus it.
+   * 4. Else if `focusDeny` is `true` and deny button is visible, focus it.
+   * 5. Else if `focusCancel` is `true` and cancel button is visible, focus it.
+   * 6. Else focus the first focusable element in a popup (if any).
+   *
+   * @param {DomCache} domCache
+   * @param {SweetAlertOptions} innerParams
+   */
+  const initFocus = (domCache, innerParams) => {
+    if (innerParams.toast) {
+      return;
+    }
+    // TODO: this is dumb, remove `allowEnterKey` param in the next major version
+    if (!callIfFunction(innerParams.allowEnterKey)) {
+      warnAboutDeprecation('allowEnterKey', 'preConfirm: () => false');
+      domCache.popup.focus();
+      return;
+    }
+    if (focusAutofocus(domCache)) {
+      return;
+    }
+    if (focusButton(domCache, innerParams)) {
+      return;
+    }
+    setFocus(-1, 1);
+  };
+
+  /**
+   * @param {DomCache} domCache
+   * @returns {boolean}
+   */
+  const focusAutofocus = domCache => {
+    const autofocusElements = Array.from(domCache.popup.querySelectorAll('[autofocus]'));
+    for (const autofocusElement of autofocusElements) {
+      if (autofocusElement instanceof HTMLElement && isVisible$1(autofocusElement)) {
+        autofocusElement.focus();
+        return true;
+      }
+    }
+    return false;
+  };
+
+  /**
+   * @param {DomCache} domCache
+   * @param {SweetAlertOptions} innerParams
+   * @returns {boolean}
+   */
+  const focusButton = (domCache, innerParams) => {
+    if (innerParams.focusDeny && isVisible$1(domCache.denyButton)) {
+      domCache.denyButton.focus();
+      return true;
+    }
+    if (innerParams.focusCancel && isVisible$1(domCache.cancelButton)) {
+      domCache.cancelButton.focus();
+      return true;
+    }
+    if (innerParams.focusConfirm && isVisible$1(domCache.confirmButton)) {
+      domCache.confirmButton.focus();
+      return true;
+    }
+    return false;
+  };
+
+  // Assign instance methods from src/instanceMethods/*.js to prototype
+  SweetAlert.prototype.disableButtons = disableButtons;
+  SweetAlert.prototype.enableButtons = enableButtons;
+  SweetAlert.prototype.getInput = getInput;
+  SweetAlert.prototype.disableInput = disableInput;
+  SweetAlert.prototype.enableInput = enableInput;
+  SweetAlert.prototype.hideLoading = hideLoading;
+  SweetAlert.prototype.disableLoading = hideLoading;
+  SweetAlert.prototype.showValidationMessage = showValidationMessage;
+  SweetAlert.prototype.resetValidationMessage = resetValidationMessage;
+  SweetAlert.prototype.close = close;
+  SweetAlert.prototype.closePopup = close;
+  SweetAlert.prototype.closeModal = close;
+  SweetAlert.prototype.closeToast = close;
+  SweetAlert.prototype.rejectPromise = rejectPromise;
+  SweetAlert.prototype.update = update;
+  SweetAlert.prototype._destroy = _destroy;
+
+  // Assign static methods from src/staticMethods/*.js to constructor
+  Object.assign(SweetAlert, staticMethods);
+
+  // Proxy to instance methods to constructor, for now, for backwards compatibility
+  Object.keys(instanceMethods).forEach(key => {
+    /**
+     * @param {...(SweetAlertOptions | string | undefined)} args
+     * @returns {SweetAlertResult | Promise<SweetAlertResult> | undefined}
+     */
+    // @ts-ignore: Dynamic property assignment for backwards compatibility
+    SweetAlert[key] = function (...args) {
+      // @ts-ignore
+      if (currentInstance && currentInstance[key]) {
+        // @ts-ignore
+        return currentInstance[key](...args);
+      }
+      return undefined;
+    };
+  });
+  SweetAlert.DismissReason = DismissReason;
+  SweetAlert.version = '11.26.25';
+
+  const Swal = SweetAlert;
+  // @ts-ignore
+  Swal.default = Swal;
+
+  return Swal;
+
+}));
+if (typeof this !== 'undefined' && this.Sweetalert2){this.swal = this.sweetAlert = this.Swal = this.SweetAlert = this.Sweetalert2}
+"undefined"!=typeof document&&function(e,t){var n=e.createElement("style");if(e.getElementsByTagName("head")[0].appendChild(n),n.styleSheet)n.styleSheet.disabled||(n.styleSheet.cssText=t);else try{n.innerHTML=t}catch(e){n.innerText=t}}(document,":root{--swal2-outline: 0 0 0 3px rgba(100, 150, 200, 0.5);--swal2-container-padding: 0.625em;--swal2-backdrop: rgba(0, 0, 0, 0.4);--swal2-backdrop-transition: background-color 0.15s;--swal2-width: 32em;--swal2-padding: 0 0 1.25em;--swal2-border: none;--swal2-border-radius: 0.3125rem;--swal2-background: white;--swal2-color: #545454;--swal2-show-animation: swal2-show 0.3s;--swal2-hide-animation: swal2-hide 0.15s forwards;--swal2-icon-zoom: 1;--swal2-title-padding: 0.8em 1em 0;--swal2-html-container-padding: 1em 1.6em 0.3em;--swal2-input-border: 1px solid #d9d9d9;--swal2-input-border-radius: 0.1875em;--swal2-input-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.06), 0 0 0 3px transparent;--swal2-input-background: transparent;--swal2-input-transition: border-color 0.2s, box-shadow 0.2s;--swal2-input-hover-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.06), 0 0 0 3px transparent;--swal2-input-focus-border: 1px solid #b4dbed;--swal2-input-focus-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.06), 0 0 0 3px rgba(100, 150, 200, 0.5);--swal2-progress-step-background: #add8e6;--swal2-validation-message-background: #f0f0f0;--swal2-validation-message-color: #666;--swal2-footer-border-color: #eee;--swal2-footer-background: transparent;--swal2-footer-color: inherit;--swal2-timer-progress-bar-background: rgba(0, 0, 0, 0.3);--swal2-close-button-position: initial;--swal2-close-button-inset: auto;--swal2-close-button-font-size: 2.5em;--swal2-close-button-color: #ccc;--swal2-close-button-transition: color 0.2s, box-shadow 0.2s;--swal2-close-button-outline: initial;--swal2-close-button-box-shadow: inset 0 0 0 3px transparent;--swal2-close-button-focus-box-shadow: inset var(--swal2-outline);--swal2-close-button-hover-transform: none;--swal2-actions-justify-content: center;--swal2-actions-width: auto;--swal2-actions-margin: 1.25em auto 0;--swal2-actions-padding: 0;--swal2-actions-border-radius: 0;--swal2-actions-background: transparent;--swal2-action-button-transition: background-color 0.2s, box-shadow 0.2s;--swal2-action-button-hover: black 10%;--swal2-action-button-active: black 10%;--swal2-confirm-button-box-shadow: none;--swal2-confirm-button-border-radius: 0.25em;--swal2-confirm-button-background-color: #7066e0;--swal2-confirm-button-color: #fff;--swal2-deny-button-box-shadow: none;--swal2-deny-button-border-radius: 0.25em;--swal2-deny-button-background-color: #dc3741;--swal2-deny-button-color: #fff;--swal2-cancel-button-box-shadow: none;--swal2-cancel-button-border-radius: 0.25em;--swal2-cancel-button-background-color: #6e7881;--swal2-cancel-button-color: #fff;--swal2-toast-show-animation: swal2-toast-show 0.5s;--swal2-toast-hide-animation: swal2-toast-hide 0.1s forwards;--swal2-toast-border: none;--swal2-toast-box-shadow: 0 0 1px hsl(0deg 0% 0% / 0.075), 0 1px 2px hsl(0deg 0% 0% / 0.075), 1px 2px 4px hsl(0deg 0% 0% / 0.075), 1px 3px 8px hsl(0deg 0% 0% / 0.075), 2px 4px 16px hsl(0deg 0% 0% / 0.075)}[data-swal2-theme=dark]{--swal2-dark-theme-black: #19191a;--swal2-dark-theme-white: #e1e1e1;--swal2-background: var(--swal2-dark-theme-black);--swal2-color: var(--swal2-dark-theme-white);--swal2-footer-border-color: #555;--swal2-input-background: color-mix(in srgb, var(--swal2-dark-theme-black), var(--swal2-dark-theme-white) 10%);--swal2-validation-message-background: color-mix( in srgb, var(--swal2-dark-theme-black), var(--swal2-dark-theme-white) 10% );--swal2-validation-message-color: var(--swal2-dark-theme-white);--swal2-timer-progress-bar-background: rgba(255, 255, 255, 0.7)}@media(prefers-color-scheme: dark){[data-swal2-theme=auto]{--swal2-dark-theme-black: #19191a;--swal2-dark-theme-white: #e1e1e1;--swal2-background: var(--swal2-dark-theme-black);--swal2-color: var(--swal2-dark-theme-white);--swal2-footer-border-color: #555;--swal2-input-background: color-mix(in srgb, var(--swal2-dark-theme-black), var(--swal2-dark-theme-white) 10%);--swal2-validation-message-background: color-mix( in srgb, var(--swal2-dark-theme-black), var(--swal2-dark-theme-white) 10% );--swal2-validation-message-color: var(--swal2-dark-theme-white);--swal2-timer-progress-bar-background: rgba(255, 255, 255, 0.7)}}body.swal2-shown:not(.swal2-no-backdrop,.swal2-toast-shown){overflow:hidden}body.swal2-height-auto{height:auto !important}body.swal2-no-backdrop .swal2-container{background-color:rgba(0,0,0,0) !important;pointer-events:none}body.swal2-no-backdrop .swal2-container .swal2-popup{pointer-events:auto}body.swal2-no-backdrop .swal2-container .swal2-modal{box-shadow:0 0 10px var(--swal2-backdrop)}body.swal2-toast-shown .swal2-container{box-sizing:border-box;width:360px;max-width:100%;background-color:rgba(0,0,0,0);pointer-events:none}body.swal2-toast-shown .swal2-container.swal2-top{inset:0 auto auto 50%;transform:translateX(-50%)}body.swal2-toast-shown .swal2-container.swal2-top-end,body.swal2-toast-shown .swal2-container.swal2-top-right{inset:0 0 auto auto}body.swal2-toast-shown .swal2-container.swal2-top-start,body.swal2-toast-shown .swal2-container.swal2-top-left{inset:0 auto auto 0}body.swal2-toast-shown .swal2-container.swal2-center-start,body.swal2-toast-shown .swal2-container.swal2-center-left{inset:50% auto auto 0;transform:translateY(-50%)}body.swal2-toast-shown .swal2-container.swal2-center{inset:50% auto auto 50%;transform:translate(-50%, -50%)}body.swal2-toast-shown .swal2-container.swal2-center-end,body.swal2-toast-shown .swal2-container.swal2-center-right{inset:50% 0 auto auto;transform:translateY(-50%)}body.swal2-toast-shown .swal2-container.swal2-bottom-start,body.swal2-toast-shown .swal2-container.swal2-bottom-left{inset:auto auto 0 0}body.swal2-toast-shown .swal2-container.swal2-bottom{inset:auto auto 0 50%;transform:translateX(-50%)}body.swal2-toast-shown .swal2-container.swal2-bottom-end,body.swal2-toast-shown .swal2-container.swal2-bottom-right{inset:auto 0 0 auto}@media print{body.swal2-shown:not(.swal2-no-backdrop,.swal2-toast-shown){overflow-y:scroll !important}body.swal2-shown:not(.swal2-no-backdrop,.swal2-toast-shown)>[aria-hidden=true]{display:none}body.swal2-shown:not(.swal2-no-backdrop,.swal2-toast-shown) .swal2-container{position:static !important}}div:where(.swal2-container){display:grid;position:fixed;z-index:1060;inset:0;box-sizing:border-box;grid-template-areas:\"top-start     top            top-end\" \"center-start  center         center-end\" \"bottom-start  bottom-center  bottom-end\";grid-template-rows:minmax(min-content, auto) minmax(min-content, auto) minmax(min-content, auto);height:100%;padding:var(--swal2-container-padding);overflow-x:hidden;transition:var(--swal2-backdrop-transition);-webkit-overflow-scrolling:touch}div:where(.swal2-container).swal2-backdrop-show,div:where(.swal2-container).swal2-noanimation{background:var(--swal2-backdrop)}div:where(.swal2-container).swal2-backdrop-hide{background:rgba(0,0,0,0) !important}div:where(.swal2-container).swal2-top-start,div:where(.swal2-container).swal2-center-start,div:where(.swal2-container).swal2-bottom-start{grid-template-columns:minmax(0, 1fr) auto auto}div:where(.swal2-container).swal2-top,div:where(.swal2-container).swal2-center,div:where(.swal2-container).swal2-bottom{grid-template-columns:auto minmax(0, 1fr) auto}div:where(.swal2-container).swal2-top-end,div:where(.swal2-container).swal2-center-end,div:where(.swal2-container).swal2-bottom-end{grid-template-columns:auto auto minmax(0, 1fr)}div:where(.swal2-container).swal2-top-start>.swal2-popup{align-self:start}div:where(.swal2-container).swal2-top>.swal2-popup{grid-column:2;place-self:start center}div:where(.swal2-container).swal2-top-end>.swal2-popup,div:where(.swal2-container).swal2-top-right>.swal2-popup{grid-column:3;place-self:start end}div:where(.swal2-container).swal2-center-start>.swal2-popup,div:where(.swal2-container).swal2-center-left>.swal2-popup{grid-row:2;align-self:center}div:where(.swal2-container).swal2-center>.swal2-popup{grid-column:2;grid-row:2;place-self:center center}div:where(.swal2-container).swal2-center-end>.swal2-popup,div:where(.swal2-container).swal2-center-right>.swal2-popup{grid-column:3;grid-row:2;place-self:center end}div:where(.swal2-container).swal2-bottom-start>.swal2-popup,div:where(.swal2-container).swal2-bottom-left>.swal2-popup{grid-column:1;grid-row:3;align-self:end}div:where(.swal2-container).swal2-bottom>.swal2-popup{grid-column:2;grid-row:3;place-self:end center}div:where(.swal2-container).swal2-bottom-end>.swal2-popup,div:where(.swal2-container).swal2-bottom-right>.swal2-popup{grid-column:3;grid-row:3;place-self:end end}div:where(.swal2-container).swal2-grow-row>.swal2-popup,div:where(.swal2-container).swal2-grow-fullscreen>.swal2-popup{grid-column:1/4;width:100%}div:where(.swal2-container).swal2-grow-column>.swal2-popup,div:where(.swal2-container).swal2-grow-fullscreen>.swal2-popup{grid-row:1/4;align-self:stretch}div:where(.swal2-container).swal2-no-transition{transition:none !important}div:where(.swal2-container)[popover]{width:auto;border:0}div:where(.swal2-container) div:where(.swal2-popup){display:none;position:relative;box-sizing:border-box;grid-template-columns:minmax(0, 100%);width:var(--swal2-width);max-width:100%;padding:var(--swal2-padding);border:var(--swal2-border);border-radius:var(--swal2-border-radius);background:var(--swal2-background);color:var(--swal2-color);font-family:inherit;font-size:1rem}div:where(.swal2-container) div:where(.swal2-popup):focus{outline:none}div:where(.swal2-container) div:where(.swal2-popup).swal2-loading{overflow-y:hidden}div:where(.swal2-container) div:where(.swal2-popup).swal2-draggable{cursor:grab}div:where(.swal2-container) div:where(.swal2-popup).swal2-draggable div:where(.swal2-icon){cursor:grab}div:where(.swal2-container) div:where(.swal2-popup).swal2-dragging{cursor:grabbing}div:where(.swal2-container) div:where(.swal2-popup).swal2-dragging div:where(.swal2-icon){cursor:grabbing}div:where(.swal2-container) h2:where(.swal2-title){position:relative;max-width:100%;margin:0;padding:var(--swal2-title-padding);color:inherit;font-size:1.875em;font-weight:600;text-align:center;text-transform:none;overflow-wrap:break-word;cursor:initial}div:where(.swal2-container) div:where(.swal2-actions){display:flex;z-index:1;box-sizing:border-box;flex-wrap:wrap;align-items:center;justify-content:var(--swal2-actions-justify-content);width:var(--swal2-actions-width);margin:var(--swal2-actions-margin);padding:var(--swal2-actions-padding);border-radius:var(--swal2-actions-border-radius);background:var(--swal2-actions-background)}div:where(.swal2-container) div:where(.swal2-loader){display:none;align-items:center;justify-content:center;width:2.2em;height:2.2em;margin:0 1.875em;animation:swal2-rotate-loading 1.5s linear 0s infinite normal;border-width:.25em;border-style:solid;border-radius:100%;border-color:#2778c4 rgba(0,0,0,0) #2778c4 rgba(0,0,0,0)}div:where(.swal2-container) button:where(.swal2-styled){margin:.3125em;padding:.625em 1.1em;transition:var(--swal2-action-button-transition);border:none;box-shadow:0 0 0 3px rgba(0,0,0,0);font-weight:500}div:where(.swal2-container) button:where(.swal2-styled):not([disabled]){cursor:pointer}div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm){border-radius:var(--swal2-confirm-button-border-radius);background:initial;background-color:var(--swal2-confirm-button-background-color);box-shadow:var(--swal2-confirm-button-box-shadow);color:var(--swal2-confirm-button-color);font-size:1em}div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm):hover{background-color:color-mix(in srgb, var(--swal2-confirm-button-background-color), var(--swal2-action-button-hover))}div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm):active{background-color:color-mix(in srgb, var(--swal2-confirm-button-background-color), var(--swal2-action-button-active))}div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-deny){border-radius:var(--swal2-deny-button-border-radius);background:initial;background-color:var(--swal2-deny-button-background-color);box-shadow:var(--swal2-deny-button-box-shadow);color:var(--swal2-deny-button-color);font-size:1em}div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-deny):hover{background-color:color-mix(in srgb, var(--swal2-deny-button-background-color), var(--swal2-action-button-hover))}div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-deny):active{background-color:color-mix(in srgb, var(--swal2-deny-button-background-color), var(--swal2-action-button-active))}div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-cancel){border-radius:var(--swal2-cancel-button-border-radius);background:initial;background-color:var(--swal2-cancel-button-background-color);box-shadow:var(--swal2-cancel-button-box-shadow);color:var(--swal2-cancel-button-color);font-size:1em}div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-cancel):hover{background-color:color-mix(in srgb, var(--swal2-cancel-button-background-color), var(--swal2-action-button-hover))}div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-cancel):active{background-color:color-mix(in srgb, var(--swal2-cancel-button-background-color), var(--swal2-action-button-active))}div:where(.swal2-container) button:where(.swal2-styled):focus-visible{outline:none;box-shadow:var(--swal2-action-button-focus-box-shadow)}div:where(.swal2-container) button:where(.swal2-styled)[disabled]:not(.swal2-loading){opacity:.4}div:where(.swal2-container) button:where(.swal2-styled)::-moz-focus-inner{border:0}div:where(.swal2-container) div:where(.swal2-footer){margin:1em 0 0;padding:1em 1em 0;border-top:1px solid var(--swal2-footer-border-color);background:var(--swal2-footer-background);color:var(--swal2-footer-color);font-size:1em;text-align:center;cursor:initial}div:where(.swal2-container) .swal2-timer-progress-bar-container{position:absolute;right:0;bottom:0;left:0;grid-column:auto !important;overflow:hidden;border-bottom-right-radius:var(--swal2-border-radius);border-bottom-left-radius:var(--swal2-border-radius)}div:where(.swal2-container) div:where(.swal2-timer-progress-bar){width:100%;height:.25em;background:var(--swal2-timer-progress-bar-background)}div:where(.swal2-container) img:where(.swal2-image){max-width:100%;margin:2em auto 1em;cursor:initial}div:where(.swal2-container) button:where(.swal2-close){position:var(--swal2-close-button-position);inset:var(--swal2-close-button-inset);z-index:2;align-items:center;justify-content:center;width:1.2em;height:1.2em;margin-top:0;margin-right:0;margin-bottom:-1.2em;padding:0;overflow:hidden;transition:var(--swal2-close-button-transition);border:none;border-radius:var(--swal2-border-radius);outline:var(--swal2-close-button-outline);background:rgba(0,0,0,0);color:var(--swal2-close-button-color);font-family:monospace;font-size:var(--swal2-close-button-font-size);cursor:pointer;justify-self:end}div:where(.swal2-container) button:where(.swal2-close):hover{transform:var(--swal2-close-button-hover-transform);background:rgba(0,0,0,0);color:#f27474}div:where(.swal2-container) button:where(.swal2-close):focus-visible{outline:none;box-shadow:var(--swal2-close-button-focus-box-shadow)}div:where(.swal2-container) button:where(.swal2-close)::-moz-focus-inner{border:0}div:where(.swal2-container) div:where(.swal2-html-container){z-index:1;justify-content:center;margin:0;padding:var(--swal2-html-container-padding);overflow:auto;color:inherit;font-size:1.125em;font-weight:normal;line-height:normal;text-align:center;overflow-wrap:break-word;word-break:break-word;cursor:initial}div:where(.swal2-container) input:where(.swal2-input),div:where(.swal2-container) input:where(.swal2-file),div:where(.swal2-container) textarea:where(.swal2-textarea),div:where(.swal2-container) select:where(.swal2-select),div:where(.swal2-container) div:where(.swal2-radio),div:where(.swal2-container) label:where(.swal2-checkbox){margin:1em 2em 3px}div:where(.swal2-container) input:where(.swal2-input),div:where(.swal2-container) input:where(.swal2-file),div:where(.swal2-container) textarea:where(.swal2-textarea){box-sizing:border-box;width:auto;transition:var(--swal2-input-transition);border:var(--swal2-input-border);border-radius:var(--swal2-input-border-radius);background:var(--swal2-input-background);box-shadow:var(--swal2-input-box-shadow);color:inherit;font-size:1.125em}div:where(.swal2-container) input:where(.swal2-input).swal2-inputerror,div:where(.swal2-container) input:where(.swal2-file).swal2-inputerror,div:where(.swal2-container) textarea:where(.swal2-textarea).swal2-inputerror{border-color:#f27474 !important;box-shadow:0 0 2px #f27474 !important}div:where(.swal2-container) input:where(.swal2-input):hover,div:where(.swal2-container) input:where(.swal2-file):hover,div:where(.swal2-container) textarea:where(.swal2-textarea):hover{box-shadow:var(--swal2-input-hover-box-shadow)}div:where(.swal2-container) input:where(.swal2-input):focus,div:where(.swal2-container) input:where(.swal2-file):focus,div:where(.swal2-container) textarea:where(.swal2-textarea):focus{border:var(--swal2-input-focus-border);outline:none;box-shadow:var(--swal2-input-focus-box-shadow)}div:where(.swal2-container) input:where(.swal2-input)::placeholder,div:where(.swal2-container) input:where(.swal2-file)::placeholder,div:where(.swal2-container) textarea:where(.swal2-textarea)::placeholder{color:#ccc}div:where(.swal2-container) .swal2-range{margin:1em 2em 3px;background:var(--swal2-background)}div:where(.swal2-container) .swal2-range input{width:80%}div:where(.swal2-container) .swal2-range output{width:20%;color:inherit;font-weight:600;text-align:center}div:where(.swal2-container) .swal2-range input,div:where(.swal2-container) .swal2-range output{height:2.625em;padding:0;font-size:1.125em;line-height:2.625em}div:where(.swal2-container) .swal2-input{height:2.625em;padding:0 .75em}div:where(.swal2-container) .swal2-file{width:75%;margin-right:auto;margin-left:auto;background:var(--swal2-input-background);font-size:1.125em}div:where(.swal2-container) .swal2-textarea{height:6.75em;padding:.75em}div:where(.swal2-container) .swal2-select{min-width:50%;max-width:100%;padding:.375em .625em;background:var(--swal2-input-background);color:inherit;font-size:1.125em}div:where(.swal2-container) .swal2-radio,div:where(.swal2-container) .swal2-checkbox{align-items:center;justify-content:center;background:var(--swal2-background);color:inherit}div:where(.swal2-container) .swal2-radio label,div:where(.swal2-container) .swal2-checkbox label{margin:0 .6em;font-size:1.125em}div:where(.swal2-container) .swal2-radio input,div:where(.swal2-container) .swal2-checkbox input{flex-shrink:0;margin:0 .4em}div:where(.swal2-container) label:where(.swal2-input-label){display:flex;justify-content:center;margin:1em auto 0}div:where(.swal2-container) div:where(.swal2-validation-message){align-items:center;justify-content:center;margin:1em 0 0;padding:.625em;overflow:hidden;background:var(--swal2-validation-message-background);color:var(--swal2-validation-message-color);font-size:1em;font-weight:300}div:where(.swal2-container) div:where(.swal2-validation-message)::before{content:\"!\";display:inline-block;width:1.5em;min-width:1.5em;height:1.5em;margin:0 .625em;border-radius:50%;background-color:#f27474;color:#fff;font-weight:600;line-height:1.5em;text-align:center}div:where(.swal2-container) .swal2-progress-steps{flex-wrap:wrap;align-items:center;max-width:100%;margin:1.25em auto;padding:0;background:rgba(0,0,0,0);font-weight:600}div:where(.swal2-container) .swal2-progress-steps li{display:inline-block;position:relative}div:where(.swal2-container) .swal2-progress-steps .swal2-progress-step{z-index:20;flex-shrink:0;width:2em;height:2em;border-radius:2em;background:#2778c4;color:#fff;line-height:2em;text-align:center}div:where(.swal2-container) .swal2-progress-steps .swal2-progress-step.swal2-active-progress-step{background:#2778c4}div:where(.swal2-container) .swal2-progress-steps .swal2-progress-step.swal2-active-progress-step~.swal2-progress-step{background:var(--swal2-progress-step-background);color:#fff}div:where(.swal2-container) .swal2-progress-steps .swal2-progress-step.swal2-active-progress-step~.swal2-progress-step-line{background:var(--swal2-progress-step-background)}div:where(.swal2-container) .swal2-progress-steps .swal2-progress-step-line{z-index:10;flex-shrink:0;width:2.5em;height:.4em;margin:0 -1px;background:#2778c4}div:where(.swal2-icon){position:relative;box-sizing:content-box;justify-content:center;width:5em;height:5em;margin:2.5em auto .6em;zoom:var(--swal2-icon-zoom);border:.25em solid rgba(0,0,0,0);border-radius:50%;border-color:#000;font-family:inherit;line-height:5em;cursor:default;user-select:none}div:where(.swal2-icon) .swal2-icon-content{display:flex;align-items:center;font-size:3.75em}div:where(.swal2-icon).swal2-error{border-color:#f27474;color:#f27474}div:where(.swal2-icon).swal2-error .swal2-x-mark{position:relative;flex-grow:1}div:where(.swal2-icon).swal2-error [class^=swal2-x-mark-line]{display:block;position:absolute;top:2.3125em;width:2.9375em;height:.3125em;border-radius:.125em;background-color:#f27474}div:where(.swal2-icon).swal2-error [class^=swal2-x-mark-line][class$=left]{left:1.0625em;transform:rotate(45deg)}div:where(.swal2-icon).swal2-error [class^=swal2-x-mark-line][class$=right]{right:1em;transform:rotate(-45deg)}div:where(.swal2-icon).swal2-error.swal2-icon-show{animation:swal2-animate-error-icon .5s}div:where(.swal2-icon).swal2-error.swal2-icon-show .swal2-x-mark{animation:swal2-animate-error-x-mark .5s}div:where(.swal2-icon).swal2-warning{border-color:#f8bb86;color:#f8bb86}div:where(.swal2-icon).swal2-warning.swal2-icon-show{animation:swal2-animate-error-icon .5s}div:where(.swal2-icon).swal2-warning.swal2-icon-show .swal2-icon-content{animation:swal2-animate-i-mark .5s}div:where(.swal2-icon).swal2-info{border-color:#3fc3ee;color:#3fc3ee}div:where(.swal2-icon).swal2-info.swal2-icon-show{animation:swal2-animate-error-icon .5s}div:where(.swal2-icon).swal2-info.swal2-icon-show .swal2-icon-content{animation:swal2-animate-i-mark .8s}div:where(.swal2-icon).swal2-question{border-color:#87adbd;color:#87adbd}div:where(.swal2-icon).swal2-question.swal2-icon-show{animation:swal2-animate-error-icon .5s}div:where(.swal2-icon).swal2-question.swal2-icon-show .swal2-icon-content{animation:swal2-animate-question-mark .8s}div:where(.swal2-icon).swal2-success{border-color:#a5dc86;color:#a5dc86}div:where(.swal2-icon).swal2-success [class^=swal2-success-circular-line]{position:absolute;width:3.75em;height:7.5em;border-radius:50%}div:where(.swal2-icon).swal2-success [class^=swal2-success-circular-line][class$=left]{top:-0.4375em;left:-2.0635em;transform:rotate(-45deg);transform-origin:3.75em 3.75em;border-radius:7.5em 0 0 7.5em}div:where(.swal2-icon).swal2-success [class^=swal2-success-circular-line][class$=right]{top:-0.6875em;left:1.875em;transform:rotate(-45deg);transform-origin:0 3.75em;border-radius:0 7.5em 7.5em 0}div:where(.swal2-icon).swal2-success .swal2-success-ring{position:absolute;z-index:2;top:-0.25em;left:-0.25em;box-sizing:content-box;width:100%;height:100%;border:.25em solid rgba(165,220,134,.3);border-radius:50%}div:where(.swal2-icon).swal2-success .swal2-success-fix{position:absolute;z-index:1;top:.5em;left:1.625em;width:.4375em;height:5.625em;transform:rotate(-45deg)}div:where(.swal2-icon).swal2-success [class^=swal2-success-line]{display:block;position:absolute;z-index:2;height:.3125em;border-radius:.125em;background-color:#a5dc86}div:where(.swal2-icon).swal2-success [class^=swal2-success-line][class$=tip]{top:2.875em;left:.8125em;width:1.5625em;transform:rotate(45deg)}div:where(.swal2-icon).swal2-success [class^=swal2-success-line][class$=long]{top:2.375em;right:.5em;width:2.9375em;transform:rotate(-45deg)}div:where(.swal2-icon).swal2-success.swal2-icon-show .swal2-success-line-tip{animation:swal2-animate-success-line-tip .75s}div:where(.swal2-icon).swal2-success.swal2-icon-show .swal2-success-line-long{animation:swal2-animate-success-line-long .75s}div:where(.swal2-icon).swal2-success.swal2-icon-show .swal2-success-circular-line-right{animation:swal2-rotate-success-circular-line 4.25s ease-in}[class^=swal2]{-webkit-tap-highlight-color:rgba(0,0,0,0)}.swal2-show{animation:var(--swal2-show-animation)}.swal2-hide{animation:var(--swal2-hide-animation)}.swal2-noanimation{transition:none}.swal2-scrollbar-measure{position:absolute;top:-9999px;width:50px;height:50px;overflow:scroll}.swal2-rtl .swal2-close{margin-right:initial;margin-left:0}.swal2-rtl .swal2-timer-progress-bar{right:0;left:auto}.swal2-toast{box-sizing:border-box;grid-column:1/4 !important;grid-row:1/4 !important;grid-template-columns:min-content auto min-content;padding:1em;overflow-y:hidden;border:var(--swal2-toast-border);background:var(--swal2-background);box-shadow:var(--swal2-toast-box-shadow);pointer-events:auto}.swal2-toast>*{grid-column:2}.swal2-toast h2:where(.swal2-title){margin:.5em 1em;padding:0;font-size:1em;text-align:initial}.swal2-toast .swal2-loading{justify-content:center}.swal2-toast input:where(.swal2-input){height:2em;margin:.5em;font-size:1em}.swal2-toast .swal2-validation-message{font-size:1em}.swal2-toast div:where(.swal2-footer){margin:.5em 0 0;padding:.5em 0 0;font-size:.8em}.swal2-toast button:where(.swal2-close){grid-column:3/3;grid-row:1/99;align-self:center;width:.8em;height:.8em;margin:0;font-size:2em}.swal2-toast div:where(.swal2-html-container){margin:.5em 1em;padding:0;overflow:initial;font-size:1em;text-align:initial}.swal2-toast div:where(.swal2-html-container):empty{padding:0}.swal2-toast .swal2-loader{grid-column:1;grid-row:1/99;align-self:center;width:2em;height:2em;margin:.25em}.swal2-toast .swal2-icon{grid-column:1;grid-row:1/99;align-self:center;width:2em;min-width:2em;height:2em;margin:0 .5em 0 0}.swal2-toast .swal2-icon .swal2-icon-content{display:flex;align-items:center;font-size:1.8em;font-weight:bold}.swal2-toast .swal2-icon.swal2-success .swal2-success-ring{width:2em;height:2em}.swal2-toast .swal2-icon.swal2-error [class^=swal2-x-mark-line]{top:.875em;width:1.375em}.swal2-toast .swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=left]{left:.3125em}.swal2-toast .swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=right]{right:.3125em}.swal2-toast div:where(.swal2-actions){justify-content:flex-start;height:auto;margin:0;margin-top:.5em;padding:0 .5em}.swal2-toast button:where(.swal2-styled){margin:.25em .5em;padding:.4em .6em;font-size:1em}.swal2-toast .swal2-success{border-color:#a5dc86}.swal2-toast .swal2-success [class^=swal2-success-circular-line]{position:absolute;width:1.6em;height:3em;border-radius:50%}.swal2-toast .swal2-success [class^=swal2-success-circular-line][class$=left]{top:-0.8em;left:-0.5em;transform:rotate(-45deg);transform-origin:2em 2em;border-radius:4em 0 0 4em}.swal2-toast .swal2-success [class^=swal2-success-circular-line][class$=right]{top:-0.25em;left:.9375em;transform-origin:0 1.5em;border-radius:0 4em 4em 0}.swal2-toast .swal2-success .swal2-success-ring{width:2em;height:2em}.swal2-toast .swal2-success .swal2-success-fix{top:0;left:.4375em;width:.4375em;height:2.6875em}.swal2-toast .swal2-success [class^=swal2-success-line]{height:.3125em}.swal2-toast .swal2-success [class^=swal2-success-line][class$=tip]{top:1.125em;left:.1875em;width:.75em}.swal2-toast .swal2-success [class^=swal2-success-line][class$=long]{top:.9375em;right:.1875em;width:1.375em}.swal2-toast .swal2-success.swal2-icon-show .swal2-success-line-tip{animation:swal2-toast-animate-success-line-tip .75s}.swal2-toast .swal2-success.swal2-icon-show .swal2-success-line-long{animation:swal2-toast-animate-success-line-long .75s}.swal2-toast.swal2-show{animation:var(--swal2-toast-show-animation)}.swal2-toast.swal2-hide{animation:var(--swal2-toast-hide-animation)}@keyframes swal2-show{0%{transform:translate3d(0, -50px, 0) scale(0.9);opacity:0}100%{transform:translate3d(0, 0, 0) scale(1);opacity:1}}@keyframes swal2-hide{0%{transform:translate3d(0, 0, 0) scale(1);opacity:1}100%{transform:translate3d(0, -50px, 0) scale(0.9);opacity:0}}@keyframes swal2-animate-success-line-tip{0%{top:1.1875em;left:.0625em;width:0}54%{top:1.0625em;left:.125em;width:0}70%{top:2.1875em;left:-0.375em;width:3.125em}84%{top:3em;left:1.3125em;width:1.0625em}100%{top:2.8125em;left:.8125em;width:1.5625em}}@keyframes swal2-animate-success-line-long{0%{top:3.375em;right:2.875em;width:0}65%{top:3.375em;right:2.875em;width:0}84%{top:2.1875em;right:0;width:3.4375em}100%{top:2.375em;right:.5em;width:2.9375em}}@keyframes swal2-rotate-success-circular-line{0%{transform:rotate(-45deg)}5%{transform:rotate(-45deg)}12%{transform:rotate(-405deg)}100%{transform:rotate(-405deg)}}@keyframes swal2-animate-error-x-mark{0%{margin-top:1.625em;transform:scale(0.4);opacity:0}50%{margin-top:1.625em;transform:scale(0.4);opacity:0}80%{margin-top:-0.375em;transform:scale(1.15)}100%{margin-top:0;transform:scale(1);opacity:1}}@keyframes swal2-animate-error-icon{0%{transform:rotateX(100deg);opacity:0}100%{transform:rotateX(0deg);opacity:1}}@keyframes swal2-rotate-loading{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}@keyframes swal2-animate-question-mark{0%{transform:rotateY(-360deg)}100%{transform:rotateY(0)}}@keyframes swal2-animate-i-mark{0%{transform:rotateZ(45deg);opacity:0}25%{transform:rotateZ(-25deg);opacity:.4}50%{transform:rotateZ(15deg);opacity:.8}75%{transform:rotateZ(-5deg);opacity:1}100%{transform:rotateX(0);opacity:1}}@keyframes swal2-toast-show{0%{transform:translateY(-0.625em) rotateZ(2deg)}33%{transform:translateY(0) rotateZ(-2deg)}66%{transform:translateY(0.3125em) rotateZ(2deg)}100%{transform:translateY(0) rotateZ(0deg)}}@keyframes swal2-toast-hide{100%{transform:rotateZ(1deg);opacity:0}}@keyframes swal2-toast-animate-success-line-tip{0%{top:.5625em;left:.0625em;width:0}54%{top:.125em;left:.125em;width:0}70%{top:.625em;left:-0.25em;width:1.625em}84%{top:1.0625em;left:.75em;width:.5em}100%{top:1.125em;left:.1875em;width:.75em}}@keyframes swal2-toast-animate-success-line-long{0%{top:1.625em;right:1.375em;width:0}65%{top:1.25em;right:.9375em;width:0}84%{top:.9375em;right:0;width:1.125em}100%{top:.9375em;right:.1875em;width:1.375em}}");
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = __webpack_modules__;
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/chunk loaded */
+/******/ 	(() => {
+/******/ 		var deferred = [];
+/******/ 		__webpack_require__.O = (result, chunkIds, fn, priority) => {
+/******/ 			if(chunkIds) {
+/******/ 				priority = priority || 0;
+/******/ 				for(var i = deferred.length; i > 0 && deferred[i - 1][2] > priority; i--) deferred[i] = deferred[i - 1];
+/******/ 				deferred[i] = [chunkIds, fn, priority];
+/******/ 				return;
+/******/ 			}
+/******/ 			var notFulfilled = Infinity;
+/******/ 			for (var i = 0; i < deferred.length; i++) {
+/******/ 				var [chunkIds, fn, priority] = deferred[i];
+/******/ 				var fulfilled = true;
+/******/ 				for (var j = 0; j < chunkIds.length; j++) {
+/******/ 					if ((priority & 1 === 0 || notFulfilled >= priority) && Object.keys(__webpack_require__.O).every((key) => (__webpack_require__.O[key](chunkIds[j])))) {
+/******/ 						chunkIds.splice(j--, 1);
+/******/ 					} else {
+/******/ 						fulfilled = false;
+/******/ 						if(priority < notFulfilled) notFulfilled = priority;
+/******/ 					}
+/******/ 				}
+/******/ 				if(fulfilled) {
+/******/ 					deferred.splice(i--, 1)
+/******/ 					var r = fn();
+/******/ 					if (r !== undefined) result = r;
+/******/ 				}
+/******/ 			}
+/******/ 			return result;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/jsonp chunk loading */
+/******/ 	(() => {
+/******/ 		// no baseURI
+/******/ 		
+/******/ 		// object to store loaded and loading chunks
+/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
+/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
+/******/ 		var installedChunks = {
+/******/ 			"/js/widgets": 0,
+/******/ 			"css/widgets": 0
+/******/ 		};
+/******/ 		
+/******/ 		// no chunk on demand loading
+/******/ 		
+/******/ 		// no prefetching
+/******/ 		
+/******/ 		// no preloaded
+/******/ 		
+/******/ 		// no HMR
+/******/ 		
+/******/ 		// no HMR manifest
+/******/ 		
+/******/ 		__webpack_require__.O.j = (chunkId) => (installedChunks[chunkId] === 0);
+/******/ 		
+/******/ 		// install a JSONP callback for chunk loading
+/******/ 		var webpackJsonpCallback = (parentChunkLoadingFunction, data) => {
+/******/ 			var [chunkIds, moreModules, runtime] = data;
+/******/ 			// add "moreModules" to the modules object,
+/******/ 			// then flag all "chunkIds" as loaded and fire callback
+/******/ 			var moduleId, chunkId, i = 0;
+/******/ 			if(chunkIds.some((id) => (installedChunks[id] !== 0))) {
+/******/ 				for(moduleId in moreModules) {
+/******/ 					if(__webpack_require__.o(moreModules, moduleId)) {
+/******/ 						__webpack_require__.m[moduleId] = moreModules[moduleId];
+/******/ 					}
+/******/ 				}
+/******/ 				if(runtime) var result = runtime(__webpack_require__);
+/******/ 			}
+/******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
+/******/ 			for(;i < chunkIds.length; i++) {
+/******/ 				chunkId = chunkIds[i];
+/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
+/******/ 					installedChunks[chunkId][0]();
+/******/ 				}
+/******/ 				installedChunks[chunkId] = 0;
+/******/ 			}
+/******/ 			return __webpack_require__.O(result);
+/******/ 		}
+/******/ 		
+/******/ 		var chunkLoadingGlobal = self["webpackChunkwidget"] = self["webpackChunkwidget"] || [];
+/******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
+/******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
+/******/ 	__webpack_require__.O(undefined, ["css/widgets"], () => (__webpack_require__("./resources/js/widgets.js")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/widgets"], () => (__webpack_require__("./resources/scss/widgets.scss")))
+/******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
+/******/ 	
+/******/ })()
+;

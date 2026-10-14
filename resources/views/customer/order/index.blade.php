@@ -50,9 +50,7 @@
                         <tr>
                             <th>{{ __('Customer Order #') }}</th>
                             <th>{{ __('Status') }}</th>
-                            <th>{{ __('Type') }}</th>
-                            <th>{{ __('Order Reference Number#') }}</th>
-                            <th>{{ __('Warehouse') }}</th>
+                            <th>{{ __('Reference Number#') }}</th>
                             <th>{{ __('Created At') }}</th>
                             <th>{{ __('Total') }}</th>
                             @if (customer(true)->can('order.details'))
@@ -75,13 +73,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    {{ $order['OrderType'] }}
-                                </td>
-                                <td>
                                     {{ $order['CustomerPurchaseOrdernumber'] ?? '' }}
-                                </td>
-                                <td>
-                                    {{ $order['WarehouseID'] ?? '' }}
                                 </td>
                                 <td class="text-center" data-order="{{ $order['EntryDate'] }}">
                                     {{ carbon_date($order['EntryDate']) }}</td>

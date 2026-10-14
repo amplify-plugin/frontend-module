@@ -53,6 +53,12 @@ class Index extends BaseComponent
 
         $orders = ErpApi::getOrderList($data);
 
+        if ($status = request('status')) {
+            $orders = $orders->filter(
+                fn ($order) => strcasecmp((string) $order->OrderStatus, (string) $status) === 0
+            )->values();
+        }
+
         return view('widget::customer.order.index', [
             'orders' => $orders,
         ]);
@@ -69,6 +75,16 @@ class Index extends BaseComponent
                 'Invoiced' => 'Invoiced',
                 'Paid' => 'Paid',
                 'Cancelled' => 'Cancelled',
+            ];
+        } elseif (ErpApi::currentErp() == 'apprise-erp') {
+            return [
+                'Open' => 'Open',
+                'Confirmed' => 'Confirmed',
+                'Partially Confirmed' => 'Partially Confirmed',
+                'Fully Confirmed' => 'Fully Confirmed',
+                'In Pick' => 'In Pick',
+                'Fully Received' => 'Fully Received',
+                'Fully Restocked' => 'Fully Restocked',
             ];
         } else {
             return [
