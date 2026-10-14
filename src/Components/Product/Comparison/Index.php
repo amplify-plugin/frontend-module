@@ -3,23 +3,32 @@
 namespace Amplify\Frontend\Components\Product\Comparison;
 
 use Amplify\Frontend\Abstracts\BaseComponent;
+use Amplify\Frontend\Services\ProductCompareService;
 use Closure;
 use Illuminate\Contracts\View\View;
 
 /**
  * @class Index
  * @package Amplify\Frontend\Components\Product\Comparison
- *
  */
 class Index extends BaseComponent
 {
-    public mixed $items;
+    public array $products = [];
+
+    public array $rows = [];
 
     public function __construct()
     {
-        $this->items = request()->session()->get('compareProducts');
-
         parent::__construct();
+
+        if (! $this->shouldRender()) {
+            return;
+        }
+
+        $comparison = app(ProductCompareService::class)->comparison();
+
+        $this->products = $comparison['products'];
+        $this->rows = $comparison['rows'];
     }
 
     /**
@@ -27,7 +36,11 @@ class Index extends BaseComponent
      */
     public function shouldRender(): bool
     {
-        if (customer_check() && !customer()->can('product-compare.details')) {
+        if (! app(ProductCompareService::class)->enabled()) {
+            return false;
+        }
+
+        if (customer_check() && ! customer(true)->can('product-compare.details')) {
             return false;
         }
 

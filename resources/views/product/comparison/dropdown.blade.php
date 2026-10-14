@@ -37,7 +37,7 @@
                 type="button" onclick="Amplify.compareProducts(this, null, 'clear')">
             Clear
         </button>
-        <a class="btn btn-sm btn-primary" href="#">
+        <a class="btn btn-sm btn-primary {{ count($items) < 2 ? 'disabled' : '' }}" href="{{ $compareUrl ?? url(config('amplify.frontend.product_compare_page', '/product/compare')) }}">
             Compare Now
         </a>
     </div>

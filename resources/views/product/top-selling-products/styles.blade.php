@@ -97,11 +97,33 @@
     }
 
     .x-top-selling-products .purchased-together-actions .x-product-quick-action {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        gap: 0.5rem;
         width: 100%;
+    }
+
+    .x-top-selling-products .purchased-together-actions .x-product-quick-action > .d-grid,
+    .x-top-selling-products .purchased-together-actions .x-product-comparison-manage {
+        flex: 1 1 100%;
+        width: 100%;
+        max-width: 100%;
+        margin: 0 !important;
     }
 
     .x-top-selling-products .purchased-together-actions .d-grid {
         gap: 0.75rem !important;
+    }
+
+    .x-top-selling-products .purchased-together-actions .x-product-comparison-manage {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 38px;
+        border-radius: 8px;
+        white-space: nowrap;
     }
 
     .x-top-selling-products .purchased-together-actions .x-cart-quantity-update {
@@ -233,8 +255,33 @@
         width: 148px;
     }
 
+    .x-top-selling-products.top-selling-products-layout-minimal .purchased-together-minimal-actions .x-product-quick-action {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+        width: 100%;
+    }
+
+    .x-top-selling-products.top-selling-products-layout-minimal .purchased-together-minimal-actions .x-product-quick-action > .d-grid,
+    .x-top-selling-products.top-selling-products-layout-minimal .purchased-together-minimal-actions .x-product-comparison-manage {
+        flex: 1 1 100%;
+        width: 100%;
+        max-width: 100%;
+        margin: 0 !important;
+    }
+
     .x-top-selling-products.top-selling-products-layout-minimal .purchased-together-minimal-actions .d-grid {
         gap: 0.5rem !important;
+    }
+
+    .x-top-selling-products.top-selling-products-layout-minimal .purchased-together-minimal-actions .x-product-comparison-manage {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 34px;
+        border-radius: 8px;
+        white-space: nowrap;
     }
 
     .x-top-selling-products.top-selling-products-layout-minimal .purchased-together-minimal-actions .x-cart-quantity-update {

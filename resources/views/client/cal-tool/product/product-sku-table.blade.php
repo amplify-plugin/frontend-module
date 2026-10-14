@@ -139,6 +139,7 @@
                                                     :favourite-list-id="$product->favorite_list_id"
                                                     :product-id="$product->id"/>
                                             @endif
+                                            <x-product-comparison-manage :product="$product" type="button" class="btn btn-sm btn-outline-primary m-0"/>
                                             <div class="count align-items-center d-flex gap-2">
                                                 <div>Quantity:</div>
                                                 <span

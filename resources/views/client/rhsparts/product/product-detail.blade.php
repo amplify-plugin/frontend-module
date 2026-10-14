@@ -245,6 +245,7 @@
                                     onclick="addSingleProductToOrder('1')">
                                 <i class="icon-bag"></i> Add to Cart
                             </button>
+                            <x-product-comparison-manage :product="$product" type="button" class="btn btn-outline-primary"/>
                         </div>
                         @endif
                     </div>
