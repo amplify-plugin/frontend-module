@@ -232,6 +232,17 @@ class Breadcrumb extends BaseComponent
             ];
         }
 
+        $product = $easyAskResult->getFirstProduct();
+
+        $trails[] = [
+            "value" => $product->Product_Name,
+            "path" =>$breadcrumbTrails->getFullPath(),
+            "purePath" => $breadcrumbTrails->getPureCategoryPath(),
+            "seoPath" => $easyAskResult->getCurrentSeoPath(),
+            "navNodePathType" => 1,
+            "englishName" => $product->Product_Name,
+        ];
+
         $categoryBreadcrumbTrail = new BreadCrumbTrail(json_decode(json_encode([
             "fullPath" => $breadcrumbTrails->getFullPath(),
             "pureCategoryPath" => $breadcrumbTrails->getPureCategoryPath(),
