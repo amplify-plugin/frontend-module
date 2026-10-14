@@ -3,6 +3,7 @@
 namespace Amplify\Frontend\Components;
 
 use Amplify\Frontend\Abstracts\BaseComponent;
+use Amplify\System\Backend\Models\Category;
 use Amplify\System\Cms\Models\Page;
 use Amplify\System\Sayt\Classes\BreadCrumbTrail;
 use Closure;
@@ -47,7 +48,7 @@ class Breadcrumb extends BaseComponent
         }
 
         if ($this->page instanceof Page) {
-            return (bool) $this->page->has_breadcrumb;
+            return (bool)$this->page->has_breadcrumb;
         }
 
         return true;
@@ -62,14 +63,14 @@ class Breadcrumb extends BaseComponent
     {
 
         if ($this->error) {
-            $this->push('Error '.$this->title, url()->current());
+            $this->push('Error ' . $this->title, url()->current());
             $this->push('Home', $this->homeUrl());
         } else {
-            if (in_array($this->page->page_type, ['shop', 'single_product'])) {
-                $this->loadEasyAskBreadcrumbs($this->page);
-            } else {
-                $this->loadDynamicPageBreadcrumbs($this->page);
-            }
+            match ($this->page->page_type) {
+                'shop' => $this->loadShopBreadcrumbs(),
+                'single_product' => $this->loadProductBreadcrumbs(),
+                default => $this->loadDynamicPageBreadcrumbs($this->page)
+            };
         }
 
         $this->breadcrumbs = $this->breadcrumbs->reverse();
@@ -95,7 +96,7 @@ class Breadcrumb extends BaseComponent
     public function homeUrl()
     {
         return getIsDynamicSiteFromCache()
-            ? request()->getSchemeAndHttpHost().'/'.getDynamicSiteSlugFromCache()
+            ? request()->getSchemeAndHttpHost() . '/' . getDynamicSiteSlugFromCache()
             : config('amplify.cms.brand_logo_url', route('frontend.index'));
     }
 
@@ -103,7 +104,7 @@ class Breadcrumb extends BaseComponent
     {
         $this->push(($page->breadcrumb_title != null ? $page->breadcrumb_title : $page->name), url($page->slug));
 
-        if (! empty($page->parent)) {
+        if (!empty($page->parent)) {
             $this->loadDynamicPageBreadcrumbs($page->parent);
         }
     }
@@ -127,7 +128,7 @@ class Breadcrumb extends BaseComponent
 
         if ($this->navigateNode != null) {
             if ($this->page->page_type == 'shop') {
-                return $this->navigateNode->getLabel().' <strong><em>\''.ucwords($this->navigateNode->getEnglishName()).'\'</em></strong>';
+                return $this->navigateNode->getLabel() . ' <strong><em>\'' . ucwords($this->navigateNode->getEnglishName()) . '\'</em></strong>';
             } else {
                 return store('pageTitle', 'Product Detail');
             }
@@ -157,15 +158,87 @@ class Breadcrumb extends BaseComponent
     /**
      * @throws ErrorException
      */
-    protected function loadEasyAskBreadcrumbs(?Page $page): void
+    protected function loadShopBreadcrumbs(): void
     {
-        $easyAskResult = ($page->page_type == 'shop') ? store()->eaProductsData : store()->eaProductDetail;
+        $easyAskResult = store()->eaProductsData;
 
         $breadcrumbTrails = $easyAskResult?->getBreadCrumbTrail() ?? new BreadCrumbTrail(null);
 
         $navigateNodes = $breadcrumbTrails->getSearchPath();
 
         $this->processEANodes($navigateNodes);
+    }
+
+    /**
+     * @throws ErrorException
+     */
+    protected function loadProductBreadcrumbs(): void
+    {
+        $easyAskResult = store()->eaProductDetail;
+
+        $breadcrumbTrails = $easyAskResult?->getBreadCrumbTrail() ?? new BreadCrumbTrail(null);
+
+        $rootCatePath = \Sayt::getDefaultCatPath();
+
+        [$first, $second] = explode('/', $rootCatePath, 2);
+
+        $categories = Category::categoryTree($easyAskResult->getSuggestedCategoryID());
+
+        $categories->shift();
+
+        $trails = [
+            [
+                "value" => "All Products",
+                "path" => "All Products",
+                "purePath" => "All Products",
+                "seoPath" => "",
+                "navNodePathType" => 1,
+                "englishName" => "All Products",
+            ],
+            [
+                "value" => $first,
+                "path" => "All Products////{$first}",
+                "purePath" => "All Products////{$first}",
+                "seoPath" => $first,
+                "navNodePathType" => 1,
+                "englishName" => $first,
+            ],
+            [
+                "value" => $second,
+                "path" => "All Products////{$first}////{$second}",
+                "purePath" => "All Products////{$first}////{$second}",
+                "seoPath" => "{$first}/{$second}",
+                "navNodePathType" => 1,
+                "englishName" => $second,
+            ],
+        ];
+
+        $path = "All Products////{$first}////{$second}";
+        $seo = "{$first}/{$second}";
+
+        foreach ($categories as $category) {
+            $sluggable = $category->sluggable();
+            $method = $sluggable['category_slug']['method'];
+            $path = "{$path}////{$category->category_name}";
+            $seo = "{$seo}/" . $method($category->category_name, '-');
+
+            $trails[] = [
+                "value" => $category->category_name,
+                "path" => $path,
+                "purePath" => $path,
+                "seoPath" => $seo,
+                "navNodePathType" => 1,
+                "englishName" => $category->category_name,
+            ];
+        }
+
+        $categoryBreadcrumbTrail = new BreadCrumbTrail(json_decode(json_encode([
+            "fullPath" => $breadcrumbTrails->getFullPath(),
+            "pureCategoryPath" => $breadcrumbTrails->getPureCategoryPath(),
+            "navPathNodeList" => $trails,
+        ])));
+
+        $this->processEANodes($categoryBreadcrumbTrail->getSearchPath());
     }
 
     protected function processEANodes(array $navigateNodes = []): void

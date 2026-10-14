@@ -43,22 +43,27 @@ class ProductDetail extends BaseComponent
 
     /**
      * Get the view / contents that represent the component.
+     * @throws \ErrorException
      */
     public function render(): View|Closure|string
     {
         $dbProduct = store()->productModel;
 
         if (! $dbProduct) {
-            abort(404, 'Product Unavailable');
+            abort(404, __(config('amplify.messages.product_unavailable',
+                'Product is not available on our website.'), [
+                'code' => request('identifier'),
+                'email' => config('amplify.cms.email'),
+                'phone' => config('amplify.cms.phone'),
+            ]));
         }
 
-        $easSearchData = $this->getProductFromEasyAsk($dbProduct->id);
+        $easSearchData = store()->eaProductDetail;
 
-        $Product = $easSearchData->getFirstProduct();
+        $Product = $easSearchData?->getFirstProduct();
 
         if (! $Product) {
             $Product = new ItemRow([], []);
-            logger()->debug("Product ID: {$dbProduct->getKey()} not Found in EasyAsk.");
             $Product->Amplify_Id = $dbProduct->getKey();
             $Product->Product_Name = $dbProduct->product_name ?? '';
             $Product->Product_Code = $dbProduct->product_code ?? '';
@@ -130,6 +135,8 @@ class ProductDetail extends BaseComponent
         $Product->availability = $dbProduct->availability ?? ProductAvailabilityEnum::Actual;
         $Product->related_product = $dbProduct?->relatedProducts()->exists() ?? false;
         $Product->pricing = true;
+
+        store()->offsetSet('productPaginate', [$Product]);
 
         return view('widget::shop.product-detail', [
             'product' => $Product,
