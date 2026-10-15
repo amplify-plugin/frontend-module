@@ -4,22 +4,16 @@ namespace Amplify\Frontend\Components;
 
 use Amplify\Frontend\Abstracts\BaseComponent;
 use Amplify\System\Backend\Models\Manufacturer;
-use Amplify\System\Helpers\UtilityHelper;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
 
 /**
  * @class ManufactureSlider
  */
 class ManufactureSlider extends BaseComponent
 {
-    public $show_title;
-
-    private int $limit;
-
     public Collection $manufactureData;
 
     /**
@@ -36,12 +30,8 @@ class ManufactureSlider extends BaseComponent
         private int   $sliderItemGap = 15
     )
     {
-
         parent::__construct();
 
-        $this->options = Config::get('amplify.widget.' . __CLASS__, []);
-        $this->show_title = UtilityHelper::typeCast($showTitle, 'bool');
-        $this->limit = UtilityHelper::typeCast($items, 'integer');
         $this->manufactureData = new Collection;
 
         $this->prepareData();
@@ -71,7 +61,7 @@ class ManufactureSlider extends BaseComponent
             return Manufacturer::when($this->showFeatured, function ($query) {
                 return $query->where('featured', $this->showFeatured);
             })->orderBy('created_at', $this->sortOrder)
-                ->limit($this->limit)
+                ->limit($this->items)
                 ->get()
                 ->map(function ($item) {
                     $item->image = assets_image($item->image);
