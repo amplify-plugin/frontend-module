@@ -15,23 +15,6 @@ use Illuminate\Support\Facades\Cache;
  */
 class FeaturedProduct extends BaseComponent
 {
-    /**
-     * @var array
-     */
-    public $options;
-
-    public $title = '';
-
-    private $merchandising_zone = 1;
-
-    private $products_limit = 5;
-
-    public $show_title = true;
-
-    public $show_price = true;
-
-    public $show_discount_price = false;
-
     public $products;
 
     private $orderList;
@@ -42,22 +25,16 @@ class FeaturedProduct extends BaseComponent
      * Create a new component instance.
      */
     public function __construct(
-        $showTitle = 'true',
-        $title = 'Featured Products',
-        $merchandisingZone = '1',
-        $productsLimit = '5',
-        $showPrice = 'false',
-        $showDiscountPrice = 'false',
+        public bool $showTitle = true,
+        public string $title = 'Featured Products',
+        private int $merchandisingZone = 1,
+        private int $productsLimit = 5,
+        public bool $showCartButton = false,
+        public bool $showPrice = false,
+        public bool $showDiscountPrice = false,
     ) {
         parent::__construct();
-
         $this->products = collect();
-        $this->show_title = UtilityHelper::typeCast($showTitle, 'bool');
-        $this->title = UtilityHelper::typeCast($title, 'string');
-        $this->merchandising_zone = UtilityHelper::typeCast($merchandisingZone, 'integer');
-        $this->products_limit = UtilityHelper::typeCast($productsLimit, 'integer');
-        $this->show_price = UtilityHelper::typeCast($showPrice, 'bool');
-        $this->show_discount_price = UtilityHelper::typeCast($showDiscountPrice, 'bool');
         $this->prepareData();
     }
 
@@ -79,13 +56,13 @@ class FeaturedProduct extends BaseComponent
 
     private function prepareData(): void
     {
-        $merchandisingZone = MerchandisingZone::find($this->merchandising_zone);
+        $merchandisingZone = MerchandisingZone::find($this->merchandisingZone);
 
         if ($merchandisingZone) {
 
             $this->products = Cache::remember('site-feature-product-'.$merchandisingZone->easyask_key, HOUR, function () use ($merchandisingZone) {
 
-                $result = \Sayt::marchProducts($merchandisingZone->easyask_key, ['per_page' => $this->products_limit]);
+                $result = \Sayt::marchProducts($merchandisingZone->easyask_key, ['per_page' => $this->productsLimit]);
 
                 $this->seopath = $result->getCurrentSeoPath();
 
