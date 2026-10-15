@@ -14,7 +14,7 @@ export const QuickOrder = {
             return;
         }
 
-        this.root = document.querySelector('.x-quick-order');
+        this.root = document.querySelector('.x-quick-order[data-lookup-url]');
         if (!this.root) {
             return;
         }
