@@ -87,7 +87,7 @@ class FeaturedProduct extends BaseComponent
         $item->image = $this->productImage($product);
         $item->price = $this->productPrice($product);
         $item->old_price = $item->price;
-        $item->discount = '10% off';
+        $item->discount = '';
         $collection->push($item);
     }
 
