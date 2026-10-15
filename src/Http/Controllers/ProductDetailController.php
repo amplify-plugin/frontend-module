@@ -34,7 +34,12 @@ class ProductDetailController extends Controller
         $product = store()->productModel;
 
         if (! $product) {
-            abort(404, 'Product Unavailable');
+            abort(404, __(config('amplify.messages.product_unavailable',
+                'Product is not available on our website.'), [
+                'code' => $identifier,
+                'email' => config('amplify.cms.email'),
+                'phone' => config('amplify.cms.phone'),
+            ]));
         }
 
         $productId = $this->resolveRecentlyViewedProductId($product);

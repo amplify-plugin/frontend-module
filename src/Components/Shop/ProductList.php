@@ -65,6 +65,7 @@ class ProductList extends BaseComponent
 
     /**
      * Get the view / contents that represent the component.
+     * @throws \ErrorException
      */
     public function render(): View|Closure|string
     {
@@ -170,7 +171,8 @@ class ProductList extends BaseComponent
 
             }
         }
-        //        dd($products);
+
+        store()->offsetSet('productPaginate', $products);
 
         return view('widget::shop.product-list', compact('productView', 'products', 'message', 'seoPath'));
     }
