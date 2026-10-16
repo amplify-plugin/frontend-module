@@ -104,6 +104,8 @@ window.Amplify = {
 
         this.initModules();
 
+        this.loadFallbackImage();
+
         window.dispatchEvent(new InitEvent(this.config));
     },
 
@@ -2013,4 +2015,31 @@ window.Amplify = {
         window.localStorage.setItem('consented', 'true');
         $('#cookie-consent-modal').modal('hide');
     },
+
+    loadFallbackImage() {
+        const FALLBACK_IMG_SRC = this.config.fallbackImageSrc;
+
+        document.querySelectorAll('img').forEach(function (imageElement) {
+            let imageSrc = imageElement.src;
+            if (imageSrc) {
+                imageSrc = imageSrc.toString().trim();
+                imageElement.dataset.src = imageSrc;
+                switch (imageSrc) {
+                    case '':
+                    case '#' : {
+                        imageElement.src = FALLBACK_IMG_SRC;
+                        break;
+                    }
+                    default : {
+                        if (imageElement.complete && imageElement.naturalHeight === 0) {
+                            imageElement.src = FALLBACK_IMG_SRC;
+                        }
+                    }
+                }
+            } else {
+                imageElement.src = FALLBACK_IMG_SRC;
+            }
+        });
+
+    }
 }

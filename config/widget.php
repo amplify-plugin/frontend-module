@@ -3011,17 +3011,6 @@ return [
         '@nestedItems' => [],
         'description' => 'Login widget',
     ],
-    Components\NoImageSkeleton::class => [
-        'name' => 'no-image-skeleton',
-        'reserved' => true,
-        'internal' => true,
-        '@inside' => null,
-        '@client' => null,
-        'model' => ['static_page'],
-        '@attributes' => [],
-        '@nestedItems' => [],
-        'description' => 'Login widget',
-    ],
     Components\Favicon::class => [
         'name' => 'site.favicon',
         'reserved' => true,
