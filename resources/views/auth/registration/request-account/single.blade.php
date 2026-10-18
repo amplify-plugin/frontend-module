@@ -14,6 +14,11 @@
             ({{ trans('Your E-Mail Address will serve as your User ID when you Login') }})
         </small>
     </div>
+    @if (! config('amplify.security.use_email_as_login_id', true))
+    <div class="col-md-6">
+        {!! \Form::rText('contact_login_id', trans('Login ID'), null, true, ['placeholder' => trans('Login ID'), 'maxlength' => '255']) !!}
+    </div>
+    @endif
     <div class="col-md-6">
         {!! \Form::rTel('contact_phone_number', trans('Phone'), null, true, [
             'placeholder' => trans('Enter Contact Phone Number'),
