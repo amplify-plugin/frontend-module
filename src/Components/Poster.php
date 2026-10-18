@@ -3,7 +3,6 @@
 namespace Amplify\Frontend\Components;
 
 use Amplify\Frontend\Abstracts\BaseComponent;
-use Amplify\Frontend\Store\StoreDataBus;
 use Closure;
 use Illuminate\Contracts\View\View;
 
@@ -12,23 +11,16 @@ use Illuminate\Contracts\View\View;
  */
 class Poster extends BaseComponent
 {
-    public $zone;
-
-    public $code;
-
-    /**
-     * @var array
-     */
-    public $options;
+    public mixed $bannerDetails;
 
     /**
      * Create a new component instance.
      */
-    public function __construct($zone, $code)
+    public function __construct(public string $zone, public mixed $code)
     {
         parent::__construct();
-        $this->zone = $zone;
-        $this->code = $code;
+
+        $this->prepareData();
     }
 
     /**
@@ -44,10 +36,20 @@ class Poster extends BaseComponent
      */
     public function render(): View|Closure|string
     {
-        $dataBus = StoreDataBus::init();
+        return view('widget::poster');
+    }
 
-        return view('widget::poster', [
-            'easyAskData' => $dataBus->eaProductsData,
-        ]);
+    private function prepareData(): void
+    {
+        $remoteResults = store()->eaProductsData;
+
+        if (!$this->code && $remoteResults->hasDisplayBanner($this->zone)) {
+
+            $banners = $remoteResults->getDisplayBanner($this->zone);
+
+            if (!empty($banners)) {
+                $this->bannerDetails = $banners[array_key_first($banners)] ?? null;
+            }
+        }
     }
 }
