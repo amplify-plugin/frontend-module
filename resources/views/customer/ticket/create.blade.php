@@ -87,7 +87,7 @@
                             <div class="custom-file">
                                 <input  aria-label="custom-file-input"
                                     class="form-control custom-file-input @if ($errors->has('attachments') || $errors->has('attachments.*')) is-invalid @endif"
-                                    id="attachments" name="attachments[]" type="file" multiple>
+                                    id="attachments" name="attachments[]" type="file" multiple accept="{{ \Amplify\System\Ticket\Requests\TicketRequest::acceptAttribute() }}">
                                 <label class="custom-file-label" for="attachments">Choose file</label>
                             </div>
                         </div>

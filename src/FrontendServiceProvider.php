@@ -2,9 +2,6 @@
 
 namespace Amplify\Frontend;
 
-use Amplify\ErpApi\Commands\Apprise\TokenRefreshCommand as AppriseTokenRefreshCommand;
-use Amplify\ErpApi\Commands\Csd\TokenRefreshCommand as CsdTokenRefreshCommand;
-use Amplify\ErpApi\Commands\PriceSyncCommand;
 use Amplify\Frontend\Commands\CleanCartCommand;
 use Amplify\Frontend\Http\Middlewares\CaptureIntendedUrl;
 use Amplify\Frontend\Http\Middlewares\ContactForceShippingAddressSelection;
@@ -64,14 +61,10 @@ class FrontendServiceProvider extends ServiceProvider
 
             }
 
-            $router = $this->app->make(\Illuminate\Routing\Router::class);
-
-            $router->middlewareGroup('frontend', [
-                ProtectAgainstSpam::class,
-                ContactForceShippingAddressSelection::class,
-                CaptureIntendedUrl::class,
-                FrontendDisabled::class
-            ]);
+            Route::pushMiddlewareToGroup('frontend', ProtectAgainstSpam::class);
+            Route::pushMiddlewareToGroup('frontend', ContactForceShippingAddressSelection::class);
+            Route::pushMiddlewareToGroup('frontend', CaptureIntendedUrl::class);
+            Route::pushMiddlewareToGroup('frontend', FrontendDisabled::class);
         }
 
         $this->registerScheduler();
