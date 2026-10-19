@@ -78,3 +78,4 @@ mix.setResourceRoot('resources')
         ]
     })
     .version();
+
