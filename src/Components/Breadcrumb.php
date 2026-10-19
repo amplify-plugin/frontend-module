@@ -95,9 +95,7 @@ class Breadcrumb extends BaseComponent
      */
     public function homeUrl()
     {
-        return getIsDynamicSiteFromCache()
-            ? request()->getSchemeAndHttpHost() . '/' . getDynamicSiteSlugFromCache()
-            : config('amplify.cms.brand_logo_url', route('frontend.index'));
+        return config('amplify.cms.brand_logo_url', route('frontend.index'));
     }
 
     protected function loadDynamicPageBreadcrumbs(?Page $page = null): void

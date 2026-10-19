@@ -104,6 +104,8 @@ window.Amplify = {
 
         this.initModules();
 
+        this.loadFallbackImage();
+
         window.dispatchEvent(new InitEvent(this.config));
     },
 
@@ -2013,4 +2015,35 @@ window.Amplify = {
         window.localStorage.setItem('consented', 'true');
         $('#cookie-consent-modal').modal('hide');
     },
+
+    loadFallbackImage() {
+
+        document.querySelectorAll('img').forEach(function (imageElement) {
+            let imageSrc = imageElement.src.toString().trim();
+
+            if (imageSrc) {
+                imageElement.dataset.src = imageSrc;
+                switch (imageSrc) {
+                    case '':
+                    case '#' : {
+                        imageElement.src = Amplify.config.fallbackImageSrc;
+                        break;
+                    }
+                    default : {
+                        if (imageElement.complete && imageElement.naturalHeight === 0) {
+                            imageElement.src = Amplify.config.fallbackImageSrc;
+                        }
+                    }
+                }
+            }
+            else {
+                imageElement.src = Amplify.config.fallbackImageSrc;
+            }
+
+            imageElement.addEventListener('error', () => {
+                this.onerror = null;
+                this.src = Amplify.config.fallbackImageSrc;
+            });
+        });
+    }
 }

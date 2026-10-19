@@ -1,12 +1,3 @@
-@php
-    $bannerDetails = null;
-    if (!(bool) $code && !empty($easyAskData['banners'])) {
-        $result = array_filter($easyAskData['banners'], function ($banner) use ($zone) {
-            return $banner->getZone() == $zone;
-        });
-        $bannerDetails = get_banner_from_zone($result);
-    }
-@endphp
 <div {!! $htmlAttributes !!}>
     @if (!empty($bannerDetails))
         @if ($bannerDetails['type'] === 'image')

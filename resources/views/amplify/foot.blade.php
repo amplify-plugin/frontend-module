@@ -32,7 +32,7 @@
 @stack('internal-script')
 <!-- Footer Script -->
 @stack('footer-script')
-<x-no-image-skeleton />
+
 <x-site.toastr-notification />
 @if(!empty($tag_manager_id))
     <script>
