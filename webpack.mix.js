@@ -37,6 +37,7 @@ class PublishWidgetAssets {
     }
 }
 
+
 mix.setResourceRoot('resources')
     .setPublicPath('public')
     .copyDirectory('resources/img', 'public/img')
