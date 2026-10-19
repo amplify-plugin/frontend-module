@@ -2017,29 +2017,33 @@ window.Amplify = {
     },
 
     loadFallbackImage() {
-        const FALLBACK_IMG_SRC = this.config.fallbackImageSrc;
 
         document.querySelectorAll('img').forEach(function (imageElement) {
-            let imageSrc = imageElement.src;
+            let imageSrc = imageElement.src.toString().trim();
+
             if (imageSrc) {
-                imageSrc = imageSrc.toString().trim();
                 imageElement.dataset.src = imageSrc;
                 switch (imageSrc) {
                     case '':
                     case '#' : {
-                        imageElement.src = FALLBACK_IMG_SRC;
+                        imageElement.src = Amplify.config.fallbackImageSrc;
                         break;
                     }
                     default : {
                         if (imageElement.complete && imageElement.naturalHeight === 0) {
-                            imageElement.src = FALLBACK_IMG_SRC;
+                            imageElement.src = Amplify.config.fallbackImageSrc;
                         }
                     }
                 }
-            } else {
-                imageElement.src = FALLBACK_IMG_SRC;
             }
-        });
+            else {
+                imageElement.src = Amplify.config.fallbackImageSrc;
+            }
 
+            imageElement.addEventListener('error', () => {
+                this.onerror = null;
+                this.src = Amplify.config.fallbackImageSrc;
+            });
+        });
     }
 }
