@@ -14,8 +14,7 @@ export const QuickOrder = {
             return;
         }
 
-        this.root = document.querySelector('.x-quick-order');
-        if (!this.root) {
+        if (this.Amplify.clientCode() == 'STV') {
             return;
         }
 
