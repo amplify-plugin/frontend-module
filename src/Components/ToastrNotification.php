@@ -43,6 +43,11 @@ class ToastrNotification extends BaseComponent
             $message = session('error');
         }
 
+        if ($alert) {
+            // Admin-entered message: allow line breaks (<br>, <p> or newlines) but strip everything else.
+            $message = nl2br(strip_tags((string) $message, '<br><p><b><strong><i><em>'));
+        }
+
         return view('widget::toastr-notification', compact('title', 'level', 'message', 'alert'));
     }
 }
