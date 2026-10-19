@@ -269,7 +269,8 @@ trait HasDynamicPage
                     'mobile' => 567, //sm
                 ],
                 'current' => request()->screen()
-            ]
+            ],
+            'fallbackImageSrc' => $this->fallBackImageSrc(),
         ];
 
 
@@ -279,6 +280,17 @@ trait HasDynamicPage
             fn() => "Amplify.init({$jsonConfig});",
             'template-script'
         );
+    }
+
+    private function fallBackImageSrc(): string
+    {
+        $filepath = config('amplify.frontend.fallback_image_path', mix('img/placeholder.png', 'vendor/widget'));
+
+        if (str_contains($filepath, 'http')) {
+            return $filepath;
+        }
+
+        return asset($filepath);
     }
 
     private function wrapPageContent(string $content): string
