@@ -35,6 +35,19 @@
                             @enderror
                         </div>
                     </div>
+                    @if (! config('amplify.security.use_email_as_login_id', true))
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Login ID<span class="text-danger">*</span></label>
+                            <input type="text" name="login_id" value="{{ old('login_id', $contact->login_id ?? '') }}"
+                                   class="form-control @error('login_id') is-invalid @enderror"
+                                   autocomplete="off" maxlength="255">
+                            @error('login_id')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                    @endif
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Phone<span class="text-danger">*</span></label>

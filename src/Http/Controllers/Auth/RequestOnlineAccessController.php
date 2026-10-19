@@ -46,7 +46,7 @@ class RequestOnlineAccessController extends Controller
                 'phone_ext' => $request->input('contact_phone_extension'),
                 'password' => $request->input('contact_password'),
                 'email' => $request->input('contact_email'),
-                'login_id' => $request->input('contact_email'),
+                'login_id' => $request->input('contact_login_id', $request->input('contact_email')),
                 'is_admin' => $customer->wasRecentlyCreated,
                 'enabled' => config('amplify.security.skip_request_account_approval', false),
                 'customer_address_id' => $address?->id ?? null,

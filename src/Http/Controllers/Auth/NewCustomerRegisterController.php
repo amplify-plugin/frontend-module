@@ -65,7 +65,7 @@ class NewCustomerRegisterController extends Controller
                 'phone_ext' => $request->input('phone_extension', $erpData['CustomerPhoneExt'] ?? null),
                 'password' => $request->input('password'),
                 'email' => $request->input('email'),
-                'login_id' => $request->input('email'),
+                'login_id' => $request->input('login_id', $request->input('email')),
                 'is_admin' => $customer->wasRecentlyCreated,
                 'enabled' => config('amplify.security.skip_contact_approval', false),
                 'customer_address_id' => null,

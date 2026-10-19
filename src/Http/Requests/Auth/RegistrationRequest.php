@@ -28,6 +28,7 @@ class RegistrationRequest extends FormRequest
         \session()->flash('tab', $this->input('tab'));
 
         $minPassLen = SecurityHelper::passwordLength();
+        $emailAsLoginId = config('amplify.security.use_email_as_login_id', true);
 
         $rules = [
             'name' => 'required|string|max:255|ascii',
@@ -36,8 +37,17 @@ class RegistrationRequest extends FormRequest
                 'required',
                 'email:dns,rfc',
                 'ascii',
-                Rule::unique('customers'),
-                Rule::unique('contacts'),
+                ...($emailAsLoginId ? [
+                    Rule::unique('customers'),
+                    Rule::unique('contacts'),
+                ] : []),
+            ],
+            'login_id' => $emailAsLoginId ? [] : [
+                'required',
+                'string',
+                'max:255',
+                'ascii',
+                Rule::unique('contacts', 'login_id'),
             ],
             'phone_number' => 'required|string|min:10|max:255|ascii',
             'phone_extension' => 'nullable|string|max:255|ascii',

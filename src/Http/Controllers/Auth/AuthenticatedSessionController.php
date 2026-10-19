@@ -41,7 +41,7 @@ class AuthenticatedSessionController extends Controller
         $request->ensureIsNotRateLimited();
 
         $account = Contact::where([
-            'email' => $request->input('email'),
+            'login_id' => $request->input('login_id'),
             'enabled' => true,
         ])->first();
 
@@ -49,13 +49,13 @@ class AuthenticatedSessionController extends Controller
 
         if (! $account) {
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'login_id' => trans('auth.failed'),
             ]);
         }
 
         if (! $account->isApproved()) {
             throw ValidationException::withMessages([
-                'email' => __('The account has not been approved yet. Please contact Admin'),
+                'login_id' => __('The account has not been approved yet. Please contact Admin'),
             ]);
         }
 
@@ -74,9 +74,9 @@ class AuthenticatedSessionController extends Controller
         @cache()->forget("{$guestSessionToken}-account-menu");
         @cache()->forget("{$guestSessionToken}-account-sidebar");
 
-        if (! Auth::guard(Contact::AUTH_GUARD)->attempt($request->only('email', 'password'), $request->boolean('remember'))) {
+        if (! Auth::guard(Contact::AUTH_GUARD)->attempt($request->only('login_id', 'password'), $request->boolean('remember'))) {
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'login_id' => trans('auth.failed'),
             ]);
         }
 

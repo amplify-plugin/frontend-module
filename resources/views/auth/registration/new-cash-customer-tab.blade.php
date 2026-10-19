@@ -44,6 +44,11 @@
                 {!! \Form::rEmail('email', __('Email'), null, true, ['placeholder' => 'Email Address']) !!}
                 <small class="text-muted small">(Your E-Mail Address will serve as your User ID when you Login)</small>
             </div>
+            @if (! config('amplify.security.use_email_as_login_id', true))
+            <div class="col-md-6">
+                {!! \Form::rText('login_id', __('Login ID'), null, true, ['placeholder' => 'Login ID', 'maxlength' => '255']) !!}
+            </div>
+            @endif
             <div class="col-md-6">
                 {!! \Form::rPassword('password', __('Password'), true, [
                     'placeholder' => 'Enter Password',

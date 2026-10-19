@@ -4,6 +4,7 @@ namespace Amplify\Frontend\Http\Requests\Auth;
 
 use Amplify\System\Helpers\SecurityHelper;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ContactAccountRequest extends FormRequest
 {
@@ -25,12 +26,22 @@ class ContactAccountRequest extends FormRequest
         \session()->flash('tab', $this->input('tab'));
 
         $minPassLen = SecurityHelper::passwordLength();
+        $emailAsLoginId = config('amplify.security.use_email_as_login_id', true);
 
         $rules = [
             'search_account_number' => 'nullable|string|max:255|ascii',
             'customer_account_number' => 'nullable|string|max:255|ascii',
             'contact_name' => 'required|string|max:255|ascii',
-            'contact_email' => 'required|email:dns,rfc|unique:contacts,email',
+            'contact_email' => $emailAsLoginId
+                ? 'required|email:dns,rfc|unique:contacts,email'
+                : 'required|email:dns,rfc',
+            'contact_login_id' => $emailAsLoginId ? [] : [
+                'required',
+                'string',
+                'max:255',
+                'ascii',
+                Rule::unique('contacts', 'login_id'),
+            ],
             'contact_phone_number' => 'required|string|min:10|max:255|ascii',
             'contact_phone_extension' => 'nullable|string|max:255|ascii',
             'contact_password' => 'required|confirmed|min:'.$minPassLen,
@@ -62,6 +73,7 @@ class ContactAccountRequest extends FormRequest
             'contact_account_number' => 'account number',
             'contact_name' => 'name',
             'contact_email' => 'email',
+            'contact_login_id' => 'login ID',
             'contact_password' => 'password',
             'contact_newsletter' => 'newsletter',
             'contact_accept_term' => 'terms and conditions',
