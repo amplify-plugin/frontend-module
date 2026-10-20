@@ -16,11 +16,11 @@ class ProductCompareController extends Controller
 
     public function __construct(Request $request)
     {
-        if (optional($request->route())->getName() !== 'frontend.product-compare.page') {
+        if ($request->route()?->getName() !== 'frontend.product-compare.page') {
             return;
         }
 
-        $page = Page::published()->where('slug', $this->comparePageSlug())->first();
+        $page = $this->publishedPage(app(ProductCompareService::class)->pageSlug());
 
         if ($page && ! empty($page->middleware)) {
             $this->middleware($page->middleware);
@@ -29,37 +29,30 @@ class ProductCompareController extends Controller
 
     public function page(ProductCompareService $compare): string
     {
-        if (! $compare->enabled()) {
-            abort(404, 'Product comparison is not available.');
-        }
+        abort_unless($compare->enabled(), 404, 'Product comparison is not available.');
 
-        $slug = $this->comparePageSlug();
-        $page = Page::published()->where('slug', $slug)->first();
+        $slug = $compare->pageSlug();
 
-        if (! $page) {
-            $page = new Page([
-                'name' => 'Product Comparison',
-                'title' => 'Product Comparison',
-                'slug' => $slug,
-                'page_type' => 'static_page',
-                'content' => '<x-product-comparison-list />',
-                'is_published' => true,
-                'has_footer' => true,
-                'has_breadcrumb' => false,
-                'styles' => '',
-                'updated_at' => now(),
-                'created_at' => now(),
-            ]);
-        }
-
-        store()->dynamicPageModel = $page;
+        store()->dynamicPageModel = $this->publishedPage($slug) ?? new Page([
+            'name' => 'Product Comparison',
+            'title' => 'Product Comparison',
+            'slug' => $slug,
+            'page_type' => 'static_page',
+            'content' => '<x-product-comparison-list />',
+            'is_published' => true,
+            'has_footer' => true,
+            'has_breadcrumb' => false,
+            'styles' => '',
+            'updated_at' => now(),
+            'created_at' => now(),
+        ]);
 
         return $this->render();
     }
 
-    private function comparePageSlug(): string
+    private function publishedPage(string $slug): ?Page
     {
-        return trim((string) config('amplify.frontend.product_compare_page', '/product/compare'), '/');
+        return Page::published()->where('slug', $slug)->first();
     }
 
     public function __invoke(Request $request, ProductCompareService $compare): JsonResponse
@@ -84,10 +77,9 @@ class ProductCompareController extends Controller
                 return $this->apiResponse(false, (string) $validator->errors()->first(), 422);
             }
 
-            $action = $request->input('action', 'list');
             $productId = (int) $request->input('product');
 
-            $result = match ($action) {
+            $result = match ($request->input('action', 'list')) {
                 'add' => $compare->add($productId),
                 'remove' => $compare->remove($productId),
                 'clear' => $compare->clear(),

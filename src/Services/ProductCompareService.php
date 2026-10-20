@@ -3,19 +3,30 @@
 namespace Amplify\Frontend\Services;
 
 use Amplify\System\Backend\Models\Product;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class ProductCompareService
 {
     public const SESSION_KEY = 'compareProducts';
 
-    private static ?Collection $loaded = null;
+    private const HIDDEN_STATUSES = ['draft', 'archived'];
 
-    private static bool $loadedDetailed = false;
+    /**
+     * Shared across instances so the many compare buttons on a page reuse one query.
+     */
+    private static ?Collection $products = null;
+
+    private static bool $productsDetailed = false;
 
     public function enabled(): bool
     {
         return (bool) config('amplify.frontend.product_compare_enabled', true);
+    }
+
+    public function availableFor(string $permission): bool
+    {
+        return $this->enabled() && (! customer_check() || customer(true)->can($permission));
     }
 
     public function max(): int
@@ -23,9 +34,14 @@ class ProductCompareService
         return max(1, (int) config('amplify.frontend.product_compare_max', 4));
     }
 
+    public function pageSlug(): string
+    {
+        return trim((string) config('amplify.frontend.product_compare_page', '/product/compare'), '/');
+    }
+
     public function pageUrl(): string
     {
-        return url(config('amplify.frontend.product_compare_page', '/product/compare'));
+        return url($this->pageSlug());
     }
 
     public function contains(int $productId): bool
@@ -49,33 +65,24 @@ class ProductCompareService
         $ids = $this->validIds();
 
         if (in_array($productId, $ids, true)) {
-            return $this->result(true, 'This product is already in your comparison list.', 'duplicate', $ids);
+            return $this->result(true, 'This product is already in your comparison list.', 'duplicate');
         }
 
         if (count($ids) >= $this->max()) {
-            return $this->result(
-                false,
-                'You can compare up to '.$this->max().' products at a time.',
-                'limit',
-                $ids
-            );
+            return $this->result(false, 'You can compare up to '.$this->max().' products at a time.', 'limit');
         }
 
-        $product = $this->findComparable($productId);
+        $product = Product::query()->find($productId);
 
-        if (! $product) {
-            return $this->result(false, 'This product is not available for comparison.', 'unavailable', $ids);
+        if (! $product || $this->isHiddenStatus($product->status)) {
+            return $this->result(false, 'This product is not available for comparison.', 'unavailable');
         }
 
-        $ids[] = (int) $product->id;
-        $this->store($ids);
+        $this->store([...$ids, (int) $product->id]);
 
-        return $this->result(
-            true,
-            htmlspecialchars((string) $product->product_name, ENT_QUOTES, 'UTF-8').' added to your product comparison list.',
-            'added',
-            $ids
-        );
+        $name = htmlspecialchars((string) $product->product_name, ENT_QUOTES, 'UTF-8');
+
+        return $this->result(true, $name.' added to your product comparison list.', 'added');
     }
 
     /**
@@ -83,14 +90,9 @@ class ProductCompareService
      */
     public function remove(int $productId): array
     {
-        $ids = array_values(array_filter(
-            $this->validIds(),
-            fn (int $id) => $id !== $productId
-        ));
+        $this->store(array_filter($this->validIds(), fn (int $id) => $id !== $productId));
 
-        $this->store($ids);
-
-        return $this->result(true, 'Item removed from product comparison list.', 'removed', $ids);
+        return $this->result(true, 'Item removed from product comparison list.', 'removed');
     }
 
     /**
@@ -100,7 +102,7 @@ class ProductCompareService
     {
         $this->store([]);
 
-        return $this->result(true, 'Your product comparison list has been cleared.', 'cleared', []);
+        return $this->result(true, 'Your product comparison list has been cleared.', 'cleared');
     }
 
     /**
@@ -128,14 +130,11 @@ class ProductCompareService
     }
 
     /**
-     * @param  array<int, int>|null  $ids
      * @return array{success: bool, message: string, count: int, max: int, state: string, items: array<int, array<string, mixed>>}
      */
-    private function result(bool $success, string $message, string $state, ?array $ids = null): array
+    private function result(bool $success, string $message, string $state): array
     {
-        $items = $ids === null
-            ? $this->summaries()
-            : $this->summariesFor($ids);
+        $items = $this->summaries();
 
         return [
             'success' => $success,
@@ -159,65 +158,39 @@ class ProductCompareService
     }
 
     /**
+     * Loads the compared products in session order and rewrites the session
+     * when it holds unavailable products or the legacy storage format.
+     *
      * @return Collection<int, Product>
      */
     private function load(bool $detailed): Collection
     {
-        if (self::$loaded instanceof Collection && (self::$loadedDetailed || ! $detailed)) {
-            return self::$loaded;
+        if (self::$products !== null && (self::$productsDetailed || ! $detailed)) {
+            return self::$products;
         }
 
         $ids = $this->normalizedIds();
 
-        if ($ids === []) {
-            if ($this->storedIsLegacy()) {
-                $this->store([]);
-            }
-
-            return self::$loaded = collect();
-        }
-
-        $with = $detailed
+        $relations = $detailed
             ? ['productImage', 'brand', 'manufacturerRelation', 'categories', 'attributes', 'attributeValues']
             : ['productImage'];
 
-        $products = $this->comparableQuery()
-            ->with($with)
+        $products = $ids === [] ? collect() : $this->comparableQuery()
+            ->with($relations)
             ->whereIn('id', $ids)
             ->get()
             ->sortBy(fn (Product $product) => array_search((int) $product->id, $ids, true))
             ->values();
 
-        $valid = $products->map(fn (Product $product) => (int) $product->id)->all();
+        $validIds = $products->map(fn (Product $product) => (int) $product->id)->all();
 
-        if ($valid !== $ids || $this->storedIsLegacy()) {
-            $this->store($valid);
+        if ($validIds !== $ids || $this->storedIsLegacy()) {
+            $this->store($validIds);
         }
 
-        self::$loadedDetailed = $detailed;
-        self::$loaded = $products;
+        self::$productsDetailed = $detailed;
 
-        return $products;
-    }
-
-    /**
-     * @param  array<int, int>  $ids
-     * @return array<int, array<string, mixed>>
-     */
-    private function summariesFor(array $ids): array
-    {
-        if ($ids === []) {
-            return [];
-        }
-
-        return $this->comparableQuery()
-            ->with('productImage')
-            ->whereIn('id', $ids)
-            ->get()
-            ->sortBy(fn (Product $product) => array_search((int) $product->id, $ids, true))
-            ->map(fn (Product $product) => $this->summary($product))
-            ->values()
-            ->all();
+        return self::$products = $products;
     }
 
     /**
@@ -231,34 +204,24 @@ class ProductCompareService
             return [];
         }
 
-        $ids = [];
-
-        foreach ($stored as $item) {
-            $id = is_array($item) ? ($item['id'] ?? null) : $item;
-
-            if (is_numeric($id)) {
-                $ids[] = (int) $id;
-            }
-        }
-
-        return array_values(array_unique($ids));
+        return collect($stored)
+            ->map(fn ($item) => is_array($item) ? ($item['id'] ?? null) : $item)
+            ->filter(fn ($id) => is_numeric($id))
+            ->map(fn ($id) => (int) $id)
+            ->unique()
+            ->values()
+            ->all();
     }
 
+    /**
+     * Older versions stored product arrays (or other values) instead of plain ids.
+     */
     private function storedIsLegacy(): bool
     {
         $stored = session()->get(self::SESSION_KEY, []);
 
-        if (! is_array($stored)) {
-            return true;
-        }
-
-        foreach ($stored as $item) {
-            if (is_array($item) || ! is_numeric($item)) {
-                return true;
-            }
-        }
-
-        return false;
+        return ! is_array($stored)
+            || collect($stored)->contains(fn ($item) => is_array($item) || ! is_numeric($item));
     }
 
     /**
@@ -267,31 +230,19 @@ class ProductCompareService
     private function store(array $ids): void
     {
         session()->put(self::SESSION_KEY, array_values($ids));
-        self::$loaded = null;
-        self::$loadedDetailed = false;
-    }
-
-    private function findComparable(int $productId): ?Product
-    {
-        $product = Product::query()->find($productId);
-
-        if (! $product || $this->isHiddenStatus($product->status)) {
-            return null;
-        }
-
-        return $product;
+        self::$products = null;
     }
 
     private function isHiddenStatus(mixed $status): bool
     {
-        return in_array(strtolower(trim((string) $status)), ['draft', 'archived'], true);
+        return in_array(strtolower(trim((string) $status)), self::HIDDEN_STATUSES, true);
     }
 
-    private function comparableQuery()
+    private function comparableQuery(): Builder
     {
         return Product::query()->where(function ($query) {
             $query->whereNull('status')
-                ->orWhereRaw('LOWER(TRIM(status)) NOT IN (?, ?)', ['draft', 'archived']);
+                ->orWhereRaw('LOWER(TRIM(status)) NOT IN (?, ?)', self::HIDDEN_STATUSES);
         });
     }
 
@@ -319,7 +270,16 @@ class ProductCompareService
             return [];
         }
 
-        $definitions = [
+        return [...$this->fieldRows($products), ...$this->attributeRows($products)];
+    }
+
+    /**
+     * @param  Collection<int, Product>  $products
+     * @return array<int, array{label: string, values: array<int, string>, differs: bool}>
+     */
+    private function fieldRows(Collection $products): array
+    {
+        $fields = [
             'Item Number' => fn (Product $product) => $product->product_code,
             'Brand' => fn (Product $product) => $product->brand?->title,
             'Manufacturer' => fn (Product $product) => $product->manufacturerRelation?->name
@@ -333,82 +293,76 @@ class ProductCompareService
 
         $rows = [];
 
-        foreach ($definitions as $label => $resolver) {
-            $values = [];
-
-            foreach ($products as $product) {
-                $values[(int) $product->id] = $this->display($resolver($product));
-            }
-
-            $rows[] = $this->row($label, $values);
+        foreach ($fields as $label => $resolve) {
+            $rows[] = $this->row($label, $products, fn (Product $product) => $this->display($resolve($product)));
         }
 
-        $attributeLabels = [];
+        return $rows;
+    }
+
+    /**
+     * One row per attribute label, sorted by label. A product with several
+     * values for the same label gets them joined with commas.
+     *
+     * @param  Collection<int, Product>  $products
+     * @return array<int, array{label: string, values: array<int, string>, differs: bool}>
+     */
+    private function attributeRows(Collection $products): array
+    {
+        $valuesByLabel = [];
+
+        $collect = function (int $productId, string $name, string $label, string $value) use (&$valuesByLabel) {
+            if ($name === '' || $value === '' || $this->attributeExcluded($name)) {
+                return;
+            }
+
+            $existing = $valuesByLabel[$label][$productId] ?? null;
+            $valuesByLabel[$label][$productId] = $existing === null ? $value : $existing.', '.$value;
+        };
 
         foreach ($products as $product) {
             foreach ($product->attributes as $attribute) {
                 $name = $this->display($attribute->name);
-                $value = $this->display($attribute->pivot->attribute_value ?? null);
-
-                if ($name === '' || $value === '' || $this->attributeExcluded($name)) {
-                    continue;
-                }
-
                 $label = $attribute->unit ? $name.' ('.$this->display($attribute->unit).')' : $name;
-                $this->putAttributeValue($attributeLabels, $label, (int) $product->id, $value);
+                $collect((int) $product->id, $name, $label, $this->display($attribute->pivot->attribute_value ?? null));
             }
 
             foreach ($product->attributeValues as $attribute) {
                 $name = $this->display($attribute->attribute_name);
-                $value = $this->display($attribute->attribute_value);
-
-                if ($name === '' || $value === '' || $this->attributeExcluded($name)) {
-                    continue;
-                }
-
-                $this->putAttributeValue($attributeLabels, $name, (int) $product->id, $value);
+                $collect((int) $product->id, $name, $name, $this->display($attribute->attribute_value));
             }
         }
 
-        ksort($attributeLabels);
+        ksort($valuesByLabel);
 
-        foreach ($attributeLabels as $label => $values) {
-            $filled = [];
+        $rows = [];
 
-            foreach ($products as $product) {
-                $filled[(int) $product->id] = $values[(int) $product->id] ?? '';
-            }
-
-            $rows[] = $this->row($label, $filled);
+        foreach ($valuesByLabel as $label => $values) {
+            $rows[] = $this->row($label, $products, fn (Product $product) => $values[(int) $product->id] ?? '');
         }
 
-        return array_values(array_filter($rows, function (array $row) {
-            return collect($row['values'])->contains(fn (string $value) => $value !== '');
-        }));
+        return $rows;
     }
 
     /**
-     * @param  array<int, string>  $values
+     * @param  Collection<int, Product>  $products
+     * @param  callable(Product): string  $resolve
      * @return array{label: string, values: array<int, string>, differs: bool}
      */
-    private function row(string $label, array $values): array
+    private function row(string $label, Collection $products, callable $resolve): array
     {
-        $comparable = array_map(fn (string $value) => $value === '' ? '-' : $value, $values);
+        $values = [];
+
+        foreach ($products as $product) {
+            $value = $resolve($product);
+            $values[(int) $product->id] = $value === '' ? '-' : $value;
+        }
 
         return [
             'label' => $label,
-            'values' => $comparable,
-            'differs' => count(array_unique($comparable)) > 1,
+            'values' => $values,
+            'differs' => count(array_unique($values)) > 1,
         ];
-    }
-
-    /**
-     * @param  array<string, array<int, string>>  $labels
-     */
-    private function putAttributeValue(array &$labels, string $label, int $productId, string $value): void
-    {
-        $existing = $labels[$label][$productId] ?? '';
-        $labels[$label][$productId] = $existing === '' ? $value : $existing.', '.$value;
     }
 
     private function attributeExcluded(string $name): bool
@@ -449,17 +403,9 @@ class ProductCompareService
                 return $this->display($value[$locale]);
             }
 
-            $parts = [];
+            $parts = array_map(fn ($item) => $this->display($item), $value);
 
-            foreach ($value as $item) {
-                $text = $this->display($item);
-
-                if ($text !== '') {
-                    $parts[] = $text;
-                }
-            }
-
-            return implode(', ', $parts);
+            return implode(', ', array_filter($parts, fn (string $part) => $part !== ''));
         }
 
         return trim((string) $value);

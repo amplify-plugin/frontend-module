@@ -71,7 +71,7 @@ class ProductDetailController extends Controller
 
     private function isProductCompareRequest(string $identifier, ?string $slug): bool
     {
-        $configured = trim((string) config('amplify.frontend.product_compare_page', '/product/compare'), '/');
+        $configured = app(ProductCompareService::class)->pageSlug();
         $prefix = trim((string) config('amplify.frontend.product_page_prefix', 'product'), '/');
         $path = $prefix.'/'.$identifier.($slug ? '/'.$slug : '');
 

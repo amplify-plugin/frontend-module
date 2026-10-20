@@ -36,15 +36,7 @@ class Index extends BaseComponent
      */
     public function shouldRender(): bool
     {
-        if (! app(ProductCompareService::class)->enabled()) {
-            return false;
-        }
-
-        if (customer_check() && ! customer(true)->can('product-compare.details')) {
-            return false;
-        }
-
-        return true;
+        return app(ProductCompareService::class)->availableFor('product-compare.details');
     }
 
     /**

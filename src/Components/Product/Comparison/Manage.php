@@ -38,15 +38,7 @@ class Manage extends BaseComponent
      */
     public function shouldRender(): bool
     {
-        if (! app(ProductCompareService::class)->enabled()) {
-            return false;
-        }
-
-        if (customer_check() && ! customer(true)->can('product-compare.manage')) {
-            return false;
-        }
-
-        return true;
+        return app(ProductCompareService::class)->availableFor('product-compare.manage');
     }
 
     /**
@@ -60,15 +52,13 @@ class Manage extends BaseComponent
     public function htmlAttributes(): string
     {
         if ($this->productId) {
-            $this->attributes = $this->attributes->merge([
-                'data-compare-product' => $this->productId,
-                'data-compare-state' => $this->selected ? 'compared' : 'idle',
-                'onclick' => "Amplify.compareProducts(this, {$this->productId}, 'add'); return false;",
-            ]);
-        }
-
-        if ($this->selected) {
-            $this->attributes = $this->attributes->class(['is-compared']);
+            $this->attributes = $this->attributes
+                ->merge([
+                    'data-compare-product' => $this->productId,
+                    'data-compare-state' => $this->selected ? 'compared' : 'idle',
+                    'onclick' => "Amplify.compareProducts(this, {$this->productId}, 'add'); return false;",
+                ])
+                ->class(['is-compared' => $this->selected]);
         }
 
         return parent::htmlAttributes();

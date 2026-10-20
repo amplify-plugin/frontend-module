@@ -271,46 +271,40 @@
         });
     }
 
-    function applyLocal(action, product) {
-        if (action !== 'remove' && action !== 'clear') {
-            return;
-        }
-
-        var items = action === 'clear'
-            ? []
-            : readBarItems().filter(function (item) {
-                return String(item.id) !== String(product);
-            });
-
+    function render(items) {
         syncButtons(items);
         renderBar(items);
         updateComparison(items);
     }
 
+    function applyOptimistically(action, product) {
+        if (action === 'clear') {
+            render([]);
+        } else if (action === 'remove') {
+            render(readBarItems().filter(function (item) {
+                return String(item.id) !== String(product);
+            }));
+        }
+    }
+
     window.AmplifyCompare = {
         sync: function (response) {
-            if (!response || !Array.isArray(response.items)) {
-                return;
+            if (response && Array.isArray(response.items)) {
+                render(response.items);
             }
-
-            syncButtons(response.items);
-            renderBar(response.items);
-            updateComparison(response.items);
         },
         request: function (target, product, action, attach) {
             var snapshot = readBarItems();
-            applyLocal(action, product);
+            applyOptimistically(action, product);
 
             var button = target && target.closest ? target.closest('button, a') : target;
             if (button) {
                 button.disabled = true;
             }
 
-            if (action === 'list' && attach) {
-                var holder = document.querySelector(attach);
-                if (holder) {
-                    holder.innerHTML = '';
-                }
+            var holder = action === 'list' && attach ? document.querySelector(attach) : null;
+            if (holder) {
+                holder.innerHTML = '';
             }
 
             $.ajax(Amplify.config.url.productCompare, {
@@ -322,7 +316,6 @@
                 },
                 success: function (response) {
                     if (action === 'list') {
-                        var holder = document.querySelector(attach);
                         if (holder) {
                             holder.innerHTML = response.data?.html || '';
                         }
@@ -338,13 +331,7 @@
                 },
                 error: function (xhr) {
                     var response = xhr.responseJSON || {};
-                    if (Array.isArray(response.items)) {
-                        window.AmplifyCompare.sync(response);
-                    } else {
-                        syncButtons(snapshot);
-                        renderBar(snapshot);
-                        updateComparison(snapshot);
-                    }
+                    render(Array.isArray(response.items) ? response.items : snapshot);
                     Amplify.alert(
                         response.message || 'Something went wrong. Please try again later.',
                         'Product Comparison',
