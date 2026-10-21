@@ -17,7 +17,9 @@ class Price extends BaseComponent
         public mixed $value = null,
         public ?string $uom = 'EA',
         public string $element = 'div',
-        public ?float $stdPrice = null)
+        public ?float $stdPrice = null,
+        public bool $showDiscount = false
+    )
     {
         parent::__construct();
     }

@@ -29,7 +29,7 @@
                     :product="$product"
                     :value="$product->ERP?->Price"
                     :uom="$product->ERP?->UnitOfMeasure ?? 'EA'"
-                    :std-price="$product->Msrp->toFloat()"/>
+                    :std-price="$product->Msrp?->toFloat()"/>
 
             <div class="widget-tags mb-2">
 
