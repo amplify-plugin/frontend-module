@@ -82,10 +82,12 @@ class ProductDetail extends BaseComponent
 
         $priceAvailability = collect();
 
-        $erpCustomer = ErpApi::getCustomerDetail();
+        $warehouses = ErpApi::getWarehouses([['enabled', '=', true]]);
 
         if (customer_check() || config('amplify.basic.enable_guest_pricing')) {
-            $warehouses = ErpApi::getWarehouses([['enabled', '=', true]]);
+
+            $erpCustomer = ErpApi::getCustomerDetail();
+
             $warehouseString = $warehouses->pluck('WarehouseNumber')->implode(',');
             if (! Str::contains($warehouseString, $erpCustomer->DefaultWarehouse)) {
                 $warehouseString = "$warehouseString,{$erpCustomer->DefaultWarehouse}";
@@ -98,16 +100,6 @@ class ProductDetail extends BaseComponent
                 ]],
                 'warehouse' => $warehouseString,
             ]);
-
-            $warehouseNumber = $priceAvailability->pluck('WarehouseID');
-
-            $Product->warehouses = Warehouse::whereIn('code', $warehouseNumber)->get(['code', 'name'])->toArray();
-
-            $Product->warehouses = array_map(fn ($warehouse, $index) => array_merge($warehouse, [
-                'price' => $priceAvailability[$index]['Price'],
-                'quantity_available' => (int) $priceAvailability[$index]['QuantityAvailable'],
-                'unit_of_measure' => $priceAvailability[$index]['UnitOfMeasure'],
-            ]), $Product->warehouses, array_keys($Product->warehouses));
 
             $warehouse_codes = array_unique([$erpCustomer->DefaultWarehouse, customer()?->warehouse?->code, config('amplify.frontend.guest_checkout_warehouse')]);
 
@@ -154,9 +146,9 @@ class ProductDetail extends BaseComponent
         $productId = 0;
 
         if ($productModel instanceof \Amplify\System\Backend\Models\Product) {
-            $productId = (int) ($productModel->getKey() ?: 0);
+            $productId = (int)($productModel->getKey() ?: 0);
         } elseif ($productModel instanceof \Amplify\System\Sayt\Classes\ItemRow) {
-            $productId = (int) ($productModel->Amplify_Id ?? 0);
+            $productId = (int)($productModel->Amplify_Id ?? 0);
         }
 
         if ($productId > 0 && config('amplify.recently_viewed.enabled', true)) {
@@ -170,17 +162,17 @@ class ProductDetail extends BaseComponent
 
     public function allowDisplayProductCode(): bool
     {
-        return (bool) $this->displayProductCode;
+        return (bool)$this->displayProductCode;
     }
 
     public function allowFavourites(): bool
     {
-        return (bool) $this->showFavourite;
+        return (bool)$this->showFavourite;
     }
 
     public function displayDiscountBadge(): bool
     {
-        return (bool) $this->showDiscountBadge;
+        return (bool)$this->showDiscountBadge;
     }
 
     public function isMasterProduct($product): bool
@@ -190,7 +182,7 @@ class ProductDetail extends BaseComponent
 
     public function isShowMultipleWarehouse($product): bool
     {
-        return ! $this->isMasterProduct($product) && erp()->allowMultiWarehouse() && havePermissions(['checkout.choose-warehouse']);
+        return !$this->isMasterProduct($product) && erp()->allowMultiWarehouse() && havePermissions(['checkout.choose-warehouse']);
     }
 
     public function addToCartBtnLabel(): string
@@ -249,7 +241,7 @@ class ProductDetail extends BaseComponent
 
     protected function productExistOnFavorite($id): ?OrderListItem
     {
-        if (! empty($this->orderList) && $this->showFavourite) {
+        if (!empty($this->orderList) && $this->showFavourite) {
             foreach ($this->orderList as $orderList) {
                 if ($item = $orderList->orderListItems->firstWhere('product_id', $id)) {
                     return $item;
