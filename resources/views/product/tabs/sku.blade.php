@@ -1,4 +1,4 @@
-@if($product->HasSku)
+@if($product->HasSku && config('amplify.pim.use_master_sku', false))
     @push('title')
         <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#{{ $entry['name'] }}" role="tab">
