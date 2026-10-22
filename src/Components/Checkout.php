@@ -19,6 +19,8 @@ use Illuminate\View\InvokableComponentVariable;
  */
 class Checkout extends BaseComponent
 {
+    public array $data = [];
+
     public function __construct(public bool   $createFavouriteFromCart = true,
                                 public bool   $allowRequestQuote = true,
                                 public bool   $allowDraftOrder = false,
@@ -30,11 +32,21 @@ class Checkout extends BaseComponent
         parent::__construct();
     }
 
+    public function shouldRender()
+    {
+        $this->prepareData($this->data);
+
+        return true;
+    }
+
     /**
      * Get the view / contents that represent the component.
-     * @throws \ErrorException
      */
     public function render(): View|Closure|string
+    {
+        return view('widget::checkout', $this->withData($this->data));
+    }
+    protected function prepareData(&$data): void
     {
         $cart = getCart();
         $data['cartId'] = $cart->getKey();
@@ -74,8 +86,6 @@ class Checkout extends BaseComponent
 
         $data['hasShipInstruction'] = false;
 
-        $data['paymentTerms'] = ErpApi::getTermsType();
-
         $data['customer'] = $customer;
 
         $data['allowChooseBilling'] = true;
@@ -83,62 +93,6 @@ class Checkout extends BaseComponent
         if (config('amplify.payment.default') == 'aptean') {
             $data['apteanStyle'] = $this->apteanStyle();
         }
-
-        return view('widget::checkout', $this->withData($data));
-    }
-
-    private function getOrderPricing($order)
-    {
-        try {
-            $customerDetails = ErpApi::getCustomerDetail();
-            $products = $order->orderLines->map(function ($item) {
-                return [
-                    'ItemNumber' => $item->product_code,
-                    'WarehouseID' => $item->warehouse->warehouse->code ?? (customer()->warehouse->code ?? null),
-                    'OrderQty' => $item->qty,
-                ];
-            });
-
-            $order_infos = [
-                'customer_number' => $customerDetails->CustomerNumber,
-                'ship_to_number' => $customerDetails->DefaultShipTo,
-                'payment_type' => $customerDetails->CreditCardOnly === 'Y' ? 'CreditCard' : 'Standard',
-                'order_type' => 'T',
-                'return_type' => 'D',
-            ];
-
-            $quote = ErpApi::createQuotation([
-                'order' => $order_infos, 'items' => $products->toArray(),
-            ])->first();
-
-            return [
-                'order_subtotal' => $quote->TotalOrderValue,
-                'order_tax' => $quote->SalesTaxAmount,
-                'order_ship' => $quote->FreightAmount,
-                'order_total' => $quote->TotalOrderValue + $quote->SalesTaxAmount + $quote->FreightAmount,
-                'threshold_limit' => $customerDetails->FreightOptionAmount ?? config('amplify.marketing.free_ship_threshold'),
-                'threshold_message' => config('amplify.marketing.checkout_threshold_replace'),
-
-            ];
-
-        } catch (\Exception $exception) {
-            return [
-                'order_subtotal' => null,
-                'order_tax' => null,
-                'order_ship' => null,
-                'order_total' => null,
-                'threshold_limit' => config('amplify.marketing.free_ship_threshold'),
-                'threshold_message' => customer()->free_shipment_amount ?? config('amplify.marketing.checkout_threshold_replace'),
-            ];
-        }
-    }
-
-    private function loadEmptyShippingLocation()
-    {
-        return ErpApi::adapter()->renderSingleCustomerShippingLocation([
-            'ShipToNumber' => 'TEMP',
-            'ShipToName' => strtoupper('Temporary address'),
-        ]);
     }
 
     public function backToShoppingUrl(): string
@@ -152,6 +106,8 @@ class Checkout extends BaseComponent
 
     protected function withData($data): array
     {
+        $data['paymentTerms'] = ErpApi::getTermsType();
+
         return $data;
     }
 
@@ -183,7 +139,7 @@ class Checkout extends BaseComponent
     }
 
 
-    protected function apteanStyle(): array
+    public function apteanStyle(): array
     {
         return [
             'styles' => [
