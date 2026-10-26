@@ -38,6 +38,7 @@ class PublishWidgetAssets {
     }
 }
 
+
 mix.setResourceRoot('resources')
     .setPublicPath('public')
     .copyDirectory('resources/img', 'public/img')
@@ -98,3 +99,4 @@ mix.setResourceRoot('resources')
     .js('resources/vue/main.js', 'public/js')
     .vue({version: 3})
     .version();
+

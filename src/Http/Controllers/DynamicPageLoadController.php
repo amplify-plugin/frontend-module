@@ -37,14 +37,6 @@ class DynamicPageLoadController extends Controller
 
         store()->dynamicPageModel = $this->page;
 
-        if ($this->site) {
-            setDynamicSiteSlugToCache($slug);
-            setSiteSearchConfigToCache($this->site->search_configuration);
-        } else {
-            setDynamicSiteSlugToCache(null);
-            setSiteSearchConfigToCache([], true);
-        }
-
         return $this->render();
     }
 
