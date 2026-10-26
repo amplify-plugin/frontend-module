@@ -63,7 +63,7 @@
                             @if ($showOrderList || $showCartBtn)
                                 <div class="product-buttons d-flex justify-content-between">
                                     @if ($showCartBtn)
-                                        <a class="btn btn-outline-primary btn-block @if ($smallButton) btn-sm @endif"
+                                        <a class="btn btn-outline-primary m-0 btn-block @if ($smallButton) btn-sm @endif"
                                            href="{{ $product->detail_link }}">
                                             {{ __($cartButtonLabel) }}
                                         </a>
