@@ -7,7 +7,7 @@
         }
     @endphp
     <button
-            class="btn btn-outline-warning btn-sm dropdown-toggle btn-block"
+            class="btn btn-outline-secondary btn-sm dropdown-toggle btn-block"
             id="shoppingListDropdown{{ $index }}"
             type="button" data-toggle="dropdown" aria-expanded="false"
             onclick="loadOrderListDropdown({{ $productId }}, '{{ $widgetTitle }}', '#shopping-list-items-container-{{ $index }}');">
