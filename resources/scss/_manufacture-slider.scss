@@ -8,8 +8,40 @@
  */
 
 .x-manufacture-slider {
-  .owl-item img {
-    height: 110px;
-    width: 110px;
+  .manufacturer-item {
+    .manufacturer-img-container {
+      height: 130px;
+      width: 130px;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+        transition: all 0.2s ease-in-out;
+      }
+    }
+
+    .manufacturer-name {
+      display: block;
+      text-align: center;
+      font-weight: 600;
+    }
+  }
+
+  &.gray-scale {
+    .manufacturer-item {
+      .manufacturer-img-container {
+        img {
+          filter: grayscale(100%);
+        }
+
+        &:hover {
+          img {
+            filter: grayscale(0%);
+          }
+        }
+      }
+    }
   }
 }

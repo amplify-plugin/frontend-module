@@ -7,12 +7,14 @@
         @foreach(($manufactureData ?? []) as $manufacturer)
             <a href="{{ route('frontend.shop.index') }}?search=1&q={{ $manufacturer->code ?? '' }}"
                title="{{ __($manufacturer->name ?? '') }}"
-               class="text-decoration-none">
-                <img class="w-100 h-100 object-fit-contain"
-                     src="{{ $manufacturer->image }}"
-                     alt="{{ __($manufacturer->name ?? '') }}"/>
+               class="text-decoration-none manufacturer-item">
+                <div class="manufacturer-img-container">
+                    <img class="object-fit-contain"
+                         src="{{ $manufacturer->image }}"
+                         alt="{{ __($manufacturer->name ?? '') }}"/>
+                </div>
                 @if ($showName)
-                    <p class="text-center mt-2">{{ __($manufacturer->name ?? '') }}</p>
+                    <span class="manufacturer-name">{{ __($manufacturer->name ?? '') }}</span>
                 @endif
             </a>
         @endforeach

@@ -1,12 +1,14 @@
 {
-    "/js/widgets.js": "/js/widgets.js?id=dd3d017013ac4e635dcf3b911b6e3b16",
+    "/js/widgets.js": "/js/widgets.js?id=4f2ad045b97f3472217d31bdfb79533b",
     "/js/google-analytics.js": "/js/google-analytics.js?id=cdfb9882c7f0de2ef9ba3000ffe6dfe6",
-    "/css/widgets.css": "/css/widgets.css?id=38f70143420b03e2a7e9eb8576c8ffda",
+    "/js/main.js": "/js/main.js?id=f52e65521f8f2abe298bdd72c54b43e8",
+    "/css/widgets.css": "/css/widgets.css?id=7b60d3c703b923320f35e53a4216a274",
+    "/img/credit-cards.png": "/img/credit-cards.png?id=def4426dfb5129e197c28ec0559dd0e0",
     "/img/loading.gif": "/img/loading.gif?id=9f26b2a7bb0f54394ee1b1fff6d92377",
     "/img/pdf-download.png": "/img/pdf-download.png?id=e09a4ad80eec28f8f991dfcd65cecef7",
     "/img/pdf-file.png": "/img/pdf-file.png?id=c2b0310b639254cf2876e922996d9937",
     "/img/placeholder.png": "/img/placeholder.png?id=2dc3ba316cc2f848988ed13ecc39353e",
     "/img/user-cover-img.jpg": "/img/user-cover-img.jpg?id=dc399608bb59f20659bdba901ea34249",
-    "/js/modernizr.min.js": "/js/modernizr.min.js?id=e68eecd4210672412efc67b2a5ca0ef4",
-    "/js/vendor.js": "/js/vendor.js?id=78e1093b74331209c02d55ccde5d5725"
+    "/js/modernizr.min.js": "/js/modernizr.min.js?id=13d3b28c12aa22d0a39f66dba2b640d1",
+    "/js/vendor.js": "/js/vendor.js?id=342e80146bf9a7d409e6993a83a3499a"
 }
