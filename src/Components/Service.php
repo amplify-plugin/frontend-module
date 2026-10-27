@@ -12,19 +12,9 @@ use Illuminate\Contracts\View\View;
 class Service extends BaseComponent
 {
     /**
-     * @var array
-     */
-    public $options;
-
-    /**
      * Create a new component instance.
      */
     public $serviceData;
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
      * Whether the component should be rendered
@@ -40,12 +30,5 @@ class Service extends BaseComponent
     public function render(): View|Closure|string
     {
         return view('widget::service');
-    }
-
-    public function htmlAttributes(): string
-    {
-        $this->attributes = $this->attributes->class(['padding-bottom-2x']);
-
-        return parent::htmlAttributes();
     }
 }

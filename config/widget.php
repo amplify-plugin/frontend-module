@@ -2765,12 +2765,37 @@ return [
         'model' => ['static_page'],
         '@attributes' => [
             [
-                'name' => 'counter',
+                'name' => 'font-color',
+                'type' => 'color',
+                'value' => '#00000',
+            ],
+            [
+                'name' => ':desktop-items',
+                'type' => 'number',
+                'value' => 4,
+            ],
+            [
+                'name' => ':tablet-items',
+                'type' => 'number',
+                'value' => 2,
+            ],
+            [
+                'name' => 'counter-font-size',
+                'type' => 'text',
+                'value' => '32px',
+            ],
+            [
+                'name' => 'label-font-size',
+                'type' => 'text',
+                'value' => '16px',
+            ],
+            [
+                'name' => 'items',
                 'type' => 'array',
                 'array_format' => [
                     [
                         'name' => 'number',
-                        'type' => 'text',
+                        'type' => 'number',
                     ],
                     [
                         'name' => 'name',
@@ -2783,9 +2808,9 @@ return [
                 ],
                 'value' => [
                     [
-                        'number' => '',
+                        'number' => '0',
                         'name' => '',
-                        'suffix' => '',
+                        'suffix' => '+',
                     ],
                 ],
             ],
