@@ -10,7 +10,7 @@ class ProductCompareService
 {
     public const SESSION_KEY = 'compareProducts';
 
-    private const HIDDEN_STATUSES = ['draft', 'archived'];
+    private const HIDDEN_STATUSES = [];
 
     /**
      * Shared across instances so the many compare buttons on a page reuse one query.
@@ -240,9 +240,17 @@ class ProductCompareService
 
     private function comparableQuery(): Builder
     {
-        return Product::query()->where(function ($query) {
+        $hidden = self::HIDDEN_STATUSES;
+
+        if ($hidden === []) {
+            return Product::query();
+        }
+
+        $placeholders = implode(', ', array_fill(0, count($hidden), '?'));
+
+        return Product::query()->where(function ($query) use ($hidden, $placeholders) {
             $query->whereNull('status')
-                ->orWhereRaw('LOWER(TRIM(status)) NOT IN (?, ?)', self::HIDDEN_STATUSES);
+                ->orWhereRaw("LOWER(TRIM(status)) NOT IN ({$placeholders})", $hidden);
         });
     }
 

@@ -44,7 +44,7 @@ return [
     'show_parent_product_for_sku' => true,
     'product_compare_enabled' => env('AMPLIFY_PRODUCT_COMPARE_ENABLED', true),
     'product_compare_max' => 4,
-    'product_compare_page' => '/product/compare',
+    'product_compare_page' => '/product-compare',
     'product_compare_excluded_attributes' => [
         'id',
         'slug',
