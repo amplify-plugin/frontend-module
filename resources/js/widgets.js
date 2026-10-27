@@ -29,7 +29,7 @@ window.Amplify = {
         dateFormat: 'dd/mm/yyyy',
         dateTimeFormat: 'dd/mm/yyyy',
         allowGuestPrice: false,
-        authenticated : false,
+        authenticated: false,
         cart: {},
         url: {
             carts: '/carts',
@@ -104,7 +104,9 @@ window.Amplify = {
 
         this.initModules();
 
-        this.loadFallbackImage();
+        setTimeout(() => {
+            Amplify.loadFallbackImage();
+        }, 500);
 
         window.dispatchEvent(new InitEvent(this.config));
     },
@@ -2036,14 +2038,13 @@ window.Amplify = {
                         }
                     }
                 }
-            }
-            else {
+            } else {
                 imageElement.src = Amplify.config.fallbackImageSrc;
             }
 
-            imageElement.addEventListener('error', () => {
-                this.onerror = null;
-                this.src = Amplify.config.fallbackImageSrc;
+            imageElement.onerror(() => {
+                imageElement.onerror = null;
+                imageElement.src = Amplify.config.fallbackImageSrc;
             });
         });
     }
