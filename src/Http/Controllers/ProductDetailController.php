@@ -39,7 +39,12 @@ class ProductDetailController extends Controller
         $product = store()->productModel;
 
         if (! $product) {
-            abort(404, 'Product Unavailable');
+            abort(404, __(config('amplify.messages.product_unavailable',
+                'Product is not available on our website.'), [
+                'code' => $identifier,
+                'email' => config('amplify.cms.email'),
+                'phone' => config('amplify.cms.phone'),
+            ]));
         }
 
         $productId = $this->resolveRecentlyViewedProductId($product);
@@ -54,7 +59,7 @@ class ProductDetailController extends Controller
 
             store()->eaProductDetail = Sayt::storeProductDetail(
                 $eaKey,
-                $this->resolveProductDetailSeoPath(),
+                $this->resolveProductDetailSeoPath($product),
                 ['return_skus' => request('return_skus', false)]
             );
 
@@ -81,19 +86,17 @@ class ProductDetailController extends Controller
     /**
      * Merchandising refs are valid for list links but break EasyAsk single-product lookup.
      */
-    private function resolveProductDetailSeoPath(): ?string
+    private function resolveProductDetailSeoPath($product): ?string
     {
         $ref = request('ref');
 
-        if (empty($ref)) {
-            return null;
-        }
-
-        if (preg_match('/^merchandising\s*:/i', (string) $ref)) {
-            return null;
-        }
-
-        return $ref;
+        return match (true) {
+            empty($ref) => null,
+            config('amplify.pim.use_master_sku', false) == false => null,
+            preg_match('/^merchandising\s*:/i', (string)$ref) => null,
+            $product->has_sku == false => null,
+            default => $ref,
+        };
     }
 
     /**

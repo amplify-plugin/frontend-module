@@ -106,7 +106,12 @@ class AnalyticInit extends BaseComponent
                 return $data;
             }
 
-            if ($categoryId = store()->eaProductDetail?->getCategories()?->getSuggestedCategoryID()) {
+            /**
+             * @var Product $product
+             */
+            $product = \store('productModel');
+
+            if ($product && $categoryId = store('eaProductDetail')?->getCategories()?->getSuggestedCategoryID()) {
                 $categories = Category::categoryTree($categoryId);
                 if (!empty($categories)) {
                     $data['category'] = $categories->pluck('category_name')->implode(' > ');
@@ -363,9 +368,14 @@ class AnalyticInit extends BaseComponent
         ];
 
         /**
+         * @var Product $product
+         */
+        $product = \store('productModel');
+
+        /**
          * @var RemoteResults $eaResponse
          */
-        if ($eaResponse = store('eaProductDetail')) {
+        if ($product && $eaResponse = store('eaProductDetail')) {
 
             if (!$eaResponse->noResultFound()) {
 

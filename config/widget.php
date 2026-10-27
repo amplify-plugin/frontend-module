@@ -667,6 +667,17 @@ return [
         '@nestedItems' => null,
         'description' => '',
     ],
+    \Amplify\System\Message\View\Components\Customer\Message::class => [
+        'name' => 'customer.message',
+        'reserved' => true,
+        'internal' => false,
+        '@inside' => null,
+        '@client' => null,
+        'model' => ['message'],
+        '@attributes' => [],
+        '@nestedItems' => [],
+        'description' => 'Customer message inbox',
+    ],
     Components\Customer\Invoice\Index::class => [
         'name' => 'customer.invoice.list',
         'reserved' => true,
@@ -2222,7 +2233,7 @@ return [
         'model' => ['static_page'],
         '@attributes' => [
             [
-                'name' => 'show-title',
+                'name' => ':show-title',
                 'type' => 'boolean',
                 'value' => false,
             ],
@@ -2232,19 +2243,23 @@ return [
                 'value' => 'Featured Products',
             ],
             [
-                'name' => 'merchandising-zone',
+                'name' => ':merchandising-zone',
                 'type' => 'merchandises-dropdown',
-                'value' => '',
+                'value' => '1',
             ],
-            ['name' => 'products-limit', 'type' => 'text', 'value' => 5],
+            ['name' => ':products-limit', 'type' => 'text', 'value' => 5],
             [
-                'name' => 'show-cart-btn',
+                'name' => ':show-cart-button',
                 'type' => 'boolean',
                 'value' => true,
             ],
-            ['name' => 'show-price', 'type' => 'boolean', 'value' => true],
             [
-                'name' => 'show-discount-price',
+                'name' => ':show-price',
+                'type' => 'boolean',
+                'value' => true
+            ],
+            [
+                'name' => ':show-discount-price',
                 'type' => 'boolean',
                 'value' => false,
             ],
@@ -2590,7 +2605,7 @@ return [
         'model' => ['static_page'],
         '@attributes' => [
             [
-                'name' => 'show-title',
+                'name' => ':show-title',
                 'type' => 'boolean',
                 'value' => true,
             ],
@@ -2600,33 +2615,37 @@ return [
                 'value' => 'Manufacturers',
             ],
             [
-                'name' => 'items',
-                'type' => 'text',
+                'name' => ':items',
+                'type' => 'number',
                 'value' => '10',
             ],
             [
-                'name' => 'show-name',
+                'name' => ':show-name',
                 'type' => 'boolean',
                 'value' => false,
             ],
             [
-                'name' => 'show-featured',
+                'name' => ':show-featured',
                 'type' => 'boolean',
                 'value' => false,
             ],
             [
                 'name' => 'sort-order',
                 'type' => 'text',
-                'value' => 'asc',
+                'value' => 'array',
+                'options' => [
+                    'asc' => 'Ascending',
+                    'desc' => 'Descending',
+                ]
             ],
             [
-                'name' => 'show-navigation',
+                'name' => ':show-navigation',
                 'type' => 'boolean',
                 'value' => false,
             ],
             [
-                'name' => 'slider-item-gap',
-                'type' => 'text',
+                'name' => ':slider-item-gap',
+                'type' => 'number',
                 'value' => '30',
             ],
         ],
@@ -2994,17 +3013,6 @@ return [
     ],
     Components\DataTableWrapper::class => [
         'name' => 'site.data-table-wrapper',
-        'reserved' => true,
-        'internal' => true,
-        '@inside' => null,
-        '@client' => null,
-        'model' => ['static_page'],
-        '@attributes' => [],
-        '@nestedItems' => [],
-        'description' => 'Login widget',
-    ],
-    Components\NoImageSkeleton::class => [
-        'name' => 'no-image-skeleton',
         'reserved' => true,
         'internal' => true,
         '@inside' => null,
