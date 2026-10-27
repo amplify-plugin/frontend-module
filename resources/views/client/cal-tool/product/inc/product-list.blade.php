@@ -85,6 +85,7 @@
                         onclick="addSingleProductToOrder('{{ $key }}')">
                         Add to Cart
                     </button>
+                    <x-product-comparison-manage :product="$product" type="button" class="btn btn-sm btn-outline-primary m-0"/>
                 </div>
             </div>
         </div>

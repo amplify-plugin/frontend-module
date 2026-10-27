@@ -94,6 +94,7 @@
                         onclick="addSingleProductToOrder('{{ $key }}')"
                         data-toast-icon="icon-circle-check">Add to Cart
                     </button>
+                    <x-product-comparison-manage :product="$product" type="button" class="btn btn-sm btn-outline-primary m-0"/>
                     {{-- data-toast-message="successfully added to cart!" --}}
                 </div>
             </div>

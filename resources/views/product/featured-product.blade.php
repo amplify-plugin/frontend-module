@@ -27,9 +27,10 @@
                             {{ $product->old_price ?? '' }}
                         </span>
                     </span>
-                    @endif
-                </div>
+                @endif
+                <x-product-comparison-manage :product="$product" type="button" class="btn btn-sm btn-outline-primary mt-2"/>
             </div>
-        @endforeach
-    </div>
+        </div>
+    @endforeach
+</div>
 </div>

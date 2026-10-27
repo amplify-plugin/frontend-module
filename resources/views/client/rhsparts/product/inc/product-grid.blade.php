@@ -16,6 +16,7 @@
                 <img src="{{ $product->productImage ?? "" }}"
                     alt="Product">
             </a>
+            <x-product-comparison-manage :product="$product" type="button" class="btn btn-sm btn-outline-primary btn-block rounded-0 m-0"/>
 
             <div class="product-info">
                 <p class="mb-0">

@@ -115,6 +115,7 @@
                                 id="add_to_order_btn_{{ $idx }}">
                             {{ __('Add To Cart') }}
                         </button>
+                        <x-product-comparison-manage :product="$rp" type="button" class="btn btn-sm btn-outline-primary btn-block m-0"/>
                     </div>
                 </div>
             </div>
