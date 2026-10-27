@@ -89,6 +89,47 @@
         padding-bottom: 92px;
     }
 
+    .product-compare-bar__minimize {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid #d9dde3;
+        background: #fff;
+        color: #343a40;
+        border-radius: 6px;
+        font-size: 13px;
+        line-height: 1;
+        padding: 6px 8px;
+        white-space: nowrap;
+    }
+
+    .product-compare-bar__minimize-closed {
+        display: none;
+    }
+
+    #product-compare-bar.is-minimized .product-compare-bar__items,
+    #product-compare-bar.is-minimized .product-compare-bar__actions > :not(.product-compare-bar__minimize) {
+        display: none;
+    }
+
+    #product-compare-bar.is-minimized .product-compare-bar__minimize-open {
+        display: none;
+    }
+
+    #product-compare-bar.is-minimized .product-compare-bar__minimize-closed {
+        display: inline;
+    }
+
+    #product-compare-bar.is-minimized .product-compare-bar__inner {
+        justify-content: flex-end;
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    body.has-product-compare-bar.is-product-compare-bar-minimized {
+        padding-bottom: 56px !important;
+    }
+
     @media (max-width: 767px) {
         .product-compare-bar__inner {
             flex-wrap: wrap;
@@ -97,6 +138,11 @@
         .product-compare-bar__actions {
             width: 100%;
             justify-content: space-between;
+        }
+
+        #product-compare-bar.is-minimized .product-compare-bar__actions {
+            width: auto;
+            margin-left: auto;
         }
     }
 </style>
@@ -118,6 +164,16 @@
             @endif
         </div>
         <div class="product-compare-bar__actions">
+            <button type="button"
+                    class="product-compare-bar__minimize"
+                    data-compare-minimize
+                    aria-expanded="true"
+                    aria-label="{{ __('Minimize comparison') }}">
+                <span class="product-compare-bar__minimize-open" aria-hidden="true">&#9660;</span>
+                <span class="product-compare-bar__minimize-closed">
+                    {{ __('Compare') }} (<span data-compare-minimized-count>{{ count($items) }}</span>/{{ $max }})
+                </span>
+            </button>
             <span class="text-muted small text-nowrap">
                 <span data-compare-count>{{ count($items) }}</span>/{{ $max }}
             </span>
@@ -275,6 +331,7 @@
         syncButtons(items);
         renderBar(items);
         updateComparison(items);
+        applyCompareBarMinimize();
     }
 
     function applyOptimistically(action, product) {
@@ -359,8 +416,60 @@
         Amplify.compareProducts.delegatesToCompare = true;
     }
 
+    var compareBarMinimizeKey = 'amplify-product-compare-bar-minimized';
+
+    function isCompareBarMinimized() {
+        try {
+            return sessionStorage.getItem(compareBarMinimizeKey) === '1';
+        } catch (error) {
+            return false;
+        }
+    }
+
+    function applyCompareBarMinimize() {
+        var bar = document.getElementById('product-compare-bar');
+        if (!bar) {
+            return;
+        }
+
+        var minimized = isCompareBarMinimized() && !bar.hidden;
+        bar.classList.toggle('is-minimized', minimized);
+        document.body.classList.toggle('is-product-compare-bar-minimized', minimized);
+
+        var count = bar.querySelector('[data-compare-count]');
+        var minimizedCount = bar.querySelector('[data-compare-minimized-count]');
+        if (count && minimizedCount) {
+            minimizedCount.textContent = count.textContent;
+        }
+
+        var toggle = bar.querySelector('[data-compare-minimize]');
+        if (toggle) {
+            toggle.setAttribute('aria-expanded', minimized ? 'false' : 'true');
+            toggle.setAttribute('aria-label', minimized ? 'Expand comparison' : 'Minimize comparison');
+        }
+    }
+
+    function setCompareBarMinimized(minimized) {
+        try {
+            sessionStorage.setItem(compareBarMinimizeKey, minimized ? '1' : '0');
+        } catch (error) {}
+
+        applyCompareBarMinimize();
+    }
+
+    document.addEventListener('click', function (event) {
+        var toggle = event.target.closest('[data-compare-minimize]');
+        if (!toggle || !document.getElementById('product-compare-bar')) {
+            return;
+        }
+
+        event.preventDefault();
+        setCompareBarMinimized(!isCompareBarMinimized());
+    });
+
     install();
     document.addEventListener('DOMContentLoaded', install);
     window.addEventListener('load', install);
+    applyCompareBarMinimize();
 })();
 </script>
