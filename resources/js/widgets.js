@@ -106,9 +106,12 @@ window.Amplify = {
 
         this.initModules();
 
-        this.loadFallbackImage();
-
         window.dispatchEvent(new InitEvent(this.config));
+
+        setTimeout(() => {
+            Amplify.loadFallbackImage();
+        }, 300);
+
     },
 
     clientCode() {
@@ -2037,15 +2040,16 @@ window.Amplify = {
                         }
                     }
                 }
-            }
-            else {
+            } else {
                 imageElement.src = Amplify.config.fallbackImageSrc;
             }
 
-            imageElement.addEventListener('error', () => {
-                this.onerror = null;
-                this.src = Amplify.config.fallbackImageSrc;
-            });
+            const handleImageError = () => {
+                imageElement.removeEventListener('error', handleImageError);
+                imageElement.src = Amplify.config.fallbackImageSrc;
+            };
+
+            imageElement.addEventListener('error', handleImageError);
         });
     }
 }
