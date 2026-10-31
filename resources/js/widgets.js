@@ -2,7 +2,8 @@ import Swal from 'sweetalert2';
 import {AddToCartEvent, InitEvent, RemoveFromCartEvent, RequestQuoteEvent} from './events.js';
 import {QuickOrder} from './modules/quick-order.js';
 import {MediaQuery} from './modules/media-query.js';
-import {RecentlyViewed} from "./modules/recently-viewed";
+import {RecentlyViewed} from "./modules/recently-viewed.js";
+import {ExternalLink} from "./modules/external-link.js";
 
 window.swal = Swal.mixin({
     theme: 'bootstrap-4-light',
@@ -18,7 +19,8 @@ window.Amplify = {
     modules: {
         QuickOrder,
         MediaQuery,
-        RecentlyViewed
+        RecentlyViewed,
+        ExternalLink
     },
     config: {
         env: 'production',
@@ -104,11 +106,12 @@ window.Amplify = {
 
         this.initModules();
 
+        window.dispatchEvent(new InitEvent(this.config));
+
         setTimeout(() => {
             Amplify.loadFallbackImage();
-        }, 500);
+        }, 300);
 
-        window.dispatchEvent(new InitEvent(this.config));
     },
 
     clientCode() {
@@ -1822,7 +1825,6 @@ window.Amplify = {
                 cancelButtonText: 'Cancel',
                 customClass: {
                     confirmButton: 'btn btn-primary',
-                    cancelButton: 'btn btn-outline-secondary',
                 },
                 preConfirm: () => {
                     const orderNotes = document.getElementById('quote-order-notes')?.value ?? '';
@@ -2042,10 +2044,12 @@ window.Amplify = {
                 imageElement.src = Amplify.config.fallbackImageSrc;
             }
 
-            imageElement.onerror(() => {
-                imageElement.onerror = null;
+            const handleImageError = () => {
+                imageElement.removeEventListener('error', handleImageError);
                 imageElement.src = Amplify.config.fallbackImageSrc;
-            });
+            };
+
+            imageElement.addEventListener('error', handleImageError);
         });
     }
 }
