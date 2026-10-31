@@ -5,7 +5,7 @@ namespace Amplify\Frontend\Components;
 use Amplify\Frontend\Abstracts\BaseComponent;
 use Closure;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Validator;
+
 
 /**
  * @class Counter
@@ -32,7 +32,6 @@ class Counter extends BaseComponent
         parent::__construct();
 
         $this->entries = json_decode($items);
-
     }
 
     /**
@@ -48,6 +47,14 @@ class Counter extends BaseComponent
      */
     public function render(): View|Closure|string
     {
+        if (!empty($this->entries)) {
+            $this->entries = array_map(function ($entry) {
+                $entry->increment = ($entry->number < 100 || $entry->number < 1_000) ? 1 : floor($entry->number / 1_000);
+                $entry->format = $entry->format ?? 'decimal';
+                return $entry;
+            }, $this->entries);
+        }
+
         return view('widget::counter');
     }
 

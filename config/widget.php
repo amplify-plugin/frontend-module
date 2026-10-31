@@ -2805,6 +2805,15 @@ return [
                         'name' => 'suffix',
                         'type' => 'text',
                     ],
+                    [
+                        'name' => 'counter',
+                        'type' => 'select',
+                        'options' => [
+                            'decimal' => 'Normal(1, 100, 1,000, 1,000,000)',
+                            'compact' => 'Compact(1, 100, 1K, 1M)',
+                            'currency' => 'Currency($1, $100, $1,000, $1,000,000)',
+                        ]
+                    ],
                 ],
                 'value' => [
                     [
