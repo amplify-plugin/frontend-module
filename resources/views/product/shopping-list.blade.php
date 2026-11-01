@@ -22,7 +22,6 @@
                onclick="Amplify.addToNewOrderList({{ $productId }}, 'product','{{ $widgetTitle }}')">
                 <i class="icon-plus mr-1"></i> {{ __(ucfirst(strtolower("Add to new {$widgetTitle}"))) }}
             </a>
-            <div class="dropdown-divider"></div>
         @endif
         <div class="dropdown-item" id="shopping-list-items-container-{{ $index }}">
         </div>
@@ -57,18 +56,18 @@
                     },
                     success: function (response) {
                         $(container).empty();
-                        let html = '';
-
-                        $.each(response.data, function (key, value) {
-                            html += `<li class="text-primary text-truncate">
+                        if (response.data.length > 0) {
+                            let html = '';
+                            $.each(response.data, function (key, value) {
+                                html += `<li class="text-primary text-truncate">
                                     <a href="javascript:void(0);" class="text-decoration-none" title="${value.name}"
                                     onclick="Amplify.addToExistingOrderList(${value.id}, ${productId}, 'product', '${title}')">
                                     ${value.name} ${value.list_type}
                                     </a>
                                 </li>`;
-                        });
-
-                        $(container).append(`<ul class="mb-0">${html}</ul>`);
+                            });
+                            $(container).append(`<ul class="mb-0">${html}</ul>`);
+                        }
                     },
                     error: function (xhr) {
                         Amplify.alert(xhr.responseJSON?.message || xhr.statusText, title);
