@@ -34,15 +34,5 @@
                     :add-label="'Save to ' . $orderListLabel"
                     :widget-title="$orderListLabel"/>
         @endif
-        {{--                @if(class_exists(\Amplify\Wishlist\Widgets\WishlistButton::class) || $wishList)--}}
-        {{--                    <x-wishlist-button :product="$product" class="btn-wishlist mx-0 my-0 btn-sm">--}}
-        {{--                        <x-slot:add-label>--}}
-        {{--                            <i class="icon-bell"></i> Add to Wishlist--}}
-        {{--                        </x-slot>--}}
-        {{--                        <x-slot:remove-label>--}}
-        {{--                            <i class="icon-bell"></i> Remove from Wishlist--}}
-        {{--                        </x-slot>--}}
-        {{--                    </x-wishlist-button>--}}
-        {{--                @endif--}}
     @endif
 </div>

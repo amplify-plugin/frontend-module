@@ -212,6 +212,7 @@
 @use 'cart/item-actions';
 @use 'notice/slider';
 @use 'vendor/daterangepicker';
+@use 'utilities';
 
 .swal2-container {
     z-index: 99999 !important;

@@ -9,6 +9,8 @@
                         <i class="icon-circle-check" style="margin-top: -3px"></i> In Stock
                     </div>
                 @endif
+                @includeWhen(\Composer\InstalledVersions::isInstalled('amplify/wishlist'),
+                'widget::shop.product.wishlist-button')
             </x-slot:before>
         </x-product.product-gallery>
 

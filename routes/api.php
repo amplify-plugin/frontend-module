@@ -8,23 +8,21 @@ use Illuminate\Support\Facades\Route;
 /*
  * Customer Api Routes.
  */
-Route::group(['prefix' => 'api', 'as' => 'api.'], function () {
-    Route::get('/list-types', function (Request $request) {
-        try {
-            $listTypes = config('amplify.constant.favorite_list_type');
+Route::get('/list-types', function (Request $request) {
+    try {
+        $listTypes = config('amplify.constant.favorite_list_type');
 
-            if (!config('amplify.basic.enable_quick_list', true)) {
-                unset($listTypes['quick-list']);
-            }
-
-            return response()->json(['data' => $listTypes, 'message' => '', 'count' => count($listTypes)]);
-        } catch (Exception $e) {
-            return response()->json(['data' => [], 'message' => $e->getMessage(), 'count' => 0]);
+        if (!config('amplify.basic.enable_quick_list', true)) {
+            unset($listTypes['quick-list']);
         }
-    });
 
-    // Route::resource('/contacts', ContactResourceController::class);
-    Route::get('/product-details/rbs/{p_code}/{w_code?}', [ECommerceGatewayController::class, 'getPriceAvailability']);
-    Route::post('/cenpos-token', [CustomerOrderController::class, 'getCenposToken']);
-    Route::get('punchout/login', [PunchOutController::class, 'login'])->name('punchout.login');
+        return response()->json(['data' => $listTypes, 'message' => '', 'count' => count($listTypes)]);
+    } catch (Exception $e) {
+        return response()->json(['data' => [], 'message' => $e->getMessage(), 'count' => 0]);
+    }
 });
+
+// Route::resource('/contacts', ContactResourceController::class);
+Route::get('/product-details/rbs/{p_code}/{w_code?}', [ECommerceGatewayController::class, 'getPriceAvailability']);
+Route::post('/cenpos-token', [CustomerOrderController::class, 'getCenposToken']);
+Route::get('punchout/login', [PunchOutController::class, 'login'])->name('punchout.login');

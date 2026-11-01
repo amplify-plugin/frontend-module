@@ -1,13 +1,13 @@
 @if($productView =='list')
     <x-product.main-image :product="$product" :seo-path="$seoPath" :wrap-link="true">
-        @if(!$showDiscountBadge)
-            @if(!$product->in_stock)
-                <div class="product-badge product-start text-white bg-success"
-                     data-toggle="tooltip" title="Inventory Status">
-                    <i class="icon-circle-check" style="margin-top: -3px"></i> In Stock
-                </div>
-            @endif
+        @if(!$product->in_stock)
+            <div class="product-badge product-start text-white bg-success"
+                 data-toggle="tooltip" title="Inventory Status">
+                <i class="icon-circle-check" style="margin-top: -3px"></i> In Stock
+            </div>
         @endif
+        @includeWhen(\Composer\InstalledVersions::isInstalled('amplify/wishlist'),
+        'widget::shop.product.wishlist-button')
     </x-product.main-image>
     <div class="product-info">
         @if($showProductCode)
@@ -85,19 +85,20 @@
                 :index="$loop->index"
                 :allow-add-to-cart="$canAddToCart($product)"
                 :product-view="$productView"
+                :order-list="$showOrderList"
                 order-list-label="List"
         />
     </div>
 @else
     <x-product.main-image :product="$product" :seo-path="$seoPath" :wrap-link="true">
-        @if(!$showDiscountBadge)
-            @if(!$product->in_stock)
-                <div class="product-badge product-start text-white bg-success"
-                     data-toggle="tooltip" title="Inventory Status">
-                    <i class="icon-circle-check" style="margin-top: -3px"></i> In Stock
-                </div>
-            @endif
+        @if(!$product->in_stock)
+            <div class="product-badge product-start text-white bg-success"
+                 data-toggle="tooltip" title="Inventory Status">
+                <i class="icon-circle-check" style="margin-top: -3px"></i> In Stock
+            </div>
         @endif
+        @includeWhen(\Composer\InstalledVersions::isInstalled('amplify/wishlist'),
+        'widget::shop.product.wishlist-button')
     </x-product.main-image>
     @if($allowDisplayProductCode())
         <x-product.item-number
@@ -135,12 +136,12 @@
             </a>
         @endif
 
-            @if(!empty($product->qty_interval) && $product->qty_interval > 1)
-                <a href="#" class="tag"
-                   data-toggle="tooltip" title="Pack Size">
-                    {{ number_format($product->qty_interval) }}/Pack
-                </a>
-            @endif
+        @if(!empty($product->qty_interval) && $product->qty_interval > 1)
+            <a href="#" class="tag"
+               data-toggle="tooltip" title="Pack Size">
+                {{ number_format($product->qty_interval) }}/Pack
+            </a>
+        @endif
     </div>
     @if(!empty($product->ship_restriction))
         <p class="mb-2">
@@ -157,6 +158,7 @@
                 :index="$loop->index"
                 :allow-add-to-cart="$canAddToCart($product)"
                 :product-view="$productView"
+                :order-list="$showOrderList"
                 order-list-label="List"
                 class="pt-2"
         />

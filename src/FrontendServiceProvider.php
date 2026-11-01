@@ -7,6 +7,7 @@ use Amplify\Frontend\Http\Middlewares\CaptureIntendedUrl;
 use Amplify\Frontend\Http\Middlewares\ContactForceShippingAddressSelection;
 use Amplify\Frontend\Http\Middlewares\FrontendDisabled;
 use Amplify\Frontend\Providers\EventServiceProvider;
+use Amplify\Frontend\Providers\RouteServiceProvider;
 use Amplify\Frontend\Providers\ValidationServiceProvider;
 use Amplify\Frontend\Providers\WidgetServiceProvider;
 use Amplify\Frontend\Store\AnalyticsBus;
@@ -26,18 +27,19 @@ class FrontendServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(
-            __DIR__.'/../config/frontend.php',
+            __DIR__ . '/../config/frontend.php',
             'amplify.frontend'
         );
 
         $this->mergeConfigFrom(
-            __DIR__.'/../config/widget.php',
+            __DIR__ . '/../config/widget.php',
             'amplify.widget'
         );
 
         $this->app->register(EventServiceProvider::class);
         $this->app->register(ValidationServiceProvider::class);
         $this->app->register(WidgetServiceProvider::class);
+        $this->app->register(RouteServiceProvider::class);
         $this->app->singleton('analytics', fn() => AnalyticsBus::init());
     }
 
@@ -48,25 +50,6 @@ class FrontendServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
-
-        $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
-
-        if (! $this->app->runningInConsole()) {
-
-            $request = $this->app->make(Request::class);
-
-            if (! $request?->is('admin/*')) {
-                Route::bind('form_code', fn (string $value) => Form::whereCode($value)->firstOrFail());
-
-            }
-
-            Route::pushMiddlewareToGroup('frontend', ProtectAgainstSpam::class);
-            Route::pushMiddlewareToGroup('frontend', ContactForceShippingAddressSelection::class);
-            Route::pushMiddlewareToGroup('frontend', CaptureIntendedUrl::class);
-            Route::pushMiddlewareToGroup('frontend', FrontendDisabled::class);
-        }
-
         $this->registerScheduler();
 
         $this->registerMediaQueryMacros();

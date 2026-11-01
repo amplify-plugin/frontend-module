@@ -6,8 +6,6 @@ use Amplify\ErpApi\Facades\ErpApi;
 use Amplify\ErpApi\Wrappers\ProductPriceAvailability;
 use Amplify\Frontend\Abstracts\BaseComponent;
 use Amplify\System\Backend\Enums\ProductAvailabilityEnum;
-use Amplify\System\Backend\Models\OrderList;
-use Amplify\System\Backend\Models\OrderListItem;
 use Amplify\System\Backend\Models\Product;
 use Amplify\System\Sayt\Classes\ItemRow;
 use Closure;
@@ -20,35 +18,21 @@ use Illuminate\Support\Str;
  */
 class ProductList extends BaseComponent
 {
-    /**
-     * @var Collection
-     */
-    public $orderList;
-
     public function __construct(
-        public bool $showDiscountBadge = false,
-        public bool $showFavourite = false,
-        public bool $showPublicPrice = false,
-        public bool $showCartButton = false,
-        public bool $showProductCode = false,
-        public bool $showProductBrand = false,
-        public bool $skuQuickOrderOption = false,
+        public bool   $showWishlist = true,
+        public bool   $showOrderList = true,
+        public bool   $showPublicPrice = false,
+        public bool   $showCartButton = false,
+        public bool   $showProductCode = false,
+        public bool   $showProductBrand = false,
+        public bool   $skuQuickOrderOption = false,
         public string $cartButtonLabel = 'Add To Cart',
         public string $detailButtonLabel = 'View Details',
         public string $alertMessageUnauthenticated = '',
-        public int $gridItemsPerLine = 5,
-        public bool $showPaginationOnTop = false
+        public int    $gridItemsPerLine = 5,
+        public bool   $showPaginationOnTop = false
     ) {
         parent::__construct();
-
-        if (customer_check() & $this->showFavourite) {
-            $this->orderList = OrderList::with('orderListItems')
-                ->whereCustomerId(customer()->getKey())
-                ->get();
-        } else {
-            $this->orderList = new Collection;
-        }
-
     }
 
     /**
@@ -100,9 +84,6 @@ class ProductList extends BaseComponent
                 'qty' => $dbProduct?->min_order_qty ?? 1,
             ];
 
-            $orderList = $this->productExistOnFavorite($product->Amplify_Id, $product);
-            $product->exists_in_favorite = $orderList != null;
-            $product->favorite_list_id = $orderList->id ?? null;
             $product->mpn = $dbProduct->manufacturer ?? 'N/A';
             $product->in_stock = $dbProduct->in_stock ?? false;
             $product->is_ncnr = $dbProduct?->is_ncnr ?? false;
@@ -187,14 +168,9 @@ class ProductList extends BaseComponent
         return $this->showProductBrand;
     }
 
-    public function allowFavourites(): bool
-    {
-        return $this->showFavourite;
-    }
-
     public function displayDiscountBadge(): bool
     {
-        return $this->showDiscountBadge;
+        return $this->showWishlist;
     }
 
     public function allowQuickView(): bool
@@ -247,18 +223,5 @@ class ProductList extends BaseComponent
     public function isShowMultipleWarehouse($product): bool
     {
         return ! $this->isMasterProduct($product) && erp()->allowMultiWarehouse() && havePermissions(['checkout.choose-warehouse']);
-    }
-
-    protected function productExistOnFavorite($id, &$product): ?OrderListItem
-    {
-        if ($this->orderList && $this->showFavourite) {
-            foreach ($this->orderList as $orderList) {
-                if ($item = $orderList->orderListItems->firstWhere('product_id', $id)) {
-                    return $item;
-                }
-            }
-        }
-
-        return null;
     }
 }
