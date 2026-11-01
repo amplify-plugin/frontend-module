@@ -56,6 +56,7 @@
                     },
                     success: function (response) {
                         $(container).empty();
+                        $(container).removeAttr('style');
                         if (response.data.length > 0) {
                             let html = '';
                             $.each(response.data, function (key, value) {
@@ -67,6 +68,8 @@
                                 </li>`;
                             });
                             $(container).append(`<ul class="mb-0">${html}</ul>`);
+                        } else {
+                            $(container).css({ height: '0', padding: '0'});
                         }
                     },
                     error: function (xhr) {
