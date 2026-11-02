@@ -16,13 +16,10 @@ class Index extends BaseComponent
      * Create a new component instance.
      */
     public function __construct(
-        public string $addressNameLabel = '',
-        public string $addressLineLabel = '',
-        public string $zipCodeLabel = '',
-        public string $cityLabel = '',
-        public string $stateLabel = '',
-        public string $countryLabel = '',
-        public string $addressCodeLabel = ''
+        public bool $allowCreate = true,
+        public bool $allowUpdate = true,
+        public bool $allowDelete = true,
+        public string $widgetTitle = 'Address',
     ) {
         parent::__construct();
 
@@ -45,16 +42,6 @@ class Index extends BaseComponent
 
         $search = request('search');
 
-        $columns = [
-            'address_code' => (strlen($this->addressCodeLabel) != 0),
-            'address_name' => (strlen($this->addressNameLabel) != 0),
-            'address_line' => (strlen($this->addressLineLabel) != 0),
-            'zip_code' => (strlen($this->zipCodeLabel) != 0),
-            'city' => (strlen($this->cityLabel) != 0),
-            'state' => (strlen($this->stateLabel) != 0),
-            'country' => (strlen($this->countryLabel) != 0),
-        ];
-
         $addresses = CustomerAddress::whereCustomerId(customer()->getKey())
             ->whereNotNull('address_code')
             ->where(function ($query) use ($search) {
@@ -70,6 +57,9 @@ class Index extends BaseComponent
             })
             ->latest()->paginate($perPage)->withQueryString();
 
-        return view('widget::customer.address.index', compact('columns', 'addresses'));
+        $useAddress = session('ship_to_address');
+
+        return view('widget::customer.address.index',
+            compact( 'addresses', 'perPage', 'search', 'useAddress'));
     }
 }

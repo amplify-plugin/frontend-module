@@ -1391,7 +1391,11 @@ window.Amplify = {
             })
             .then(function (result) {
                 if (result.isConfirmed) {
-                    Amplify.notify('success', result.value.message, title);
+
+                    if (result.value.hasOwnProperty('message')) {
+                        Amplify.notify('success', result.value.message, title);
+                    }
+
                     if (redirect) {
                         setTimeout(() => {
                             const {origin, pathname} = window.location;

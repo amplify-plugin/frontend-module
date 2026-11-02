@@ -180,7 +180,7 @@ class AddressController extends Controller
 
             if ($request->expectsJson()) {
                 return $this->apiResponse(true, $message, 200, [
-                    'erp'=> $erpAddress,
+                    'erp' => $erpAddress,
                 ]);
             }
 
@@ -258,7 +258,7 @@ class AddressController extends Controller
     }
 
     /**
-     * @return RedirectResponse
+     * @return JsonResponse
      *                          This method deletes a single address fromt the database
      */
     public function destroy(CustomerAddress $address)
@@ -274,12 +274,14 @@ class AddressController extends Controller
 
             $address->delete();
 
-            Session::flash('success', 'You have successfully deleted the address!');
-        } catch (\Throwable $th) {
-            Session::flash('error', 'Sorry something went wrong...');
-        }
+            return $this->apiResponse(true, 'You have successfully deleted the address!');
 
-        return back();
+        } catch (\Throwable $th) {
+
+            report($th);
+
+            return $this->apiResponse(false, $th->getMessage(), 500);
+        }
     }
 
     /**
