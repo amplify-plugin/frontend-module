@@ -74,10 +74,13 @@
                         @endif
                     </div>
                     <div class="address-buttons">
-                        <a href="{{ route('frontend.session.shipping-address.store', $address->address_code) }}"
-                           class="btn btn-sm btn-secondary">
-                            <i class="pe-7s-star"></i> Set Default
-                        </a>
+                        @if(!$isSelected)
+                            <a href="{{ route('frontend.session.shipping-address.store', $address->address_code) }}"
+                               class="btn btn-sm btn-secondary">
+                                <i class="pe-7s-star"></i> Set Default
+                            </a>
+                        @endif
+
                         @if($allowUpdate && customer(true)->can('address.update'))
                             <button class="btn btn-sm btn-secondary">
                                 <i class="pe-7s-note"></i> Edit
