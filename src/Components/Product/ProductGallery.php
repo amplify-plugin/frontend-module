@@ -54,6 +54,7 @@ class ProductGallery extends BaseComponent
         return json_encode([
             'items' => 3,
             'nav' => true,
+            'center' => true,
             'dots' => true,
             'loop' => false,
             'autoplay' => false,
