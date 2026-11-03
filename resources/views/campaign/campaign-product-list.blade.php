@@ -76,7 +76,6 @@
                                 <button class="btn btn-outline-primary btn-block btn-sm"
                                         onclick="addToCartCampaignProduct({{ $key }})">Add to Cart
                                 </button>
-                                <x-product-comparison-manage :product="$campaign_item" type="button" class="btn btn-sm btn-outline-primary m-0"/>
                             </div>
                         @else
                             <h4 class="product-title">
@@ -164,7 +163,6 @@
                                         onclick="addToCartCampaignProduct({{ $key }})">
                                     Add to Cart
                                 </button>
-                                <x-product-comparison-manage :product="$campaign_item" type="button" class="btn btn-sm btn-outline-primary m-0"/>
                             </div>
                         @else
                             <h4 class="product-title">

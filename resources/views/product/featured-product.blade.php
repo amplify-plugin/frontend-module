@@ -28,7 +28,6 @@
                         </span>
                     </span>
                 @endif
-                <x-product-comparison-manage :product="$product" type="button" class="btn btn-sm btn-outline-primary mt-2"/>
             </div>
         </div>
     @endforeach

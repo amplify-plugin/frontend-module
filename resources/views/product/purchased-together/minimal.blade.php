@@ -40,8 +40,6 @@
                     :detail-label="$detailButtonLabel" :add-to-cart="$showCartBtn && !$isMasterProduct($product)" :order-list="$showOrderList"
                     :order-list-label="$orderListLabel" />
             </div>
-        @else
-            <x-product-comparison-manage :product="$product" type="button" class="btn btn-sm btn-outline-primary m-0"/>
         @endif
     </div>
 </article>
