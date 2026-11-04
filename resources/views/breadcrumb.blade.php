@@ -12,7 +12,7 @@
                 </h1>
             </div>
         @endif
-        <div class="column col-md">
+        <div @class(["column", 'col-12' => $hideTitle, 'col-md' => !$hideTitle])>
             <ul class="breadcrumbs cs-truncate-1">
                 @foreach($breadcrumbs as $breadcrumb)
                     @if($breadcrumb != $breadcrumbs->last())
