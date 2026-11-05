@@ -11,6 +11,7 @@
         @endif
     @else
         @if($allowAddToCart)
+            {{ $slot ?? '' }}
             <x-cart.quantity-update :product="$product" :index="$index"/>
             <button
                     data-warehouse="{{ $defaultWarehouse }}"

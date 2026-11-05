@@ -77,6 +77,7 @@ class ProductDetail extends BaseComponent
         $Product->product_image = $dbProduct->productImage;
         $Product->allow_back_order = $dbProduct->allow_back_order;
         $Product->manufacturer = $dbProduct?->manufacturerRelation ?? null;
+        $Product->brand = $dbProduct?->brand ?? null;
         $Product->specifications = $dbProduct?->specifications ?? [];
         $Product->features = $dbProduct?->features ?? [];
 
@@ -133,7 +134,6 @@ class ProductDetail extends BaseComponent
         return view('widget::shop.product-detail', [
             'product' => $Product,
             'customer' => $erpCustomer,
-            'productImage' => $dbProduct->productImage,
             'eaAttributes' => $easSearchData->hasAttributes() ? $easSearchData->getAttributes() : [],
         ]);
     }
