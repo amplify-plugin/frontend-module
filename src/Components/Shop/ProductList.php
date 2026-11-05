@@ -189,6 +189,11 @@ class ProductList extends BaseComponent
     }
 
     public function canAddToCart($product): bool {
+
+        if ($this->showCartButton) {
+            return true;
+        }
+
         if (!customer_check() && config('amplify.frontend.guest_add_to_cart')) {
             return true;
         }

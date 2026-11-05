@@ -1,5 +1,5 @@
 <div {!! $htmlAttributes !!}>
-    <div @class(['container-collapse-p0', 'container-fluid' => theme_option('full_screen_header'),  'container' => !theme_option('full_screen_header')])>
+    <div @class(['container-fluid' => theme_option('full_screen_header'),  'container' => !theme_option('full_screen_header')])>
         <div class="row">
         @if(!$hideTitle)
             <div class="column col-md">

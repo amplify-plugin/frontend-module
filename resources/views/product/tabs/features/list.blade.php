@@ -3,10 +3,17 @@
 @endphp
 
 <div @class(["col-md-6", "d-none" => empty($group?->group_items) ])>
-    <h4>{{ $group->group_name ?? '' }}</h4>
-    <ul class="pl-0">
+    @if(!empty( $group->group_name))
+        <h4>{{ $group->group_name ?? '' }}</h4>
+    @endif
+    <ul>
         @foreach ($group?->group_items ?? [] as $item)
-            <li class="d-flex justify-content-start gap-2"><b>{!! $item->name ?? null  !!} :</b> {!! $item->value ?? null !!}</li>
+            <li>
+                @if(!empty($item->name))
+                    <b class="mr-2">{!! $item->name ?? null  !!}:</b>
+                @endif
+                {!! $item->value ?? null !!}
+            </li>
         @endforeach
     </ul>
 </div>

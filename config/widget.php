@@ -3262,12 +3262,12 @@ return [
         '@inside' => null,
         '@attributes' => [
             [
-                'name' => ':show-discount-badge',
+                'name' => ':show-wishlist',
                 'type' => 'boolean',
                 'value' => false,
             ],
             [
-                'name' => ':show-favourite',
+                'name' => ':show-order-list',
                 'type' => 'boolean',
                 'value' => false,
             ],
@@ -3308,7 +3308,7 @@ return [
                 'value' => 'View Details',
             ],
             [
-                'name' => 'grid-items-per-line',
+                'name' => ':grid-items-per-line',
                 'type' => 'number',
                 'value' => 5,
                 'hint' => 'On grid view number of the cards display in one line',
