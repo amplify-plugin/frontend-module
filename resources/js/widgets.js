@@ -1976,6 +1976,10 @@ window.Amplify = {
     },
 
     compareProducts(target, product, action, attach = null) {
+        if (window.AmplifyCompare?.request) {
+            return window.AmplifyCompare.request(target, product, action, attach);
+        }
+
         const defaultContent = target?.innerHTML ?? '';
 
         $.ajax(this.config.url.productCompare, {
@@ -2053,3 +2057,5 @@ window.Amplify = {
         });
     }
 }
+
+window.Amplify.compareProducts.synced = true;

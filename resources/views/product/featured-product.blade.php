@@ -27,9 +27,9 @@
                             {{ $product->old_price ?? '' }}
                         </span>
                     </span>
-                    @endif
-                </div>
+                @endif
             </div>
-        @endforeach
-    </div>
+        </div>
+    @endforeach
+</div>
 </div>

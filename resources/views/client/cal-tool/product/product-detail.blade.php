@@ -204,6 +204,7 @@
                                     onclick="addSingleProductToOrder('1')" aria-label="Add to Cart">
                                 Add to Cart
                             </button>
+                            <x-product-comparison-manage :product="$product" type="button" class="btn btn-outline-primary"/>
                         </div>
 
                         @if (config('amplify.prop65.prop65_status'))
@@ -219,10 +220,11 @@
                 </div>
 
                 @if ($isMasterProduct($product))
-                    <div>
+                    <div class="d-flex gap-2">
                         <button class="btn btn-outline-danger" data-toggle="modal" data-target="#branchModal"
                                 type="button">Branch Availability
                         </button>
+                        <x-product-comparison-manage :product="$product" type="button" class="btn btn-outline-primary"/>
                     </div>
                 @endif
             </div>

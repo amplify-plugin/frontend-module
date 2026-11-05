@@ -1,3 +1,3 @@
-<{{$element}} {!! $htmlAttributes !!}>
-{{ $slot ?? '' }}
-</{{$element}}>
+<{{ $element }} {!! $htmlAttributes !!}>
+    <span data-compare-label>{{ $selected ? __('Compared') : __('Compare') }}</span>
+</{{ $element }}>
