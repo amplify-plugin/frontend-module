@@ -42,4 +42,5 @@ return [
     ],
     'cart_item_badge_style' => 'items',
     'show_parent_product_for_sku' => true,
+    'customer_message_admin_ids' => [],
 ];

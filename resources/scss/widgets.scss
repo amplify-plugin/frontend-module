@@ -18,6 +18,7 @@
 @use "customer/ticket/list";
 @use "customer/ticket/create";
 @use "customer/ticket/conversation";
+@use "customer/message";
 @use "customer/invoice/list" as list2;
 @use "customer/invoice/details";
 @use "customer/account-summary";
