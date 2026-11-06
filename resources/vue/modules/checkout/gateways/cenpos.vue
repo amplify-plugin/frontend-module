@@ -97,6 +97,10 @@ async function captureCreditCard() {
     verifyingpost: siteVerifyToken.value,
   };
 
+  if (config.css_url?.toString()?.length > 0) {
+    payload.customUrlCss = config.css_url.toString();
+  }
+
   let encoded = new URLSearchParams(payload).toString();
 
   store.selectPaymentMethod('credit_card');
@@ -106,6 +110,9 @@ async function captureCreditCard() {
     params: encoded,
     width: '100%',
     sessionToken: false,
+    openComplete:() => {
+      alert("Cenpos Initialization Completed");
+    },
     success: (response) => {
       store.payment.credentials.card_number = response.CardNumber;
       store.payment.credentials.card_expiry = response.CardExpirationDate;
