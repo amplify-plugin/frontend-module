@@ -1,5 +1,5 @@
 @pushonce('plugin-style')
-    <link type="text/css" href="{{ asset('vendor/bs-stepper/css/bs-stepper.min.css') }}" rel="stylesheet"/>
+    <link type="text/css" href="{{ mix('vendor/bs-stepper/css/bs-stepper.min.css', 'vendor/widget') }}" rel="stylesheet"/>
 @endpushonce
 
 <div class="bs-stepper" id="customer-verification-steps">
@@ -222,7 +222,7 @@
 </div>
 
 @pushonce('plugin-script')
-    <script src="{{ asset('vendor/bs-stepper/js/bs-stepper.min.js') }}"></script>
+    <script src="{{ mix('vendor/bs-stepper/js/bs-stepper.min.js', 'vendor/widget') }}"></script>
     <script>
         function verifyCustomerInformation(event, element) {
             event.preventDefault();
