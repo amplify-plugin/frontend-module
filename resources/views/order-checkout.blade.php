@@ -35,9 +35,7 @@
 @pushonce('plugin-script')
     <script src="{{ asset('packages/select2/dist/js/select2.min.js') }}"></script>
 @endpushonce
-@pushonce('plugin-script')
-    <script src="{{ asset('vendor/jp-card/credit-card.min.js') }}"></script>
-@endpushonce
+
 @pushonce('plugin-script')
     <script src="{{ mix("js/backend.js", "vendor/backend") }}"></script>
 @endpushonce
