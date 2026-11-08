@@ -41,6 +41,8 @@ class PublishWidgetAssets {
 mix.setResourceRoot('resources')
     .setPublicPath('public')
     .copyDirectory('resources/img', 'public/img')
+    .copyDirectory('resources/backgrounds', 'public/backgrounds')
+    .copyDirectory('resources/fonts', 'public/fonts')
     .sass('resources/scss/widgets.scss', 'public/css/widgets.css')
     .js('resources/js/widgets.js', 'public/js/widgets.js')
     .js('resources/js/google-analytics.js', 'public/js/google-analytics.js')
