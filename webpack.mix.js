@@ -15,6 +15,7 @@ const webpack = require('webpack');
  |
  */
 
+
 class PublishWidgetAssets {
     apply(compiler) {
         compiler.hooks.done.tap('RunCommandIfArtisanExists', (stats) => {
@@ -42,6 +43,9 @@ class PublishWidgetAssets {
 mix.setResourceRoot('resources')
     .setPublicPath('public')
     .copyDirectory('resources/img', 'public/img')
+    .copyDirectory('resources/backgrounds', 'public/backgrounds')
+    .copyDirectory('resources/fonts', 'public/fonts')
+    .copyDirectory('resources/js/vendor/bs-stepper', 'public/vendor/bs-stepper')
     .sass('resources/scss/widgets.scss', 'public/css/widgets.css')
     .js('resources/js/widgets.js', 'public/js/widgets.js')
     .js('resources/js/google-analytics.js', 'public/js/google-analytics.js')
