@@ -18,6 +18,7 @@ export const useCheckoutStore = defineStore('checkout', {
             countries: [],
             states: [],
             shipOptions: {},
+            selectedShippingMethod: null,
             creditCardToken: '',
             validationError: '',
             verifyPoNumber: false,

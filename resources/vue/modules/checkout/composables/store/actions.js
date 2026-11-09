@@ -288,7 +288,7 @@ export default {
 
                     return {
                         success: false,
-                        data: error.response.data,
+                        data: error.response?.data ?? {},
                         error: error.response?.data?.message ?? error.message
                     };
                 }
@@ -350,7 +350,7 @@ export default {
                 } catch (error) {
                     return {
                         success: false,
-                        data: error.response.data,
+                        data: error.response?.data ?? {},
                         error: error.response?.data?.message ?? error.message
                     };
                 }
@@ -455,8 +455,8 @@ export default {
                 } catch (error) {
                     return {
                         success: false,
-                        code: error?.response.status ?? 500,
-                        data: error?.response.data ?? {},
+                        code: error?.response?.status ?? 500,
+                        data: error?.response?.data ?? {},
                         error: error?.response?.data?.message ?? error.message
                     };
                 }
@@ -573,9 +573,19 @@ export default {
             let gateway = result.value?.data ?? null;
 
             if (gateway) {
-                let configuration = await this.decryptPaymentConfig(gateway);
+                try {
+                    let configuration = await this.decryptPaymentConfig(gateway);
 
-                this.fillPaymentGateway(configuration);
+                    this.fillPaymentGateway(configuration);
+                } catch (error) {
+                    console.error('Failed to decrypt payment configuration:', error);
+
+                    window.Amplify.alert(
+                        error?.message ?? 'Failed to load payment gateway.',
+                        'Checkout',
+                        {icon: 'error'}
+                    );
+                }
             }
 
             return result.value.success;
@@ -598,6 +608,13 @@ export default {
     },
 
     async deriveKey(secret) {
+        if (!window.isSecureContext || !window.crypto?.subtle) {
+            throw new Error(
+                'Web Crypto is unavailable because this page was loaded over an insecure origin (http). '
+                + 'Payment decryption requires HTTPS or localhost.'
+            );
+        }
+
         const hash = await crypto.subtle.digest(
             'SHA-256',
             new TextEncoder().encode(secret)
@@ -704,7 +721,7 @@ export default {
 
                     let message = error.response?.data?.message ?? error.message;
 
-                    if (error.response.status == 400) {
+                    if (error.response?.status == 400) {
                         let errors = error.response?.data?.errors ?? [];
                         if (errors.length > 0) {
                             message = `<p>${message}</p>`
@@ -717,7 +734,7 @@ export default {
 
                     return {
                         success: false,
-                        data: error.response.data,
+                        data: error.response?.data ?? {},
                         error: message
                     }
                 }
@@ -754,12 +771,33 @@ export default {
     },
 
     getCheckoutRequestPayload(type = 'order', data = {}) {
+
+        // Resolve the chosen carrier option. `selectedShippingMethod` is only
+        // set when the radio is clicked; otherwise derive it from the
+        // selected `shipping.method` shipvia code so the payload always
+        // satisfies the required code/label/amount rules.
+        let selectedMethod = this.selectedShippingMethod ?? null;
+
+        if (!selectedMethod && this.shipping.method) {
+            for (const methods of Object.values(this.shipOptions ?? {})) {
+                const match = (methods ?? []).find(m => m.shipvia === this.shipping.method);
+                if (match) {
+                    selectedMethod = match;
+                    break;
+                }
+            }
+        }
+
+        const shipAmount = parseFloat(
+            selectedMethod?.amount ?? this.review.ship_charge ?? 0
+        );
+
         return {
             amounts: {
                 subtotal: this.review.sub_total,
                 shipping: this.review.ship_charge,
                 tax: this.review.tax_amount,
-                total: this.review.tax_amount,
+                total: this.review.total ?? this.review.sub_total,
                 additional: [
                     {
                         field: 'hazmat_charge',
@@ -813,9 +851,9 @@ export default {
                 zip_code: this.shipping.zipCode,
                 country: this.shipping.country,
                 method: {
-                    code: this.selectedShippingMethod.shipvia ?? null,
-                    label: this.selectedShippingMethod.name ?? null,
-                    amount: this.selectedShippingMethod.amount ?? null,
+                    code: selectedMethod?.shipvia ?? this.shipping.method ?? null,
+                    label: selectedMethod?.name ?? this.shipping.method ?? null,
+                    amount: Number.isFinite(shipAmount) ? shipAmount : 0,
                 },
                 instructions: this.shipping.instructions ?? null,
                 additional: [
@@ -842,13 +880,15 @@ export default {
                 phone: this.payment.phone,
                 additional: this.payment.additional,
             },
-            notes: [
-                {
-                    subject: 'Order Note',
-                    type: 'INT',
-                    note: this.review?.notes ?? null,
-                }
-            ]
+            notes: (this.review?.notes ?? '').toString().trim() !== ''
+                ? [
+                    {
+                        subject: 'Order Note',
+                        type: 'INT',
+                        note: this.review.notes,
+                    }
+                ]
+                : []
         };
     },
 
