@@ -15,7 +15,6 @@ const webpack = require('webpack');
  |
  */
 
-
 class PublishWidgetAssets {
     apply(compiler) {
         compiler.hooks.done.tap('RunCommandIfArtisanExists', (stats) => {

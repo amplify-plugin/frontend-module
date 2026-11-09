@@ -34,12 +34,12 @@
                 @php $idx = $loop->index + 2; @endphp
                 <li class="product-sku-item list-group-item">
                     <div class="w-100 d-flex  align-items-sm-center gap-3 flex-column flex-sm-row">
-                        <div class="product-img"
+                        <a class="product-img" href="{{ frontendSingleProductURL($rp ?? '#') }}"
                              style="height: 105px; width: 120px; border-radius: 8px; padding: 8px;">
                             <img src="{{ $rp?->productImage?->main ?? asset(config('amplify.frontend.fallback_image_path')) }}"
                                  alt="Product"
                                  style="height: 100%; width: 100%; object-fit: contain;">
-                        </div>
+                        </a>
                         <div class="product-info">
                             <a href="{{ frontendSingleProductURL($rp ?? '#') }}"
                                target="_blank" class="text-decoration-none">

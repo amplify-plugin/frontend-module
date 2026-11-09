@@ -38,7 +38,8 @@ window.Amplify = {
             favourites: '/favourites',
             orderLists: '/order-lists',
             orderExport: '/orders/export',
-        }
+        },
+        allowedHosts: []
     },
     cart: {},
     initialized: false,
