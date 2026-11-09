@@ -271,6 +271,7 @@ trait HasDynamicPage
                 'current' => request()->screen()
             ],
             'fallbackImageSrc' => $this->fallBackImageSrc(),
+            'allowedHosts' => config('amplify.frontend.allowed_external_host', []),
         ];
 
 
