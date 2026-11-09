@@ -14,7 +14,6 @@ const path = require('path');
  |
  */
 
-
 class PublishWidgetAssets {
     apply(compiler) {
         compiler.hooks.done.tap('RunCommandIfArtisanExists', (stats) => {
