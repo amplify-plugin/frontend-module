@@ -22,6 +22,7 @@ use Amplify\Frontend\Http\Controllers\Auth\RequestOnlineAccessController;
 use Amplify\Frontend\Http\Controllers\Auth\VerifyEmailController;
 use Amplify\Frontend\Http\Controllers\BrandIndexController;
 use Amplify\Frontend\Http\Controllers\CampaignController;
+use Amplify\Frontend\Http\Controllers\CartController;
 use Amplify\Frontend\Http\Controllers\ContactLoginController;
 use Amplify\Frontend\Http\Controllers\CustomerPartNumberController;
 use Amplify\Frontend\Http\Controllers\DashboardController;
@@ -50,7 +51,6 @@ use Amplify\Frontend\Http\Controllers\RecentlyViewedController;
 use Amplify\Frontend\Http\Controllers\ShippingController;
 use Amplify\Frontend\Http\Controllers\ShopSearchController;
 use Amplify\Frontend\Http\Middlewares\CustomerDefaultValues;
-use Amplify\System\Backend\Http\Controllers\CartController;
 use Amplify\System\Backend\Http\Controllers\CenPosPaymentController;
 use Amplify\System\Backend\Http\Controllers\CustomerOrderController;
 use Illuminate\Support\Facades\Redirect;
@@ -99,11 +99,11 @@ Route::name('shop.')->prefix(config('amplify.frontend.shop_page_prefix'))
         Route::get('/warehouse-selection-view/{code}', 'getWarehouseSelectionView')->name('warehouseSelectionView');
     });
 
-Route::apiResource('carts', \Amplify\Frontend\Http\Controllers\CartController::class)
+Route::apiResource('carts', CartController::class)
     ->where(['cart' => '[0-9]+'])
     ->except('update', 'show', 'destroy');
 
-Route::prefix('carts')->controller(\Amplify\Frontend\Http\Controllers\CartController::class)->name('carts.')->group(function () {
+Route::prefix('carts')->controller(CartController::class)->name('carts.')->group(function () {
     Route::patch('/', 'update')->name('update');
     Route::delete('/', 'destroy')->name('destroy');
     Route::get('show', 'show')->name('show');
@@ -116,7 +116,7 @@ Route::prefix('carts')->controller(\Amplify\Frontend\Http\Controllers\CartContro
 // lookup a single product code (used by quick-order widget)
 Route::post('carts/submit-order', \Amplify\Frontend\Http\Controllers\CartSubmitOrderController::class)->name('carts.submit-order');
 Route::post('carts/submit-quote', \Amplify\Frontend\Http\Controllers\CartSubmitQuoteController::class)->name('carts.submit-quote');
-Route::post('/remove/carts', [\Amplify\Frontend\Http\Controllers\CartController::class, 'removeCarts'])->name('frontend.remove-carts');
+Route::post('/remove/carts', [CartController::class, 'removeCarts'])->name('frontend.remove-carts');
 Route::get('checkout', \Amplify\Frontend\Http\Controllers\Checkout\IndexController::class)->name('checkout');
 Route::post('checkout', \Amplify\Frontend\Http\Controllers\Checkout\StoreController::class);
 
@@ -139,8 +139,6 @@ Route::post('get/shipping/option', [ShippingController::class, 'options'])->name
 Route::get('related-products/{product}', [ProductDetailController::class, 'relatedProducts'])->name('shop.relatedProducts');
 Route::post('order/quick-order-file-upload',
     [CustomerOrderController::class, 'quickOrderFileUpload'])->name('order.quick-order-file-upload');
-
-Route::post('/cart/summary', [CartController::class, 'getCartSummary'])->name('cart.summary');
 
 Route::post('/order/check-order-list-name',
     [CustomerOrderController::class, 'checkOrderListName'])->name('order.order-list.check-name-availability');
