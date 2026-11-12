@@ -52,9 +52,9 @@ class AddressController extends Controller
         hasAccessOrFail('address.create');
         $validated = $request->validated();
 
-        // STV Client: Auto-generate unique address code from first address line
+        // Auto-generate unique address code from first address line
         // Example: "123 Main Street" → "123", check duplicates → "123-1", "123-2", etc.
-        if (config('amplify.client_code') === 'STV') {
+        if (empty($validated['address_code'])) {
             // Step 1: Extract the first address line and trim whitespace
             // Input: "  123 Main Street  " → Output: "123 Main Street"
             $address1 = trim($validated['address_1'] ?? '');
@@ -167,6 +167,24 @@ class AddressController extends Controller
                     'city' => $erpAddress->ShipToCity,
                     'zip_code' => $erpAddress->ShipToZipCode,
                     'phone' => $erpAddress->ShipToPhoneNumber ?? $validated['phone'] ?? null,
+                ]);
+            } elseif (!CustomerAddress::where('customer_id', customer()->getKey())
+                ->where('address_code', $validated['address_code'])
+                ->exists()) {
+                // The ERP adapter did not return a ship-to number (e.g. default
+                // adapter) so persist the address locally from the submitted data.
+                CustomerAddress::create([
+                    'customer_id' => customer()->getKey(),
+                    'address_code' => $validated['address_code'],
+                    'address_name' => $validated['address_name'] ?? null,
+                    'address_1' => $validated['address_1'],
+                    'address_2' => $validated['address_2'] ?? null,
+                    'address_3' => $validated['address_3'] ?? null,
+                    'country_code' => $validated['country_code'],
+                    'state' => $validated['state'] ?? null,
+                    'city' => $validated['city'],
+                    'zip_code' => $validated['zip_code'],
+                    'phone' => $validated['phone'] ?? null,
                 ]);
             }
 

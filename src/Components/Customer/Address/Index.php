@@ -59,7 +59,9 @@ class Index extends BaseComponent
 
         $useAddress = session('ship_to_address');
 
+        $defaultAddressId = customer()->default_address_id;
+
         return view('widget::customer.address.index',
-            compact( 'addresses', 'perPage', 'search', 'useAddress'));
+            compact('addresses', 'perPage', 'search', 'useAddress', 'defaultAddressId'));
     }
 }

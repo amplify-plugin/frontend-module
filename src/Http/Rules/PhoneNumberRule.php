@@ -17,12 +17,16 @@ class PhoneNumberRule implements ValidationRule
             return;
         }
 
-        if (! ctype_digit($value)) {
+        // Strip separators the form input allows (spaces, hyphens,
+        // parentheses, slashes) before validating the digits.
+        $digits = preg_replace('/[\s\-\(\)\/]/', '', $value);
+
+        if ($digits === '' || ! ctype_digit($digits)) {
             $fail('Phone number must contain digits only.');
             return;
         }
 
-        if (strlen($value) < $this->minDigits) {
+        if (strlen($digits) < $this->minDigits) {
             $fail("Phone number must contain at least {$this->minDigits} digits.");
         }
     }

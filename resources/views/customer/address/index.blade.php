@@ -26,7 +26,8 @@
             </label>
         </div>
         @if($allowCreate && customer(true)->can('address.create'))
-            <button class="btn btn-sm btn-success m-0">
+            <button class="btn btn-sm btn-success m-0"
+                    data-toggle="modal" data-target="#address-form-modal" data-mode="create">
                 <i class="icon-plus"></i> Add New Address
             </button>
         @endif
@@ -35,9 +36,21 @@
     <div class="address-list">
         @forelse($addresses as $address)
             @php
-                $isSelected = $useAddress && $useAddress['ShipToNumber'] === $address->address_code;
+                $isDefault = $address->id == $defaultAddressId;
+                $isSelected = $isDefault || ($useAddress && $useAddress['ShipToNumber'] === $address->address_code);
             @endphp
-            <div @class(["address-card", "active" => $isSelected])>
+            <div @class(["address-card", "active" => $isSelected])
+                 data-id="{{ $address->id }}"
+                 data-address_name="{{ $address->address_name }}"
+                 data-address_code="{{ $address->address_code }}"
+                 data-address_1="{{ $address->address_1 }}"
+                 data-address_2="{{ $address->address_2 }}"
+                 data-address_3="{{ $address->address_3 }}"
+                 data-city="{{ $address->city }}"
+                 data-country_code="{{ $address->country_code }}"
+                 data-state="{{ $address->state }}"
+                 data-zip_code="{{ $address->zip_code }}"
+                 data-phone="{{ $address->phone }}">
                 <div class="address-title">
                     <span data-toggle="tooltip"
                           title="Address Code"
@@ -47,7 +60,7 @@
                     <span class="address-name">
                         {{ $address->address_name }}
                     </span>
-                    @if($isSelected)
+                    @if($isDefault)
                         <span class="default-address">
                         <i class="icon-circle-check" style="margin-top: -4px"></i>
                         Default Address
@@ -74,15 +87,16 @@
                         @endif
                     </div>
                     <div class="address-buttons">
-                        @if(!$isSelected)
-                            <a href="{{ route('frontend.session.shipping-address.store', $address->address_code) }}"
-                               class="btn btn-sm btn-secondary">
+                        @if(!$isDefault)
+                            <a href="{{ route('frontend.addresses.default-address', $address) }}"
+                               class="btn btn-sm btn-secondary btn-set-default">
                                 <i class="pe-7s-star"></i> Set Default
                             </a>
                         @endif
 
                         @if($allowUpdate && customer(true)->can('address.update'))
-                            <button class="btn btn-sm btn-secondary">
+                            <button class="btn btn-sm btn-secondary"
+                                    data-toggle="modal" data-target="#address-form-modal" data-mode="edit">
                                 <i class="pe-7s-note"></i> Edit
                             </button>
                         @endif
@@ -980,6 +994,29 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="address-form-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header d-flex align-items-center p-3">
+                    <h5 class="modal-title" id="address-form-modal-title">{{ __('Add New Address') }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @include('widget::customer.address.form', [
+                        'address'       => null,
+                        'editable'      => false,
+                        'action_route'  => route('frontend.addresses.store'),
+                        'action_method' => 'POST',
+                        'countries'     => \Amplify\System\Backend\Models\Country::enabled()->pluck('name', 'iso2')->toArray(),
+                        'htmlAttributes' => 'id="address-entry-form-wrapper"',
+                    ])
+                </div>
+            </div>
+        </div>
+    </div>
 @endpush
 
 @push('internal-script')
@@ -1029,6 +1066,129 @@
                 window.location.assign(next);
             }, true);
         })();
+
+        // ------------------------------------------------------------------
+        // Set Default Address (SweetAlert confirmation before changing)
+        // ------------------------------------------------------------------
+        $(document).on('click', '.btn-set-default', function (e) {
+            e.preventDefault();
+
+            var url = this.href;
+
+            Amplify.confirm(
+                'Do you want to set this address as your default shipping address?',
+                'Set Default Address',
+                'Yes, Set Default',
+                { showLoaderOnConfirm: false }
+            ).then(function (result) {
+                if (result.isConfirmed) {
+                    Amplify.notify('success', 'You have successfully set the default address!', 'Set Default Address');
+                    setTimeout(function () {
+                        window.location.href = url;
+                    }, 600);
+                }
+            }).catch(function (err) {
+                console.error(err);
+            });
+        });
+
+        // ------------------------------------------------------------------
+        // Add / Edit Address modal
+        // ------------------------------------------------------------------
+        $('#address-form-modal').on('show.bs.modal', function (e) {
+            var modal = $(this);
+            var trigger = e.relatedTarget;
+            var mode = trigger ? (trigger.dataset.mode || 'create') : 'create';
+            var form = modal.find('form');
+
+            form[0].reset();
+            form.find('.is-invalid').removeClass('is-invalid');
+            form.find('.invalid-feedback').remove();
+            form.find('button[type="submit"]').prop('disabled', false);
+            form.attr('action', '{{ route('frontend.addresses.store') }}');
+            form.find('input[name="_method"]').val('POST');
+            modal.find('#address-form-modal-title').text('{{ __('Add New Address') }}');
+
+            if (mode === 'edit') {
+                var card = trigger.closest('.address-card');
+
+                if (card) {
+                    var d = card.dataset;
+
+                    modal.find('#address-form-modal-title').text('{{ __('Edit Address') }}');
+                    form.attr('action', '{{ route('frontend.addresses.update', ':id') }}'.replace(':id', d.id));
+                    form.find('input[name="_method"]').val('PUT');
+                    form.find('[name="address_name"]').val(d.address_name);
+                    form.find('[name="address_code"]').val(d.address_code);
+                    form.find('[name="address_1"]').val(d.address_1);
+                    form.find('[name="address_2"]').val(d.address_2);
+                    form.find('[name="address_3"]').val(d.address_3);
+                    form.find('[name="city"]').val(d.city);
+                    form.find('[name="country_code"]').val(d.country_code);
+                    form.find('[name="zip_code"]').val(d.zip_code);
+                    form.find('[name="phone"]').val(d.phone);
+
+                    updateState(d.country_code || null, d.state || null);
+                }
+            } else {
+                updateState(null);
+            }
+        });
+
+        // Submit the modal form via AJAX so errors render inside the modal
+        $('#address-form-modal form').on('submit', function (e) {
+            e.preventDefault();
+
+            var form = $(this);
+            var submitBtn = form.find('button[type="submit"]');
+            var originalBtnHtml = submitBtn.html();
+
+            form.find('.is-invalid').removeClass('is-invalid');
+            form.find('.invalid-feedback').remove();
+
+            submitBtn.prop('disabled', true).html(
+                '<span class="spinner-border spinner-border-sm mr-1" role="status" aria-hidden="true"></span> Saving...'
+            );
+
+            $.ajax({
+                url: form.attr('action'),
+                method: 'POST',
+                data: form.serialize(),
+                dataType: 'json',
+                success: function (res) {
+                    $('#address-form-modal').modal('hide');
+                    Amplify.notify('success', res.message ?? 'Address saved successfully.', 'Address');
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1200);
+                },
+                error: function (xhr) {
+                    // The update route answers with a redirect, so jQuery ends
+                    // here after following it - treat any 200 response as success.
+                    if (xhr.status === 200 && xhr.responseText) {
+                        $('#address-form-modal').modal('hide');
+                        Amplify.notify('success', 'You have successfully updated the address!', 'Address');
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 1200);
+                        return;
+                    }
+
+                    if (xhr.status === 422 && xhr.responseJSON?.errors) {
+                        $.each(xhr.responseJSON.errors, function (name, messages) {
+                            var field = form.find('[name="' + $.escapeSelector(name) + '"]');
+                            field.addClass('is-invalid');
+                            field.after('<div class="invalid-feedback d-block">' + messages[0] + '</div>');
+                        });
+                        submitBtn.prop('disabled', false).html(originalBtnHtml);
+                        return;
+                    }
+
+                    Amplify.notify('error', xhr.responseJSON?.message ?? 'Sorry something went wrong.', 'Address');
+                    submitBtn.prop('disabled', false).html(originalBtnHtml);
+                }
+            });
+        });
     </script>
 @endpush
 

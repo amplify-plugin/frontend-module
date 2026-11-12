@@ -6,6 +6,15 @@
                 @method($action_method)
                 <div class="row">
                     <div class="col-md-6">
+                        {!! \Form::rText('phone', __('Phone'), old('phone', $address->phone ?? ''), false, [
+                            'maxlength' => 20,
+                            'title'     => __("Digits, spaces, parentheses, slash and hyphen only"),
+                            'data-allow'=> "phone"
+                        ]) !!}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
                         {!! \Form::rText('address_name', __('Address Name'), old('address_name', $address->address_name ?? ''), true, [
                             'maxlength' => 100,
                             'title'     => __("Letters required; allowed: letters, numbers, spaces, - . , ' & ( ) /"),
@@ -80,13 +89,6 @@
                         {!! \Form::rText('zip_code', __('Zip/Postal Code'), old('zip_code', $address->zip_code ?? ''), false, [
                             'maxlength' => 10,
                             'title'     => __("Digits, hyphen only (4–10)"),
-                        ]) !!}
-                    </div>
-                    <div class="col-md-6">
-                        {!! \Form::rText('phone', __('Phone'), old('phone', $address->phone ?? ''), false, [
-                            'maxlength' => 20,
-                            'title'     => __("Digits, spaces, parentheses, slash and hyphen only"),
-                            'data-allow'=> "phone"
                         ]) !!}
                     </div>
                 </div>
