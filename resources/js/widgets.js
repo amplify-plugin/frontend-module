@@ -4,6 +4,7 @@ import {QuickOrder} from './modules/quick-order.js';
 import {MediaQuery} from './modules/media-query.js';
 import {RecentlyViewed} from "./modules/recently-viewed.js";
 import {ExternalLink} from "./modules/external-link.js";
+import {CompareBar} from './modules/compare-bar.js';
 
 window.swal = Swal.mixin({
     theme: 'bootstrap-4-light',
@@ -20,7 +21,8 @@ window.Amplify = {
         QuickOrder,
         MediaQuery,
         RecentlyViewed,
-        ExternalLink
+        ExternalLink,
+        CompareBar
     },
     config: {
         env: 'production',
