@@ -32,7 +32,3 @@
         </div>
     @endif
 </div>
-
-@pushonce('internal-style')
-    @include('widget::product.top-selling-products.styles')
-@endpushonce
