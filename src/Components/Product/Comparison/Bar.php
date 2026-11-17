@@ -15,21 +15,6 @@ class Bar extends BaseComponent
 
     public string $compareUrl = '#';
 
-    public function __construct()
-    {
-        parent::__construct();
-
-        if (! $this->shouldRender()) {
-            return;
-        }
-
-        $compare = app(ProductCompareService::class);
-
-        $this->items = $compare->summaries();
-        $this->max = $compare->max();
-        $this->compareUrl = $compare->pageUrl();
-    }
-
     public function shouldRender(): bool
     {
         return app(ProductCompareService::class)->availableFor('product-compare.manage');
@@ -37,6 +22,13 @@ class Bar extends BaseComponent
 
     public function render(): View|Closure|string
     {
+
+        $compare = app(ProductCompareService::class);
+
+        $this->items = $compare->summaries();
+        $this->max = $compare->max();
+        $this->compareUrl = $compare->pageUrl();
+
         return view('widget::product.comparison.bar');
     }
 }

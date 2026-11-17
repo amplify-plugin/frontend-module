@@ -24,11 +24,6 @@ class Index extends BaseComponent
         if (! $this->shouldRender()) {
             return;
         }
-
-        $comparison = app(ProductCompareService::class)->comparison();
-
-        $this->products = $comparison['products'];
-        $this->rows = $comparison['rows'];
     }
 
     /**
@@ -44,6 +39,11 @@ class Index extends BaseComponent
      */
     public function render(): View|Closure|string
     {
+        $comparison = app(ProductCompareService::class)->comparison();
+
+        $this->products = $comparison['products'];
+        $this->rows = $comparison['rows'];
+
         return view('widget::product.comparison.index');
     }
 }
