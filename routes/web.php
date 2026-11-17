@@ -246,7 +246,7 @@ Route::group(['middleware' => ['customers', CustomerDefaultValues::class]], func
 
     Route::resource('roles', \Amplify\Frontend\Http\Controllers\RoleController::class);
 
-    Route::resource('addresses', AddressController::class);
+    Route::resource('addresses', AddressController::class)->except(['create', 'show', 'edit']);
     Route::get('/addresses/default-address/{address}', [AddressController::class, 'setDefault'])
         ->name('addresses.default-address');
 

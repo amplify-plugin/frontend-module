@@ -967,34 +967,6 @@
 </div>
 
 @push('html-default')
-    <div class="modal fade" id="delete-modal" tabindex="-1" aria-hidden="true" data-backdrop="static"
-         data-keyboard="false">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-danger d-flex align-items-center p-3">
-                    <h5 class="modal-title text-white">Delete Confirmation</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form action="#" method="POST" class="d-inline" id="form-delete">
-                    @method('delete')
-                    @csrf
-                    <div class="modal-body">
-                        <p class="text-center">{{ __('Are you sure you want to delete this item?') }}</p>
-                    </div>
-                    <div class="modal-footer d-flex justify-content-between">
-                        <button type="button" class="btn btn-secondary"
-                                data-dismiss="modal">
-                            {{ __('Cancel') }}
-                        </button>
-                        <button type="submit" class="btn btn-danger" name="delete_user">{{ __('Delete') }}</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
     <div class="modal fade" id="address-form-modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">

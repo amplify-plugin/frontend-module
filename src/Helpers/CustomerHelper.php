@@ -3,6 +3,7 @@
 namespace Amplify\Frontend\Helpers;
 
 use Amplify\System\Backend\Models\State;
+use Amplify\System\Cms\Models\Page;
 use Illuminate\Support\Facades\Route;
 
 class CustomerHelper
@@ -12,32 +13,59 @@ class CustomerHelper
         $contact = customer(true);
 
         return match (true) {
-            !empty($data['previous_url']) && ! str_contains($data['previous_url'], 'admin')
-                => $data['previous_url'],
+            !empty($contact->redirect_route) && $contact->redirect_route !== 'previous-url'
+            => url($contact->redirect_route),
 
-            ! empty($contact->redirect_route)
-                =>  url($contact->redirect_route),
+            $contact->redirect_route === 'previous-url' && !empty($data['previous_url'])
+            => $data['previous_url'],
 
             default
-                => route('frontend.dashboard')
+            => frontendHomeURL()
         };
     }
 
-    public static function redirecteableUrls()
+    public static function redirecteableUrls(): array
     {
         $urls = [];
 
-        $routes = Route::getRoutes()->getRoutesByMethod()['GET'];
+        $excludedUrls = config('amplify.basic.excluded_redirect_urls', []);
 
-        $exclude_urls = config('amplify.basic.excluded_redirect_urls', []);
+        Page::published()->get()->each(function ($page) use (&$urls, $excludedUrls) {
+            $pageType = collect(config('amplify.cms.page_types', []))
+                ->firstWhere('code', $page->page_type);
 
-        foreach ($routes as $route) {
-            if (str_starts_with($route->getName(), 'frontend') && ! str_contains($route->uri(), '{') && ! in_array($route->uri(), $exclude_urls)) {
-                $urls[$route->uri()] = ($route->uri() == '/') ? 'Home' : ucwords(str_replace(['/', '-'], [' ', ' '], $route->uri()));
+            if ($pageType === null || $page->page_type === 'static_page') {
+                return;
             }
-        }
+
+            if (($pageType['url']['type'] ?? null) === 'route') {
+                $route = Route::getRoutes()->getByName($pageType['url']['name']);
+
+                if ($route === null) {
+                    return;
+                }
+
+                // exclude page types that require a parameter in the uri
+                foreach (get_uri_parameter($route->uri()) as $param) {
+                    if (!str_contains($param, '?')) {
+                        return;
+                    }
+                }
+            }
+
+            // exclude urls listed in the excluded_redirect_urls configuration
+            foreach ($excludedUrls as $excludedUrl) {
+                if (preg_match('/' . str_replace('/', '\/', $excludedUrl) . '/', $page->full_url)) {
+                    return;
+                }
+            }
+
+            $urls[$page->full_url] = $page->name;
+        });
 
         ksort($urls);
+
+        $urls['previous-url'] = 'Return to last page';
 
         return $urls;
     }
