@@ -17,9 +17,6 @@ class WidgetServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->loadViewsFrom(__DIR__.'/../../resources/views', 'widget');
-
-        Blade::component(Bar::class, 'product-comparison-bar');
-
         $this->publishes([
             __DIR__.'/../../public' => public_path('vendor/widget'),
         ], 'widget-asset');
