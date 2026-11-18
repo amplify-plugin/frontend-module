@@ -16,15 +16,19 @@
 
         <div class="col-md-8">
             {!! $before ?? null !!}
-            <div class="d-flex gap-3 justify-content-between align-items-center mt-2">
-                <x-product.item-number :product="$product" format="{product_code}" element="h4"
-                                       class="text-primary font-weight-bold mb-0"/>
-
-                <x-product-social-media-link :product="$product" class="btn btn-outline-secondary"/>
+            <div class="d-flex gap-3 justify-content-between mt-3 mt-md-0">
+                <div>
+                    <x-product.item-number :product="$product" format="{product_code}" element="h4"
+                                           class="text-primary font-weight-bold mb-0"/>
+                    <h3 class="product-title">{{ $product->Product_Name ?? '' }}</h3>
+                </div>
+                <x-product-manufacture-image
+                        :product="$product"
+                        class="tag"
+                        title="Brand"
+                        attribute="Brands"
+                        data-toggle="tooltip"/>
             </div>
-
-            <h3 class="product-title">{{ $product->Product_Name ?? '' }}</h3>
-
             <x-product.price
                     element="div"
                     class="w-100 product-price d-flex"
@@ -34,14 +38,6 @@
                     :std-price="$product->Msrp?->toFloat()"/>
 
             <div class="widget-tags mb-2">
-
-                <x-product-manufacture-image :product="$product" class="tag" title="Brand"
-                                             data-toggle="tooltip">
-                    <x-slot:prefix>
-                        <i class="icon-star font-weight-bold" style="margin-top: -3px"></i>
-                    </x-slot:prefix>
-                </x-product-manufacture-image>
-
                 @if($product->total_quantity_available > 1)
                     <x-product.availability
                             :product="$product" :value="$product->total_quantity_available"

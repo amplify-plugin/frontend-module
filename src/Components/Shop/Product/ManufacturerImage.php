@@ -39,11 +39,26 @@ class ManufacturerImage extends BaseComponent
     public function htmlAttributes(): string
     {
         $this->attributes = $this->attributes->merge([
-            'href' => frontendShopURL("{$this->attribute}:{$this->product?->manufacturer?->code}"),
+            'href' => frontendShopURL("{$this->attribute}:". $this->getSeoPath($this->product->manufacturer->name)),
             'title' => $this->product->manufacturer->name,
             'class' => 'text-decoration-none'
         ]);
 
         return parent::htmlAttributes();
+    }
+
+    private function getSeoPath(?string $value): string
+    {
+        $separator= '-';
+
+        if (empty($value)) {
+            return '';
+        }
+
+        $value = preg_replace('/[^a-zA-Z0-9-.]+/', $separator, $value);
+        $value = preg_replace("/{$separator}+/", $separator, $value);
+
+        return trim(trim($value, $separator));
+
     }
 }
