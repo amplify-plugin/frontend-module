@@ -9,8 +9,6 @@ use Amplify\System\Backend\Enums\ProductAvailabilityEnum;
 use Amplify\System\Backend\Models\CategoryProduct;
 use Amplify\System\Backend\Models\OrderList;
 use Amplify\System\Backend\Models\OrderListItem;
-use Amplify\System\Backend\Models\Warehouse;
-use Amplify\System\Helpers\UtilityHelper;
 use Amplify\System\Sayt\Classes\ItemRow;
 use Amplify\System\Traits\ProductDetailTrait;
 use Closure;

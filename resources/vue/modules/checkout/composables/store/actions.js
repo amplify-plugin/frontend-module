@@ -1,6 +1,6 @@
 import {mockContact, mockCountries, mockCustomer, mockStates,} from '../../mock';
 
-import {useValidate, useEvent} from "@/composables";
+import {useEvent, useValidate} from "@/composables";
 import axios from 'axios';
 
 const validator = useValidate();

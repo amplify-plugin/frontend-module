@@ -5,8 +5,6 @@ namespace Amplify\Frontend\Components\Product;
 use Amplify\Frontend\Abstracts\BaseComponent;
 use Closure;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Js;
 
 /**
  * @class ProductGallery

@@ -1,5 +1,5 @@
 import mitt from 'mitt';
-import { onUnmounted } from 'vue';
+import {onUnmounted} from 'vue';
 
 const eventBus = mitt();
 

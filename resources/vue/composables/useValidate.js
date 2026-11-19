@@ -1,4 +1,4 @@
-import { reactive, computed } from 'vue'
+import {computed, reactive} from 'vue'
 
 /**
  * Access nested properties in objects/arrays using dot-notation or wildcard '*'.

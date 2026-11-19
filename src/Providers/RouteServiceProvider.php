@@ -4,17 +4,11 @@ namespace Amplify\Frontend\Providers;
 
 use Amplify\Frontend\Http\Middlewares\CaptureIntendedUrl;
 use Amplify\Frontend\Http\Middlewares\ContactForceShippingAddressSelection;
+use Amplify\Frontend\Http\Middlewares\CustomerAuthCheck;
 use Amplify\Frontend\Http\Middlewares\FrontendDisabled;
-use Amplify\System\Backend\Http\Middlewares\AdminForcePasswordReset;
-use Amplify\System\Backend\Http\Middlewares\CustomerAuthCheck;
-use Amplify\System\Backend\Http\Middlewares\Language;
-use Amplify\System\Backend\Http\Middlewares\ProductSessionClear;
-use Amplify\System\Backend\Http\Middlewares\TeamsPermission;
 use Amplify\System\Cms\Models\Form;
-use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 use Spatie\Honeypot\ProtectAgainstSpam;
 
@@ -45,6 +39,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->pushMiddlewareToGroup('frontend', ContactForceShippingAddressSelection::class);
         $this->pushMiddlewareToGroup('frontend', CaptureIntendedUrl::class);
         $this->pushMiddlewareToGroup('frontend', FrontendDisabled::class);
+        $this->pushMiddlewareToGroup('frontend', CustomerAuthCheck::class);
 
         $this->routes(function () {
             Route::middleware('api')

@@ -1,6 +1,6 @@
 <div class="row justify-content-center">
     <div class="col-9 col-md-4">
-        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+        <svg xmlns="http://www.w3.org/2000/svg"
              viewBox="10 110 500 400">
             <defs>
                 <clipPath id="freepik--clip-path--inject-65">

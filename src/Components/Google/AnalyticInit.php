@@ -10,7 +10,6 @@ use Amplify\System\Backend\Models\Product;
 use Amplify\System\Sayt\Classes\BreadCrumbTrail;
 use Amplify\System\Sayt\Classes\NavigateNode;
 use Amplify\System\Sayt\Classes\RemoteResults;
-use Amplify\System\Sayt\Classes\StateInfo;
 use Illuminate\Contracts\View\View;
 
 /**

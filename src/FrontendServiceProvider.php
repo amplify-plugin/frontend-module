@@ -3,21 +3,15 @@
 namespace Amplify\Frontend;
 
 use Amplify\Frontend\Commands\CleanCartCommand;
-use Amplify\Frontend\Http\Middlewares\CaptureIntendedUrl;
-use Amplify\Frontend\Http\Middlewares\ContactForceShippingAddressSelection;
-use Amplify\Frontend\Http\Middlewares\FrontendDisabled;
 use Amplify\Frontend\Providers\EventServiceProvider;
 use Amplify\Frontend\Providers\RouteServiceProvider;
 use Amplify\Frontend\Providers\ValidationServiceProvider;
 use Amplify\Frontend\Providers\WidgetServiceProvider;
 use Amplify\Frontend\Store\AnalyticsBus;
-use Amplify\System\Cms\Models\Form;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Spatie\Honeypot\ProtectAgainstSpam;
 
 class FrontendServiceProvider extends ServiceProvider
 {
