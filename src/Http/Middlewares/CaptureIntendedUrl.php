@@ -46,7 +46,7 @@ class CaptureIntendedUrl
             ! $request->routeIs('frontend.login*') &&
             ! $request->expectsJson()
         ) {
-            session(['url.intended' => $request->fullUrl()]);
+            session(['customer.intended' => $request->fullUrl()]);
         }
 
         return $next($request);

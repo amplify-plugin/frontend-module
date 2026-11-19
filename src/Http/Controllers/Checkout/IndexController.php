@@ -14,7 +14,7 @@ class IndexController extends Controller
         if (!config('amplify.frontend.guest_checkout')) {
 
             if (!customer_check()) {
-                session('url.intended', route('frontend.checkout'));
+                session('customer.intended', route('frontend.checkout'));
             }
 
             $this->middleware('customers');

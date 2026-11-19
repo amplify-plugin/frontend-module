@@ -39,7 +39,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->pushMiddlewareToGroup('frontend', ContactForceShippingAddressSelection::class);
         $this->pushMiddlewareToGroup('frontend', CaptureIntendedUrl::class);
         $this->pushMiddlewareToGroup('frontend', FrontendDisabled::class);
-        $this->pushMiddlewareToGroup('frontend', CustomerAuthCheck::class);
+        $this->aliasMiddleware('customers', CustomerAuthCheck::class);
 
         $this->routes(function () {
             Route::middleware('api')
