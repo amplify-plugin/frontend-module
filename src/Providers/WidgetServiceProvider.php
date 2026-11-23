@@ -14,7 +14,10 @@ class WidgetServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->loadViewsFrom(__DIR__.'/../../resources/views', 'widget');
+        $this->loadViewsFrom([
+            base_path("themes/" . theme()->slug . "/widget"),
+            __DIR__ . '/../../resources/views'
+        ], 'widget');
 
         $this->publishes([
             __DIR__.'/../../public' => public_path('vendor/widget'),
