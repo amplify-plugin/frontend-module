@@ -212,7 +212,7 @@ class ShippingController extends Controller
 
         $orderTotal = ErpApi::getOrderTotal($orderInfo);
 
-        event(new CartUpdated($cart, $orderTotal));
+        //event(new CartUpdated($cart, $orderTotal));
 
         return response()->json($orderTotal);
     }
